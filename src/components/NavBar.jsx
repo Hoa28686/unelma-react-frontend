@@ -20,6 +20,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link } from "react-router";
 import Logo from "./Logo.jsx";
+import ThemeSwitch from "./ThemeSwitch";
 
 function NavBar() {
   const mobileMenuWidth = 240;
@@ -74,7 +75,7 @@ function NavBar() {
   return (
     <Box sx={{ display: "flex" }}>
       {/* App Bar */}
-      <AppBar component="nav" position="fixed" color="inherit">
+      <AppBar component="nav" position="fixed">
         <Toolbar>
           {/* logo */}
           <Logo />
@@ -109,6 +110,7 @@ function NavBar() {
             <IconButton color="inherit" component={Link} to="/user">
               <AccountCircleOutlinedIcon />
             </IconButton>
+            <ThemeSwitch />
 
             {/* Mobile Menu Button */}
             <IconButton
