@@ -116,17 +116,19 @@ function Blog() {
               display: "block",
               padding: 0,
             }}
-            image={blog.image}
+            image={blog.image_url}
             alt={blog.title}
           />
           <Box>
             <CardHeader
               title={blog.title}
-              subheader={`${timeConversion(blog.created_at)} • ${blog.author}`}
+              subheader={`${timeConversion(blog.created_at)} • ${
+                blog.author.name
+              }`}
               sx={{ pb: 1 }}
             />
             <CardContent sx={{ mb: 3 }}>
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ color: "text.primary" }}>
                 {blog.content.length > 100 ? (
                   <>
                     {blog.content.substring(0, 100)}

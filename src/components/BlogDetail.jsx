@@ -6,7 +6,7 @@ import {
   fetchBlogs,
   setSelectedBlog,
 } from "../lib/features/blogs/blogsSlice";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import { Box, Divider, Typography, TextField, Button } from "@mui/material";
 import { timeConversion } from "../helpers/helpers";
 import HandleBackButton from "./handleBackButton";
 
@@ -99,12 +99,12 @@ function BlogDetail() {
         <Box
           component="img"
           sx={{ width: "100%" }}
-          src={selectedBlog?.image}
+          src={selectedBlog?.image_url}
           alt={selectedBlog.title}
         />
         <Typography variant="h4">{selectedBlog.title}</Typography>
         <Typography variant="subtitle1" sx={{ color: "text.secondary", mb: 2 }}>
-          {selectedBlog.author} • {timeConversion(selectedBlog.created_at)}
+          {selectedBlog.author.name} • {timeConversion(selectedBlog.created_at)}
         </Typography>
         <Box>
           {selectedBlog.content.includes("\n") ? (
@@ -121,7 +121,7 @@ function BlogDetail() {
           <Typography variant="h6" mb={1}>
             Comments
           </Typography>
-          <Divider sx={{ borderColor: "text.secondary" }} />
+          <Divider />
           <Box sx={{ mt: 2 }}>
             <Typography variant="h6" sx={{ mb: 1 }}>
               Leave a comment
@@ -157,8 +157,8 @@ function BlogDetail() {
               >
                 <Box
                   component="img"
-                  src={c.avatar}
-                  alt={c.user}
+                  src={c.user.avatar}
+                  alt={c.user.name}
                   sx={{
                     borderRadius: "50%",
                     width: 24,
@@ -168,7 +168,7 @@ function BlogDetail() {
                 />
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                   <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                    {c.user}
+                    {c.user.name}
                     <Box
                       component="span"
                       sx={{
