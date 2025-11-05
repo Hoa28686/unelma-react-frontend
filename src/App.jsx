@@ -9,10 +9,13 @@ import NotFound from "./pages/NotFound.jsx";
 import User from "./pages/User.jsx";
 import Cart from "./pages/Cart.jsx";
 import { CustomThemeProvider } from "./context/ThemeContext.jsx";
+import { CssBaseline } from "@mui/material";
+import BlogDetail from "./components/BlogDetail.jsx";
 
 function App() {
   return (
     <>
+      <CssBaseline />
       <CustomThemeProvider>
         <BrowserRouter>
           <Routes>
@@ -20,6 +23,7 @@ function App() {
               <Route index element={<Home />} />
               <Route path="/products" element={<Products />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:blogId" element={<BlogDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
               <Route path="/user" element={<User />} />

@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 import { Link } from "react-router";
+import unelmaLogo from "../assets/unelma-logo.png";
 
 function Logo() {
   return (
@@ -14,7 +15,7 @@ function Logo() {
       }}
     >
       <img
-        src="https://www.unelmaplatforms.com/assets/uploads/media-uploader/unelma-platforms-11670581545.jpg"
+        src={unelmaLogo}
         alt="unelma-logo"
         style={{ height: "100%", width: "auto" }}
       />
