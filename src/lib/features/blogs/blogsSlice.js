@@ -15,10 +15,6 @@ export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async () => {
   return res.data;
 });
 
-export const selectBlogById = (state, blogId) => {
-  return state.blogs.blogs.find((blog) => blog.id === blogId);
-};
-
 export const blogsSlice = createSlice({
   name: "blogs",
   initialState,

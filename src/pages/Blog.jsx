@@ -128,7 +128,7 @@ function Blog() {
               sx={{ pb: 1 }}
             />
             <CardContent sx={{ mb: 3 }}>
-              <Typography variant="body2" sx={{ color: "text.primary" }}>
+              <Typography variant="body2">
                 {blog.content.length > 100 ? (
                   <>
                     {blog.content.substring(0, 100)}
