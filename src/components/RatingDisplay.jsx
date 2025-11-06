@@ -10,6 +10,11 @@ function RatingDisplay({ rating }) {
         defaultValue={rating}
         precision={0.05}
         readOnly
+        sx={{
+          "& .MuiRating-iconEmpty": {
+            color: "text.secondary",
+          },
+        }}
       />
     </Stack>
   );

@@ -11,6 +11,7 @@ import Cart from "./pages/Cart.jsx";
 import { CustomThemeProvider } from "./context/ThemeContext.jsx";
 import { CssBaseline } from "@mui/material";
 import BlogDetail from "./components/BlogDetail.jsx";
+import ProductDetail from "./components/ProductDetail.jsx";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/products/:productId" element={<ProductDetail />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:blogId" element={<BlogDetail />} />
               <Route path="/contact" element={<Contact />} />

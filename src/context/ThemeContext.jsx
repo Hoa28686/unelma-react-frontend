@@ -34,6 +34,7 @@ const lightTheme = createTheme({
       primary: "#110f0fff",
       secondary: "#6B7280",
     },
+    divider: "#c4c4c4",
   },
   typography: {
     fontFamily: [
@@ -105,6 +106,7 @@ const darkTheme = createTheme({
       primary: "#F3F4F6", // Light grayish white
       secondary: "#9CA3AF", // Muted gray for secondary text
     },
+    divider: "#c4c4c4",
   },
   typography: {
     fontFamily: [
