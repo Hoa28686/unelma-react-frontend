@@ -5,12 +5,12 @@ import {
   clearSelectedProduct,
   fetchProducts,
   setSelectedProduct,
-} from "../lib/features/products/productsSlice";
+} from "../../lib/features/products/productsSlice";
 import { Box, Divider, Typography } from "@mui/material";
-import HandleBackButton from "./handleBackButton";
-import PriceDisplay from "./PriceDisplay";
-import RatingDisplay from "./RatingDisplay";
-import AddToCart from "./AddToCart";
+import HandleBackButton from "../../components/handleBackButton";
+import PriceDisplay from "../../components/PriceDisplay";
+import RatingDisplay from "../../components/RatingDisplay";
+import AddToCart from "../../components/AddToCart";
 
 function ProductDetail() {
   const { productId } = useParams();

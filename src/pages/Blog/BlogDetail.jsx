@@ -5,10 +5,10 @@ import {
   clearSelectedBlog,
   fetchBlogs,
   setSelectedBlog,
-} from "../lib/features/blogs/blogsSlice";
+} from "../../lib/features/blogs/blogsSlice";
 import { Box, Divider, Typography, TextField, Button } from "@mui/material";
-import { timeConversion } from "../helpers/helpers";
-import HandleBackButton from "./handleBackButton";
+import { timeConversion } from "../../helpers/helpers";
+import HandleBackButton from "../../components/handleBackButton";
 
 function BlogDetail() {
   const { blogId } = useParams();

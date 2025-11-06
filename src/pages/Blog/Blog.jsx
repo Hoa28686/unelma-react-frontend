@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { fetchBlogs } from "../lib/features/blogs/blogsSlice";
+import { fetchBlogs } from "../../lib/features/blogs/blogsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router";
-import { timeConversion } from "../helpers/helpers";
+import { timeConversion } from "../../helpers/helpers";
 
 function Blog() {
   const navigate = useNavigate();

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../lib/features/products/productsSlice";
-import HandleBackButton from "../components/handleBackButton";
+import { fetchProducts } from "../../lib/features/products/productsSlice";
 import {
   Box,
   Card,
@@ -12,9 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router";
-import PriceDisplay from "../components/PriceDisplay";
-import RatingDisplay from "../components/RatingDisplay";
-import AddToCart from "../components/AddToCart";
+import PriceDisplay from "../../components/PriceDisplay";
+import RatingDisplay from "../../components/RatingDisplay";
+import AddToCart from "../../components/AddToCart";
+import HandleBackButton from "../../components/handleBackButton";
 
 function Products() {
   const dispatch = useDispatch();
