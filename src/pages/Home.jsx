@@ -21,64 +21,71 @@ function Home() {
       sx={{
         position: "relative",
         width: "100%",
-        minHeight: "100vh",
-        overflow: "hidden",
       }}
     >
-      {/* Hero Images - layered, animates from top, behind header, to below header */}
-      {/* First image (tiles) - back layer */}
-      <Box
-        sx={(theme) => ({
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          backgroundImage: `url(${heroTilesImage})`,
-          backgroundRepeat: { xs: "no-repeat", md: "repeat-x" },
-          backgroundSize: { xs: "contain", md: "auto 100vh" },
-          backgroundPosition: "center",
-          zIndex: 0,
-          transform: isLoaded 
-            ? "translateY(0)" 
-            : "translateY(-100vh)",
-          transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
-          willChange: "transform",
-        })}
-      />
-      {/* Second image (black background) - front layer with delay */}
-      <Box
-        sx={(theme) => ({
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          backgroundImage: `url(${heroImage})`,
-          backgroundRepeat: { xs: "no-repeat", md: "repeat-x" },
-          backgroundSize: { xs: "contain", md: "auto 100vh" },
-          backgroundPosition: "center",
-          zIndex: 1,
-          transform: isLoaded 
-            ? "translateY(0)" 
-            : "translateY(-100vh)",
-          transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
-          willChange: "transform",
-        })}
-      />
-      
-      {/* Content overlay - ensures content is above the image */}
+      {/* Hero Section Container - limits hero images to content area */}
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
-          minHeight: "100vh",
           width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
+          overflow: "hidden",
         }}
       >
+        {/* Hero Images - layered, animates from top, behind header, to below header */}
+        {/* First image (tiles) - back layer */}
+        <Box
+          sx={(theme) => ({
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundImage: `url(${heroTilesImage})`,
+            backgroundRepeat: "repeat-y",
+            backgroundSize: { xs: "100% auto", md: "100% auto" },
+            backgroundPosition: "top center",
+            zIndex: 0,
+            transform: isLoaded 
+              ? "translateY(0)" 
+              : "translateY(-100vh)",
+            transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            willChange: "transform",
+          })}
+        />
+        {/* Second image (black background) - front layer with delay */}
+        <Box
+          sx={(theme) => ({
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundImage: `url(${heroImage})`,
+            backgroundRepeat: "repeat-y",
+            backgroundSize: { xs: "100% auto", md: "100% auto" },
+            backgroundPosition: "top center",
+            zIndex: 1,
+            transform: isLoaded 
+              ? "translateY(0)" 
+              : "translateY(-100vh)",
+            transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
+            willChange: "transform",
+          })}
+        />
+        
+        {/* Content overlay - ensures content is above the image */}
+        <Box
+          sx={{
+            position: "relative",
+            zIndex: 2,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            minHeight: { xs: "auto", md: "auto" },
+            paddingBottom: { xs: "2rem", sm: "3rem", md: "4rem" },
+          }}
+        >
         {/* Hero Content */}
         <Box
           sx={{
@@ -219,6 +226,7 @@ function Home() {
             </Box>
           </Box>
         </Box>
+      </Box>
       </Box>
 
       {/* What We Offer Section */}

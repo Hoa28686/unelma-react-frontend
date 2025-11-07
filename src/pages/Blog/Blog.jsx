@@ -12,9 +12,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router";
-import { timeConversion } from "../helpers/helpers";
+import { timeConversion } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import heroImage from "../assets/hero.webp";
+import heroImage from "../../assets/hero.webp";
 
 function Blog() {
   const navigate = useNavigate();
@@ -176,7 +176,7 @@ function Blog() {
                 display: "block",
                 padding: 0,
               }}
-              image={blog.image}
+              image={blog.image_url}
               alt={blog.title}
             />
             <Box

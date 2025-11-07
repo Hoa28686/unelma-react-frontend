@@ -7,7 +7,7 @@ import {
   setSelectedProduct,
 } from "../../lib/features/products/productsSlice";
 import { Box, Divider, Typography } from "@mui/material";
-import HandleBackButton from "../../components/handleBackButton";
+import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";

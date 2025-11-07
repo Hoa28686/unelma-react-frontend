@@ -120,19 +120,21 @@ function About() {
 
           {/* Welcome Message */}
           <Box
-            sx={{
+            sx={(theme) => ({
               mb: 5,
               p: { xs: 3, sm: 4 },
               marginBottom: { xs: "3rem", sm: "4rem" },
-              backgroundColor: (theme) => theme.palette.mode === 'light' ? theme.palette.background.paper : "transparent",
-              border: (theme) => theme.palette.mode === 'light' ? "1px solid rgba(0, 0, 0, 0.1)" : "none",
-              borderRadius: (theme) => theme.palette.mode === 'light' ? 2 : 0,
-              transition: (theme) => theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
-              "&:hover": (theme) => theme.palette.mode === 'light' ? {
-                borderColor: "#3B82F6",
-                transform: "translateY(-4px)",
-              } : {},
-            }}
+              backgroundColor: theme.palette.mode === 'light' ? theme.palette.background.paper : "transparent",
+              border: theme.palette.mode === 'light' ? "1px solid rgba(0, 0, 0, 0.1)" : "none",
+              borderRadius: theme.palette.mode === 'light' ? 2 : 0,
+              transition: theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
+              ...(theme.palette.mode === 'light' ? {
+                "&:hover": {
+                  borderColor: "#3B82F6",
+                  transform: "translateY(-4px)",
+                }
+              } : {}),
+            })}
           >
             <Typography
               variant="h3"
@@ -258,17 +260,19 @@ function About() {
                 }}
               >
                 <Box
-                  sx={{
-                    backgroundColor: (theme) => theme.palette.mode === 'light' ? theme.palette.background.paper : "transparent",
-                    border: (theme) => theme.palette.mode === 'light' ? "1px solid rgba(0, 0, 0, 0.1)" : "none",
-                    borderRadius: (theme) => theme.palette.mode === 'light' ? 2 : 0,
-                    padding: (theme) => theme.palette.mode === 'light' ? { xs: "2rem", sm: "2.5rem", md: "3rem" } : 0,
-                    transition: (theme) => theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
-                    "&:hover": (theme) => theme.palette.mode === 'light' ? {
-                      borderColor: "#3B82F6",
-                      transform: "translateY(-4px)",
-                    } : {},
-                  }}
+                  sx={(theme) => ({
+                    backgroundColor: theme.palette.mode === 'light' ? theme.palette.background.paper : "transparent",
+                    border: theme.palette.mode === 'light' ? "1px solid rgba(0, 0, 0, 0.1)" : "none",
+                    borderRadius: theme.palette.mode === 'light' ? 2 : 0,
+                    padding: theme.palette.mode === 'light' ? { xs: "2rem", sm: "2.5rem", md: "3rem" } : 0,
+                    transition: theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
+                    ...(theme.palette.mode === 'light' ? {
+                      "&:hover": {
+                        borderColor: "#3B82F6",
+                        transform: "translateY(-4px)",
+                      }
+                    } : {}),
+                  })}
                 >
                   <Typography
                     variant="h2"

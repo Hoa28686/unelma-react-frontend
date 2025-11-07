@@ -14,7 +14,7 @@ import { useNavigate } from "react-router";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import HandleBackButton from "../../components/handleBackButton";
+import HandleBackButton from "../../components/HandleBackButton";
 
 function Products() {
   const dispatch = useDispatch();

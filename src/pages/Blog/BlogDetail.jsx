@@ -5,11 +5,11 @@ import {
   clearSelectedBlog,
   fetchBlogs,
   setSelectedBlog,
-} from "../lib/features/blogs/blogsSlice";
+} from "../../lib/features/blogs/blogsSlice";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
-import { timeConversion } from "../helpers/helpers";
-import HandleBackButton from "./handleBackButton";
-import heroImage from "../assets/hero.webp";
+import { timeConversion } from "../../helpers/helpers";
+import HandleBackButton from "../../components/HandleBackButton";
+import heroImage from "../../assets/hero.webp";
 
 function BlogDetail() {
   const { blogId } = useParams();
@@ -150,7 +150,7 @@ function BlogDetail() {
             objectFit: "cover",
             maxHeight: "500px",
           }}
-          src={selectedBlog?.image}
+          src={selectedBlog?.image_url}
           alt={selectedBlog.title}
         />
         <Typography
