@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { fetchBlogs } from "../../lib/features/blogs/blogsSlice";
+import { fetchBlogs } from "../lib/features/blogs/blogsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,

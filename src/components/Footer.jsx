@@ -1,31 +1,77 @@
 import React from 'react';
 import { Box, Typography, Link, Button, Grid, TextField } from "@mui/material";
+import businessFinlandLogo from "../assets/business-finland-logo.webp";
+import estoniaLogo from "../assets/republic-of-estonia-logo.webp";
+import shortlistLogo from "../assets/shortlist-logo.webp";
 
 // Style Guide Colors as defined:
 const COLORS = {
-    // Background/Neutral (Mint/Pale Green)
-    footerBg: '#BCD8C1', 
-    // Primary Accent (Orange/Terracotta)
-    primaryAccent: '#E57A44', 
-    // Dark Text/Header (Dark Purple/Near Black)
-    textDark: '#422040', 
-    // Secondary Accent (Pale Yellow/Khaki)
-    secondaryAccent: '#E3D985', 
+    // Background - Darker Blue
+    footerBg: '#0A0F1C', 
+    // Primary Accent - Blue (matching theme)
+    primaryAccent: '#3B82F6', 
+    // Text - White
+    textDark: '#FFFFFF', 
+    // Secondary Accent - Dark blue-gray for subtle backgrounds
+    secondaryAccent: '#151B2E', 
 };
 
 // Footer Links Data
-const companyLinks = [
-    { label: 'About Us', href: '#' },
-    { label: 'Careers', href: '#' },
-    { label: 'Press', href: '#' },
-    { label: '#' },
+const usefulLinks = [
+    { label: 'Home', href: '/' },
+    { label: 'Feedback', href: '#' },
+    { label: 'Clients Feedback', href: '#' },
+    { label: 'Support Ticket', href: '#' },
 ];
 
-const resourceLinks = [
-    { label: 'Blog', href: '#' },
-    { label: 'Help Center', href: '#' },
-    { label: 'FAQ', href: '#' },
-    { label: 'Terms & Privacy', href: '#' },
+const careerLinks = [
+    { label: 'Come work with us', href: '#' },
+    { label: 'Internship', href: '#' },
+    { label: 'UI/ UX Designer', href: '#' },
+    { label: 'Software Engineer', href: '#' },
+    { label: 'Office Management', href: '#' },
+];
+
+const offices = [
+    {
+        title: 'Northern Europe office',
+        company: 'Unelma Platforms OÜ',
+        address: 'Tallinn, Estonia region 10111, Estonia',
+        registry: 'Company Registry code: 16069962',
+        phone: '+358(0) 44 9889771',
+        email: 'info@unelmaplatforms.com',
+    },
+    {
+        title: 'North America office',
+        company: 'Unelma Pay Ltd',
+        address: '215 Anne Street N, Barrie, Ontario, Canada',
+        registry: 'Incorporation number: 1000986742',
+        phone: '+1 (705) 790-8047',
+        email: 'unelmapayca@gmail.com',
+    },
+    {
+        title: 'South Asia office',
+        company: 'Unelma Platforms Pvt. Ltd',
+        address: 'Ratnanagar, Chitwan 44204, Nepal',
+        registry: 'Business ID with VAT/PAN number: 606863094',
+        phone: '+977 56-562130',
+        email: 'hello@unelma.com.np',
+    },
+    {
+        title: 'United States of America (USA)',
+        company: 'Unelma Platforms Inc.',
+        address: 'Incorporation states: Delaware, Illinois Alabama, Montana',
+        registry: '',
+        phone: '+13027037343',
+        email: 'info@unelmaplatforms.com',
+    },
+];
+
+// Partner Logos
+const partnerLogos = [
+    { src: businessFinlandLogo, alt: 'Business Finland Logo', href: 'https://www.businessfinland.com/' },
+    { src: estoniaLogo, alt: 'Republic of Estonia e-Residency Logo', href: 'https://www.e-resident.gov.ee/' },
+    { src: shortlistLogo, alt: 'Shortlist Logo', href: 'https://www.sortlist.com/' },
 ];
 
 
@@ -47,7 +93,7 @@ const Footer = () => {
                 backgroundColor: COLORS.footerBg, 
                 color: COLORS.textDark, 
                 p: { xs: 3, md: 6 }, 
-                boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -2px rgba(0, 0, 0, 0.06)'
+                boxShadow: 'none'
             }}
         >
             {/* Inner content is centered via margin: 0 auto and max-width: 1280px */}
@@ -59,12 +105,11 @@ const Footer = () => {
                         mb: 5, 
                         p: { xs: 3, sm: 4 }, 
                         backgroundColor: COLORS.secondaryAccent, 
-                        opacity: 0.7, 
                         borderRadius: 3, 
-                        boxShadow: 3,
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
                         transition: 'all 300ms',
                         '&:hover': {
-                            boxShadow: 6,
+                            borderColor: 'rgba(59, 130, 246, 0.5)',
                         }
                     }}
                 >
@@ -72,31 +117,44 @@ const Footer = () => {
                         Trusted by Innovators & Industry Leaders
                     </Typography>
                     
-                    {/* Logos Grid (5 responsive placeholders) */}
+                    {/* Partner Logos Grid */}
                     <Grid container spacing={3} justifyContent="center" alignItems="center">
-                        {[...Array(5)].map((_, index) => (
+                        {partnerLogos.map((logo, index) => (
                             <Grid 
                                 item 
-                                xs={6} sm={4} lg={2} 
+                                xs={12} sm={6} md={4} 
                                 key={index}
-                                // Hiding the 5th logo on small screens for responsiveness
-                                sx={{ display: { xs: index === 4 ? 'none' : 'flex', lg: 'flex' }, justifyContent: 'center' }} 
+                                sx={{ display: 'flex', justifyContent: 'center' }} 
                             >
-                                <Box
-                                    component="img"
-                                    src={`https://placehold.co/120x40/${COLORS.secondaryAccent.substring(1)}/${COLORS.textDark.substring(1)}?text=Client+${String.fromCharCode(65 + index)}`} 
-                                    alt={`Client ${String.fromCharCode(65 + index)} Logo`} 
-                                    sx={{ 
-                                        height: 40, 
-                                        width: 'auto', 
-                                        objectFit: 'contain', 
-                                        borderRadius: 1,
-                                        transition: 'transform 200ms',
-                                        '&:hover': { transform: 'scale(1.05)' }
+                                <Link
+                                    href={logo.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        textDecoration: 'none',
                                     }}
-                                    // Error handling in case placeholder fails
-                                    onError={(e) => { e.target.onerror = null; e.target.src=`https://placehold.co/120x40/${COLORS.secondaryAccent.substring(1)}/${COLORS.textDark.substring(1)}?text=Logo`; }} 
-                                />
+                                >
+                                    <Box
+                                        component="img"
+                                        src={logo.src} 
+                                        alt={logo.alt} 
+                                        sx={{ 
+                                            height: { xs: 35, sm: 40, md: 50 }, 
+                                            width: 'auto', 
+                                            maxWidth: '100%',
+                                            objectFit: 'contain', 
+                                            opacity: 0.8,
+                                            transition: 'all 200ms',
+                                            cursor: 'pointer',
+                                            '&:hover': { 
+                                                transform: 'scale(1.05)',
+                                                opacity: 1,
+                                            }
+                                        }}
+                                    />
+                                </Link>
                             </Grid>
                         ))}
                     </Grid>
@@ -107,64 +165,23 @@ const Footer = () => {
                 {/* END: Clients and Partners Logo Section */}
                 
                 {/* Main Footer Grid */}
-                <Grid container spacing={5} sx={{ pb: 4, borderBottom: `1px solid ${COLORS.textDark}33` }}>
-
-                    {/* 1. Brand Info & Social */}
-                    <Grid item xs={12} sm={6} lg={3}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                            <Typography variant="h5" component="h2" sx={{ fontWeight: 700, color: COLORS.primaryAccent, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                                UNELMA
-                            </Typography>
-                            <Typography variant="body2" sx={{ fontSize: '0.875rem' }}>
-                                Innovative platforms for a better digital experience.
-                            </Typography>
-                            
-                            {/* Social Icons (Using SVG paths directly) */}
-                            <Box sx={{ display: 'flex', gap: 2, pt: 1 }}>
-    {/* 1. X (formerly Twitter) Icon */}
-    <Link 
-        href="https://x.com/yourprofile" 
-        target="_blank" 
-        color="inherit" 
-        sx={{ 
-            color: COLORS.primaryAccent, 
-            transition: 'color 300ms, transform 300ms', 
-            '&:hover': { color: COLORS.textDark, transform: 'scale(1.15)' } 
-        }}
-        aria-label="Follow us on X" // Added for accessibility
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2 1.1-.8 1.4-2.8 0-4s-3.7-1-4.7-3c-3-6 2-10.2 6-8.2 2.8 1.4 5 3.8 6.4 5.7.5.3 1.1.2 1.4-.4.4-.8.4-1.6 0-2.4 1.3.1 2.3 0 3.3-.8z"/>
-        </svg>
-    </Link>
-    
-    {/* 2. Facebook Icon */}
-    <Link 
-        href="https://facebook.com/yourprofile" 
-        target="_blank" 
-        color="inherit" 
-        sx={{ 
-            color: COLORS.primaryAccent, 
-            transition: 'color 300ms, transform 300ms', 
-            '&:hover': { color: COLORS.textDark, transform: 'scale(1.15)' } 
-        }}
-        aria-label="Find us on Facebook" // Added for accessibility
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-        </svg>
-    </Link>
-</Box>
-                        </Box>
-                    </Grid>
-
-                    {/* 2. Company Links */}
-                    <Grid item xs={6} sm={6} lg={3}>
-                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Company</Typography>
+                <Grid container spacing={4} sx={{ pb: 4, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                    {/* Top Row: Useful Links, Career With Us, Newsletter */}
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Useful Links</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
-                            {companyLinks.map((item) => (
+                            {usefulLinks.map((item) => (
                                 <Box component="li" key={item.label}>
-                                    <Link href={item.href} underline="none" sx={{ fontSize: '0.875rem', color: COLORS.textDark, transition: 'color 200ms', '&:hover': { color: COLORS.primaryAccent } }}>
+                                    <Link 
+                                        href={item.href} 
+                                        underline="none" 
+                                        sx={{ 
+                                            fontSize: '0.875rem', 
+                                            color: COLORS.textDark, 
+                                            transition: 'color 200ms', 
+                                            '&:hover': { color: COLORS.primaryAccent } 
+                                        }}
+                                    >
                                         {item.label}
                                     </Link>
                                 </Box>
@@ -172,13 +189,21 @@ const Footer = () => {
                         </Box>
                     </Grid>
 
-                    {/* 3. Support & Resources */}
-                    <Grid item xs={6} sm={6} lg={3}>
-                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Resources</Typography>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Career With Us</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
-                            {resourceLinks.map((item) => (
+                            {careerLinks.map((item) => (
                                 <Box component="li" key={item.label}>
-                                    <Link href={item.href} underline="none" sx={{ fontSize: '0.875rem', color: COLORS.textDark, transition: 'color 200ms', '&:hover': { color: COLORS.primaryAccent } }}>
+                                    <Link 
+                                        href={item.href} 
+                                        underline="none" 
+                                        sx={{ 
+                                            fontSize: '0.875rem', 
+                                            color: COLORS.textDark, 
+                                            transition: 'color 200ms', 
+                                            '&:hover': { color: COLORS.primaryAccent } 
+                                        }}
+                                    >
                                         {item.label}
                                     </Link>
                                 </Box>
@@ -186,11 +211,10 @@ const Footer = () => {
                         </Box>
                     </Grid>
 
-                    {/* 4. Newsletter Signup */}
-                    <Grid item xs={12} lg={3}>
-                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Stay Updated</Typography>
-                        <Typography variant="body2" sx={{ fontSize: '0.875rem', mb: 2 }}>
-                            Subscribe for the latest news and features.
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Subscribe to our Newsletter</Typography>
+                        <Typography variant="body2" sx={{ fontSize: '0.875rem', mb: 2, color: 'rgba(255, 255, 255, 0.7)' }}>
+                            Based on the GDPR rule, we will only contact you if it is essential and all personal data collected is anonymized.
                         </Typography>
                         
                         {/* Newsletter Form */}
@@ -203,19 +227,18 @@ const Footer = () => {
                                 fullWidth
                                 size="small"
                                 type="email" 
-                                placeholder="Your email" 
+                                placeholder="your email" 
                                 required
                                 variant="outlined"
                                 sx={{
-                                    // Custom styling to mimic Tailwind look
                                     '& .MuiOutlinedInput-root': {
-                                        borderRadius: 2, // Equivalent to rounded-lg
-                                        backgroundColor: `${COLORS.secondaryAccent}66`, // Secondary Accent with opacity
+                                        borderRadius: 2,
+                                        backgroundColor: COLORS.secondaryAccent,
                                         color: COLORS.textDark,
-                                        '& fieldset': { borderColor: `${COLORS.textDark}4D` }, // Border color
+                                        '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
                                         '&:hover fieldset': { borderColor: COLORS.primaryAccent },
                                         '&.Mui-focused fieldset': { borderColor: COLORS.primaryAccent, borderWidth: '2px' },
-                                        '& input::placeholder': { color: `${COLORS.textDark}99`, opacity: 1 },
+                                        '& input::placeholder': { color: 'rgba(255, 255, 255, 0.5)', opacity: 1 },
                                     },
                                 }}
                             />
@@ -228,14 +251,14 @@ const Footer = () => {
                                     color: 'white',
                                     fontWeight: 600,
                                     py: 1, 
-                                    px: 2,
-                                    borderRadius: 2, // rounded-lg
-                                    boxShadow: 3,
+                                    px: 3,
+                                    borderRadius: 2,
+                                    textTransform: 'none',
                                     transition: 'all 300ms',
+                                    whiteSpace: 'nowrap',
                                     '&:hover': { 
-                                        backgroundColor: COLORS.primaryAccent, // Maintain color, use opacity change for hover effect
+                                        backgroundColor: COLORS.primaryAccent,
                                         opacity: 0.9,
-                                        boxShadow: 6,
                                     }
                                 }}
                             >
@@ -243,13 +266,146 @@ const Footer = () => {
                             </Button>
                         </Box>
                     </Grid>
+
+                    {/* Office Locations - Horizontal Layout */}
+                    <Grid item xs={12}>
+                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 3, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Offices</Typography>
+                        <Box sx={{ 
+                            display: 'flex', 
+                            flexDirection: { xs: 'column', sm: 'row' },
+                            flexWrap: 'wrap',
+                            gap: { xs: 3, sm: 4, md: 4 },
+                        }}>
+                            {offices.map((office, index) => (
+                                <Box 
+                                    key={index}
+                                    sx={{
+                                        flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 16px)', md: '1 1 calc(25% - 24px)' },
+                                        minWidth: { xs: '100%', sm: '250px', md: '200px' },
+                                    }}
+                                >
+                                    <Typography variant="subtitle2" sx={{ fontWeight: 600, color: COLORS.primaryAccent, mb: 0.5, fontSize: '0.875rem' }}>
+                                        {office.title}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ fontSize: '0.75rem', color: COLORS.textDark, mb: 0.5 }}>
+                                        {office.company}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.7)', mb: 0.5 }}>
+                                        {office.address}
+                                    </Typography>
+                                    {office.registry && (
+                                        <Typography variant="body2" sx={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.7)', mb: 0.5 }}>
+                                            {office.registry}
+                                        </Typography>
+                                    )}
+                                    <Typography variant="body2" sx={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.7)', mb: 0.5 }}>
+                                        {office.phone}
+                                    </Typography>
+                                    <Link 
+                                        href={`mailto:${office.email}`}
+                                        underline="none"
+                                        sx={{ 
+                                            fontSize: '0.75rem', 
+                                            color: COLORS.primaryAccent, 
+                                            transition: 'color 200ms',
+                                            '&:hover': { color: COLORS.textDark }
+                                        }}
+                                    >
+                                        {office.email}
+                                    </Link>
+                                </Box>
+                            ))}
+                        </Box>
+                    </Grid>
                 </Grid>
 
-                {/* Copyright Row */}
-                <Box sx={{ pt: 3, textAlign: 'center', fontSize: '0.875rem', color: `${COLORS.textDark}B3` }}>
-                    <Typography variant="caption" component="p" sx={{ fontSize: 'inherit' }}>
+                {/* Copyright and Social Media Row */}
+                <Box 
+                    sx={{ 
+                        pt: 3, 
+                        display: 'flex', 
+                        flexDirection: { xs: 'column', sm: 'row' },
+                        justifyContent: 'space-between',
+                        alignItems: { xs: 'flex-start', sm: 'center' },
+                        gap: { xs: 2, sm: 0 },
+                    }}
+                >
+                    {/* Copyright Text - Left */}
+                    <Typography 
+                        variant="caption" 
+                        component="p" 
+                        sx={{ 
+                            fontSize: '0.875rem', 
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            textAlign: 'left',
+                        }}
+                    >
                         &copy; 2025 UNELMA Platforms. All rights reserved.
                     </Typography>
+                    
+                    {/* Social Media Icons - Right */}
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        {/* LinkedIn Icon */}
+                        <Link 
+                            href="https://linkedin.com/company/yourprofile" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            sx={{ 
+                                color: COLORS.primaryAccent, 
+                                transition: 'color 300ms, transform 300ms', 
+                                '&:hover': { color: COLORS.textDark, transform: 'scale(1.15)' },
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                            aria-label="Follow us on LinkedIn"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                <rect x="2" y="9" width="4" height="12"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </Link>
+                        
+                        {/* X (formerly Twitter) Icon */}
+                        <Link 
+                            href="https://x.com/yourprofile" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            sx={{ 
+                                color: COLORS.primaryAccent, 
+                                transition: 'color 300ms, transform 300ms', 
+                                '&:hover': { color: COLORS.textDark, transform: 'scale(1.15)' },
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                            aria-label="Follow us on X"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2 1.1-.8 1.4-2.8 0-4s-3.7-1-4.7-3c-3-6 2-10.2 6-8.2 2.8 1.4 5 3.8 6.4 5.7.5.3 1.1.2 1.4-.4.4-.8.4-1.6 0-2.4 1.3.1 2.3 0 3.3-.8z"/>
+                            </svg>
+                        </Link>
+                        
+                        {/* Instagram Icon */}
+                        <Link 
+                            href="https://instagram.com/yourprofile" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            sx={{ 
+                                color: COLORS.primaryAccent, 
+                                transition: 'color 300ms, transform 300ms', 
+                                '&:hover': { color: COLORS.textDark, transform: 'scale(1.15)' },
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                            aria-label="Follow us on Instagram"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                            </svg>
+                        </Link>
+                    </Box>
                 </Box>
 
             </Box>

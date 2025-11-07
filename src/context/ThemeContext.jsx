@@ -8,37 +8,38 @@ export const ThemeContext = createContext(null);
 //Light theme gonna be here
 const lightTheme = createTheme({
   palette: {
+    mode: "light",
     primary: {
-      main: "#6366F1", // Soft Indigo / Violet (modern & vibrant)
+      main: "#3B82F6", // Blue accent color matching logo
     },
     secondary: {
-      main: "#EC4899", // Pink accent — adds warmth and contrast
+      main: "#3B82F6", // Blue accent for consistency
     },
     error: {
-      main: "#EF4444", // Modern red (not too harsh)
+      main: "#F87171", // Soft coral red (less harsh)
     },
     warning: {
-      main: "#F59E0B", // Smooth amber tone
+      main: "#FBBF24", // Warm amber
     },
     success: {
-      main: "#10B981", // Fresh emerald green
+      main: "#34D399", // Fresh mint green
     },
     info: {
-      main: "#3B82F6", // Clean, crisp blue
+      main: "#3B82F6", // Blue accent
     },
     background: {
-      default: "#ffffff",
-      paper: "#f5f5f5",
+      default: "#FFFFFF", // Pure white background
+      paper: "#F5F5F5", // Slightly darker for cards/surfaces
     },
     text: {
-      primary: "#110f0fff",
-      secondary: "#6B7280",
+      primary: "#000000", // Pure black text
+      secondary: "#6B7280", // Muted gray for secondary text
     },
     divider: "#c4c4c4",
   },
   typography: {
     fontFamily: [
-      "Roboto",
+      "Poppins",
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',
@@ -79,10 +80,10 @@ const darkTheme = createTheme({
     mode: "dark",
 
     primary: {
-      main: "#818CF8", // Softer indigo (more visible on dark bg)
+      main: "#3B82F6", // Blue accent color matching logo
     },
     secondary: {
-      main: "#F472B6", // Brightened pink for contrast
+      main: "#3B82F6", // Blue accent for consistency
     },
     error: {
       main: "#F87171", // Soft coral red (less harsh)
@@ -94,23 +95,23 @@ const darkTheme = createTheme({
       main: "#34D399", // Fresh mint green
     },
     info: {
-      main: "#60A5FA", // Lively sky blue
+      main: "#3B82F6", // Blue accent
     },
 
     background: {
-      default: "#0F172A", // Deep slate navy (modern dark bg)
-      paper: "#1E293B", // Slightly lighter card surface
+      default: "#0A0F1C", // Darker blue background
+      paper: "#151B2E", // Slightly lighter dark blue for cards/surfaces
     },
 
     text: {
-      primary: "#F3F4F6", // Light grayish white
+      primary: "#FFFFFF", // Pure white text
       secondary: "#9CA3AF", // Muted gray for secondary text
     },
     divider: "#c4c4c4",
   },
   typography: {
     fontFamily: [
-      "Roboto",
+      "Poppins",
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',
