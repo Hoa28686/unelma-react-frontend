@@ -1,0 +1,147 @@
+{
+  "blogs": [
+    {
+      "id": 1,
+      "title": "Welcome to My Blog",
+      "author": {
+        "id": 1,
+        "name": "John Doe",
+        "avatar": "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+      },
+      "created_at": "2025-11-03",
+      "image_url": "https://www.franceinfo.fr/pictures/WiKL7sffDn62uziktAnl718yY_g/1200x1200/2019/04/11/083656.jpg-r_1920_1080-f_jpg-q_x-xxyxx.jpg",
+      "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit cumque ratione nulla amet blanditiis reprehenderit quas optio qui magni maxime debitis dolore laborum consequatur itaque, dolorum quo ipsam eum soluta. Quasi quae repellendus obcaecati.\nNemo, expedita magni delectus accusamus repellat soluta sint tempore debitis. Dolores nemo est deserunt doloribus distinctio.Maxime deleniti pariatur assumenda vero accusamus est exercitationem laudantium? Quasi, consectetur voluptas esse nostrum itaque dolore deserunt voluptatum libero consequatur ad possimus veritatis! Illo ducimus, itaque esse libero rerum laudantium magnam doloribus modi tempore numquam necessitatibus ea accusantium qui iste laborum veniam! Quibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+      "comments": [
+        {
+          "id": 1,
+          "user": {
+            "id": 1,
+            "name": "Alice",
+            "avatar": "https://t3.ftcdn.net/jpg/15/34/03/58/360_F_1534035806_6gn57ou4V0dVZY6l30h6nEB5gWQRAP6v.jpg"
+          },
+          "text": "Great first post! \nQuibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+          "created_at": "2025-11-03T10:00:00Z"
+        },
+        {
+          "id": 2,
+          "user": {
+            "id": 2,
+            "name": "Bob",
+            "avatar": "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+          },
+          "text": "Looking forward to more content!",
+          "created_at": "2025-11-03T11:30:00Z"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "React Tips for Beginners",
+      "author": {
+        "id": 2,
+        "name": "Jane Smith",
+        "avatar": "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+      },
+      "created_at": "2025-10-25",
+      "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEilkDplCHVHpisFb1j_6H7U2t15JtDbaIloVNSQfjZ9WBP2NH229xjuHReV3QYsycndnk4YRPWIXbzVhwnEhr0RQEndyvnsPymxOyqXA7DZRy7TZRvR563gbECshOZxG5vOeaoqJXd8eL3PkGTv2VETppl9Qoln5DyGJY3lZcNqzSlyivxmtxCQGuBvE8Rz/w532-h407/Screenshot%202025-05-26%20at%2020.49.37.png",
+      "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit cumque ratione nulla amet blanditiis reprehenderit quas optio qui magni maxime debitis dolore laborum consequatur itaque, dolorum quo ipsam eum soluta. Quasi quae repellendus obcaecati, nemo, expedita magni delectus accusamus repellat soluta sint tempore debitis. Dolores nemo est deserunt doloribus distinctio. Maxime deleniti pariatur assumenda vero accusamus est exercitationem laudantium? \nQuasi, consectetur voluptas esse nostrum itaque dolore deserunt voluptatum libero consequatur ad possimus veritatis! Illo ducimus, itaque esse libero rerum laudantium magnam doloribus modi tempore numquam necessitatibus ea accusantium qui iste laborum veniam! Quibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+      "comments": [
+        {
+          "id": 1,
+          "user": {
+            "id": 3,
+            "name": "Chris",
+            "avatar": "https://lumiere-a.akamaihd.net/v1/images/c94eed56a5e84479a2939c9172434567c0147d4f.jpeg?region=0,0,600,600&width=480"
+          },
+          "text": "This helped me a lot, thanks!\n Quibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+          "created_at": "2025-10-26T09:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Understanding Redux Toolkit",
+      "author": {
+        "id": 3,
+        "name": "Alex Vu",
+        "avatar": "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+      },
+      "created_at": "2025-10-20",
+      "image_url": "https://www.gamedesigning.org/wp-content/uploads/2015/11/3d-animation-technique.jpg",
+      "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit cumque ratione nulla amet blanditiis reprehenderit quas optio qui magni maxime debitis dolore laborum consequatur itaque, dolorum quo ipsam eum soluta. Quasi quae.\n Repellendus obcaecati, nemo, expedita magni delectus accusamus repellat soluta sint tempore debitis. Dolores nemo est deserunt doloribus distinctio. Maxime deleniti pariatur assumenda vero accusamus est exercitationem laudantium? \nQuasi, consectetur voluptas esse nostrum itaque dolore deserunt voluptatum libero consequatur ad possimus veritatis! Illo ducimus, itaque esse libero rerum laudantium magnam doloribus modi tempore numquam necessitatibus ea accusantium qui iste laborum veniam! Quibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+      "comments": []
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "UnelmaMail",
+      "category": "Enterprise Software",
+      "price": 99.99,
+      "sku": "123456_UnelmaMail",
+      "hightlights": "Explore UnelmaMail, the world's first AI-powered email marketing platform developed by Unelma Platforms. Offering user-friendly and efficient solutions, UnelmaMail revolutionizes the way businesses engage in email marketing strategies for ultimate growth and expansion. Experience the future of email marketing with UnelmaMail.",
+      "description": "ELorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit cumque ratione nulla amet blanditiis reprehenderit quas optio qui magni maxime debitis dolore laborum consequatur itaque, dolorum quo ipsam eum soluta. Quasi quae repellendus obcaecati, nemo, expedita magni delectus accusamus repellat soluta sint tempore debitis. Dolores nemo est deserunt doloribus distinctio. Maxime deleniti pariatur assumenda vero accusamus est exercitationem laudantium? \nQuasi, consectetur voluptas esse nostrum itaque dolore deserunt voluptatum libero consequatur ad possimus veritatis! Illo ducimus, itaque esse libero rerum laudantium magnam doloribus modi tempore numquam necessitatibus ea accusantium qui iste laborum veniam! Quibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+      "rating": 4.5,
+      "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFSVIHqHpXHhhCAOLCcQwPcsLEDEk_lLVixA&s"
+    },
+    {
+      "id": 2,
+      "name": "UnelmaBrowser and Unelma-CodeTranslator",
+      "category": "Open source",
+      "price": 49.99,
+      "sku": "123456_UnelmaPlatforms_OpenSource",
+      "hightlights": "Unelma Platforms brings to you UnelmaBrowser and Unelma-Code Translator - innovative software designed for optimised user experience. With open-source access, full support, maintenance, security provisions, and bug fixes, we ensure a smooth, secure and efficient digital journey.",
+      "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit cumque ratione nulla amet blanditiis reprehenderit quas optio qui magni maxime debitis dolore laborum consequatur itaque, dolorum quo ipsam eum soluta. Quasi quae repellendus obcaecati, nemo, expedita magni delectus accusamus repellat soluta sint tempore debitis. Dolores nemo est deserunt doloribus distinctio. Maxime deleniti pariatur assumenda vero accusamus est exercitationem laudantium? \nQuasi, consectetur voluptas esse nostrum itaque dolore deserunt voluptatum libero consequatur ad possimus veritatis! Illo ducimus, itaque esse libero rerum laudantium magnam doloribus modi tempore numquam necessitatibus ea accusantium qui iste laborum veniam! Quibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+      "rating": 4.8,
+      "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg85Stla9VUgFD4bOPehJGT_RoIh_70NtF2saAWS3Yiz_5zXiVmgMaArFYNr7m3S8_1b5rKjwVqjvfO1e9KMHePLRJgJaS0NqrzSzgaV-ydypi5EDEbI5RBUzls15BmbNsiKym6W77wH4kml-aPgGCNwGRi1rADIeMxpfhK3NvSqzGOwj3PZPuTx6iepGOG/w574-h555/Screenshot%202023-11-15%20at%207.53.49.png"
+    },
+    {
+      "id": 3,
+      "name": "UnelmaCRM",
+      "category": "Enterprise Software",
+      "price": 149.99,
+      "sku": "12345_10950",
+      "hightlights": "When you choose UnelmaCRM, you choose a comprehensive CRM solution that offers 1 year of full support, maintenance, hosting, SaaS, top-notch security, and bug fixes.",
+      "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit cumque ratione nulla amet blanditiis reprehenderit quas optio qui magni maxime debitis dolore laborum consequatur itaque, dolorum quo ipsam eum soluta. Quasi quae repellendus obcaecati, nemo, expedita magni delectus accusamus repellat soluta sint tempore debitis. Dolores nemo est deserunt doloribus distinctio. Maxime deleniti pariatur assumenda vero accusamus est exercitationem laudantium? \nQuasi, consectetur voluptas esse nostrum itaque dolore deserunt voluptatum libero consequatur ad possimus veritatis! Illo ducimus, itaque esse libero rerum laudantium magnam doloribus modi tempore numquam necessitatibus ea accusantium qui iste laborum veniam! Quibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+      "rating": 4.7,
+      "image_url": "https://unelmacrm.com/assets/images/growth.jpg"
+    },
+    {
+      "id": 4,
+      "name": "UnelmaCloud",
+      "category": "Enterprise Software",
+      "price": 299.99,
+      "sku": "ELEC-004",
+      "hightlights": "Experience the power of UnelmaCloud, our state-of-the-art cloud storage solution that offers seamless access, robust security, and scalable storage options for all your data needs.",
+      "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit cumque ratione nulla amet blanditiis reprehenderit quas optio qui magni maxime debitis dolore laborum consequatur itaque, dolorum quo ipsam eum soluta. Quasi quae repellendus obcaecati, nemo, expedita magni delectus accusamus repellat soluta sint tempore debitis. Dolores nemo est deserunt doloribus distinctio. Maxime deleniti pariatur assumenda vero accusamus est exercitationem laudantium? \nQuasi, consectetur voluptas esse nostrum itaque dolore deserunt voluptatum libero consequatur ad possimus veritatis! Illo ducimus, itaque esse libero rerum laudantium magnam doloribus modi tempore numquam necessitatibus ea accusantium qui iste laborum veniam! Quibusdam architecto, repudiandae rerum aperiam dolore delectus fugit.",
+      "rating": 4.6,
+      "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7gTylxL55kR7zS-KFd6UbKesHdzouBrJznw&s"
+    }
+  ],
+  "services": [
+    {
+      "id": 1,
+      "name": "Cloud Service",
+      "description": "Rent a space on our virtual space",
+      "icon": null,
+      "is_active": true,
+      "is_featured": false,
+      "order": 0,
+      "created_at": "2025-10-31T18:55:20.000000Z",
+      "updated_at": "2025-10-31T18:55:20.000000Z",
+      "image_url": "https://images.unsplash.com/photo-1507842217343-583bb7270b66"
+    },
+    {
+      "id": 2,
+      "name": "Unelma Mail",
+      "description": "Mailing service",
+      "icon": null,
+      "is_active": true,
+      "is_featured": false,
+      "order": 0,
+      "created_at": "2025-10-31T19:07:19.000000Z",
+      "updated_at": "2025-10-31T19:07:19.000000Z",
+      "image_url": "https://images.unsplash.com/photo-1519389950473-47ba0277781c"
+    }
+  ]
+}

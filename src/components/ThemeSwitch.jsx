@@ -8,7 +8,24 @@ const ThemeSwitch = () => {
   let { CurrentTheme, toogleTheme } = useTheme(ThemeContext);
   return (
     <>
-      <IconButton aria-label="Example" onClick={toogleTheme}>
+      <IconButton 
+        aria-label="Example" 
+        onClick={toogleTheme}
+        sx={{
+          color: (theme) => theme.palette.text.primary,
+          "&:hover": {
+            color: (theme) => theme.palette.text.primary,
+            backgroundColor: "transparent",
+          },
+          "&:focus": {
+            outline: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+          },
+        }}
+        disableRipple
+      >
         {CurrentTheme == "dark" ? <FlashlightOnIcon /> : <DarkModeIcon />}
       </IconButton>
     </>
