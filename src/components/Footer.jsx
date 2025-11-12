@@ -6,14 +6,14 @@ import shortlistLogo from "../assets/shortlist-logo.webp";
 
 // Style Guide Colors as defined:
 const COLORS = {
-    // Background - Darker Blue
-    footerBg: '#0A0F1C', 
-    // Primary Accent - Blue (matching theme)
-    primaryAccent: '#3B82F6', 
-    // Text - White
-    textDark: '#FFFFFF', 
-    // Secondary Accent - Dark blue-gray for subtle backgrounds
-    secondaryAccent: '#151B2E', 
+    // Background - Dark Purple
+    footerBg: '#422040', 
+    // Primary Accent - Orange/Coral (matching theme)
+    primaryAccent: '#E57A44', 
+    // Text - Light Yellow/Green
+    textDark: '#E3D985', 
+    // Secondary Accent - Darker purple for subtle backgrounds
+    secondaryAccent: '#2A1630', 
 };
 
 // Footer Links Data
@@ -109,7 +109,7 @@ const Footer = () => {
                         border: '1px solid rgba(255, 255, 255, 0.1)',
                         transition: 'all 300ms',
                         '&:hover': {
-                            borderColor: 'rgba(59, 130, 246, 0.5)',
+                            borderColor: 'rgba(229, 122, 68, 0.5)',
                         }
                     }}
                 >
@@ -121,8 +121,7 @@ const Footer = () => {
                     <Grid container spacing={3} justifyContent="center" alignItems="center">
                         {partnerLogos.map((logo, index) => (
                             <Grid 
-                                item 
-                                xs={12} sm={6} md={4} 
+                                size={{ xs: 12, sm: 6, md: 4 }}
                                 key={index}
                                 sx={{ display: 'flex', justifyContent: 'center' }} 
                             >
@@ -167,7 +166,7 @@ const Footer = () => {
                 {/* Main Footer Grid */}
                 <Grid container spacing={4} sx={{ pb: 4, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
                     {/* Top Row: Useful Links, Career With Us, Newsletter */}
-                    <Grid item xs={12} md={4}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Useful Links</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
                             {usefulLinks.map((item) => (
@@ -189,7 +188,7 @@ const Footer = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Career With Us</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
                             {careerLinks.map((item) => (
@@ -211,7 +210,7 @@ const Footer = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Subscribe to our Newsletter</Typography>
                         <Typography variant="body2" sx={{ fontSize: '0.875rem', mb: 2, color: 'rgba(255, 255, 255, 0.7)' }}>
                             Based on the GDPR rule, we will only contact you if it is essential and all personal data collected is anonymized.
@@ -247,40 +246,18 @@ const Footer = () => {
                                 variant="contained"
                                 color="primary"
                                 sx={{ 
-                                    backgroundColor: COLORS.primaryAccent,
+                                    backgroundColor: (theme) => theme.palette.primary.main,
                                     color: '#FFFFFF',
-                                    fontWeight: 600,
-                                    py: 1, 
-                                    px: 3,
+                                    fontWeight: 100,
                                     borderRadius: 2,
                                     boxShadow: "none",
                                     textTransform: 'none',
                                     whiteSpace: 'nowrap',
-                                    border: "none",
-                                    position: "relative",
+                                    border: "1px solid transparent",
                                     transition: "all 0.3s ease",
-                                    '&::after': {
-                                        content: '""',
-                                        position: "absolute",
-                                        top: "8px",
-                                        left: "8px",
-                                        width: "100%",
-                                        height: "100%",
-                                        borderRight: "4px solid transparent",
-                                        borderBottom: "4px solid transparent",
-                                        borderRadius: 2,
-                                        transition: "border-color 0.3s ease",
-                                        pointerEvents: "none",
-                                        zIndex: -1,
-                                    },
                                     '&:hover': { 
-                                        boxShadow: "none",
-                                        backgroundColor: (theme) => theme.palette.primary.main,
-                                        transform: "translateY(-2px)",
-                                        '&::after': {
-                                            borderRightColor: "#3B82F6",
-                                            borderBottomColor: "#3B82F6",
-                                        },
+                                        borderColor: "#E57A44",
+                                        transform: "translateY(-4px)",
                                     },
                                     '&:focus': {
                                         outline: "none",
@@ -290,13 +267,7 @@ const Footer = () => {
                                         outline: "none",
                                         boxShadow: "none",
                                     },
-                                    '&:active': {
-                                        outline: "none",
-                                        boxShadow: "none",
-                                        border: "none",
-                                    },
                                 }}
-                                disableRipple
                             >
                                 Subscribe
                             </Button>
@@ -304,7 +275,7 @@ const Footer = () => {
                     </Grid>
 
                     {/* Office Locations - Horizontal Layout */}
-                    <Grid item xs={12}>
+                    <Grid size={{ xs: 12 }}>
                         <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 3, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Offices</Typography>
                         <Box sx={{ 
                             display: 'flex', 

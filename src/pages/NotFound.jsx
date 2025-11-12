@@ -15,7 +15,21 @@ function NotFound() {
     >
       <Typography variant="h2">404</Typography>
       <Typography variant="h6">Page not found</Typography>
-      <Button component={Link} to="/" color="primary" sx={{ mt: 2 }}>
+      <Button 
+        component={Link} 
+        to="/" 
+        color="primary" 
+        variant="contained"
+        sx={{ 
+          mt: 2,
+          border: "1px solid transparent",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            borderColor: "#E57A44",
+            transform: "translateY(-4px)",
+          },
+        }}
+      >
         Back to the home page
       </Button>
     </Box>

@@ -1,11 +1,27 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../lib/features/cart/cartSlice";
 
-function AddToCart() {
+function AddToCart({ product }) {
+  const dispatch = useDispatch();
+  const [isAdded, setIsAdded] = useState(false);
+
+  const handleAddToCart = (e) => {
+    e?.stopPropagation(); // Prevent event bubbling
+    if (product) {
+      dispatch(addToCart(product));
+      setIsAdded(true);
+      setTimeout(() => setIsAdded(false), 2000);
+    }
+  };
+
   return (
     <Button
       variant="contained"
       color="primary"
+      onClick={handleAddToCart}
+      disabled={!product}
       sx={{
         width: "100%",
         height: 50,
@@ -14,32 +30,12 @@ function AddToCart() {
         boxShadow: "none",
         textTransform: "none",
         whiteSpace: "nowrap",
-        border: "none",
-        position: "relative",
+        border: "1px solid transparent",
         color: "#FFFFFF",
         transition: "all 0.3s ease",
-        '&::after': {
-          content: '""',
-          position: "absolute",
-          top: "8px",
-          left: "8px",
-          width: "100%",
-          height: "100%",
-          borderRight: "4px solid transparent",
-          borderBottom: "4px solid transparent",
-          borderRadius: 2,
-          transition: "border-color 0.3s ease",
-          pointerEvents: "none",
-          zIndex: -1,
-        },
         '&:hover': {
-          boxShadow: "none",
-          backgroundColor: (theme) => theme.palette.primary.main,
-          transform: "translateY(-2px)",
-          '&::after': {
-            borderRightColor: "#3B82F6",
-            borderBottomColor: "#3B82F6",
-          },
+          borderColor: "#E57A44",
+          transform: "translateY(-4px)",
         },
         '&:focus': {
           outline: "none",
@@ -54,10 +50,13 @@ function AddToCart() {
           boxShadow: "none",
           border: "none",
         },
+        '&:disabled': {
+          opacity: 0.6,
+        },
       }}
       disableRipple
     >
-      Add to cart
+      {isAdded ? "Added to Cart!" : "Add to cart"}
     </Button>
   );
 }

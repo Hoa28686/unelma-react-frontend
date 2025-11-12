@@ -10,32 +10,32 @@ const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#3B82F6", // Blue accent color matching logo
+      main: "#E57A44", // Orange/coral accent color
     },
     secondary: {
-      main: "#3B82F6", // Blue accent for consistency
+      main: "#422040", // Dark purple for secondary elements
     },
     error: {
-      main: "#F87171", // Soft coral red (less harsh)
+      main: "#E57A44", // Orange/coral for errors
     },
     warning: {
-      main: "#FBBF24", // Warm amber
+      main: "#E3D985", // Light yellow/green for warnings
     },
     success: {
-      main: "#34D399", // Fresh mint green
+      main: "#BCD8C1", // Mint green for success
     },
     info: {
-      main: "#3B82F6", // Blue accent
+      main: "#D6DBB2", // Light green for info
     },
     background: {
-      default: "#FFFFFF", // Pure white background
-      paper: "#F5F5F5", // Slightly darker for cards/surfaces
+      default: "#BCD8C1", // Mint green background (lightest)
+      paper: "#BCD8C1", // Mint green for cards/surfaces (lightest)
     },
     text: {
-      primary: "#000000", // Pure black text
-      secondary: "#6B7280", // Muted gray for secondary text
+      primary: "#422040", // Dark purple text
+      secondary: "#422040", // Dark purple for secondary text (with opacity)
     },
-    divider: "#c4c4c4",
+    divider: "#D6DBB2",
   },
   typography: {
     fontFamily: [
@@ -80,34 +80,34 @@ const darkTheme = createTheme({
     mode: "dark",
 
     primary: {
-      main: "#3B82F6", // Blue accent color matching logo
+      main: "#E57A44", // Orange/coral accent color
     },
     secondary: {
-      main: "#3B82F6", // Blue accent for consistency
+      main: "#E3D985", // Light yellow/green for secondary elements
     },
     error: {
-      main: "#F87171", // Soft coral red (less harsh)
+      main: "#E57A44", // Orange/coral for errors
     },
     warning: {
-      main: "#FBBF24", // Warm amber
+      main: "#E3D985", // Light yellow/green for warnings
     },
     success: {
-      main: "#34D399", // Fresh mint green
+      main: "#BCD8C1", // Mint green for success
     },
     info: {
-      main: "#3B82F6", // Blue accent
+      main: "#D6DBB2", // Light green for info
     },
 
     background: {
-      default: "#0A0F1C", // Darker blue background
-      paper: "#151B2E", // Slightly lighter dark blue for cards/surfaces
+      default: "#422040", // Dark purple background
+      paper: "#2A1630", // Darker purple for cards/surfaces
     },
 
     text: {
-      primary: "#FFFFFF", // Pure white text
-      secondary: "#9CA3AF", // Muted gray for secondary text
+      primary: "#E3D985", // Light yellow/green text
+      secondary: "#D6DBB2", // Light green for secondary text
     },
-    divider: "#c4c4c4",
+    divider: "#D6DBB2",
   },
   typography: {
     fontFamily: [

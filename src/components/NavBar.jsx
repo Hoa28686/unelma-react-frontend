@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   AppBar,
+  Badge,
   Box,
   Button,
   Divider,
@@ -19,18 +20,23 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link, useLocation } from "react-router";
+import { useSelector } from "react-redux";
 import Logo from "./Logo.jsx";
 import ThemeSwitch from "./ThemeSwitch";
+import SearchBar from "./SearchBar";
 import { useAuth } from "../context/AuthContext.jsx";
 
 function NavBar() {
   const { user, logout } = useAuth();
   const mobileMenuWidth = 240;
   const location = useLocation();
+  const cartItems = useSelector((state) => state.cart.items);
+  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const navItems = [
     { label: "Home", path: "/" },
     { label: "About", path: "/about" },
     { label: "Products", path: "/products" },
+    { label: "Services", path: "/services" },
     { label: "Blogs", path: "/blog" },
     { label: "Contact us", path: "/contact" },
   ];
@@ -72,7 +78,7 @@ function NavBar() {
               bottom: "-4px",
               left: 0,
               right: 0,
-              height: "4px",
+              height: "2px",
               backgroundColor: isIconActive("/user")
                 ? (theme) => theme.palette.primary.main
                 : "transparent",
@@ -161,7 +167,7 @@ function NavBar() {
                     bottom: "-0.5rem",
                     left: 0,
                     right: 0,
-                    height: "4px",
+                    height: "2px",
                     backgroundColor: isActive(item.path)
                       ? theme.palette.primary.main
                       : "transparent",
@@ -197,13 +203,19 @@ function NavBar() {
           boxShadow: "none",
           borderBottom: "none",
           backgroundImage: "none",
+          "&::before": {
+            display: "none",
+          },
         }}
       >
         <Toolbar
           sx={{
             minHeight: { xs: "56px", sm: "64px" },
             padding: { xs: "0 0.5rem", sm: "0 1rem" },
-            backgroundColor: "transparent",
+            backgroundColor: "transparent !important",
+            "&::before": {
+              display: "none",
+            },
           }}
         >
           {/* logo */}
@@ -249,7 +261,7 @@ function NavBar() {
                       bottom: "-0.5rem",
                       left: 0,
                       right: 0,
-                      height: "4px",
+                      height: "2px",
                       backgroundColor: isActive(item.path)
                         ? theme.palette.primary.main
                         : "transparent",
@@ -279,7 +291,7 @@ function NavBar() {
                   left: "50%",
                   transform: "translateX(-50%)",
                   width: "60%",
-                  height: "4px",
+                  height: "2px",
                   backgroundColor: searchActive
                     ? (theme) => theme.palette.primary.main
                     : "transparent",
@@ -304,11 +316,10 @@ function NavBar() {
                     outline: "none",
                   },
                 }}
-                onClick={() => setSearchActive(!searchActive)}
+                onClick={() => setSearchActive(true)}
                 disableRipple
               >
                 <SearchOutlinedIcon />
-                {/* search logic */}
               </IconButton>
             </Box>
             {/*Product cart button */}
@@ -323,7 +334,7 @@ function NavBar() {
                   left: "50%",
                   transform: "translateX(-50%)",
                   width: "60%",
-                  height: "4px",
+                  height: "2px",
                   backgroundColor: isIconActive("/cart")
                     ? (theme) => theme.palette.primary.main
                     : "transparent",
@@ -337,6 +348,7 @@ function NavBar() {
               <IconButton
                 sx={{
                   color: (theme) => theme.palette.text.primary,
+                  position: "relative",
                   "&:hover": {
                     color: (theme) => theme.palette.text.primary,
                     backgroundColor: "transparent",
@@ -345,7 +357,19 @@ function NavBar() {
                 component={Link}
                 to="/cart"
               >
-                <ShoppingCartOutlinedIcon />
+                <Badge
+                  badgeContent={cartItemCount}
+                  color="primary"
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      backgroundColor: "#E57A44",
+                      color: "#FFFFFF",
+                      fontWeight: 600,
+                    },
+                  }}
+                >
+                  <ShoppingCartOutlinedIcon />
+                </Badge>
               </IconButton>
             </Box>
             {/* Login/Register button */}
@@ -360,7 +384,7 @@ function NavBar() {
                   left: "50%",
                   transform: "translateX(-50%)",
                   width: "60%",
-                  height: "4px",
+                  height: "2px",
                   backgroundColor: isIconActive("/user")
                     ? (theme) => theme.palette.primary.main
                     : "transparent",
@@ -435,6 +459,9 @@ function NavBar() {
           {mobileMenu}
         </Drawer>
       </Box>
+
+      {/* Search Bar Modal */}
+      <SearchBar open={searchActive} onClose={() => setSearchActive(false)} />
     </Box>
   );
 }

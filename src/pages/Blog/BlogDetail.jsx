@@ -9,7 +9,8 @@ import {
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { timeConversion } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
-import heroImage from "../../assets/hero.webp";
+import heroImageDesktop from "../../assets/earthy_frontend.png";
+import heroImageMobile from "../../assets/earthy_frontend_mobile.png";
 
 function BlogDetail() {
   const { blogId } = useParams();
@@ -102,10 +103,10 @@ function BlogDetail() {
           overflow: "hidden",
         }}
       >
-        {/* Hero Image - static, no animation */}
+        {/* Hero Images - responsive, static, no animation */}
         <Box
           component="img"
-          src={heroImage}
+          src={heroImageDesktop}
           alt="Hero background"
           sx={{
             position: "absolute",
@@ -113,8 +114,26 @@ function BlogDetail() {
             left: 0,
             width: "100%",
             height: "100vh",
-            objectFit: "contain",
+            objectFit: "cover",
+            objectPosition: "center",
             zIndex: 0,
+            display: { xs: "none", md: "block" },
+          }}
+        />
+        <Box
+          component="img"
+          src={heroImageMobile}
+          alt="Hero background"
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100vh",
+            objectFit: "cover",
+            objectPosition: "center",
+            zIndex: 0,
+            display: { xs: "block", md: "none" },
           }}
         />
 
@@ -142,262 +161,214 @@ function BlogDetail() {
               gap: 3,
             }}
           >
-            <Box
-              component="img"
-              sx={{
-                width: "100%",
-                borderRadius: 2,
-                objectFit: "cover",
-                maxHeight: "500px",
-              }}
-              src={selectedBlog?.image_url}
-              alt={selectedBlog.title}
-            />
+        <Box
+          component="img"
+          sx={{
+            width: "100%",
+            borderRadius: 2,
+            objectFit: "cover",
+            maxHeight: "500px",
+          }}
+          src={selectedBlog?.image_url}
+          alt={selectedBlog.title}
+        />
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{
+            fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+            fontWeight: 700,
+            color: (theme) => theme.palette.text.primary,
+            textAlign: "left",
+            width: "100%",
+          }}
+        >
+          {selectedBlog.title}
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          sx={{
+            color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+            mb: 2,
+            textAlign: "left",
+            width: "100%",
+            fontSize: { xs: "0.875rem", sm: "1rem" },
+          }}
+        >
+          {selectedBlog.author} • {timeConversion(selectedBlog.created_at)}
+        </Typography>
+        <Box
+          sx={{
+            width: "100%",
+            "& p": {
+              fontSize: { xs: "1rem", sm: "1.125rem" },
+              fontWeight: 400,
+              color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.87)',
+              lineHeight: 1.8,
+              textAlign: "left",
+              marginBottom: "1.5rem",
+              marginTop: 0,
+              "&:last-child": {
+                marginBottom: 0,
+              },
+            },
+          }}
+        >
+          {selectedBlog.content.includes("\n") ? (
+            selectedBlog.content.split("\n").map((paragraph, index) => (
+              <p key={index}>{paragraph.trim()}</p>
+            ))
+          ) : (
+            <p>{selectedBlog.content}</p>
+          )}
+        </Box>
+        <Box sx={{ width: "100%", textAlign: "left", alignSelf: "flex-start" }}>
+          <Typography
+            variant="h6"
+            component="h2"
+            sx={{
+              fontWeight: 600,
+              color: (theme) => theme.palette.text.primary,
+              mb: 2,
+              fontSize: { xs: "1.25rem", sm: "1.5rem" },
+            }}
+          >
+            Comments
+          </Typography>
+          <Divider sx={{ borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.12)', mb: 3 }} />
+          <Box sx={{ mt: 2 }}>
             <Typography
-              variant="h4"
-              component="h1"
+              variant="h6"
+              component="h3"
               sx={{
-                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
-                fontWeight: 700,
+                fontWeight: 600,
                 color: (theme) => theme.palette.text.primary,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              {selectedBlog.title}
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                color: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.7)"
-                    : "rgba(0, 0, 0, 0.6)",
                 mb: 2,
-                textAlign: "left",
-                width: "100%",
-                fontSize: { xs: "0.875rem", sm: "1rem" },
+                fontSize: { xs: "1.125rem", sm: "1.25rem" },
               }}
             >
-              {selectedBlog.author.name} •{" "}
-              {timeConversion(selectedBlog.created_at)}
+              Leave a comment
             </Typography>
-            <Box
-              sx={{
-                width: "100%",
-                "& p": {
-                  fontSize: { xs: "1rem", sm: "1.125rem" },
-                  fontWeight: 400,
-                  color: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.95)"
-                      : "rgba(0, 0, 0, 0.87)",
-                  lineHeight: 1.8,
-                  textAlign: "left",
-                  marginBottom: "1.5rem",
-                  marginTop: 0,
-                  "&:last-child": {
-                    marginBottom: 0,
+            <TextField
+              multiline
+              minRows={3}
+              fullWidth
+              InputProps={{
+                sx: {
+                  color: (theme) => theme.palette.text.primary,
+                  backgroundColor: (theme) => theme.palette.background.paper,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.23)',
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                    borderWidth: "2px",
                   },
                 },
               }}
+              InputLabelProps={{
+                sx: {
+                  color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                },
+              }}
+              placeholder="Write your comment..."
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <Button
+              variant="contained"
+              sx={{
+                mt: 2,
+                backgroundColor: (theme) => theme.palette.primary.main,
+                color: "#FFFFFF",
+                fontWeight: 600,
+                textTransform: "none",
+                px: 3,
+                py: 1,
+                "&:hover": {
+                  backgroundColor: (theme) => theme.palette.primary.dark || "#2563EB",
+                },
+              }}
+              onClick={handlePostComment}
             >
-              {selectedBlog.content.includes("\n") ? (
-                selectedBlog.content
-                  .split("\n")
-                  .map((paragraph, index) => (
-                    <p key={index}>{paragraph.trim()}</p>
-                  ))
-              ) : (
-                <p>{selectedBlog.content}</p>
-              )}
-            </Box>
-            <Box
-              sx={{ width: "100%", textAlign: "left", alignSelf: "flex-start" }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 600,
-                  color: (theme) => theme.palette.text.primary,
-                  mb: 2,
-                  fontSize: { xs: "1.25rem", sm: "1.5rem" },
-                }}
-              >
-                Comments
-              </Typography>
-              <Divider
-                sx={{
-                  borderColor: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.2)"
-                      : "rgba(0, 0, 0, 0.12)",
-                  mb: 3,
-                }}
-              />
-              <Box sx={{ mt: 2 }}>
-                <Typography
-                  variant="h6"
-                  component="h3"
+              Post Comment
+            </Button>
+          </Box>
+          {selectedBlog.comments.length > 0 && (
+            <Box sx={{ mt: 4 }}>
+              {selectedBlog.comments.map((c, index) => (
+                <Box
+                  key={index}
                   sx={{
-                    fontWeight: 600,
-                    color: (theme) => theme.palette.text.primary,
-                    mb: 2,
-                    fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                    display: "flex",
+                    gap: 2,
+                    my: 3,
+                    padding: 2,
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    borderRadius: 2,
+                    border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
                   }}
                 >
-                  Leave a comment
-                </Typography>
-                <TextField
-                  multiline
-                  minRows={3}
-                  fullWidth
-                  InputProps={{
-                    sx: {
-                      color: (theme) => theme.palette.text.primary,
-                      backgroundColor: (theme) =>
-                        theme.palette.background.paper,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: (theme) =>
-                          theme.palette.mode === "dark"
-                            ? "rgba(255, 255, 255, 0.2)"
-                            : "rgba(0, 0, 0, 0.23)",
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: (theme) => theme.palette.primary.main,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: (theme) => theme.palette.primary.main,
-                        borderWidth: "2px",
-                      },
-                    },
-                  }}
-                  InputLabelProps={{
-                    sx: {
-                      color: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? "rgba(255, 255, 255, 0.7)"
-                          : "rgba(0, 0, 0, 0.6)",
-                    },
-                  }}
-                  placeholder="Write your comment..."
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-                <Button
-                  variant="contained"
-                  sx={{
-                    mt: 2,
-                    backgroundColor: (theme) => theme.palette.primary.main,
-                    color: "#FFFFFF",
-                    fontWeight: 600,
-                    textTransform: "none",
-                    px: 3,
-                    py: 1,
-                    "&:hover": {
-                      backgroundColor: (theme) =>
-                        theme.palette.primary.dark || "#2563EB",
-                    },
-                  }}
-                  onClick={handlePostComment}
-                >
-                  Post Comment
-                </Button>
-              </Box>
-              {selectedBlog.comments.length > 0 && (
-                <Box sx={{ mt: 4 }}>
-                  {selectedBlog.comments.map((c, index) => (
-                    <Box
-                      key={index}
+                  <Box
+                    component="img"
+                    src={c.avatar}
+                    alt={c.user}
+                    sx={{
+                      borderRadius: "50%",
+                      width: { xs: 32, sm: 40 },
+                      height: { xs: 32, sm: 40 },
+                      objectFit: "cover",
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 1, flex: 1 }}>
+                    <Typography
+                      variant="body1"
                       sx={{
-                        display: "flex",
-                        gap: 2,
-                        my: 3,
-                        padding: 2,
-                        backgroundColor: (theme) =>
-                          theme.palette.background.paper,
-                        borderRadius: 2,
-                        border: (theme) =>
-                          `1px solid ${
-                            theme.palette.mode === "dark"
-                              ? "rgba(255, 255, 255, 0.1)"
-                              : "rgba(0, 0, 0, 0.1)"
-                          }`,
+                        fontWeight: 600,
+                        color: (theme) => theme.palette.text.primary,
                       }}
                     >
+                      {c.user}
                       <Box
-                        component="img"
-                        src={c.user.avatar}
-                        alt={c.user.name}
+                        component="span"
                         sx={{
-                          borderRadius: "50%",
-                          width: { xs: 32, sm: 40 },
-                          height: { xs: 32, sm: 40 },
-                          objectFit: "cover",
-                          flexShrink: 0,
-                        }}
-                      />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          flex: 1,
+                          fontSize: "0.875rem",
+                          color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                          ml: 1,
+                          fontWeight: 400,
                         }}
                       >
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            fontWeight: 600,
-                            color: (theme) => theme.palette.text.primary,
-                          }}
-                        >
-                          {c.user.name}
-                          <Box
-                            component="span"
-                            sx={{
-                              fontSize: "0.875rem",
-                              color: (theme) =>
-                                theme.palette.mode === "dark"
-                                  ? "rgba(255, 255, 255, 0.7)"
-                                  : "rgba(0, 0, 0, 0.6)",
-                              ml: 1,
-                              fontWeight: 400,
-                            }}
-                          >
-                            {timeConversion(c.created_at)}
-                          </Box>
-                        </Typography>
-                        <Box
-                          sx={{
-                            "& p": {
-                              fontSize: "0.9375rem",
-                              color: (theme) =>
-                                theme.palette.mode === "dark"
-                                  ? "rgba(255, 255, 255, 0.9)"
-                                  : "rgba(0, 0, 0, 0.87)",
-                              lineHeight: 1.8,
-                              margin: 0,
-                            },
-                          }}
-                        >
-                          {c.text.includes("\n") ? (
-                            c.text
-                              .split("\n")
-                              .map((paragraph, index) => (
-                                <p key={index}>{paragraph.trim()}</p>
-                              ))
-                          ) : (
-                            <p>{c.text}</p>
-                          )}
-                        </Box>
+                        {timeConversion(c.created_at)}
                       </Box>
+                    </Typography>
+                    <Box
+                      sx={{
+                        "& p": {
+                          fontSize: "0.9375rem",
+                          color: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.87)',
+                          lineHeight: 1.8,
+                          margin: 0,
+                        },
+                      }}
+                    >
+                      {c.text.includes("\n") ? (
+                        c.text.split("\n").map((paragraph, index) => (
+                          <p key={index}>{paragraph.trim()}</p>
+                        ))
+                      ) : (
+                        <p>{c.text}</p>
+                      )}
                     </Box>
-                  ))}
+                  </Box>
                 </Box>
-              )}
+              ))}
             </Box>
+          )}
+        </Box>
           </Box>
         </Box>
       </Box>

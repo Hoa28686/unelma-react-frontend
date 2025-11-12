@@ -138,7 +138,7 @@ function ProductDetail() {
                 transform: { xs: "translateX(-50%)", md: "none" },
               }}
             >
-              <AddToCart />
+              <AddToCart product={product} />
             </Box>
           </Box>
         </Box>

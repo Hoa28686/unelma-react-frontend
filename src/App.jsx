@@ -11,8 +11,9 @@ import ProductDetail from "./pages/Products/ProductDetail.jsx";
 import BlogDetail from "./pages/Blog/BlogDetail.jsx";
 import Blog from "./pages/Blog/Blog.jsx";
 import Products from "./pages/Products/Products.jsx";
-import Login from "./pages/Auth/Login.jsx";
-import Register from "./pages/Auth/Register.jsx";
+import Services from "./pages/Services/Services.jsx";
+import ServiceDetail from "./pages/Services/ServiceDetail.jsx";
+import User from "./pages/User.jsx";
 
 function App() {
   return (
@@ -25,12 +26,13 @@ function App() {
               <Route index element={<Home />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:productId" element={<ProductDetail />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/services/:serviceId" element={<ServiceDetail />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:blogId" element={<BlogDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/user" element={<User />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="*" element={<NotFound />} />
             </Route>

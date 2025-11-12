@@ -36,40 +36,31 @@ function BackToTop() {
           bottom: { xs: "2rem", sm: "3rem" },
           right: { xs: "1.5rem", sm: "2rem" },
           zIndex: 1000,
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: "-8px",
-            left: "-8px",
-            right: "-8px",
-            bottom: "-8px",
-            border: "4px solid transparent",
-            borderRadius: "50%",
-            transition: "border-color 0.3s ease",
-            pointerEvents: "none",
-            zIndex: -1,
-          },
-          "&:hover::after": {
-            borderColor: "#3B82F6",
-          },
         }}
       >
         <IconButton
           onClick={scrollToTop}
           sx={{
-            backgroundColor: "#3B82F6",
+            backgroundColor: (theme) => theme.palette.primary.main,
             color: "#FFFFFF",
             width: { xs: "48px", sm: "56px" },
             height: { xs: "48px", sm: "56px" },
+            borderRadius: "50%",
+            border: "1px solid transparent",
             transition: "all 0.3s ease",
+            "&:hover": {
+              borderColor: "#E57A44",
+              transform: "translateY(-4px)",
+            },
             "&:focus": {
               outline: "none",
+              boxShadow: "none",
             },
             "&:focus-visible": {
               outline: "none",
+              boxShadow: "none",
             },
           }}
-          disableRipple
         >
           <KeyboardArrowUpIcon sx={{ fontSize: { xs: "1.5rem", sm: "2rem" } }} />
         </IconButton>
