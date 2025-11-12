@@ -5,7 +5,7 @@ import {
   clearSelectedBlog,
   fetchBlogs,
   setSelectedBlog,
-} from "../../lib/features/blogs/blogsSlice";
+} from "../../store/slices/blogs/blogsSlice";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { timeConversion } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";

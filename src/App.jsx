@@ -4,7 +4,6 @@ import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import NotFound from "./pages/NotFound.jsx";
-import User from "./pages/User.jsx";
 import Cart from "./pages/Cart.jsx";
 import { CustomThemeProvider } from "./context/ThemeContext.jsx";
 import { CssBaseline } from "@mui/material";
@@ -12,6 +11,8 @@ import ProductDetail from "./pages/Products/ProductDetail.jsx";
 import BlogDetail from "./pages/Blog/BlogDetail.jsx";
 import Blog from "./pages/Blog/Blog.jsx";
 import Products from "./pages/Products/Products.jsx";
+import Login from "./pages/Auth/Login.jsx";
+import Register from "./pages/Auth/Register.jsx";
 
 function App() {
   return (
@@ -28,7 +29,8 @@ function App() {
               <Route path="/blog/:blogId" element={<BlogDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
-              <Route path="/user" element={<User />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="*" element={<NotFound />} />
             </Route>
