@@ -5,10 +5,10 @@ import ComputerIcon from "@mui/icons-material/Computer";
 import SecurityIcon from "@mui/icons-material/Security";
 import PeopleIcon from "@mui/icons-material/People";
 import PublicIcon from "@mui/icons-material/Public";
-import heroImageDesktop from "../assets/earthy_frontend.png";
-import heroImageMobile from "../assets/earthy_frontend_mobile.png";
 import globalMapImage from "../assets/global_office_presence.png";
 import heroVideo from "../assets/hero_video.mp4?url";
+import HeroImage from "../components/HeroImage";
+import commonBackground from "../assets/earthy_common_background.png";
 
 function About() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -34,39 +34,8 @@ function About() {
         overflow: "hidden",
       }}
     >
-      {/* Hero Images - responsive, static, no animation */}
-      <Box
-        component="img"
-        src={heroImageDesktop}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          display: { xs: "none", md: "block" },
-        }}
-      />
-      <Box
-        component="img"
-        src={heroImageMobile}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          display: { xs: "block", md: "none" },
-        }}
-      />
+      {/* Hero Image - static, no animation */}
+      <HeroImage imageSource={commonBackground} animate={false} />
       
       {/* Content overlay */}
       <Box

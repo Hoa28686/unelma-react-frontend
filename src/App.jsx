@@ -15,6 +15,9 @@ import Services from "./pages/Services/Services.jsx";
 import ServiceDetail from "./pages/Services/ServiceDetail.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
+import User from "./pages/User.jsx";
+import PaymentSuccess from "./pages/Payment/PaymentSuccess.jsx";
+import PaymentCancel from "./pages/Payment/PaymentCancel.jsx";
 
 function App() {
   return (
@@ -35,7 +38,10 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/user" element={<User />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/payment/success" element={<PaymentSuccess />} />
+              <Route path="/payment/cancel" element={<PaymentCancel />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

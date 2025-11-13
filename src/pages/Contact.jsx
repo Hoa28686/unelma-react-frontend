@@ -12,6 +12,7 @@ import {
 import { useContactForm } from "../hooks/useContactForm";
 import StyledTextField from "../components/StyledTextField";
 import HeroImage from "../components/HeroImage";
+import commonBackground from "../assets/earthy_common_background.png";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -37,19 +38,8 @@ function Contact() {
         overflow: "hidden",
       }}
     >
-      {/* Hero Images */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          zIndex: 0,
-        }}
-      >
-        <HeroImage />
-      </Box>
+      {/* Hero Image - static, no animation */}
+      <HeroImage imageSource={commonBackground} animate={false} />
 
       {/* Content overlay */}
       <Box

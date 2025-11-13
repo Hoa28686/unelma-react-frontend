@@ -27,7 +27,16 @@ import SearchBar from "./SearchBar";
 import { useAuth } from "../context/AuthContext.jsx";
 
 function NavBar() {
-  const { user, logout } = useAuth();
+  const { user: authContextUser, logout } = useAuth();
+  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated } = useSelector((state) => state.auth);
+  
+  // Check authentication from both systems
+  const hasToken = authContextUser?.email || reduxUser?.email || 
+                   localStorage.getItem("token") || localStorage.getItem("authToken");
+  const user = reduxUser || authContextUser || 
+               (localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null);
+  const isAuthenticated = reduxIsAuthenticated || hasToken || (user && (user.email || user.name));
+  
   const mobileMenuWidth = 240;
   const location = useLocation();
   const cartItems = useSelector((state) => state.cart.items);
@@ -89,7 +98,7 @@ function NavBar() {
             },
           }}
         >
-          {user?.email ? (
+          {isAuthenticated ? (
             <Button
               onClick={logout}
               color="inherit"
@@ -100,7 +109,7 @@ function NavBar() {
           ) : (
             <Button
               component={Link}
-              to="/login"
+              to="/user"
               sx={{
                 textTransform: "none",
                 fontSize: "1rem",
@@ -404,7 +413,7 @@ function NavBar() {
                   },
                 }}
                 component={Link}
-                to="/login"
+                to="/user"
               >
                 <AccountCircleOutlinedIcon />
               </IconButton>

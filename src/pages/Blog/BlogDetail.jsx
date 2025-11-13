@@ -9,8 +9,8 @@ import {
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { timeConversion } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
-import heroImageDesktop from "../../assets/earthy_frontend.png";
-import heroImageMobile from "../../assets/earthy_frontend_mobile.png";
+import HeroImage from "../../components/HeroImage";
+import commonBackground from "../../assets/earthy_common_background.png";
 
 function BlogDetail() {
   const { blogId } = useParams();
@@ -103,39 +103,8 @@ function BlogDetail() {
           overflow: "hidden",
         }}
       >
-        {/* Hero Images - responsive, static, no animation */}
-        <Box
-          component="img"
-          src={heroImageDesktop}
-          alt="Hero background"
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100vh",
-            objectFit: "cover",
-            objectPosition: "center",
-            zIndex: 0,
-            display: { xs: "none", md: "block" },
-          }}
-        />
-        <Box
-          component="img"
-          src={heroImageMobile}
-          alt="Hero background"
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100vh",
-            objectFit: "cover",
-            objectPosition: "center",
-            zIndex: 0,
-            display: { xs: "block", md: "none" },
-          }}
-        />
+        {/* Hero Image - static, no animation */}
+        <HeroImage imageSource={commonBackground} animate={false} />
 
         {/* Content overlay */}
         <Box

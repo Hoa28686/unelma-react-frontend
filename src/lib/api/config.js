@@ -17,7 +17,8 @@ const apiClient = axios.create({
 // Request interceptor - automatically add auth tokens
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    // Check both 'token' (Redux) and 'authToken' (AuthContext) for compatibility
+    const token = localStorage.getItem("token") || localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -43,11 +44,12 @@ apiClient.interceptors.response.use(
       if (error.response.status === 401 || error.response.status === 403) {
         // Clear auth data and redirect to login
         localStorage.removeItem("token");
+        localStorage.removeItem("authToken");
         localStorage.removeItem("user");
         // Optionally dispatch logout action if you have access to store
         // For now, we'll let components handle this
-        if (window.location.pathname !== "/user") {
-          window.location.href = "/user";
+        if (window.location.pathname !== "/user" && window.location.pathname !== "/login") {
+          window.location.href = "/login";
         }
       }
     } else if (error.request) {

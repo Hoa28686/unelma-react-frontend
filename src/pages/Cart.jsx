@@ -16,8 +16,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { removeFromCart, updateQuantity, clearCart } from "../lib/features/cart/cartSlice";
 import PriceDisplay from "../components/PriceDisplay";
-import heroImageDesktop from "../assets/earthy_frontend.png";
-import heroImageMobile from "../assets/earthy_frontend_mobile.png";
+import HeroImage from "../components/HeroImage";
+import commonBackground from "../assets/earthy_common_background.png";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -54,39 +54,8 @@ function Cart() {
         overflow: "hidden",
       }}
     >
-      {/* Hero Images - responsive, static, no animation */}
-      <Box
-        component="img"
-        src={heroImageDesktop}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          display: { xs: "none", md: "block" },
-        }}
-      />
-      <Box
-        component="img"
-        src={heroImageMobile}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          display: { xs: "block", md: "none" },
-        }}
-      />
+      {/* Hero Image - static, no animation */}
+      <HeroImage imageSource={commonBackground} animate={false} />
 
       {/* Content overlay */}
       <Box

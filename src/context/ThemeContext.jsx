@@ -147,10 +147,15 @@ const darkTheme = createTheme({
 });
 
 export const CustomThemeProvider = ({ children }) => {
-  const [CurrentTheme, setCurrentTheme] = useState("dark");
+  const [CurrentTheme, setCurrentTheme] = useState("light");
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-    if (saved) setCurrentTheme(saved);
+    if (saved) {
+      setCurrentTheme(saved);
+    } else {
+      // Default to light mode if no saved preference
+      setCurrentTheme("light");
+    }
   }, []);
 
   function toogleTheme() {

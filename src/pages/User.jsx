@@ -14,11 +14,19 @@ import {
   CircularProgress,
   InputAdornment,
   IconButton,
+  Drawer,
+  useTheme,
+  useMediaQuery,
+  Divider,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff, Menu as MenuIcon } from "@mui/icons-material";
 import { login, register, clearError } from "../lib/features/auth/authSlice";
+import { useContactForm } from "../hooks/useContactForm";
 
 function User() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [activeTab, setActiveTab] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -29,6 +37,16 @@ function User() {
     password_confirmation: "",
   });
   const [errors, setErrors] = useState({});
+
+  // Query form hook
+  const {
+    formData: queryFormData,
+    loading: queryLoading,
+    submitStatus: querySubmitStatus,
+    fieldErrors: queryFieldErrors,
+    handleChange: handleQueryChange,
+    handleSubmit: handleQuerySubmit,
+  } = useContactForm({ name: "", email: "", message: "" });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -127,8 +145,203 @@ function User() {
     }
   };
 
+  // Sidebar content with query form
+  const sidebarContent = (
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "transparent",
+        backgroundImage: "none",
+      }}
+    >
+      <Box
+        sx={{
+          p: 3,
+        }}
+      >
+        <Typography
+          variant="h5"
+          component="h2"
+          sx={{
+            fontWeight: 600,
+            color: (theme) => theme.palette.text.primary,
+            textAlign: "center",
+          }}
+        >
+          Send a Query
+        </Typography>
+      </Box>
+
+      <Box
+        component="form"
+        onSubmit={handleQuerySubmit}
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          p: 3,
+          gap: 2,
+          overflowY: "auto",
+        }}
+      >
+        <TextField
+          name="name"
+          label="Name"
+          variant="outlined"
+          fullWidth
+          required
+          value={queryFormData.name}
+          onChange={handleQueryChange}
+          error={!!queryFieldErrors.name}
+          helperText={queryFieldErrors.name}
+        />
+
+        <TextField
+          name="email"
+          label="Email"
+          type="email"
+          variant="outlined"
+          fullWidth
+          required
+          value={queryFormData.email}
+          onChange={handleQueryChange}
+          error={!!queryFieldErrors.email}
+          helperText={queryFieldErrors.email}
+        />
+
+        <TextField
+          name="message"
+          label="Message"
+          variant="outlined"
+          fullWidth
+          required
+          multiline
+          rows={6}
+          value={queryFormData.message}
+          onChange={handleQueryChange}
+          error={!!queryFieldErrors.message}
+          helperText={queryFieldErrors.message}
+        />
+
+        {querySubmitStatus.success !== null && (
+          <Alert
+            severity={querySubmitStatus.success ? "success" : "error"}
+            sx={{ mt: 1 }}
+          >
+            {querySubmitStatus.message}
+          </Alert>
+        )}
+
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          disabled={queryLoading}
+          sx={{
+            backgroundColor: (theme) => theme.palette.primary.main,
+            color: "#FFFFFF",
+            fontWeight: 100,
+            borderRadius: 2,
+            py: 1.5,
+            textTransform: "none",
+            border: "1px solid transparent",
+            transition: "all 0.3s ease",
+            mt: 2,
+            "&:hover": {
+              borderColor: "#E57A44",
+              transform: "translateY(-4px)",
+            },
+          }}
+        >
+          {queryLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Send Query"
+          )}
+        </Button>
+      </Box>
+    </Box>
+  );
+
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
+    <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)" }}>
+      {/* Sidebar */}
+      {isMobile ? (
+        <Drawer
+          anchor="left"
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: { xs: 320, sm: 380 },
+              backgroundColor: "transparent",
+              backgroundImage: "none",
+            },
+          }}
+        >
+          {sidebarContent}
+        </Drawer>
+      ) : (
+        <Box
+          sx={{
+            width: { md: 380, lg: 420 },
+            flexShrink: 0,
+            borderRight: 1,
+            borderColor: "divider",
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "transparent",
+            backgroundImage: "none",
+            position: "relative",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              right: 0,
+              top: 0,
+              bottom: 0,
+              width: "1px",
+              boxShadow: (theme) =>
+                theme.palette.mode === "light"
+                  ? "2px 0 8px rgba(0, 0, 0, 0.15)"
+                  : "2px 0 8px rgba(0, 0, 0, 0.4)",
+              pointerEvents: "none",
+            },
+          }}
+        >
+          {sidebarContent}
+        </Box>
+      )}
+
+      {/* Main content */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: { xs: 2, sm: 4 },
+        }}
+      >
+        {/* Mobile menu button */}
+        {isMobile && (
+          <IconButton
+            onClick={() => setSidebarOpen(true)}
+            sx={{
+              position: "absolute",
+              top: 16,
+              left: 16,
+              zIndex: 1,
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+
+        <Container maxWidth="sm" sx={{ width: "100%" }}>
       <Paper
         elevation={3}
         sx={{
@@ -295,7 +508,9 @@ function User() {
           </Button>
         </Box>
       </Paper>
-    </Container>
+        </Container>
+      </Box>
+    </Box>
   );
 }
 

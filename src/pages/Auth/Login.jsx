@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SignInPage } from "@toolpad/core/SignInPage";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router";
@@ -8,6 +8,45 @@ import { useAuth } from "../../context/AuthContext";
 function Login() {
   const { user, login, logout, message, loading, error } = useAuth();
   const navigate = useNavigate();
+
+  // Fix aria-hidden accessibility issue
+  useEffect(() => {
+    const rootElement = document.getElementById("root");
+    if (rootElement && rootElement.getAttribute("aria-hidden") === "true") {
+      // Remove aria-hidden from root if it's incorrectly set
+      rootElement.removeAttribute("aria-hidden");
+    }
+    
+    // Monitor for aria-hidden changes and fix them
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "aria-hidden" &&
+          rootElement &&
+          rootElement.getAttribute("aria-hidden") === "true"
+        ) {
+          // Check if there's a focused element inside
+          const focusedElement = document.activeElement;
+          if (focusedElement && rootElement.contains(focusedElement)) {
+            // Remove aria-hidden if a focused element is inside
+            rootElement.removeAttribute("aria-hidden");
+          }
+        }
+      });
+    });
+
+    if (rootElement) {
+      observer.observe(rootElement, {
+        attributes: true,
+        attributeFilter: ["aria-hidden"],
+      });
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   const providers = [{ id: "credentials", name: "Email & Password" }];
 
@@ -53,8 +92,19 @@ function Login() {
     <Typography variant="body2" sx={{ mt: 3 }}>
       Don't have an account?{" "}
       <Link
-        style={{ fontWeight: "bold", color: "#0260c1", cursor: "pointer" }}
         to={"/register"}
+        style={{
+          fontWeight: "bold",
+          color: "#E57A44",
+          cursor: "pointer",
+          textDecoration: "none",
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.textDecoration = "underline";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.textDecoration = "none";
+        }}
       >
         Create one.
       </Link>
@@ -66,15 +116,22 @@ function Login() {
         type="submit"
         {...props}
         sx={{
-          background: "#0173E6",
-          border: "1px solid #006BD6",
-          boxShadow:
-            "0 1px 0px inset #3399FF80, 0 1px 0 #004D9966, 0 2px 4px 0 #090B0B1A",
+          backgroundColor: (theme) => theme.palette.primary.main,
+          color: "#FFFFFF",
+          fontWeight: 100,
+          borderRadius: 2,
+          boxShadow: "none",
           textTransform: "none",
+          border: "1px solid transparent",
+          transition: "all 0.3s ease",
           width: "100%",
           fontSize: "inherit",
           mt: 3,
           py: 1,
+          "&:hover": {
+            borderColor: "#E57A44",
+            transform: "translateY(-4px)",
+          },
         }}
       >
         Log In
@@ -91,8 +148,11 @@ function Login() {
           variant="body1"
           sx={{
             width: "100%",
-            color: message ? "#1565c0" : "#dc362e",
+            color: message
+              ? (theme) => theme.palette.primary.main
+              : (theme) => theme.palette.error.main,
             textAlign: "center",
+            fontWeight: message ? 500 : 400,
           }}
         >
           {message || error}
@@ -119,28 +179,53 @@ function Login() {
             my: 8,
             p: 4,
             borderRadius: 2,
-            boxShadow: "0 4px 12px #0000001A",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            backgroundColor: "#fff",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? "#B0D0B5"
+                : theme.palette.background.paper,
           }}
         >
-          <Typography variant="h4" sx={{ textAlign: "center" }}>
+          <Typography
+            variant="h4"
+            sx={{
+              textAlign: "center",
+              fontWeight: 600,
+              color: (theme) => theme.palette.text.primary,
+              mb: 2,
+            }}
+          >
             {user.name || "User"}
           </Typography>
-          <Typography variant="subtitle1" sx={{ textAlign: "center" }}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              textAlign: "center",
+              color: (theme) => theme.palette.text.secondary,
+              mb: 3,
+            }}
+          >
             {user.email || ""}
           </Typography>
           <Button
             sx={{
-              border: "1px solid #006BD6",
-              color: "#006BD6",
+              backgroundColor: (theme) => theme.palette.primary.main,
+              color: "#FFFFFF",
+              fontWeight: 100,
+              borderRadius: 2,
               textTransform: "none",
+              border: "1px solid transparent",
+              transition: "all 0.3s ease",
               width: "100%",
               fontSize: "inherit",
               mt: 3,
               py: 1,
+              "&:hover": {
+                borderColor: "#E57A44",
+                transform: "translateY(-4px)",
+              },
             }}
             onClick={handleLogout}
           >

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { fetchBlogs } from "../../store/slices/blogs/blogsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,20 +13,26 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  Pagination,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useNavigate } from "react-router";
 import { timeConversion } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import heroImageDesktop from "../../assets/earthy_frontend.png";
-import heroImageMobile from "../../assets/earthy_frontend_mobile.png";
+import HeroImage from "../../components/HeroImage";
+import commonBackground from "../../assets/earthy_common_background.png";
+
+const ITEMS_PER_PAGE = 6; // Show 6 blogs per page
 
 function Blog() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { blogs, loading, error } = useSelector((state) => state.blogs);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (blogs.length === 0) {
@@ -39,25 +45,58 @@ function Blog() {
   };
 
   // Filter blogs based on search query
-  const filteredBlogs = blogs.filter((blog) => {
-    if (!searchQuery.trim()) return true;
+  const filteredBlogs = useMemo(() => {
+    if (!searchQuery.trim()) return blogs;
 
     const query = searchQuery.toLowerCase().trim();
     const searchTerms = query.split(" ").filter((term) => term.length > 0);
 
-    const searchableText = [
-      blog.title,
-      blog.content,
-      blog.author,
-      blog.category,
-      typeof blog.author === "object" ? blog.author?.name : blog.author,
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
+    return blogs.filter((blog) => {
+      const searchableText = [
+        blog.title,
+        blog.content,
+        blog.author,
+        blog.category,
+        typeof blog.author === "object" ? blog.author?.name : blog.author,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
 
-    return searchTerms.some((term) => searchableText.includes(term));
-  });
+      return searchTerms.some((term) => searchableText.includes(term));
+    });
+  }, [blogs, searchQuery]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex);
+
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const handleBack = () => {
     navigate("/");
@@ -122,39 +161,8 @@ function Blog() {
         overflow: "hidden",
       }}
     >
-      {/* Hero Images - responsive, static, no animation */}
-      <Box
-        component="img"
-        src={heroImageDesktop}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          display: { xs: "none", md: "block" },
-        }}
-      />
-      <Box
-        component="img"
-        src={heroImageMobile}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          display: { xs: "block", md: "none" },
-        }}
-      />
+      {/* Hero Image - static, no animation */}
+      <HeroImage imageSource={commonBackground} animate={false} />
 
       {/* Content overlay */}
       <Box
@@ -266,7 +274,7 @@ function Blog() {
           gap: { xs: 2, sm: 3 },
         }}
       >
-        {blogs.map((blog) => (
+        {paginatedBlogs.map((blog) => (
           <CardActionArea
             key={blog.id}
             sx={{
@@ -366,6 +374,88 @@ function Blog() {
             </Box>
           </CardActionArea>
         ))}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 2,
+              marginTop: { xs: "2rem", sm: "3rem" },
+              flexWrap: "wrap",
+            }}
+          >
+            {/* Previous Arrow */}
+            <IconButton
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+              sx={{
+                color: (theme) => theme.palette.text.primary,
+                border: "1px solid transparent",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  borderColor: "#E57A44",
+                  transform: "translateY(-4px)",
+                  backgroundColor: "transparent",
+                },
+                "&:disabled": {
+                  opacity: 0.5,
+                },
+              }}
+            >
+              <NavigateBeforeIcon />
+            </IconButton>
+
+            {/* Page Numbers */}
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  color: (theme) => theme.palette.text.primary,
+                  "&.Mui-selected": {
+                    backgroundColor: "#E57A44",
+                    color: "#FFFFFF",
+                    "&:hover": {
+                      backgroundColor: "#C85A2E",
+                    },
+                  },
+                  "&:hover": {
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(229, 122, 68, 0.1)"
+                        : "rgba(229, 122, 68, 0.2)",
+                  },
+                },
+              }}
+            />
+
+            {/* Next Arrow */}
+            <IconButton
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              sx={{
+                color: (theme) => theme.palette.text.primary,
+                border: "1px solid transparent",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  borderColor: "#E57A44",
+                  transform: "translateY(-4px)",
+                  backgroundColor: "transparent",
+                },
+                "&:disabled": {
+                  opacity: 0.5,
+                },
+              }}
+            >
+              <NavigateNextIcon />
+            </IconButton>
+          </Box>
+        )}
       </Box>
       </Box>
     </Box>

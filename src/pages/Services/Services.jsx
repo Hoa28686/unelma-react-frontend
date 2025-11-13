@@ -19,8 +19,8 @@ import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import { useNavigate } from "react-router";
-import heroImageDesktop from "../../assets/earthy_frontend.png";
-import heroImageMobile from "../../assets/earthy_frontend_mobile.png";
+import HeroImage from "../../components/HeroImage";
+import commonBackground from "../../assets/earthy_common_background.png";
 
 // Hardcoded services data with icons
 const servicesData = [
@@ -61,6 +61,10 @@ const ITEMS_PER_PAGE = 3; // Show 3 services per page
 // Service ID mapping
 const serviceIdMap = {
   1: "cyber-security",
+  2: "data-management",
+  3: "data-science",
+  4: "cloud-service",
+  5: "ai-machine-learning",
 };
 
 function Services() {
@@ -126,39 +130,8 @@ function Services() {
         overflow: "hidden",
       }}
     >
-      {/* Hero Images - responsive, static, no animation */}
-      <Box
-        component="img"
-        src={heroImageDesktop}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          display: { xs: "none", md: "block" },
-        }}
-      />
-      <Box
-        component="img"
-        src={heroImageMobile}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          display: { xs: "block", md: "none" },
-        }}
-      />
+      {/* Hero Image - static, no animation */}
+      <HeroImage imageSource={commonBackground} animate={false} />
 
       {/* Content overlay */}
       <Box
@@ -301,9 +274,7 @@ function Services() {
                     key={service.id}
                     onClick={() => {
                       const serviceId = serviceIdMap[service.id];
-                      if (serviceId) {
-                        navigate(`/services/${serviceId}`);
-                      }
+                      navigate(`/services/${serviceId}`);
                     }}
                     sx={{
                       backgroundColor: (theme) =>
@@ -314,7 +285,7 @@ function Services() {
                       borderRadius: 2,
                       transition: "all 0.3s ease",
                       overflow: "hidden",
-                      cursor: serviceIdMap[service.id] ? "pointer" : "default",
+                      cursor: "pointer",
                       "&:hover": {
                         borderColor: "#E57A44",
                         transform: "translateY(-4px)",

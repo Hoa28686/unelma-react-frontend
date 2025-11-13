@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../store/slices/products/productsSlice";
 import {
@@ -12,20 +12,26 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  Pagination,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useNavigate } from "react-router";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
 
+const ITEMS_PER_PAGE = 9; // Show 9 products per page
+
 function Products() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products, loading, error } = useSelector((state) => state.products);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (products.length === 0) {
@@ -38,24 +44,57 @@ function Products() {
   };
 
   // Filter products based on search query
-  const filteredProducts = products.filter((product) => {
-    if (!searchQuery.trim()) return true;
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return products;
 
     const query = searchQuery.toLowerCase().trim();
     const searchTerms = query.split(" ").filter((term) => term.length > 0);
 
-    const searchableText = [
-      product.name,
-      product.category,
-      product.description,
-      product.hightlights || product.highlights,
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
+    return products.filter((product) => {
+      const searchableText = [
+        product.name,
+        product.category,
+        product.description,
+        product.hightlights || product.highlights,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
 
-    return searchTerms.some((term) => searchableText.includes(term));
-  });
+      return searchTerms.some((term) => searchableText.includes(term));
+    });
+  }, [products, searchQuery]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
   if (loading || products.length === 0) {
     return (
       <Box
@@ -197,7 +236,7 @@ function Products() {
             margin: "0 auto",
           }}
         >
-          {filteredProducts.map((p) => (
+          {paginatedProducts.map((p) => (
         <Card
           key={p.id}
           sx={{
@@ -257,6 +296,89 @@ function Products() {
           </CardActions>
         </Card>
           ))}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 2,
+                marginTop: { xs: "2rem", sm: "3rem" },
+                flexWrap: "wrap",
+                width: "100%",
+              }}
+            >
+              {/* Previous Arrow */}
+              <IconButton
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                sx={{
+                  color: (theme) => theme.palette.text.primary,
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    borderColor: "#E57A44",
+                    transform: "translateY(-4px)",
+                    backgroundColor: "transparent",
+                  },
+                  "&:disabled": {
+                    opacity: 0.5,
+                  },
+                }}
+              >
+                <NavigateBeforeIcon />
+              </IconButton>
+
+              {/* Page Numbers */}
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+                sx={{
+                  "& .MuiPaginationItem-root": {
+                    color: (theme) => theme.palette.text.primary,
+                    "&.Mui-selected": {
+                      backgroundColor: "#E57A44",
+                      color: "#FFFFFF",
+                      "&:hover": {
+                        backgroundColor: "#C85A2E",
+                      },
+                    },
+                    "&:hover": {
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "rgba(229, 122, 68, 0.1)"
+                          : "rgba(229, 122, 68, 0.2)",
+                    },
+                  },
+                }}
+              />
+
+              {/* Next Arrow */}
+              <IconButton
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                sx={{
+                  color: (theme) => theme.palette.text.primary,
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    borderColor: "#E57A44",
+                    transform: "translateY(-4px)",
+                    backgroundColor: "transparent",
+                  },
+                  "&:disabled": {
+                    opacity: 0.5,
+                  },
+                }}
+              >
+                <NavigateNextIcon />
+              </IconButton>
+            </Box>
+          )}
         </Box>
       )}
     </Box>

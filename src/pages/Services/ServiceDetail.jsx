@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useSelector } from "react-redux";
 import {
   Box,
   Typography,
@@ -10,13 +11,24 @@ import {
   Divider,
   Alert,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { useContactForm } from "../../hooks/useContactForm";
 import StyledTextField from "../../components/StyledTextField";
 import HeroImage from "../../components/HeroImage";
+import commonBackground from "../../assets/earthy_common_background.png";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SecurityIcon from "@mui/icons-material/Security";
+import StorageIcon from "@mui/icons-material/Storage";
+import ScienceIcon from "@mui/icons-material/Science";
+import CloudIcon from "@mui/icons-material/Cloud";
+import PsychologyIcon from "@mui/icons-material/Psychology";
 import { commonButtonStyles } from "../../constants/styles";
+import { useAuth } from "../../context/AuthContext";
+import { createCheckoutSession } from "../../lib/api/paymentService";
 
 // Service data with details
 const serviceDetails = {
@@ -24,30 +36,169 @@ const serviceDetails = {
     id: 1,
     name: "Cyber Security",
     icon: SecurityIcon,
-    description: "Cyber security is fundamental in today's day and age. We provide you with cyber security tools and services with a wide range of Open Web Application Security Project®toolbox that can help you and your company in security-related tasks efficiently and conveniently.",
+    description: "Cyber security is fundamental in today's day and age. We provide you with cyber security tools and services with a wide range of Open Web Application Security Project® toolbox that can help you and your company in security-related tasks efficiently and conveniently. Our comprehensive security solutions protect your digital assets from threats, vulnerabilities, and attacks while ensuring compliance with industry standards.",
     plans: [
       {
-        name: "Business",
+        name: "Essential",
         price: 99,
         period: "/Yr",
+        stripePriceId: "price_1SSwI9RtwC76q4jZxYnbUsqp", // Cyber Security Essential
         features: [
-          "Unlimited Pages",
-          "All Team Members",
-          "Unlimited Leads",
-          "Unlimited Page Views",
-          "Export in HTML/CSS",
+          "Basic Threat Detection",
+          "Security Audit Reports",
+          "Email Support",
+          "OWASP Top 10 Protection",
+          "Monthly Security Updates",
         ],
       },
       {
         name: "Professional",
         price: 199,
         period: "/Mo",
+        stripePriceId: null, // Add your Stripe Price ID here when available
         features: [
-          "Unlimited Pages",
-          "All Team Members",
-          "Unlimited Leads",
-          "Unlimited Page Views",
-          "Export in HTML/CSS",
+          "Advanced Threat Protection",
+          "24/7 Security Monitoring",
+          "Priority Support",
+          "Custom Security Policies",
+          "Penetration Testing",
+          "Incident Response Team",
+        ],
+      },
+    ],
+  },
+  "data-management": {
+    id: 2,
+    name: "Data Management",
+    icon: StorageIcon,
+    description: "We at Unelma Platforms can help you with different types of data management products and services. Our solutions enable organizations to collect, store, organize, and analyze data efficiently. From database design to data warehousing, we provide end-to-end data management services that transform raw data into actionable insights. Our expertise includes data migration, data quality assurance, and implementing robust data governance frameworks.",
+    plans: [
+      {
+        name: "Starter",
+        price: 149,
+        period: "/Mo",
+        features: [
+          "Up to 100GB Storage",
+          "Basic Database Setup",
+          "Data Backup & Recovery",
+          "Email Support",
+          "Monthly Reports",
+        ],
+      },
+      {
+        name: "Enterprise",
+        price: 499,
+        period: "/Mo",
+        features: [
+          "Unlimited Storage",
+          "Advanced Analytics",
+          "Real-time Data Sync",
+          "24/7 Support",
+          "Custom Data Models",
+          "Data Governance Tools",
+          "API Integration",
+        ],
+      },
+    ],
+  },
+  "data-science": {
+    id: 3,
+    name: "Data Science",
+    icon: ScienceIcon,
+    description: "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services. Our team of expert data scientists helps you extract meaningful insights from complex datasets using advanced statistical methods, machine learning algorithms, and predictive analytics. We transform your data into strategic business intelligence.",
+    plans: [
+      {
+        name: "Analytics",
+        price: 299,
+        period: "/Mo",
+        features: [
+          "Data Analysis & Visualization",
+          "Statistical Modeling",
+          "Custom Dashboards",
+          "Monthly Consultations",
+          "Report Generation",
+        ],
+      },
+      {
+        name: "Advanced",
+        price: 799,
+        period: "/Mo",
+        features: [
+          "Machine Learning Models",
+          "Predictive Analytics",
+          "Real-time Insights",
+          "Dedicated Data Scientist",
+          "Custom Algorithm Development",
+          "A/B Testing Framework",
+          "Priority Support",
+        ],
+      },
+    ],
+  },
+  "cloud-service": {
+    id: 4,
+    name: "Cloud Service",
+    icon: CloudIcon,
+    description: "We are masters of cloud services as we have developed one of the platforms called \"Unelma Cloud\". Our cloud solutions provide scalable, secure, and cost-effective infrastructure for businesses of all sizes. From cloud migration to multi-cloud strategies, we help you leverage the power of cloud computing to enhance agility, reduce costs, and accelerate innovation. Experience seamless scalability and enterprise-grade security.",
+    plans: [
+      {
+        name: "Basic",
+        price: 79,
+        period: "/Mo",
+        features: [
+          "50GB Cloud Storage",
+          "Basic Compute Resources",
+          "Automated Backups",
+          "Email Support",
+          "99.9% Uptime SLA",
+        ],
+      },
+      {
+        name: "Premium",
+        price: 299,
+        period: "/Mo",
+        features: [
+          "Unlimited Storage",
+          "High-Performance Computing",
+          "Auto-scaling",
+          "24/7 Support",
+          "99.99% Uptime SLA",
+          "Multi-region Deployment",
+          "Advanced Security Features",
+        ],
+      },
+    ],
+  },
+  "ai-machine-learning": {
+    id: 5,
+    name: "AI and Machine Learning",
+    icon: PsychologyIcon,
+    description: "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning. Our AI services help businesses automate processes, enhance decision-making, and create intelligent applications. From chatbots to recommendation systems, we build custom AI solutions that learn, adapt, and evolve with your business needs.",
+    plans: [
+      {
+        name: "AI Starter",
+        price: 399,
+        period: "/Mo",
+        features: [
+          "Pre-built AI Models",
+          "Basic NLP & Computer Vision",
+          "API Access",
+          "Documentation & Training",
+          "Email Support",
+        ],
+      },
+      {
+        name: "AI Enterprise",
+        price: 1299,
+        period: "/Mo",
+        features: [
+          "Custom AI Development",
+          "Advanced ML Models",
+          "Real-time Processing",
+          "Dedicated AI Team",
+          "Model Training & Optimization",
+          "Integration Services",
+          "Priority Support & SLA",
         ],
       },
     ],
@@ -66,7 +217,72 @@ function ServiceDetail() {
     handleSubmit,
   } = useContactForm({ name: "", email: "", message: "" });
 
+  // Check authentication from both AuthContext and Redux
+  const { user: authContextUser, token: authContextToken } = useAuth();
+  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated, token: reduxToken } = useSelector((state) => state.auth);
+  
+  // Check for token in localStorage (both systems)
+  const hasToken = authContextToken || reduxToken || localStorage.getItem("token") || localStorage.getItem("authToken");
+  
+  // Get user from either system
+  const user = reduxUser || authContextUser || (localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null);
+  
+  // User is authenticated if they have a token or user data
+  const isUserAuthenticated = reduxIsAuthenticated || hasToken || (user && (user.email || user.name || Object.keys(user).length > 0));
+  
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState(null);
+
   const service = serviceDetails[serviceId];
+
+  // Handle order now - Stripe integration
+  const handleOrderNow = async (plan) => {
+    // Check if user is authenticated
+    if (!isUserAuthenticated) {
+      setLoginDialogOpen(true);
+      return;
+    }
+
+    setPaymentLoading(true);
+    setPaymentError(null);
+
+    try {
+      // Check if Stripe Price ID is available (required)
+      if (!plan.stripePriceId) {
+        setPaymentError("This plan is not yet available for purchase. Please contact support.");
+        setPaymentLoading(false);
+        return;
+      }
+
+      // Prepare comprehensive payment data with all metadata for order tracking
+      const paymentData = {
+        stripePriceId: plan.stripePriceId,
+        serviceId: serviceId,
+        serviceName: service.name,
+        planName: plan.name,
+        quantity: 1,
+        subscriptionName: `${service.name} - ${plan.name}`,
+      };
+
+      // Create checkout session
+      const result = await createCheckoutSession(paymentData);
+
+      if (result.success && result.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = result.url;
+      } else {
+        setPaymentError(
+          result.message || "Failed to initiate payment. Please try again."
+        );
+        setPaymentLoading(false);
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      setPaymentError("An unexpected error occurred. Please try again.");
+      setPaymentLoading(false);
+    }
+  };
 
   if (!service) {
     return (
@@ -113,7 +329,7 @@ function ServiceDetail() {
           zIndex: 0,
         }}
       >
-        <HeroImage />
+        <HeroImage imageSource={commonBackground} animate={false} />
       </Box>
 
       {/* Content overlay */}
@@ -194,7 +410,7 @@ function ServiceDetail() {
           {/* Main Content and Sidebar Layout */}
           <Grid container spacing={4} sx={{ alignItems: "flex-start" }}>
             {/* Left Side - Main Content */}
-            <Grid item xs={12} md={8}>
+            <Grid size={{ xs: 12, md: 8 }}>
               {/* Description */}
               <Typography
                 variant="body1"
@@ -224,7 +440,7 @@ function ServiceDetail() {
                 </Typography>
                 <Grid container spacing={3}>
                   {service.plans.map((plan, index) => (
-                    <Grid item xs={12} sm={6} key={index}>
+                    <Grid size={{ xs: 12, sm: 6 }} key={index}>
                       <Card
                         sx={{
                           backgroundColor: (theme) =>
@@ -318,6 +534,8 @@ function ServiceDetail() {
                         <Button
                           variant="contained"
                           fullWidth
+                          onClick={() => handleOrderNow(plan)}
+                          disabled={paymentLoading}
                           sx={{
                             backgroundColor: (theme) => theme.palette.primary.main,
                             color: "#FFFFFF",
@@ -333,7 +551,14 @@ function ServiceDetail() {
                             },
                           }}
                         >
-                          Order Now
+                          {paymentLoading ? (
+                            <>
+                              <CircularProgress size={20} sx={{ mr: 1, color: "#FFFFFF" }} />
+                              Processing...
+                            </>
+                          ) : (
+                            "Order Now"
+                          )}
                         </Button>
                       </Card>
                     </Grid>
@@ -343,7 +568,7 @@ function ServiceDetail() {
             </Grid>
 
             {/* Right Side - Contact Form Sidebar */}
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Box
                 sx={{
                   position: { md: "sticky" },
@@ -463,6 +688,63 @@ function ServiceDetail() {
           </Grid>
         </Box>
       </Box>
+
+      {/* Payment Error Alert */}
+      {paymentError && (
+        <Alert
+          severity="error"
+          onClose={() => setPaymentError(null)}
+          sx={{
+            position: "fixed",
+            top: 20,
+            right: 20,
+            zIndex: 9999,
+            maxWidth: 400,
+          }}
+        >
+          {paymentError}
+        </Alert>
+      )}
+
+      {/* Login Required Dialog */}
+      <Dialog open={loginDialogOpen} onClose={() => setLoginDialogOpen(false)}>
+        <DialogTitle>Login Required</DialogTitle>
+        <DialogContent>
+          <Typography>
+            You need to be logged in to proceed with the order. Please log in or create an account to continue.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, gap: 1 }}>
+          <Button
+            onClick={() => setLoginDialogOpen(false)}
+            sx={{
+              textTransform: "none",
+              color: (theme) => theme.palette.text.primary,
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              setLoginDialogOpen(false);
+              navigate("/login");
+            }}
+            variant="contained"
+            sx={{
+              backgroundColor: (theme) => theme.palette.primary.main,
+              color: "#FFFFFF",
+              fontWeight: 100,
+              borderRadius: 2,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: (theme) => theme.palette.primary.dark,
+              },
+            }}
+          >
+            Go to Login
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

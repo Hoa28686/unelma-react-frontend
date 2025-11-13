@@ -68,16 +68,26 @@ function Register() {
         my: 8,
         p: 4,
         borderRadius: 2,
-        boxShadow: "0 4px 12px #0000001A",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        backgroundColor: "#fff",
+        backgroundColor: (theme) =>
+          theme.palette.mode === "light"
+            ? "#B0D0B5"
+            : theme.palette.background.paper,
         position: "relative",
       }}
     >
       <form onSubmit={handleRegister}>
-        <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>
+        <Typography
+          variant="h5"
+          sx={{
+            mb: 2,
+            textAlign: "center",
+            fontWeight: 600,
+            color: (theme) => theme.palette.text.primary,
+          }}
+        >
           Create an account
         </Typography>
         <TextField
@@ -123,15 +133,25 @@ function Register() {
         <Button
           type="submit"
           sx={{
-            background: "#0173E6",
-            border: "1px solid #006BD6",
-            boxShadow:
-              "0 1px 0px inset #3399FF80, 0 1px 0 #004D9966, 0 2px 4px 0 #090B0B1A",
+            backgroundColor: (theme) => theme.palette.primary.main,
+            color: "#FFFFFF",
+            fontWeight: 100,
+            borderRadius: 2,
+            boxShadow: "none",
             textTransform: "none",
+            border: "1px solid transparent",
+            transition: "all 0.3s ease",
             width: "100%",
             fontSize: "inherit",
             mt: 3,
             py: 1,
+            "&:hover": {
+              borderColor: "#E57A44",
+              transform: "translateY(-4px)",
+            },
+            "&:disabled": {
+              opacity: 0.6,
+            },
           }}
           disabled={loading}
         >
@@ -144,8 +164,11 @@ function Register() {
           sx={{
             mt: 2,
             width: "100%",
-            color: message ? "#1565c0" : "#dc362e",
+            color: message
+              ? (theme) => theme.palette.primary.main
+              : (theme) => theme.palette.error.main,
             textAlign: "center",
+            fontWeight: message ? 500 : 400,
           }}
         >
           {message || error}

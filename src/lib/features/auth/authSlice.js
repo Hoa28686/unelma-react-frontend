@@ -57,13 +57,15 @@ export const register = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("authToken");
   localStorage.removeItem("user");
   return null;
 });
 
 // Check if user is authenticated on app load
 export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
-  const token = localStorage.getItem("token");
+  // Check both 'token' (Redux) and 'authToken' (AuthContext) for compatibility
+  const token = localStorage.getItem("token") || localStorage.getItem("authToken");
   const userStr = localStorage.getItem("user");
 
   if (token && userStr) {
@@ -76,23 +78,41 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
       });
       return { user: response.data, token };
     } catch (error) {
-      // Token is invalid or endpoint doesn't exist, clear it and use stored user
-      // If endpoint doesn't exist, just use the stored user data
-      if (error.response?.status === 404 || error.code === 'ERR_NETWORK') {
-        // API endpoint doesn't exist or network error - use stored user data
+      // Token is invalid, endpoint doesn't exist, or server error - use stored user data
+      // If endpoint doesn't exist or server error (404/500), just use the stored user data
+      if (
+        error.response?.status === 404 ||
+        error.response?.status === 500 ||
+        error.code === 'ERR_NETWORK'
+      ) {
+        // API endpoint doesn't exist, server error, or network error - use stored user data
         try {
           const user = JSON.parse(userStr);
           return { user, token };
         } catch {
           localStorage.removeItem("token");
+          localStorage.removeItem("authToken");
           localStorage.removeItem("user");
           return null;
         }
       }
-      // Token is invalid, clear it
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      return null;
+      // Token is invalid (401/403), clear it
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
+        return null;
+      }
+      // For other errors, use stored user data
+      try {
+        const user = JSON.parse(userStr);
+        return { user, token };
+      } catch {
+        localStorage.removeItem("token");
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
+        return null;
+      }
     }
   }
   return null;
@@ -100,10 +120,10 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
 
 const initialState = {
   user: null,
-  token: localStorage.getItem("token") || null,
+  token: localStorage.getItem("token") || localStorage.getItem("authToken") || null,
   loading: false,
   error: null,
-  isAuthenticated: !!localStorage.getItem("token"),
+  isAuthenticated: !!(localStorage.getItem("token") || localStorage.getItem("authToken")),
 };
 
 const authSlice = createSlice({
