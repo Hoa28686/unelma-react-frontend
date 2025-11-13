@@ -13,7 +13,8 @@ import Blog from "./pages/Blog/Blog.jsx";
 import Products from "./pages/Products/Products.jsx";
 import Services from "./pages/Services/Services.jsx";
 import ServiceDetail from "./pages/Services/ServiceDetail.jsx";
-import User from "./pages/User.jsx";
+import Login from "./pages/Auth/Login.jsx";
+import Register from "./pages/Auth/Register.jsx";
 
 function App() {
   return (
@@ -32,7 +33,8 @@ function App() {
               <Route path="/blog/:blogId" element={<BlogDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
-              <Route path="/user" element={<User />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="*" element={<NotFound />} />
             </Route>
