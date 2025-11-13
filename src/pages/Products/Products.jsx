@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../lib/features/products/productsSlice";
+import { fetchProducts } from "../../store/slices/products/productsSlice";
 import {
   Box,
   Card,

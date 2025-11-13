@@ -21,8 +21,10 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link, useLocation } from "react-router";
 import Logo from "./Logo.jsx";
 import ThemeSwitch from "./ThemeSwitch";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function NavBar() {
+  const { user, logout } = useAuth();
   const mobileMenuWidth = 240;
   const location = useLocation();
   const navItems = [
@@ -36,14 +38,14 @@ function NavBar() {
   const [searchActive, setSearchActive] = useState(false);
 
   const handleNavToggle = () => setMobile((prev) => !prev);
-  
+
   const isActive = (path) => {
     if (path === "/") {
       return location.pathname === "/";
     }
     return location.pathname.startsWith(path);
   };
-  
+
   const isIconActive = (path) => {
     if (path) {
       return location.pathname === path;
@@ -71,7 +73,9 @@ function NavBar() {
               left: 0,
               right: 0,
               height: "4px",
-              backgroundColor: isIconActive("/user") ? (theme) => theme.palette.primary.main : "transparent",
+              backgroundColor: isIconActive("/user")
+                ? (theme) => theme.palette.primary.main
+                : "transparent",
               transition: "background-color 0.3s ease",
             },
             "&:hover::after": {
@@ -79,24 +83,34 @@ function NavBar() {
             },
           }}
         >
-          <Button
-            component={Link}
-            to="/user"
-            sx={{ 
-              textTransform: "none", 
-              fontSize: "1rem",
-              color: (theme) => theme.palette.text.primary,
-              "&:hover": {
+          {user?.email ? (
+            <Button
+              onClick={logout}
+              color="inherit"
+              sx={{ textTransform: "none", fontSize: "1rem" }}
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button
+              component={Link}
+              to="/login"
+              sx={{
+                textTransform: "none",
+                fontSize: "1rem",
                 color: (theme) => theme.palette.text.primary,
-                backgroundColor: "transparent",
-              },
-            }}
-          >
-            Login/Register
-          </Button>
+                "&:hover": {
+                  color: (theme) => theme.palette.text.primary,
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              Login/Register
+            </Button>
+          )}
         </Box>
-        <IconButton 
-          sx={{ 
+        <IconButton
+          sx={{
             color: (theme) => theme.palette.text.primary,
             "&:hover": {
               color: (theme) => theme.palette.text.primary,
@@ -120,7 +134,7 @@ function NavBar() {
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
             <ListItemButton
-              sx={{ 
+              sx={{
                 textAlign: "center",
                 position: "relative",
                 color: (theme) => theme.palette.text.primary,
@@ -148,12 +162,14 @@ function NavBar() {
                     left: 0,
                     right: 0,
                     height: "4px",
-                    backgroundColor: isActive(item.path) ? theme.palette.primary.main : "transparent",
+                    backgroundColor: isActive(item.path)
+                      ? theme.palette.primary.main
+                      : "transparent",
                     transition: "background-color 0.3s ease",
                   },
                 })}
               >
-                <ListItemText 
+                <ListItemText
                   primary={item.label}
                   primaryTypographyProps={{
                     color: "inherit",
@@ -172,8 +188,8 @@ function NavBar() {
   return (
     <Box sx={{ display: "flex" }}>
       {/* App Bar */}
-      <AppBar 
-        component="nav" 
+      <AppBar
+        component="nav"
         position="static"
         elevation={0}
         sx={{
@@ -193,8 +209,8 @@ function NavBar() {
           {/* logo */}
           <Logo />
           {/* Desktop Nav Items */}
-          <Box 
-            sx={{ 
+          <Box
+            sx={{
               display: { xs: "none", md: "flex" },
               gap: { md: "0.5rem", lg: "1rem" },
               alignItems: "center",
@@ -222,7 +238,7 @@ function NavBar() {
                 component={Link}
                 to={item.path}
               >
-                  <Box
+                <Box
                   component="span"
                   sx={(theme) => ({
                     position: "relative",
@@ -234,7 +250,9 @@ function NavBar() {
                       left: 0,
                       right: 0,
                       height: "4px",
-                      backgroundColor: isActive(item.path) ? theme.palette.primary.main : "transparent",
+                      backgroundColor: isActive(item.path)
+                        ? theme.palette.primary.main
+                        : "transparent",
                       transition: "background-color 0.3s ease",
                     },
                   })}
@@ -245,7 +263,10 @@ function NavBar() {
             ))}
           </Box>
           {/* Buttons on the right side of the NavBar */}
-          <Box component="div" sx={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
+          <Box
+            component="div"
+            sx={{ marginLeft: "auto", display: "flex", alignItems: "center" }}
+          >
             {/* Search */}
             <Box
               sx={{
@@ -259,7 +280,9 @@ function NavBar() {
                   transform: "translateX(-50%)",
                   width: "60%",
                   height: "4px",
-                  backgroundColor: searchActive ? (theme) => theme.palette.primary.main : "transparent",
+                  backgroundColor: searchActive
+                    ? (theme) => theme.palette.primary.main
+                    : "transparent",
                   transition: "background-color 0.3s ease",
                 },
                 "&:hover::after": {
@@ -267,8 +290,8 @@ function NavBar() {
                 },
               }}
             >
-              <IconButton 
-                sx={{ 
+              <IconButton
+                sx={{
                   color: (theme) => theme.palette.text.primary,
                   "&:hover": {
                     color: (theme) => theme.palette.text.primary,
@@ -301,7 +324,9 @@ function NavBar() {
                   transform: "translateX(-50%)",
                   width: "60%",
                   height: "4px",
-                  backgroundColor: isIconActive("/cart") ? (theme) => theme.palette.primary.main : "transparent",
+                  backgroundColor: isIconActive("/cart")
+                    ? (theme) => theme.palette.primary.main
+                    : "transparent",
                   transition: "background-color 0.3s ease",
                 },
                 "&:hover::after": {
@@ -309,15 +334,15 @@ function NavBar() {
                 },
               }}
             >
-              <IconButton 
-                sx={{ 
+              <IconButton
+                sx={{
                   color: (theme) => theme.palette.text.primary,
                   "&:hover": {
                     color: (theme) => theme.palette.text.primary,
                     backgroundColor: "transparent",
                   },
                 }}
-                component={Link} 
+                component={Link}
                 to="/cart"
               >
                 <ShoppingCartOutlinedIcon />
@@ -336,7 +361,9 @@ function NavBar() {
                   transform: "translateX(-50%)",
                   width: "60%",
                   height: "4px",
-                  backgroundColor: isIconActive("/user") ? (theme) => theme.palette.primary.main : "transparent",
+                  backgroundColor: isIconActive("/user")
+                    ? (theme) => theme.palette.primary.main
+                    : "transparent",
                   transition: "background-color 0.3s ease",
                 },
                 "&:hover::after": {
@@ -344,16 +371,16 @@ function NavBar() {
                 },
               }}
             >
-              <IconButton 
-                sx={{ 
+              <IconButton
+                sx={{
                   color: (theme) => theme.palette.text.primary,
                   "&:hover": {
                     color: (theme) => theme.palette.text.primary,
                     backgroundColor: "transparent",
                   },
                 }}
-                component={Link} 
-                to="/user"
+                component={Link}
+                to="/login"
               >
                 <AccountCircleOutlinedIcon />
               </IconButton>
@@ -362,7 +389,7 @@ function NavBar() {
 
             {/* Mobile Menu Button */}
             <IconButton
-              sx={{ 
+              sx={{
                 color: (theme) => theme.palette.text.primary,
                 display: { xs: "flex", md: "none" },
                 "&:hover": {

@@ -5,7 +5,7 @@ import {
   clearSelectedProduct,
   fetchProducts,
   setSelectedProduct,
-} from "../../lib/features/products/productsSlice";
+} from "../../store/slices/products/productsSlice";
 import { Box, Divider, Typography } from "@mui/material";
 import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";

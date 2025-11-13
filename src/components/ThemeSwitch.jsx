@@ -3,13 +3,14 @@ import { ThemeContext } from "@emotion/react";
 import FlashlightOnIcon from "@mui/icons-material/FlashlightOn";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { IconButton } from "@mui/material";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
 const ThemeSwitch = () => {
   let { CurrentTheme, toogleTheme } = useTheme(ThemeContext);
   return (
     <>
-      <IconButton 
-        aria-label="Example" 
+      <IconButton
+        aria-label="Example"
         onClick={toogleTheme}
         sx={{
           color: (theme) => theme.palette.text.primary,
@@ -26,7 +27,7 @@ const ThemeSwitch = () => {
         }}
         disableRipple
       >
-        {CurrentTheme == "dark" ? <FlashlightOnIcon /> : <DarkModeIcon />}
+        {CurrentTheme == "dark" ? <LightModeIcon /> : <DarkModeIcon />}
       </IconButton>
     </>
   );
