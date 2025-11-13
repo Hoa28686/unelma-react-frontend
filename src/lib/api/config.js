@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAuthToken, clearAuthData } from "../../utils/authUtils";
 
 // Get API base URL from environment variable or use default
 const API_BASE_URL =
@@ -18,7 +19,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Check both 'token' (Redux) and 'authToken' (AuthContext) for compatibility
-    const token = localStorage.getItem("token") || localStorage.getItem("authToken");
+    const token = getAuthToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -42,10 +43,8 @@ apiClient.interceptors.response.use(
 
       // Handle unauthorized (401) or forbidden (403) errors
       if (error.response.status === 401 || error.response.status === 403) {
-        // Clear auth data and redirect to login
-        localStorage.removeItem("token");
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("user");
+        // Clear auth data and redirect to login using utility
+        clearAuthData();
         // Optionally dispatch logout action if you have access to store
         // For now, we'll let components handle this
         if (window.location.pathname !== "/user" && window.location.pathname !== "/login") {

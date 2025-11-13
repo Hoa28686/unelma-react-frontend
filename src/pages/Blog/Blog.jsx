@@ -395,6 +395,14 @@ function Blog() {
                 color: (theme) => theme.palette.text.primary,
                 border: "1px solid transparent",
                 transition: "all 0.3s ease",
+                "&:focus": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                },
+                "&:focus-visible": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                },
                 "&:hover": {
                   borderColor: "#E57A44",
                   transform: "translateY(-4px)",
@@ -413,22 +421,49 @@ function Blog() {
               count={totalPages}
               page={currentPage}
               onChange={handlePageChange}
-              color="primary"
               sx={{
                 "& .MuiPaginationItem-root": {
                   color: (theme) => theme.palette.text.primary,
+                  border: "1px solid transparent",
+                  boxShadow: "none !important",
                   "&.Mui-selected": {
                     backgroundColor: "#E57A44",
                     color: "#FFFFFF",
+                    border: "1px solid #E57A44",
+                    boxShadow: "none !important",
                     "&:hover": {
                       backgroundColor: "#C85A2E",
                     },
+                    "&:focus": {
+                      outline: "2px solid #E57A44 !important",
+                      outlineOffset: "2px",
+                      boxShadow: "none !important",
+                    },
+                    "&:focus-visible": {
+                      outline: "2px solid #E57A44 !important",
+                      outlineOffset: "2px",
+                      boxShadow: "none !important",
+                    },
+                  },
+                  "&:focus": {
+                    outline: "2px solid #E57A44 !important",
+                    outlineOffset: "2px",
+                    boxShadow: "none !important",
+                    border: "1px solid transparent",
+                  },
+                  "&:focus-visible": {
+                    outline: "2px solid #E57A44 !important",
+                    outlineOffset: "2px",
+                    boxShadow: "none !important",
+                    border: "1px solid transparent",
                   },
                   "&:hover": {
                     backgroundColor: (theme) =>
                       theme.palette.mode === "light"
                         ? "rgba(229, 122, 68, 0.1)"
                         : "rgba(229, 122, 68, 0.2)",
+                    border: "1px solid transparent",
+                    boxShadow: "none !important",
                   },
                 },
               }}
@@ -442,6 +477,14 @@ function Blog() {
                 color: (theme) => theme.palette.text.primary,
                 border: "1px solid transparent",
                 transition: "all 0.3s ease",
+                "&:focus": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                },
+                "&:focus-visible": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                },
                 "&:hover": {
                   borderColor: "#E57A44",
                   transform: "translateY(-4px)",

@@ -18,10 +18,13 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
+  Avatar,
 } from "@mui/material";
-import { Visibility, VisibilityOff, Menu as MenuIcon } from "@mui/icons-material";
-import { login, register, clearError } from "../lib/features/auth/authSlice";
+import { Visibility, VisibilityOff, Menu as MenuIcon, AccountCircle } from "@mui/icons-material";
+import { login, register, clearError, logout } from "../lib/features/auth/authSlice";
 import { useContactForm } from "../hooks/useContactForm";
+import { useAuth } from "../context/AuthContext";
+import { getUserFromSources, clearAuthData } from "../utils/authUtils";
 
 function User() {
   const theme = useTheme();
@@ -50,14 +53,25 @@ function User() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated, user: reduxUser } = useSelector((state) => state.auth);
+  const { user: authContextUser, logout: authContextLogout } = useAuth();
 
-  // Redirect if already authenticated
-  useEffect(() => {
+  // Get user from either Redux or AuthContext using utility
+  const user = getUserFromSources(reduxUser, authContextUser);
+
+  const handleLogout = async () => {
+    // Try both logout methods
     if (isAuthenticated) {
-      navigate("/");
+      dispatch(logout());
     }
-  }, [isAuthenticated, navigate]);
+    if (authContextUser) {
+      await authContextLogout();
+    }
+    // Clear localStorage using utility
+    clearAuthData();
+    // Redirect to home
+    window.location.href = "/";
+  };
 
   // Clear errors when switching tabs
   useEffect(() => {
@@ -143,6 +157,41 @@ function User() {
         })
       );
     }
+  };
+
+  // Sidebar styling (reused for both authenticated and unauthenticated views)
+  const sidebarSx = {
+    width: { md: 380, lg: 420 },
+    flexShrink: 0,
+    borderRight: 1,
+    borderColor: "divider",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "transparent",
+    backgroundImage: "none",
+    position: "relative",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: "1px",
+      boxShadow: (theme) =>
+        theme.palette.mode === "light"
+          ? "2px 0 8px rgba(0, 0, 0, 0.15)"
+          : "2px 0 8px rgba(0, 0, 0, 0.4)",
+      pointerEvents: "none",
+    },
+  };
+
+  const drawerSx = {
+    "& .MuiDrawer-paper": {
+      boxSizing: "border-box",
+      width: { xs: 320, sm: 380 },
+      backgroundColor: "transparent",
+      backgroundImage: "none",
+    },
   };
 
   // Sidebar content with query form
@@ -249,6 +298,16 @@ function User() {
             border: "1px solid transparent",
             transition: "all 0.3s ease",
             mt: 2,
+            "&:focus": {
+              outline: "2px solid #E57A44",
+              outlineOffset: "2px",
+              boxShadow: "none",
+            },
+            "&:focus-visible": {
+              outline: "2px solid #E57A44",
+              outlineOffset: "2px",
+              boxShadow: "none",
+            },
             "&:hover": {
               borderColor: "#E57A44",
               transform: "translateY(-4px)",
@@ -265,6 +324,164 @@ function User() {
     </Box>
   );
 
+  // Show loading state while checking authentication to prevent flash
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "calc(100vh - 64px)",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Show user profile if authenticated
+  if (isAuthenticated || user) {
+    const userName = user?.name || user?.user?.name || "User";
+    const userEmail = user?.email || user?.user?.email || "N/A";
+
+    return (
+      <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)" }}>
+        {/* Sidebar */}
+        {isMobile ? (
+          <Drawer
+            anchor="left"
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            ModalProps={{ keepMounted: true }}
+            sx={drawerSx}
+          >
+            {sidebarContent}
+          </Drawer>
+        ) : (
+          <Box sx={sidebarSx}>
+            {sidebarContent}
+          </Box>
+        )}
+
+        {/* Main content - User Profile */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            p: { xs: 2, sm: 4 },
+          }}
+        >
+          {/* Mobile menu button */}
+          {isMobile && (
+            <IconButton
+              onClick={() => setSidebarOpen(true)}
+              sx={{
+                position: "absolute",
+                top: 16,
+                left: 16,
+                zIndex: 1,
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+
+          <Container maxWidth="sm" sx={{ width: "100%" }}>
+            <Paper
+              elevation={3}
+              sx={{
+                p: 4,
+                borderRadius: 2,
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "#B0D0B5"
+                    : theme.palette.background.paper,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  mb: 3,
+                }}
+              >
+                <Avatar
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    mb: 2,
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    border: (theme) => 
+                      `0.5px solid ${theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)'}`,
+                  }}
+                >
+                  <AccountCircle sx={{ fontSize: 60 }} />
+                </Avatar>
+                <Typography
+                  variant="h4"
+                  component="h1"
+                  sx={{
+                    fontWeight: 600,
+                    color: (theme) => theme.palette.text.primary,
+                    mb: 1,
+                  }}
+                >
+                  {userName}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: (theme) => theme.palette.text.secondary,
+                    mb: 3,
+                  }}
+                >
+                  {userEmail}
+                </Typography>
+              </Box>
+
+              <Divider sx={{ mb: 3 }} />
+
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleLogout}
+                sx={{
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: "#FFFFFF",
+                  fontWeight: 100,
+                  borderRadius: 2,
+                  py: 1.5,
+                  textTransform: "none",
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  outline: "none",
+                  "&:focus": {
+                    outline: "none",
+                    boxShadow: "none",
+                  },
+                  "&:focus-visible": {
+                    outline: "none",
+                    boxShadow: "none",
+                  },
+                  "&:hover": {
+                    borderColor: "#E57A44",
+                    transform: "translateY(-4px)",
+                  },
+                }}
+              >
+                Logout
+              </Button>
+            </Paper>
+          </Container>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)" }}>
       {/* Sidebar */}
@@ -274,44 +491,12 @@ function User() {
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
           ModalProps={{ keepMounted: true }}
-          sx={{
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: { xs: 320, sm: 380 },
-              backgroundColor: "transparent",
-              backgroundImage: "none",
-            },
-          }}
+          sx={drawerSx}
         >
           {sidebarContent}
         </Drawer>
       ) : (
-        <Box
-          sx={{
-            width: { md: 380, lg: 420 },
-            flexShrink: 0,
-            borderRight: 1,
-            borderColor: "divider",
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "transparent",
-            backgroundImage: "none",
-            position: "relative",
-            "&::after": {
-              content: '""',
-              position: "absolute",
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: "1px",
-              boxShadow: (theme) =>
-                theme.palette.mode === "light"
-                  ? "2px 0 8px rgba(0, 0, 0, 0.15)"
-                  : "2px 0 8px rgba(0, 0, 0, 0.4)",
-              pointerEvents: "none",
-            },
-          }}
-        >
+        <Box sx={sidebarSx}>
           {sidebarContent}
         </Box>
       )}
@@ -492,6 +677,15 @@ function User() {
               textTransform: "none",
               border: "1px solid transparent",
               transition: "all 0.3s ease",
+              outline: "none",
+              "&:focus": {
+                outline: "none",
+                boxShadow: "none",
+              },
+              "&:focus-visible": {
+                outline: "none",
+                boxShadow: "none",
+              },
               "&:hover": {
                 borderColor: "#E57A44",
                 transform: "translateY(-4px)",

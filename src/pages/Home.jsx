@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, Card, CardContent } from "@mui/material";
+import { useNavigate } from "react-router";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SendIcon from "@mui/icons-material/Send";
@@ -15,12 +16,17 @@ import heroImageDesktop from "../assets/earthy_frontend.png";
 import heroImageMobile from "../assets/earthy_frontend_mobile.png";
 
 function Home() {
+  const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     // Trigger animation on mount
     setIsLoaded(true);
   }, []);
+
+  const handleRequestQuote = () => {
+    navigate("/contact");
+  };
 
   return (
     <Box
@@ -122,6 +128,7 @@ function Home() {
               variant="contained"
               color="primary"
               size="large"
+              onClick={handleRequestQuote}
               sx={{
                 px: { xs: 3, sm: 4, md: 5 },
                 py: { xs: 1.25, sm: 1.5, md: 2 },
@@ -139,17 +146,19 @@ function Home() {
                   transform: "translateY(-4px)",
                 },
                 '&:focus': {
-                  outline: "none",
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 '&:focus-visible': {
-                  outline: "none",
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 '&:active': {
-                  outline: "none",
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
                   boxShadow: "none",
-                  border: "none",
                 },
               }}
               disableRipple

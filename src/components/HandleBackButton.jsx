@@ -17,6 +17,16 @@ export default function HandleBackButton({ content, link }) {
         textTransform: "none",
         color: "secondary.main",
         m: 2,
+        "&:focus": {
+          outline: "2px solid #E57A44",
+          outlineOffset: "2px",
+          boxShadow: "none",
+        },
+        "&:focus-visible": {
+          outline: "2px solid #E57A44",
+          outlineOffset: "2px",
+          boxShadow: "none",
+        },
         ":hover": { textDecoration: "underline" },
       }}
     >

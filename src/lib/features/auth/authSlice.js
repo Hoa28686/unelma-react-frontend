@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getAuthToken, getStoredUser, clearAuthData } from "../../../utils/authUtils";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
@@ -56,19 +57,17 @@ export const register = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk("auth/logout", async () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("authToken");
-  localStorage.removeItem("user");
+  clearAuthData();
   return null;
 });
 
 // Check if user is authenticated on app load
 export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
   // Check both 'token' (Redux) and 'authToken' (AuthContext) for compatibility
-  const token = localStorage.getItem("token") || localStorage.getItem("authToken");
-  const userStr = localStorage.getItem("user");
+  const token = getAuthToken();
+  const user = getStoredUser();
 
-  if (token && userStr) {
+  if (token && user) {
     try {
       // Optionally verify token with backend
       const response = await axios.get(`${API_BASE_URL}/user`, {
@@ -86,33 +85,15 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
         error.code === 'ERR_NETWORK'
       ) {
         // API endpoint doesn't exist, server error, or network error - use stored user data
-        try {
-          const user = JSON.parse(userStr);
-          return { user, token };
-        } catch {
-          localStorage.removeItem("token");
-          localStorage.removeItem("authToken");
-          localStorage.removeItem("user");
-          return null;
-        }
+        return user ? { user, token } : null;
       }
       // Token is invalid (401/403), clear it
       if (error.response?.status === 401 || error.response?.status === 403) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("user");
+        clearAuthData();
         return null;
       }
       // For other errors, use stored user data
-      try {
-        const user = JSON.parse(userStr);
-        return { user, token };
-      } catch {
-        localStorage.removeItem("token");
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("user");
-        return null;
-      }
+      return user ? { user, token } : null;
     }
   }
   return null;
@@ -120,10 +101,10 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
 
 const initialState = {
   user: null,
-  token: localStorage.getItem("token") || localStorage.getItem("authToken") || null,
+  token: getAuthToken(),
   loading: false,
   error: null,
-  isAuthenticated: !!(localStorage.getItem("token") || localStorage.getItem("authToken")),
+  isAuthenticated: !!getAuthToken(),
 };
 
 const authSlice = createSlice({

@@ -74,6 +74,16 @@ function PaymentSuccess() {
                 sx={{
                   backgroundColor: (theme) => theme.palette.primary.main,
                   color: "#FFFFFF",
+                  "&:focus": {
+                    outline: "2px solid #E57A44",
+                    outlineOffset: "2px",
+                    boxShadow: "none",
+                  },
+                  "&:focus-visible": {
+                    outline: "2px solid #E57A44",
+                    outlineOffset: "2px",
+                    boxShadow: "none",
+                  },
                   "&:hover": {
                     backgroundColor: (theme) => theme.palette.primary.dark,
                   },
@@ -87,6 +97,16 @@ function PaymentSuccess() {
                 sx={{
                   borderColor: (theme) => theme.palette.primary.main,
                   color: (theme) => theme.palette.primary.main,
+                  "&:focus": {
+                    outline: "2px solid #E57A44",
+                    outlineOffset: "2px",
+                    boxShadow: "none",
+                  },
+                  "&:focus-visible": {
+                    outline: "2px solid #E57A44",
+                    outlineOffset: "2px",
+                    boxShadow: "none",
+                  },
                 }}
               >
                 Go to Home

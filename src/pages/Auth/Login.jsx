@@ -128,6 +128,16 @@ function Login() {
           fontSize: "inherit",
           mt: 3,
           py: 1,
+          "&:focus": {
+            outline: "2px solid #E57A44",
+            outlineOffset: "2px",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "2px solid #E57A44",
+            outlineOffset: "2px",
+            boxShadow: "none",
+          },
           "&:hover": {
             borderColor: "#E57A44",
             transform: "translateY(-4px)",

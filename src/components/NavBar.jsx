@@ -25,17 +25,17 @@ import Logo from "./Logo.jsx";
 import ThemeSwitch from "./ThemeSwitch";
 import SearchBar from "./SearchBar";
 import { useAuth } from "../context/AuthContext.jsx";
+import { getUserFromSources, isUserAuthenticated as checkIsUserAuthenticated } from "../utils/authUtils";
 
 function NavBar() {
-  const { user: authContextUser, logout } = useAuth();
-  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated } = useSelector((state) => state.auth);
+  const { user: authContextUser, logout, token: authContextToken } = useAuth();
+  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated, token: reduxToken } = useSelector((state) => state.auth);
   
-  // Check authentication from both systems
-  const hasToken = authContextUser?.email || reduxUser?.email || 
-                   localStorage.getItem("token") || localStorage.getItem("authToken");
-  const user = reduxUser || authContextUser || 
-               (localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null);
-  const isAuthenticated = reduxIsAuthenticated || hasToken || (user && (user.email || user.name));
+  // Get user from either system using utility
+  const user = getUserFromSources(reduxUser, authContextUser);
+  
+  // Check authentication from both systems using utility
+  const isAuthenticated = checkIsUserAuthenticated(reduxIsAuthenticated, reduxToken, authContextToken, user);
   
   const mobileMenuWidth = 240;
   const location = useLocation();
@@ -102,7 +102,20 @@ function NavBar() {
             <Button
               onClick={logout}
               color="inherit"
-              sx={{ textTransform: "none", fontSize: "1rem" }}
+              sx={{
+                textTransform: "none",
+                fontSize: "1rem",
+                "&:focus": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                  boxShadow: "none",
+                },
+                "&:focus-visible": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                  boxShadow: "none",
+                },
+              }}
             >
               Logout
             </Button>
@@ -114,6 +127,16 @@ function NavBar() {
                 textTransform: "none",
                 fontSize: "1rem",
                 color: (theme) => theme.palette.text.primary,
+                "&:focus": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                  boxShadow: "none",
+                },
+                "&:focus-visible": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                  boxShadow: "none",
+                },
                 "&:hover": {
                   color: (theme) => theme.palette.text.primary,
                   backgroundColor: "transparent",

@@ -257,6 +257,16 @@ function BlogDetail() {
                 textTransform: "none",
                 px: 3,
                 py: 1,
+                "&:focus": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                  boxShadow: "none",
+                },
+                "&:focus-visible": {
+                  outline: "2px solid #E57A44",
+                  outlineOffset: "2px",
+                  boxShadow: "none",
+                },
                 "&:hover": {
                   backgroundColor: (theme) => theme.palette.primary.dark || "#2563EB",
                 },

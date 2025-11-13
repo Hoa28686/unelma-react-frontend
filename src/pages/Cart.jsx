@@ -380,6 +380,16 @@ function Cart() {
                       borderColor: "#E57A44",
                       color: "#E57A44",
                       textTransform: "none",
+                      "&:focus": {
+                        outline: "2px solid #E57A44",
+                        outlineOffset: "2px",
+                        boxShadow: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "2px solid #E57A44",
+                        outlineOffset: "2px",
+                        boxShadow: "none",
+                      },
                       "&:hover": {
                         borderColor: "#E57A44",
                         backgroundColor: "rgba(229, 122, 68, 0.1)",
@@ -400,6 +410,16 @@ function Cart() {
                       textTransform: "none",
                       border: "1px solid transparent",
                       transition: "all 0.3s ease",
+                      "&:focus": {
+                        outline: "2px solid #E57A44",
+                        outlineOffset: "2px",
+                        boxShadow: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "2px solid #E57A44",
+                        outlineOffset: "2px",
+                        boxShadow: "none",
+                      },
                       "&:hover": {
                         borderColor: "#E57A44",
                         transform: "translateY(-4px)",

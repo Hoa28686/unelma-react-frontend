@@ -260,11 +260,13 @@ const Footer = () => {
                                         transform: "translateY(-4px)",
                                     },
                                     '&:focus': {
-                                        outline: "none",
+                                        outline: "2px solid #E57A44",
+                                        outlineOffset: "2px",
                                         boxShadow: "none",
                                     },
                                     '&:focus-visible': {
-                                        outline: "none",
+                                        outline: "2px solid #E57A44",
+                                        outlineOffset: "2px",
                                         boxShadow: "none",
                                     },
                                 }}

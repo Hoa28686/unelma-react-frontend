@@ -29,6 +29,7 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import { commonButtonStyles } from "../../constants/styles";
 import { useAuth } from "../../context/AuthContext";
 import { createCheckoutSession } from "../../lib/api/paymentService";
+import { getUserFromSources, isUserAuthenticated as checkIsUserAuthenticated } from "../../utils/authUtils";
 
 // Service data with details
 const serviceDetails = {
@@ -221,17 +222,14 @@ function ServiceDetail() {
   const { user: authContextUser, token: authContextToken } = useAuth();
   const { user: reduxUser, isAuthenticated: reduxIsAuthenticated, token: reduxToken } = useSelector((state) => state.auth);
   
-  // Check for token in localStorage (both systems)
-  const hasToken = authContextToken || reduxToken || localStorage.getItem("token") || localStorage.getItem("authToken");
-  
-  // Get user from either system
-  const user = reduxUser || authContextUser || (localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null);
+  // Get user from either system using utility
+  const user = getUserFromSources(reduxUser, authContextUser);
   
   // User is authenticated if they have a token or user data
-  const isUserAuthenticated = reduxIsAuthenticated || hasToken || (user && (user.email || user.name || Object.keys(user).length > 0));
+  const isUserAuthenticated = checkIsUserAuthenticated(reduxIsAuthenticated, reduxToken, authContextToken, user);
   
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
-  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(null); // Track which plan is loading (plan name)
   const [paymentError, setPaymentError] = useState(null);
 
   const service = serviceDetails[serviceId];
@@ -244,14 +242,14 @@ function ServiceDetail() {
       return;
     }
 
-    setPaymentLoading(true);
+    setPaymentLoading(plan.name); // Track which plan is loading
     setPaymentError(null);
 
     try {
       // Check if Stripe Price ID is available (required)
       if (!plan.stripePriceId) {
         setPaymentError("This plan is not yet available for purchase. Please contact support.");
-        setPaymentLoading(false);
+        setPaymentLoading(null);
         return;
       }
 
@@ -275,12 +273,12 @@ function ServiceDetail() {
         setPaymentError(
           result.message || "Failed to initiate payment. Please try again."
         );
-        setPaymentLoading(false);
+        setPaymentLoading(null);
       }
     } catch (error) {
       console.error("Payment error:", error);
       setPaymentError("An unexpected error occurred. Please try again.");
-      setPaymentLoading(false);
+      setPaymentLoading(null);
     }
   };
 
@@ -535,7 +533,7 @@ function ServiceDetail() {
                           variant="contained"
                           fullWidth
                           onClick={() => handleOrderNow(plan)}
-                          disabled={paymentLoading}
+                          disabled={paymentLoading === plan.name}
                           sx={{
                             backgroundColor: (theme) => theme.palette.primary.main,
                             color: "#FFFFFF",
@@ -545,13 +543,23 @@ function ServiceDetail() {
                             textTransform: "none",
                             border: "1px solid transparent",
                             transition: "all 0.3s ease",
+                            "&:focus": {
+                              outline: "2px solid #E57A44",
+                              outlineOffset: "2px",
+                              boxShadow: "none",
+                            },
+                            "&:focus-visible": {
+                              outline: "2px solid #E57A44",
+                              outlineOffset: "2px",
+                              boxShadow: "none",
+                            },
                             "&:hover": {
                               borderColor: "#E57A44",
                               transform: "translateY(-4px)",
                             },
                           }}
                         >
-                          {paymentLoading ? (
+                          {paymentLoading === plan.name ? (
                             <>
                               <CircularProgress size={20} sx={{ mr: 1, color: "#FFFFFF" }} />
                               Processing...
@@ -720,6 +728,16 @@ function ServiceDetail() {
             sx={{
               textTransform: "none",
               color: (theme) => theme.palette.text.primary,
+              "&:focus": {
+                outline: "2px solid #E57A44",
+                outlineOffset: "2px",
+                boxShadow: "none",
+              },
+              "&:focus-visible": {
+                outline: "2px solid #E57A44",
+                outlineOffset: "2px",
+                boxShadow: "none",
+              },
             }}
           >
             Cancel
@@ -736,6 +754,16 @@ function ServiceDetail() {
               fontWeight: 100,
               borderRadius: 2,
               textTransform: "none",
+              "&:focus": {
+                outline: "2px solid #E57A44",
+                outlineOffset: "2px",
+                boxShadow: "none",
+              },
+              "&:focus-visible": {
+                outline: "2px solid #E57A44",
+                outlineOffset: "2px",
+                boxShadow: "none",
+              },
               "&:hover": {
                 backgroundColor: (theme) => theme.palette.primary.dark,
               },

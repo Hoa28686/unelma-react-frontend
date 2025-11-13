@@ -24,6 +24,16 @@ function NotFound() {
           mt: 2,
           border: "1px solid transparent",
           transition: "all 0.3s ease",
+          "&:focus": {
+            outline: "2px solid #E57A44",
+            outlineOffset: "2px",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "2px solid #E57A44",
+            outlineOffset: "2px",
+            boxShadow: "none",
+          },
           "&:hover": {
             borderColor: "#E57A44",
             transform: "translateY(-4px)",
