@@ -23,7 +23,11 @@ import { useSelector } from "react-redux";
 
 function SearchBar({ open, onClose }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [results, setResults] = useState({ products: [], blogs: [], services: [] });
+  const [results, setResults] = useState({
+    products: [],
+    blogs: [],
+    services: [],
+  });
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const navigate = useNavigate();
   const searchInputRef = useRef(null);
@@ -58,7 +62,7 @@ function SearchBar({ open, onClose }) {
         product.name,
         product.category,
         product.description,
-        product.hightlights || product.highlights,
+        product.highlights,
       ]
         .filter(Boolean)
         .join(" ")
@@ -110,7 +114,7 @@ function SearchBar({ open, onClose }) {
       .toLowerCase()
       .split(" ")
       .filter((term) => term.length > 0);
-    
+
     let parts = [];
     let remainingText = text;
     let remainingLower = text.toLowerCase();
@@ -152,9 +156,7 @@ function SearchBar({ open, onClose }) {
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex((prev) =>
-        prev < totalResults - 1 ? prev + 1 : prev
-      );
+      setSelectedIndex((prev) => (prev < totalResults - 1 ? prev + 1 : prev));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
@@ -178,7 +180,10 @@ function SearchBar({ open, onClose }) {
       item = results.blogs[resultIndex - results.products.length];
       navigate(`/blog/${item.id}`);
     } else {
-      item = results.services[resultIndex - results.products.length - results.blogs.length];
+      item =
+        results.services[
+          resultIndex - results.products.length - results.blogs.length
+        ];
       navigate(`/services`);
     }
 
@@ -199,7 +204,8 @@ function SearchBar({ open, onClose }) {
     }
   };
 
-  const totalResults = results.products.length + results.blogs.length + results.services.length;
+  const totalResults =
+    results.products.length + results.blogs.length + results.services.length;
   const hasResults = totalResults > 0;
   const showNoResults = searchQuery.trim() && !hasResults;
 
@@ -388,9 +394,10 @@ function SearchBar({ open, onClose }) {
                 </>
               )}
 
-              {results.products.length > 0 && (results.blogs.length > 0 || results.services.length > 0) && (
-                <Divider />
-              )}
+              {results.products.length > 0 &&
+                (results.blogs.length > 0 || results.services.length > 0) && (
+                  <Divider />
+                )}
 
               {results.blogs.length > 0 && (
                 <>
@@ -462,9 +469,8 @@ function SearchBar({ open, onClose }) {
                 </>
               )}
 
-              {(results.blogs.length > 0 || results.products.length > 0) && results.services.length > 0 && (
-                <Divider />
-              )}
+              {(results.blogs.length > 0 || results.products.length > 0) &&
+                results.services.length > 0 && <Divider />}
 
               {results.services.length > 0 && (
                 <>
@@ -483,7 +489,8 @@ function SearchBar({ open, onClose }) {
                   </Box>
                   <List sx={{ py: 0 }}>
                     {results.services.map((service, index) => {
-                      const actualIndex = results.products.length + results.blogs.length + index;
+                      const actualIndex =
+                        results.products.length + results.blogs.length + index;
                       return (
                         <ListItem
                           key={service.id}
@@ -570,4 +577,3 @@ function SearchBar({ open, onClose }) {
 }
 
 export default SearchBar;
-

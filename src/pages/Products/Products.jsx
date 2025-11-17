@@ -55,7 +55,7 @@ function Products() {
         product.name,
         product.category,
         product.description,
-        product.hightlights || product.highlights,
+        product.highlights,
       ]
         .filter(Boolean)
         .join(" ")
@@ -237,64 +237,64 @@ function Products() {
           }}
         >
           {paginatedProducts.map((p) => (
-        <Card
-          key={p.id}
-          sx={{
-            width: 350,
-            height: 480,
-            m: 2,
-            position: "relative",
-          }}
-        >
-          <CardActions
-            sx={{
-              flexDirection: "column",
-
-              alignItems: "flex-start",
-              p: 0,
-            }}
-            onClick={() => handleProductClick(p.id)}
-          >
-            <CardMedia
-              component="img"
-              src={p.image_url}
-              alt={p.name}
+            <Card
+              key={p.id}
               sx={{
-                width: "100%",
-                height: { xs: 220, md: 250 },
-                objectFit: "cover",
-                objectPosition: "center",
+                width: 350,
+                height: 480,
+                m: 2,
+                position: "relative",
               }}
-            />
-            <CardHeader
-              title={
-                p.name.length > 50 ? (
-                  <Typography variant="h6">{`${p.name.substring(
-                    0,
-                    50
-                  )}...`}</Typography>
-                ) : (
-                  <Typography variant="h6">{p.name}</Typography>
-                )
-              }
-              subheader={p.category}
-            />
-            <CardContent>
-              <RatingDisplay rating={p.rating} />
-              <PriceDisplay price={p.price} />
-            </CardContent>
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 15,
-                right: 15,
-              }}
-              onClick={(e) => e.stopPropagation()}
             >
-              <AddToCart product={p} />
-            </Box>
-          </CardActions>
-        </Card>
+              <CardActions
+                sx={{
+                  flexDirection: "column",
+
+                  alignItems: "flex-start",
+                  p: 0,
+                }}
+                onClick={() => handleProductClick(p.id)}
+              >
+                <CardMedia
+                  component="img"
+                  src={p.image_url}
+                  alt={p.name}
+                  sx={{
+                    width: "100%",
+                    height: { xs: 220, md: 250 },
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
+                />
+                <CardHeader
+                  title={
+                    p.name.length > 50 ? (
+                      <Typography variant="h6">{`${p.name.substring(
+                        0,
+                        50
+                      )}...`}</Typography>
+                    ) : (
+                      <Typography variant="h6">{p.name}</Typography>
+                    )
+                  }
+                  subheader={p.category}
+                />
+                <CardContent>
+                  <RatingDisplay rating={p.rating} />
+                  <PriceDisplay price={p.price} />
+                </CardContent>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 15,
+                    right: 15,
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <AddToCart product={p} />
+                </Box>
+              </CardActions>
+            </Card>
           ))}
 
           {/* Pagination */}

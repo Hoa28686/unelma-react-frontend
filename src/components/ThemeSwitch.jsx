@@ -6,12 +6,12 @@ import { IconButton } from "@mui/material";
 import LightModeIcon from "@mui/icons-material/LightMode";
 
 const ThemeSwitch = () => {
-  let { CurrentTheme, toogleTheme } = useTheme(ThemeContext);
+  let { CurrentTheme, toggleTheme } = useTheme(ThemeContext);
   return (
     <>
       <IconButton
         aria-label="Example"
-        onClick={toogleTheme}
+        onClick={toggleTheme}
         sx={{
           color: (theme) => theme.palette.text.primary,
           "&:hover": {

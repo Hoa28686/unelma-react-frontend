@@ -31,7 +31,7 @@ function ProductDetail() {
 
   useEffect(() => {
     if (productId && products.length > 0) {
-      const foundProduct = products.find((p) => p.id === productId);
+      const foundProduct = products.find((p) => p.id == productId);
       if (foundProduct) {
         dispatch(setSelectedProduct(foundProduct));
       } else {
@@ -154,17 +154,17 @@ function ProductDetail() {
             SKU: {product.sku}
           </Typography>
           <Typography variant="h6" mt={3} mb={2}>
-            Hightlights
+            Highlights
           </Typography>
           <Box>
-            {product.hightlights.includes("\n") ? (
-              product.hightlights.split("\n").map((paragraph, index) => (
+            {product.highlights.includes("\n") ? (
+              product.highlights.split("\n").map((paragraph, index) => (
                 <Typography variant="body1" key={index} mb={3}>
                   {paragraph.trim()}
                 </Typography>
               ))
             ) : (
-              <Typography variant="body1">{product.hightlights}</Typography>
+              <Typography variant="body1">{product.highlights}</Typography>
             )}
           </Box>
           <Typography variant="h6" mt={3} mb={2}>

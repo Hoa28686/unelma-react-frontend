@@ -8,13 +8,14 @@ const initialState = {
   error: null,
 };
 
-const productAPI = "http://localhost:3001/products";
+// const productAPI = "http://localhost:3001/products";
+const productAPI = "http://127.0.0.1:8000/api/products";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async () => {
     const res = await axios.get(productAPI);
-    return res.data;
+    return res.data.data;
   }
 );
 
