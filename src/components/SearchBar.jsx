@@ -131,7 +131,7 @@ function SearchBar({ open, onClose }) {
           <Box
             key={`highlight-${parts.length}`}
             component="span"
-            sx={{ fontWeight: 700, color: "#E57A44" }}
+            sx={{ fontWeight: 700, color: (theme) => theme.palette.primary.main }}
           >
             {remainingText.substring(index, index + term.length)}
           </Box>
@@ -293,10 +293,10 @@ function SearchBar({ open, onClose }) {
                         : "rgba(0, 0, 0, 0.23)",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#E57A44",
+                    borderColor: (theme) => theme.palette.primary.main,
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#E57A44",
+                    borderColor: (theme) => theme.palette.primary.main,
                     borderWidth: "2px",
                   },
                 },
@@ -368,7 +368,7 @@ function SearchBar({ open, onClose }) {
                           <ListItemIcon>
                             <ShoppingBagOutlinedIcon
                               sx={{
-                                color: "#E57A44",
+                                color: (theme) => theme.palette.primary.main,
                               }}
                             />
                           </ListItemIcon>
@@ -438,7 +438,7 @@ function SearchBar({ open, onClose }) {
                             <ListItemIcon>
                               <ArticleOutlinedIcon
                                 sx={{
-                                  color: "#E57A44",
+                                  color: (theme) => theme.palette.primary.main,
                                 }}
                               />
                             </ListItemIcon>
@@ -512,7 +512,7 @@ function SearchBar({ open, onClose }) {
                             <ListItemIcon>
                               <BusinessCenterOutlinedIcon
                                 sx={{
-                                  color: "#E57A44",
+                                  color: (theme) => theme.palette.primary.main,
                                 }}
                               />
                             </ListItemIcon>

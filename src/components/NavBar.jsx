@@ -107,12 +107,12 @@ function NavBar() {
                 textTransform: "none",
                 fontSize: "1rem",
                 "&:focus": {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 "&:focus-visible": {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },
@@ -129,12 +129,12 @@ function NavBar() {
                 fontSize: "1rem",
                 color: (theme) => theme.palette.text.primary,
                 "&:focus": {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 "&:focus-visible": {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },
@@ -395,7 +395,7 @@ function NavBar() {
                   color="primary"
                   sx={{
                     "& .MuiBadge-badge": {
-                      backgroundColor: "#E57A44",
+                      backgroundColor: (theme) => theme.palette.primary.main,
                       color: "#FFFFFF",
                       fontWeight: 600,
                     },

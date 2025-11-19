@@ -9,8 +9,6 @@ import {
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { timeConversion } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
-import HeroImage from "../../components/HeroImage";
-import commonBackground from "../../assets/earthy_common_background.png";
 
 function BlogDetail() {
   const { blogId } = useParams();
@@ -100,17 +98,13 @@ function BlogDetail() {
           position: "relative",
           width: "100%",
           minHeight: "100vh",
-          overflow: "hidden",
+          backgroundColor: (theme) => theme.palette.background.default,
         }}
       >
-        {/* Hero Image - static, no animation */}
-        <HeroImage imageSource={commonBackground} animate={false} />
-
-        {/* Content overlay */}
+        {/* Content */}
         <Box
           sx={{
             position: "relative",
-            zIndex: 1,
             minHeight: "100vh",
             width: "100%",
             display: "flex",
@@ -258,12 +252,12 @@ function BlogDetail() {
                 px: 3,
                 py: 1,
                 "&:focus": {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 "&:focus-visible": {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },

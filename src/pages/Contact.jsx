@@ -11,8 +11,6 @@ import {
 } from "@mui/material";
 import { useContactForm } from "../hooks/useContactForm";
 import StyledTextField from "../components/StyledTextField";
-import HeroImage from "../components/HeroImage";
-import commonBackground from "../assets/earthy_common_background.png";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -35,17 +33,13 @@ function Contact() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      {/* Hero Image - static, no animation */}
-      <HeroImage imageSource={commonBackground} animate={false} />
-
-      {/* Content overlay */}
+      {/* Content */}
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
           padding: { xs: "3rem 1rem", sm: "4rem 2rem", md: "5rem 3rem" },
@@ -80,15 +74,15 @@ function Contact() {
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                   <Card
                   sx={{
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "light"
-                        ? "#B0D0B5"
-                        : theme.palette.background.paper,
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      borderColor: "#E57A44",
+                      borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
                     },
                   }}
@@ -104,7 +98,7 @@ function Contact() {
                     >
                       <EmailIcon
                         sx={{
-                          color: "#E57A44",
+                          color: (theme) => theme.palette.primary.main,
                           fontSize: { xs: "1.5rem", sm: "2rem" },
                         }}
                       />
@@ -134,15 +128,15 @@ function Contact() {
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                   <Card
                   sx={{
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "light"
-                        ? "#B0D0B5"
-                        : theme.palette.background.paper,
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      borderColor: "#E57A44",
+                      borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
                     },
                   }}
@@ -158,7 +152,7 @@ function Contact() {
                     >
                       <PhoneIcon
                         sx={{
-                          color: "#E57A44",
+                          color: (theme) => theme.palette.primary.main,
                           fontSize: { xs: "1.5rem", sm: "2rem" },
                         }}
                       />
@@ -212,15 +206,15 @@ function Contact() {
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                   <Card
                   sx={{
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "light"
-                        ? "#B0D0B5"
-                        : theme.palette.background.paper,
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      borderColor: "#E57A44",
+                      borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
                     },
                   }}
@@ -236,7 +230,7 @@ function Contact() {
                     >
                       <AccessTimeIcon
                         sx={{
-                          color: "#E57A44",
+                          color: (theme) => theme.palette.primary.main,
                           fontSize: { xs: "1.5rem", sm: "2rem" },
                         }}
                       />
@@ -274,15 +268,15 @@ function Contact() {
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                   <Card
                   sx={{
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "light"
-                        ? "#B0D0B5"
-                        : theme.palette.background.paper,
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      borderColor: "#E57A44",
+                      borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
                     },
                   }}
@@ -298,7 +292,7 @@ function Contact() {
                     >
                       <LocationOnIcon
                         sx={{
-                          color: "#E57A44",
+                          color: (theme) => theme.palette.primary.main,
                           fontSize: { xs: "1.5rem", sm: "2rem" },
                         }}
                       />
@@ -367,9 +361,12 @@ function Contact() {
                     sx={{
                       backgroundColor: (theme) =>
                         theme.palette.mode === "light"
-                          ? "#B0D0B5"
+                          ? theme.palette.background.paper
                           : theme.palette.background.paper,
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: 2,
                       padding: { xs: 2, sm: 3 },
                     }}
@@ -445,9 +442,12 @@ function Contact() {
                     sx={{
                       backgroundColor: (theme) =>
                         theme.palette.mode === "light"
-                          ? "#B0D0B5"
+                          ? theme.palette.background.paper
                           : theme.palette.background.paper,
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: 2,
                       overflow: "hidden",
                       height: "100%",

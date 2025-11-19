@@ -23,6 +23,7 @@ import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
+import { getImageUrl } from "../../helpers/helpers";
 
 const ITEMS_PER_PAGE = 9; // Show 9 products per page
 
@@ -181,10 +182,10 @@ function Products() {
                     : "rgba(0, 0, 0, 0.23)",
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#E57A44",
+                borderColor: (theme) => theme.palette.primary.main,
               },
               "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#E57A44",
+                borderColor: (theme) => theme.palette.primary.main,
                 borderWidth: "2px",
               },
             },
@@ -257,7 +258,7 @@ function Products() {
               >
                 <CardMedia
                   component="img"
-                  src={p.image_url}
+                  src={getImageUrl(p.image_url)}
                   alt={p.name}
                   sx={{
                     width: "100%",
@@ -319,15 +320,15 @@ function Products() {
                   border: "1px solid transparent",
                   transition: "all 0.3s ease",
                   "&:focus": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                   },
                   "&:focus-visible": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                   },
                   "&:hover": {
-                    borderColor: "#E57A44",
+                    borderColor: (theme) => theme.palette.primary.main,
                     transform: "translateY(-4px)",
                     backgroundColor: "transparent",
                   },
@@ -350,32 +351,32 @@ function Products() {
                     border: "1px solid transparent",
                     boxShadow: "none !important",
                     "&.Mui-selected": {
-                      backgroundColor: "#E57A44",
+                      backgroundColor: (theme) => theme.palette.primary.main,
                       color: "#FFFFFF",
-                      border: "1px solid #E57A44",
+                      border: (theme) => `1px solid ${theme.palette.primary.main}`,
                       boxShadow: "none !important",
                       "&:hover": {
                         backgroundColor: "#C85A2E",
                       },
                       "&:focus": {
-                        outline: "2px solid #E57A44 !important",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
                         outlineOffset: "2px",
                         boxShadow: "none !important",
                       },
                       "&:focus-visible": {
-                        outline: "2px solid #E57A44 !important",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
                         outlineOffset: "2px",
                         boxShadow: "none !important",
                       },
                     },
                     "&:focus": {
-                      outline: "2px solid #E57A44 !important",
+                      outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
                       outlineOffset: "2px",
                       boxShadow: "none !important",
                       border: "1px solid transparent",
                     },
                     "&:focus-visible": {
-                      outline: "2px solid #E57A44 !important",
+                      outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
                       outlineOffset: "2px",
                       boxShadow: "none !important",
                       border: "1px solid transparent",
@@ -401,15 +402,15 @@ function Products() {
                   border: "1px solid transparent",
                   transition: "all 0.3s ease",
                   "&:focus": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                   },
                   "&:focus-visible": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                   },
                   "&:hover": {
-                    borderColor: "#E57A44",
+                    borderColor: (theme) => theme.palette.primary.main,
                     transform: "translateY(-4px)",
                     backgroundColor: "transparent",
                   },

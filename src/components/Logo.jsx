@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 import { Link } from "react-router";
-import logo from "../assets/header_logo.webp";
+import logo from "../assets/logo.webp";
 
 function Logo() {
   return (

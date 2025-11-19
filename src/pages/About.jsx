@@ -7,8 +7,6 @@ import PeopleIcon from "@mui/icons-material/People";
 import PublicIcon from "@mui/icons-material/Public";
 import globalMapImage from "../assets/global_office_presence.png";
 import heroVideo from "../assets/hero_video.mp4?url";
-import HeroImage from "../components/HeroImage";
-import commonBackground from "../assets/earthy_common_background.png";
 
 function About() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -31,17 +29,13 @@ function About() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      {/* Hero Image - static, no animation */}
-      <HeroImage imageSource={commonBackground} animate={false} />
-      
-      {/* Content overlay */}
+      {/* Content */}
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
           paddingBottom: { xs: "4rem", sm: "6rem" },
@@ -134,7 +128,7 @@ function About() {
               transition: theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
               ...(theme.palette.mode === 'light' ? {
                 "&:hover": {
-                  borderColor: "#E57A44",
+                  borderColor: theme.palette.primary.main,
                   transform: "translateY(-4px)",
                 }
               } : {}),
@@ -195,7 +189,7 @@ function About() {
                 >
                   <Box
                     sx={{
-                      color: "#E57A44",
+                      color: (theme) => theme.palette.primary.main,
                       marginBottom: "1.5rem",
                       display: "flex",
                       alignItems: "center",
@@ -272,7 +266,7 @@ function About() {
                     transition: theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
                     ...(theme.palette.mode === 'light' ? {
                       "&:hover": {
-                        borderColor: "#E57A44",
+                        borderColor: theme.palette.primary.main,
                         transform: "translateY(-4px)",
                       }
                     } : {}),
@@ -349,11 +343,11 @@ function About() {
                   sx={{
                     width: "100%",
                     aspectRatio: "9/16",
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "light"
-                        ? "#B0D0B5"
-                        : theme.palette.background.paper,
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     display: "flex",
                     alignItems: "center",
@@ -401,10 +395,10 @@ function About() {
                         sx={{
                           width: { xs: "64px", sm: "80px", md: "96px" },
                           height: { xs: "64px", sm: "80px", md: "96px" },
-                          backgroundColor: "#E57A44",
+                          backgroundColor: (theme) => theme.palette.primary.main,
                           color: "#FFFFFF",
                           "&:hover": {
-                            backgroundColor: "#C85A2E",
+                            backgroundColor: (theme) => theme.palette.primary.dark || theme.palette.primary.main,
                             transform: "scale(1.1)",
                           },
                           transition: "all 0.3s ease",
@@ -471,7 +465,7 @@ function About() {
                     ...(theme.palette.mode === "light"
                       ? {
                           "&:hover": {
-                            borderColor: "#E57A44",
+                            borderColor: theme.palette.primary.main,
                             transform: "translateY(-4px)",
                           },
                         }

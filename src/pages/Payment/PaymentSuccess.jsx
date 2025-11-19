@@ -8,8 +8,6 @@ import {
   CardContent,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import HeroImage from "../../components/HeroImage";
-import commonBackground from "../../assets/earthy_common_background.png";
 
 function PaymentSuccess() {
   const navigate = useNavigate();
@@ -22,17 +20,15 @@ function PaymentSuccess() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      <HeroImage imageSource={commonBackground} animate={false} />
-
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
+          backgroundColor: (theme) => theme.palette.background.default,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -75,12 +71,12 @@ function PaymentSuccess() {
                   backgroundColor: (theme) => theme.palette.primary.main,
                   color: "#FFFFFF",
                   "&:focus": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                     boxShadow: "none",
                   },
                   "&:focus-visible": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                     boxShadow: "none",
                   },
@@ -98,12 +94,12 @@ function PaymentSuccess() {
                   borderColor: (theme) => theme.palette.primary.main,
                   color: (theme) => theme.palette.primary.main,
                   "&:focus": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                     boxShadow: "none",
                   },
                   "&:focus-visible": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                     boxShadow: "none",
                   },

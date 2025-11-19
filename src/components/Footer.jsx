@@ -5,15 +5,14 @@ import estoniaLogo from "../assets/republic-of-estonia-logo.webp";
 import shortlistLogo from "../assets/shortlist-logo.webp";
 
 // Style Guide Colors as defined:
+// Updated to match blue theme from main branch
 const COLORS = {
-    // Background - Dark Purple
-    footerBg: '#422040', 
-    // Primary Accent - Orange/Coral (matching theme)
-    primaryAccent: '#E57A44', 
-    // Text - Light Yellow/Green
-    textDark: '#E3D985', 
-    // Secondary Accent - Darker purple for subtle backgrounds
-    secondaryAccent: '#2A1630', 
+    // Background - Darker Blue (matching dark theme background)
+    footerBg: '#0A0F1C', 
+    // Text - White (matching dark theme text)
+    textDark: '#FFFFFF', 
+    // Secondary Accent - Dark blue-gray for subtle backgrounds
+    secondaryAccent: '#151B2E', 
 };
 
 // Footer Links Data
@@ -109,7 +108,7 @@ const Footer = () => {
                         border: '1px solid rgba(255, 255, 255, 0.1)',
                         transition: 'all 300ms',
                         '&:hover': {
-                            borderColor: 'rgba(229, 122, 68, 0.5)',
+                            borderColor: (theme) => `${theme.palette.primary.main}80`, // 50% opacity blue
                         }
                     }}
                 >
@@ -167,7 +166,7 @@ const Footer = () => {
                 <Grid container spacing={4} sx={{ pb: 4, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
                     {/* Top Row: Useful Links, Career With Us, Newsletter */}
                     <Grid size={{ xs: 12, md: 4 }}>
-                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Useful Links</Typography>
+                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: (theme) => theme.palette.primary.main, pl: 2, fontSize: '1.125rem' }}>Useful Links</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
                             {usefulLinks.map((item) => (
                                 <Box component="li" key={item.label}>
@@ -178,7 +177,7 @@ const Footer = () => {
                                             fontSize: '0.875rem', 
                                             color: COLORS.textDark, 
                                             transition: 'color 200ms', 
-                                            '&:hover': { color: COLORS.primaryAccent } 
+                                            '&:hover': { color: (theme) => theme.palette.primary.main } 
                                         }}
                                     >
                                         {item.label}
@@ -189,7 +188,7 @@ const Footer = () => {
                     </Grid>
 
                     <Grid size={{ xs: 12, md: 4 }}>
-                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Career With Us</Typography>
+                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: (theme) => theme.palette.primary.main, pl: 2, fontSize: '1.125rem' }}>Career With Us</Typography>
                         <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
                             {careerLinks.map((item) => (
                                 <Box component="li" key={item.label}>
@@ -200,7 +199,7 @@ const Footer = () => {
                                             fontSize: '0.875rem', 
                                             color: COLORS.textDark, 
                                             transition: 'color 200ms', 
-                                            '&:hover': { color: COLORS.primaryAccent } 
+                                            '&:hover': { color: (theme) => theme.palette.primary.main } 
                                         }}
                                     >
                                         {item.label}
@@ -211,7 +210,7 @@ const Footer = () => {
                     </Grid>
 
                     <Grid size={{ xs: 12, md: 4 }}>
-                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Subscribe to our Newsletter</Typography>
+                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 2, borderLeft: 4, borderColor: (theme) => theme.palette.primary.main, pl: 2, fontSize: '1.125rem' }}>Subscribe to our Newsletter</Typography>
                         <Typography variant="body2" sx={{ fontSize: '0.875rem', mb: 2, color: 'rgba(255, 255, 255, 0.7)' }}>
                             Based on the GDPR rule, we will only contact you if it is essential and all personal data collected is anonymized.
                         </Typography>
@@ -235,8 +234,8 @@ const Footer = () => {
                                         backgroundColor: COLORS.secondaryAccent,
                                         color: COLORS.textDark,
                                         '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                                        '&:hover fieldset': { borderColor: COLORS.primaryAccent },
-                                        '&.Mui-focused fieldset': { borderColor: COLORS.primaryAccent, borderWidth: '2px' },
+                                        '&:hover fieldset': { borderColor: (theme) => theme.palette.primary.main },
+                                        '&.Mui-focused fieldset': { borderColor: (theme) => theme.palette.primary.main, borderWidth: '2px' },
                                         '& input::placeholder': { color: 'rgba(255, 255, 255, 0.5)', opacity: 1 },
                                     },
                                 }}
@@ -256,16 +255,16 @@ const Footer = () => {
                                     border: "1px solid transparent",
                                     transition: "all 0.3s ease",
                                     '&:hover': { 
-                                        borderColor: "#E57A44",
+                                        borderColor: (theme) => theme.palette.primary.main,
                                         transform: "translateY(-4px)",
                                     },
                                     '&:focus': {
-                                        outline: "2px solid #E57A44",
+                                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                                         outlineOffset: "2px",
                                         boxShadow: "none",
                                     },
                                     '&:focus-visible': {
-                                        outline: "2px solid #E57A44",
+                                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                                         outlineOffset: "2px",
                                         boxShadow: "none",
                                     },
@@ -278,7 +277,7 @@ const Footer = () => {
 
                     {/* Office Locations - Horizontal Layout */}
                     <Grid size={{ xs: 12 }}>
-                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 3, borderLeft: 4, borderColor: COLORS.primaryAccent, pl: 2, fontSize: '1.125rem' }}>Offices</Typography>
+                        <Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 3, borderLeft: 4, borderColor: (theme) => theme.palette.primary.main, pl: 2, fontSize: '1.125rem' }}>Offices</Typography>
                         <Box sx={{ 
                             display: 'flex', 
                             flexDirection: { xs: 'column', sm: 'row' },
@@ -293,7 +292,7 @@ const Footer = () => {
                                         minWidth: { xs: '100%', sm: '250px', md: '200px' },
                                     }}
                                 >
-                                    <Typography variant="subtitle2" sx={{ fontWeight: 600, color: COLORS.primaryAccent, mb: 0.5, fontSize: '0.875rem' }}>
+                                    <Typography variant="subtitle2" sx={{ fontWeight: 600, color: (theme) => theme.palette.primary.main, mb: 0.5, fontSize: '0.875rem' }}>
                                         {office.title}
                                     </Typography>
                                     <Typography variant="body2" sx={{ fontSize: '0.75rem', color: COLORS.textDark, mb: 0.5 }}>
@@ -315,7 +314,7 @@ const Footer = () => {
                                         underline="none"
                                         sx={{ 
                                             fontSize: '0.75rem', 
-                                            color: COLORS.primaryAccent, 
+                                            color: (theme) => theme.palette.primary.main, 
                                             transition: 'color 200ms',
                                             '&:hover': { color: COLORS.textDark }
                                         }}
@@ -360,7 +359,7 @@ const Footer = () => {
                             target="_blank" 
                             rel="noopener noreferrer"
                             sx={{ 
-                                color: COLORS.primaryAccent, 
+                                color: (theme) => theme.palette.primary.main, 
                                 transition: 'color 300ms, transform 300ms', 
                                 '&:hover': { color: COLORS.textDark, transform: 'scale(1.15)' },
                                 display: 'flex',
@@ -381,7 +380,7 @@ const Footer = () => {
                             target="_blank" 
                             rel="noopener noreferrer"
                             sx={{ 
-                                color: COLORS.primaryAccent, 
+                                color: (theme) => theme.palette.primary.main, 
                                 transition: 'color 300ms, transform 300ms', 
                                 '&:hover': { color: COLORS.textDark, transform: 'scale(1.15)' },
                                 display: 'flex',
@@ -400,7 +399,7 @@ const Footer = () => {
                             target="_blank" 
                             rel="noopener noreferrer"
                             sx={{ 
-                                color: COLORS.primaryAccent, 
+                                color: (theme) => theme.palette.primary.main, 
                                 transition: 'color 300ms, transform 300ms', 
                                 '&:hover': { color: COLORS.textDark, transform: 'scale(1.15)' },
                                 display: 'flex',

@@ -49,7 +49,7 @@ function BackToTop() {
             border: "1px solid transparent",
             transition: "all 0.3s ease",
             "&:hover": {
-              borderColor: "#E57A44",
+              borderColor: (theme) => theme.palette.primary.main,
               transform: "translateY(-4px)",
             },
             "&:focus": {

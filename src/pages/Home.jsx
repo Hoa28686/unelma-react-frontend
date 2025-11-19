@@ -12,8 +12,8 @@ import StorageIcon from "@mui/icons-material/Storage";
 import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import heroImageDesktop from "../assets/earthy_frontend.png";
-import heroImageMobile from "../assets/earthy_frontend_mobile.png";
+import heroImage from "../assets/hero.webp";
+import heroTilesImage from "../assets/hero-tiles.webp";
 
 function Home() {
   const navigate = useNavigate();
@@ -43,8 +43,8 @@ function Home() {
           overflow: "hidden",
         }}
       >
-        {/* Hero Images - responsive, animates from top, behind header, to below header */}
-        {/* Desktop hero image */}
+        {/* Hero Images - layered, animates from top, behind header, to below header */}
+        {/* First image (tiles) - back layer */}
         <Box
           sx={(theme) => ({
             position: "absolute",
@@ -52,12 +52,11 @@ function Home() {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundImage: `url(${heroImageDesktop})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundImage: `url(${heroTilesImage})`,
+            backgroundRepeat: "repeat-y",
+            backgroundSize: { xs: "100% auto", md: "100% auto" },
+            backgroundPosition: "top center",
             zIndex: 0,
-            display: { xs: "none", md: "block" },
             transform: isLoaded 
               ? "translateY(0)" 
               : "translateY(-100vh)",
@@ -65,7 +64,7 @@ function Home() {
             willChange: "transform",
           })}
         />
-        {/* Mobile hero image */}
+        {/* Second image (black background) - front layer with delay */}
         <Box
           sx={(theme) => ({
             position: "absolute",
@@ -73,16 +72,15 @@ function Home() {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundImage: `url(${heroImageMobile})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            zIndex: 0,
-            display: { xs: "block", md: "none" },
+            backgroundImage: `url(${heroImage})`,
+            backgroundRepeat: "repeat-y",
+            backgroundSize: { xs: "100% auto", md: "100% auto" },
+            backgroundPosition: "top center",
+            zIndex: 1,
             transform: isLoaded 
               ? "translateY(0)" 
               : "translateY(-100vh)",
-            transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
+            transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
             willChange: "transform",
           })}
         />
@@ -142,21 +140,21 @@ function Home() {
                 border: "1px solid transparent",
                 transition: "all 0.3s ease",
                 '&:hover': {
-                  borderColor: "#E57A44",
+                  borderColor: (theme) => theme.palette.primary.main,
                   transform: "translateY(-4px)",
                 },
                 '&:focus': {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 '&:focus-visible': {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 '&:active': {
-                  outline: "2px solid #E57A44",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                   outlineOffset: "2px",
                   boxShadow: "none",
                 },
@@ -304,13 +302,15 @@ function Home() {
                   },
                   minWidth: { xs: "100%", sm: "280px", md: "300px" },
                   maxWidth: { xs: "100%", sm: "none", md: "400px" },
-                  backgroundColor: (theme) => 
-                    theme.palette.mode === 'light' ? '#B0D0B5' : theme.palette.background.paper,
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  backgroundColor: (theme) => theme.palette.background.paper,
+                  border: (theme) => 
+                    theme.palette.mode === 'dark' 
+                      ? "1px solid rgba(255, 255, 255, 0.1)" 
+                      : "1px solid rgba(0, 0, 0, 0.1)",
                   borderRadius: 2,
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    borderColor: "#E57A44",
+                    borderColor: (theme) => theme.palette.primary.main,
                     transform: "translateY(-4px)",
                   },
                 }}
@@ -333,8 +333,11 @@ function Home() {
                           width: { xs: "48px", sm: "56px" },
                           height: { xs: "48px", sm: "56px" },
                           borderRadius: "50%",
-                          backgroundColor: "rgba(229, 122, 68, 0.1)",
-                          color: "#E57A44",
+                          backgroundColor: (theme) => 
+                            theme.palette.mode === 'light' 
+                              ? `${theme.palette.primary.main}15` 
+                              : `${theme.palette.primary.main}25`,
+                          color: (theme) => theme.palette.primary.main,
                         }}
                       >
                         <service.icon
@@ -370,7 +373,7 @@ function Home() {
                   <Button
                     variant="text"
                     sx={{
-                      color: "#E57A44",
+                      color: (theme) => theme.palette.primary.main,
                       textTransform: "none",
                       fontWeight: 500,
                       padding: 0,
@@ -383,7 +386,7 @@ function Home() {
                         left: 0,
                         width: "0",
                         height: "2px",
-                        backgroundColor: "#E57A44",
+                        backgroundColor: (theme) => theme.palette.primary.main,
                         transition: "width 0.3s ease",
                       },
                       "&:hover": {
@@ -493,7 +496,7 @@ function Home() {
                     width: { xs: "50px", sm: "60px", md: "70px" },
                     height: { xs: "50px", sm: "60px", md: "70px" },
                     borderRadius: "50%",
-                    backgroundColor: "#E57A44",
+                    backgroundColor: (theme) => theme.palette.primary.main,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -509,7 +512,7 @@ function Home() {
                 {/* Icon */}
                 <Box
                   sx={{
-                    color: "#E57A44",
+                    color: (theme) => theme.palette.primary.main,
                     marginBottom: "1rem",
                     display: "flex",
                     alignItems: "center",
@@ -542,7 +545,7 @@ function Home() {
                       left: "calc(100% + 8px)",
                       width: "calc(20% - 16px)",
                       height: "2px",
-                      backgroundColor: "#E57A44",
+                      backgroundColor: (theme) => theme.palette.primary.main,
                       opacity: 0.3,
                     }}
                   />

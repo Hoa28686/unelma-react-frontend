@@ -406,17 +406,17 @@ function User() {
             transition: "all 0.3s ease",
             mt: 2,
             "&:focus": {
-              outline: "2px solid #E57A44",
+              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
               outlineOffset: "2px",
               boxShadow: "none",
             },
             "&:focus-visible": {
-              outline: "2px solid #E57A44",
+              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
               outlineOffset: "2px",
               boxShadow: "none",
             },
             "&:hover": {
-              borderColor: "#E57A44",
+              borderColor: (theme) => theme.palette.primary.main,
               transform: "translateY(-4px)",
             },
           }}
@@ -584,7 +584,7 @@ function User() {
                 borderRadius: 2,
                 backgroundColor: (theme) =>
                   theme.palette.mode === "light"
-                    ? "#B0D0B5"
+                    ? theme.palette.background.paper
                     : theme.palette.background.paper,
               }}
             >
@@ -638,7 +638,7 @@ function User() {
                     color: (theme) => theme.palette.primary.main,
                     textTransform: "none",
                     "&:hover": {
-                      borderColor: "#E57A44",
+                      borderColor: (theme) => theme.palette.primary.main,
                       backgroundColor: "transparent",
                     },
                   }}
@@ -1113,10 +1113,7 @@ function User() {
         sx={{
           p: 4,
           borderRadius: 2,
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? "#B0D0B5"
-              : theme.palette.background.paper,
+          backgroundColor: (theme) => theme.palette.background.paper,
         }}
       >
         <Typography
@@ -1268,7 +1265,7 @@ function User() {
                 boxShadow: "none",
               },
               "&:hover": {
-                borderColor: "#E57A44",
+                borderColor: (theme) => theme.palette.primary.main,
                 transform: "translateY(-4px)",
               },
             }}

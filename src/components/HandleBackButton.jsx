@@ -18,12 +18,12 @@ export default function HandleBackButton({ content, link }) {
         color: "secondary.main",
         m: 2,
         "&:focus": {
-          outline: "2px solid #E57A44",
+          outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           outlineOffset: "2px",
           boxShadow: "none",
         },
         "&:focus-visible": {
-          outline: "2px solid #E57A44",
+          outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           outlineOffset: "2px",
           boxShadow: "none",
         },

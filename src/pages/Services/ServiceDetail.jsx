@@ -18,8 +18,6 @@ import {
 } from "@mui/material";
 import { useContactForm } from "../../hooks/useContactForm";
 import StyledTextField from "../../components/StyledTextField";
-import HeroImage from "../../components/HeroImage";
-import commonBackground from "../../assets/earthy_common_background.png";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SecurityIcon from "@mui/icons-material/Security";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -313,28 +311,13 @@ function ServiceDetail() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      {/* Hero Images */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          zIndex: 0,
-        }}
-      >
-        <HeroImage imageSource={commonBackground} animate={false} />
-      </Box>
-
-      {/* Content overlay */}
+      {/* Content */}
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
           padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
@@ -357,7 +340,7 @@ function ServiceDetail() {
               border: "1px solid transparent",
               transition: "all 0.3s ease",
               "&:hover": {
-                borderColor: "#E57A44",
+                borderColor: (theme) => theme.palette.primary.main,
                 transform: "translateY(-4px)",
               },
             }}
@@ -383,7 +366,7 @@ function ServiceDetail() {
                 height: { xs: "64px", sm: "80px" },
                 borderRadius: "50%",
                 backgroundColor: "rgba(229, 122, 68, 0.1)",
-                color: "#E57A44",
+                color: (theme) => theme.palette.primary.main,
               }}
             >
               <IconComponent
@@ -443,9 +426,12 @@ function ServiceDetail() {
                         sx={{
                           backgroundColor: (theme) =>
                             theme.palette.mode === "light"
-                              ? "#B0D0B5"
+                              ? theme.palette.background.paper
                               : theme.palette.background.paper,
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          border: (theme) => 
+                            theme.palette.mode === 'dark' 
+                              ? "1px solid rgba(255, 255, 255, 0.1)" 
+                              : "1px solid rgba(0, 0, 0, 0.1)",
                           borderRadius: 2,
                           padding: { xs: "2rem", sm: "2.5rem" },
                           height: "100%",
@@ -453,7 +439,7 @@ function ServiceDetail() {
                           flexDirection: "column",
                           transition: "all 0.3s ease",
                           "&:hover": {
-                            borderColor: "#E57A44",
+                            borderColor: (theme) => theme.palette.primary.main,
                             transform: "translateY(-4px)",
                           },
                         }}
@@ -482,7 +468,7 @@ function ServiceDetail() {
                             sx={{
                               fontSize: { xs: "2rem", sm: "2.5rem" },
                               fontWeight: 700,
-                              color: "#E57A44",
+                              color: (theme) => theme.palette.primary.main,
                             }}
                           >
                             ${plan.price}
@@ -513,7 +499,7 @@ function ServiceDetail() {
                                   width: "8px",
                                   height: "8px",
                                   borderRadius: "50%",
-                                  backgroundColor: "#E57A44",
+                                  backgroundColor: (theme) => theme.palette.primary.main,
                                   marginRight: 2,
                                 }}
                               />
@@ -544,17 +530,17 @@ function ServiceDetail() {
                             border: "1px solid transparent",
                             transition: "all 0.3s ease",
                             "&:focus": {
-                              outline: "2px solid #E57A44",
+                              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                               outlineOffset: "2px",
                               boxShadow: "none",
                             },
                             "&:focus-visible": {
-                              outline: "2px solid #E57A44",
+                              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                               outlineOffset: "2px",
                               boxShadow: "none",
                             },
                             "&:hover": {
-                              borderColor: "#E57A44",
+                              borderColor: (theme) => theme.palette.primary.main,
                               transform: "translateY(-4px)",
                             },
                           }}
@@ -585,11 +571,11 @@ function ServiceDetail() {
               >
                 <Card
                   sx={{
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "light"
-                        ? "#B0D0B5"
-                        : theme.palette.background.paper,
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     padding: { xs: "2rem", sm: "2.5rem" },
                   }}
@@ -729,12 +715,12 @@ function ServiceDetail() {
               textTransform: "none",
               color: (theme) => theme.palette.text.primary,
               "&:focus": {
-                outline: "2px solid #E57A44",
+                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                 outlineOffset: "2px",
                 boxShadow: "none",
               },
               "&:focus-visible": {
-                outline: "2px solid #E57A44",
+                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                 outlineOffset: "2px",
                 boxShadow: "none",
               },
@@ -755,12 +741,12 @@ function ServiceDetail() {
               borderRadius: 2,
               textTransform: "none",
               "&:focus": {
-                outline: "2px solid #E57A44",
+                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                 outlineOffset: "2px",
                 boxShadow: "none",
               },
               "&:focus-visible": {
-                outline: "2px solid #E57A44",
+                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                 outlineOffset: "2px",
                 boxShadow: "none",
               },

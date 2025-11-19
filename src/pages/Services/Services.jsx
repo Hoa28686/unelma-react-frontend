@@ -19,8 +19,6 @@ import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import { useNavigate } from "react-router";
-import HeroImage from "../../components/HeroImage";
-import commonBackground from "../../assets/earthy_common_background.png";
 
 // Hardcoded services data with icons
 const servicesData = [
@@ -127,17 +125,13 @@ function Services() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      {/* Hero Image - static, no animation */}
-      <HeroImage imageSource={commonBackground} animate={false} />
-
-      {/* Content overlay */}
+      {/* Content */}
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
           padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
@@ -211,10 +205,10 @@ function Services() {
                         : "rgba(0, 0, 0, 0.23)",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#E57A44",
+                    borderColor: (theme) => theme.palette.primary.main,
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#E57A44",
+                    borderColor: (theme) => theme.palette.primary.main,
                     borderWidth: "2px",
                   },
                 },
@@ -277,17 +271,17 @@ function Services() {
                       navigate(`/services/${serviceId}`);
                     }}
                     sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "#B0D0B5"
-                          : theme.palette.background.paper,
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      backgroundColor: (theme) => theme.palette.background.paper,
+                      border: (theme) => 
+                        theme.palette.mode === 'dark' 
+                          ? "1px solid rgba(255, 255, 255, 0.1)" 
+                          : "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: 2,
                       transition: "all 0.3s ease",
                       overflow: "hidden",
                       cursor: "pointer",
                       "&:hover": {
-                        borderColor: "#E57A44",
+                        borderColor: (theme) => theme.palette.primary.main,
                         transform: "translateY(-4px)",
                       },
                     }}
@@ -311,7 +305,7 @@ function Services() {
                               height: { xs: "48px", sm: "56px" },
                               borderRadius: "50%",
                               backgroundColor: "rgba(229, 122, 68, 0.1)",
-                              color: "#E57A44",
+                              color: (theme) => theme.palette.primary.main,
                             }}
                           >
                             <service.icon
@@ -369,15 +363,15 @@ function Services() {
                       border: "1px solid transparent",
                       transition: "all 0.3s ease",
                       "&:focus": {
-                        outline: "2px solid #E57A44",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                       },
                       "&:focus-visible": {
-                        outline: "2px solid #E57A44",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                       },
                       "&:hover": {
-                        borderColor: "#E57A44",
+                        borderColor: (theme) => theme.palette.primary.main,
                         transform: "translateY(-4px)",
                         backgroundColor: "transparent",
                       },
@@ -400,32 +394,32 @@ function Services() {
                         border: "1px solid transparent",
                         boxShadow: "none !important",
                         "&.Mui-selected": {
-                          backgroundColor: "#E57A44",
+                          backgroundColor: (theme) => theme.palette.primary.main,
                           color: "#FFFFFF",
-                          border: "1px solid #E57A44",
+                          border: (theme) => `1px solid ${theme.palette.primary.main}`,
                           boxShadow: "none !important",
                           "&:hover": {
                             backgroundColor: "#C85A2E",
                           },
                           "&:focus": {
-                            outline: "2px solid #E57A44 !important",
+                            outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
                             outlineOffset: "2px",
                             boxShadow: "none !important",
                           },
                           "&:focus-visible": {
-                            outline: "2px solid #E57A44 !important",
+                            outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
                             outlineOffset: "2px",
                             boxShadow: "none !important",
                           },
                         },
                         "&:focus": {
-                          outline: "2px solid #E57A44 !important",
+                          outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
                           outlineOffset: "2px",
                           boxShadow: "none !important",
                           border: "1px solid transparent",
                         },
                         "&:focus-visible": {
-                          outline: "2px solid #E57A44 !important",
+                          outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
                           outlineOffset: "2px",
                           boxShadow: "none !important",
                           border: "1px solid transparent",
@@ -451,15 +445,15 @@ function Services() {
                       border: "1px solid transparent",
                       transition: "all 0.3s ease",
                       "&:focus": {
-                        outline: "2px solid #E57A44",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                       },
                       "&:focus-visible": {
-                        outline: "2px solid #E57A44",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                       },
                       "&:hover": {
-                        borderColor: "#E57A44",
+                        borderColor: (theme) => theme.palette.primary.main,
                         transform: "translateY(-4px)",
                         backgroundColor: "transparent",
                       },

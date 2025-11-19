@@ -1,8 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
-import heroImageDesktop from "../assets/earthy_frontend.png";
-import heroImageMobile from "../assets/earthy_frontend_mobile.png";
-import commonBackground from "../assets/earthy_common_background.png";
+import heroImage from "../assets/hero.webp";
+import heroTilesImage from "../assets/hero-tiles.webp";
 
 /**
  * Reusable HeroImage component for consistent hero image display across pages
@@ -19,9 +18,9 @@ function HeroImage({ animate = false, imageSource = null, sx = {} }) {
     }
   }, [animate]);
 
-  // Use custom image if provided, otherwise use default hero images
-  const desktopImage = imageSource || heroImageDesktop;
-  const mobileImage = imageSource || heroImageMobile;
+  // Use custom image if provided, otherwise use default hero images from main branch
+  // Note: Main branch uses layered approach (heroTilesImage + heroImage)
+  // For custom images, use imageSource prop
 
   const baseStyles = {
     position: "absolute",
@@ -41,38 +40,46 @@ function HeroImage({ animate = false, imageSource = null, sx = {} }) {
     ...sx,
   };
 
-  // If using a single custom image, show it on all screen sizes
-  // Use auto sizing to maintain aspect ratio and prevent stretching
+  // If using a custom image, show it on all screen sizes
   if (imageSource) {
     return (
       <Box
         sx={{
           ...baseStyles,
           backgroundImage: `url(${imageSource})`,
-          backgroundSize: "100% auto", // Scale width to 100%, maintain aspect ratio
-          backgroundPosition: "center top", // Position at top center
-          minHeight: "100vh", // Ensure it covers at least the viewport height
+          backgroundSize: "100% auto",
+          backgroundPosition: "center top",
+          minHeight: "100vh",
         }}
       />
     );
   }
 
+  // Default: Use main branch's layered hero images (heroTilesImage + heroImage)
   return (
     <>
-      {/* Desktop hero image */}
+      {/* First image (tiles) - back layer */}
       <Box
         sx={{
           ...baseStyles,
-          backgroundImage: `url(${desktopImage})`,
-          display: { xs: "none", md: "block" },
+          backgroundImage: `url(${heroTilesImage})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: { xs: "100% auto", md: "100% auto" },
+          backgroundPosition: "top center",
         }}
       />
-      {/* Mobile hero image */}
+      {/* Second image (black background) - front layer with delay */}
       <Box
         sx={{
           ...baseStyles,
-          backgroundImage: `url(${mobileImage})`,
-          display: { xs: "block", md: "none" },
+          backgroundImage: `url(${heroImage})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: { xs: "100% auto", md: "100% auto" },
+          backgroundPosition: "top center",
+          zIndex: 1,
+          transition: animate 
+            ? "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s"
+            : "none",
         }}
       />
     </>

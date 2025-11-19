@@ -25,17 +25,17 @@ function NotFound() {
           border: "1px solid transparent",
           transition: "all 0.3s ease",
           "&:focus": {
-            outline: "2px solid #E57A44",
+            outline: (theme) => `2px solid ${theme.palette.primary.main}`,
             outlineOffset: "2px",
             boxShadow: "none",
           },
           "&:focus-visible": {
-            outline: "2px solid #E57A44",
+            outline: (theme) => `2px solid ${theme.palette.primary.main}`,
             outlineOffset: "2px",
             boxShadow: "none",
           },
           "&:hover": {
-            borderColor: "#E57A44",
+            borderColor: (theme) => theme.palette.primary.main,
             transform: "translateY(-4px)",
           },
         }}

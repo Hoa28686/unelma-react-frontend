@@ -10,32 +10,32 @@ const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#E57A44", // Orange/coral accent color
+      main: "#3B82F6", // Blue accent color matching logo
     },
     secondary: {
-      main: "#422040", // Dark purple for secondary elements
+      main: "#3B82F6", // Blue accent for consistency
     },
     error: {
-      main: "#E57A44", // Orange/coral for errors
+      main: "#F87171", // Soft coral red (less harsh)
     },
     warning: {
-      main: "#E3D985", // Light yellow/green for warnings
+      main: "#FBBF24", // Warm amber
     },
     success: {
-      main: "#BCD8C1", // Mint green for success
+      main: "#34D399", // Fresh mint green
     },
     info: {
-      main: "#D6DBB2", // Light green for info
+      main: "#3B82F6", // Blue accent
     },
     background: {
-      default: "#BCD8C1", // Mint green background (lightest)
-      paper: "#BCD8C1", // Mint green for cards/surfaces (lightest)
+      default: "#FFFFFF", // Pure white background
+      paper: "#F5F5F5", // Slightly darker for cards/surfaces
     },
     text: {
-      primary: "#422040", // Dark purple text
-      secondary: "#422040", // Dark purple for secondary text (with opacity)
+      primary: "#000000", // Pure black text
+      secondary: "#6B7280", // Muted gray for secondary text
     },
-    divider: "#D6DBB2",
+    divider: "#c4c4c4",
   },
   typography: {
     fontFamily: [
@@ -80,34 +80,34 @@ const darkTheme = createTheme({
     mode: "dark",
 
     primary: {
-      main: "#E57A44", // Orange/coral accent color
+      main: "#3B82F6", // Blue accent color matching logo
     },
     secondary: {
-      main: "#E3D985", // Light yellow/green for secondary elements
+      main: "#3B82F6", // Blue accent for consistency
     },
     error: {
-      main: "#E57A44", // Orange/coral for errors
+      main: "#F87171", // Soft coral red (less harsh)
     },
     warning: {
-      main: "#E3D985", // Light yellow/green for warnings
+      main: "#FBBF24", // Warm amber
     },
     success: {
-      main: "#BCD8C1", // Mint green for success
+      main: "#34D399", // Fresh mint green
     },
     info: {
-      main: "#D6DBB2", // Light green for info
+      main: "#3B82F6", // Blue accent
     },
 
     background: {
-      default: "#422040", // Dark purple background
-      paper: "#2A1630", // Darker purple for cards/surfaces
+      default: "#0A0F1C", // Darker blue background
+      paper: "#151B2E", // Slightly lighter dark blue for cards/surfaces
     },
 
     text: {
-      primary: "#E3D985", // Light yellow/green text
-      secondary: "#D6DBB2", // Light green for secondary text
+      primary: "#FFFFFF", // Pure white text
+      secondary: "#9CA3AF", // Muted gray for secondary text
     },
-    divider: "#D6DBB2",
+    divider: "#c4c4c4",
   },
   typography: {
     fontFamily: [
@@ -147,22 +147,17 @@ const darkTheme = createTheme({
 });
 
 export const CustomThemeProvider = ({ children }) => {
-  const [CurrentTheme, setCurrentTheme] = useState("light");
+  const [CurrentTheme, setCurrentTheme] = useState("dark");
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-    if (saved) {
-      setCurrentTheme(saved);
-    } else {
-      // Default to light mode if no saved preference
-      setCurrentTheme("light");
-    }
+    if (saved) setCurrentTheme(saved);
   }, []);
 
   function toggleTheme() {
     setCurrentTheme((prev) => (prev == "dark" ? "light" : "dark"));
   }
   useEffect(() => {
-    const saved = localStorage.setItem("theme", CurrentTheme);
+    localStorage.setItem("theme", CurrentTheme);
   }, [CurrentTheme]);
   return (
     <ThemeContext.Provider value={{ CurrentTheme, toggleTheme }}>

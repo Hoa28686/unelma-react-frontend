@@ -24,10 +24,10 @@ const StyledTextField = React.forwardRef(({ multiline = false, ...props }, ref) 
                 : "rgba(0, 0, 0, 0.23)",
           },
           "&:hover fieldset": {
-            borderColor: "#E57A44",
+            borderColor: (theme) => theme.palette.primary.main,
           },
           "&.Mui-focused fieldset": {
-            borderColor: "#E57A44",
+            borderColor: (theme) => theme.palette.primary.main,
             borderWidth: "2px",
           },
           "&.Mui-error fieldset": {

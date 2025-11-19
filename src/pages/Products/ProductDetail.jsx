@@ -11,6 +11,7 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
+import { getImageUrl } from "../../helpers/helpers";
 
 function ProductDetail() {
   const { productId } = useParams();
@@ -113,7 +114,7 @@ function ProductDetail() {
           <Box
             component="img"
             sx={{ width: { xs: "100%", md: "50%" }, mb: { xs: 3, md: 0 } }}
-            src={product?.image_url}
+            src={getImageUrl(product?.image_url)}
             alt={product.name}
           />
           <Box

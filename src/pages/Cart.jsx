@@ -16,8 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { removeFromCart, updateQuantity, clearCart } from "../lib/features/cart/cartSlice";
 import PriceDisplay from "../components/PriceDisplay";
-import HeroImage from "../components/HeroImage";
-import commonBackground from "../assets/earthy_common_background.png";
+import { getImageUrl } from "../helpers/helpers";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -51,17 +50,13 @@ function Cart() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      {/* Hero Image - static, no animation */}
-      <HeroImage imageSource={commonBackground} animate={false} />
-
-      {/* Content overlay */}
+      {/* Content */}
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
           padding: { xs: "3rem 1rem", sm: "4rem 2rem", md: "5rem 3rem" },
@@ -121,7 +116,7 @@ function Cart() {
                   border: "1px solid transparent",
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    borderColor: "#E57A44",
+                    borderColor: (theme) => theme.palette.primary.main,
                     transform: "translateY(-4px)",
                   },
                 }}
@@ -137,15 +132,15 @@ function Cart() {
                   <Card
                     key={item.id}
                     sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "#B0D0B5"
-                          : theme.palette.background.paper,
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      backgroundColor: (theme) => theme.palette.background.paper,
+                      border: (theme) => 
+                        theme.palette.mode === 'dark' 
+                          ? "1px solid rgba(255, 255, 255, 0.1)" 
+                          : "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: 2,
                       transition: "all 0.3s ease",
                       "&:hover": {
-                        borderColor: "#E57A44",
+                        borderColor: (theme) => theme.palette.primary.main,
                         transform: "translateY(-4px)",
                       },
                     }}
@@ -162,7 +157,7 @@ function Cart() {
                         {/* Product Image */}
                         <CardMedia
                           component="img"
-                          image={item.image_url}
+                          image={getImageUrl(item.image_url)}
                           alt={item.name}
                           sx={{
                             width: { xs: "100%", md: "150px" },
@@ -279,7 +274,7 @@ function Cart() {
                         <IconButton
                           onClick={() => handleRemoveItem(item.id)}
                           sx={{
-                            color: "#E57A44",
+                            color: (theme) => theme.palette.primary.main,
                             "&:hover": {
                               backgroundColor: "rgba(229, 122, 68, 0.1)",
                             },
@@ -356,7 +351,7 @@ function Cart() {
                     <Typography
                       variant="h5"
                       sx={{
-                        color: "#E57A44",
+                        color: (theme) => theme.palette.primary.main,
                         fontWeight: 700,
                       }}
                     >
@@ -377,21 +372,21 @@ function Cart() {
                     variant="outlined"
                     onClick={handleClearCart}
                     sx={{
-                      borderColor: "#E57A44",
-                      color: "#E57A44",
+                      borderColor: (theme) => theme.palette.primary.main,
+                      color: (theme) => theme.palette.primary.main,
                       textTransform: "none",
                       "&:focus": {
-                        outline: "2px solid #E57A44",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
                       "&:focus-visible": {
-                        outline: "2px solid #E57A44",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
                       "&:hover": {
-                        borderColor: "#E57A44",
+                        borderColor: (theme) => theme.palette.primary.main,
                         backgroundColor: "rgba(229, 122, 68, 0.1)",
                       },
                     }}
@@ -411,17 +406,17 @@ function Cart() {
                       border: "1px solid transparent",
                       transition: "all 0.3s ease",
                       "&:focus": {
-                        outline: "2px solid #E57A44",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
                       "&:focus-visible": {
-                        outline: "2px solid #E57A44",
+                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
                       "&:hover": {
-                        borderColor: "#E57A44",
+                        borderColor: (theme) => theme.palette.primary.main,
                         transform: "translateY(-4px)",
                       },
                     }}

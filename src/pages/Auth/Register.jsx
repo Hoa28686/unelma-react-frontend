@@ -71,10 +71,7 @@ function Register() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        backgroundColor: (theme) =>
-          theme.palette.mode === "light"
-            ? "#B0D0B5"
-            : theme.palette.background.paper,
+        backgroundColor: (theme) => theme.palette.background.paper,
         position: "relative",
       }}
     >
@@ -146,17 +143,17 @@ function Register() {
             mt: 3,
             py: 1,
             "&:focus": {
-              outline: "2px solid #E57A44",
+              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
               outlineOffset: "2px",
               boxShadow: "none",
             },
             "&:focus-visible": {
-              outline: "2px solid #E57A44",
+              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
               outlineOffset: "2px",
               boxShadow: "none",
             },
             "&:hover": {
-              borderColor: "#E57A44",
+              borderColor: (theme) => theme.palette.primary.main,
               transform: "translateY(-4px)",
             },
             "&:disabled": {

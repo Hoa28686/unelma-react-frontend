@@ -34,21 +34,21 @@ function AddToCart({ product }) {
         color: "#FFFFFF",
         transition: "all 0.3s ease",
         '&:hover': {
-          borderColor: "#E57A44",
+          borderColor: (theme) => theme.palette.primary.main,
           transform: "translateY(-4px)",
         },
         '&:focus': {
-          outline: "2px solid #E57A44",
+          outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           outlineOffset: "2px",
           boxShadow: "none",
         },
         '&:focus-visible': {
-          outline: "2px solid #E57A44",
+          outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           outlineOffset: "2px",
           boxShadow: "none",
         },
         '&:active': {
-          outline: "2px solid #E57A44",
+          outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           outlineOffset: "2px",
           boxShadow: "none",
         },

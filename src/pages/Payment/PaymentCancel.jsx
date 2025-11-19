@@ -9,8 +9,6 @@ import {
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import HeroImage from "../../components/HeroImage";
-import commonBackground from "../../assets/earthy_common_background.png";
 
 function PaymentCancel() {
   const navigate = useNavigate();
@@ -21,15 +19,12 @@ function PaymentCancel() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      <HeroImage imageSource={commonBackground} animate={false} />
-
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
           display: "flex",
@@ -70,12 +65,12 @@ function PaymentCancel() {
                   backgroundColor: (theme) => theme.palette.primary.main,
                   color: "#FFFFFF",
                   "&:focus": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                     boxShadow: "none",
                   },
                   "&:focus-visible": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                     boxShadow: "none",
                   },
@@ -93,12 +88,12 @@ function PaymentCancel() {
                   borderColor: (theme) => theme.palette.primary.main,
                   color: (theme) => theme.palette.primary.main,
                   "&:focus": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                     boxShadow: "none",
                   },
                   "&:focus-visible": {
-                    outline: "2px solid #E57A44",
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                     boxShadow: "none",
                   },
