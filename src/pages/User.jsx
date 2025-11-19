@@ -19,8 +19,30 @@ import {
   useMediaQuery,
   Divider,
   Avatar,
+  Card,
+  CardContent,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
 } from "@mui/material";
-import { Visibility, VisibilityOff, Menu as MenuIcon, AccountCircle } from "@mui/icons-material";
+import { 
+  Visibility, 
+  VisibilityOff, 
+  Menu as MenuIcon, 
+  AccountCircle,
+  Edit,
+  Cancel,
+  ShoppingBag,
+  CardMembership,
+  Settings,
+  Delete,
+} from "@mui/icons-material";
 import { login, register, clearError, logout } from "../lib/features/auth/authSlice";
 import { useContactForm } from "../hooks/useContactForm";
 import { useAuth } from "../context/AuthContext";
@@ -31,15 +53,71 @@ function User() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [activeTab, setActiveTab] = useState(0);
+  const [userProfileTab, setUserProfileTab] = useState(0); // Tab for authenticated user (Profile, Orders, Subscriptions, Settings)
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     password_confirmation: "",
   });
+  const [profileData, setProfileData] = useState({
+    name: "",
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   const [errors, setErrors] = useState({});
+  const [profileErrors, setProfileErrors] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [itemToCancel, setItemToCancel] = useState(null);
+  const [cancelType, setCancelType] = useState(null); // 'order' or 'subscription'
+
+  // Mock data for orders and subscriptions (replace with API calls)
+  const [orders, setOrders] = useState([
+    {
+      id: 1,
+      orderNumber: "ORD-2024-001",
+      date: "2024-01-15",
+      items: ["UnelmaMail Pro", "UnelmaBrowser Premium"],
+      total: 299.99,
+      status: "completed",
+    },
+    {
+      id: 2,
+      orderNumber: "ORD-2024-002",
+      date: "2024-02-20",
+      items: ["Unelma-Code Translator"],
+      total: 149.99,
+      status: "pending",
+    },
+  ]);
+
+  const [subscriptions, setSubscriptions] = useState([
+    {
+      id: 1,
+      name: "UnelmaMail Pro",
+      plan: "Monthly",
+      price: 29.99,
+      status: "active",
+      nextBilling: "2024-03-15",
+      startDate: "2024-02-15",
+    },
+    {
+      id: 2,
+      name: "UnelmaBrowser Premium",
+      plan: "Annual",
+      price: 199.99,
+      status: "active",
+      nextBilling: "2025-02-15",
+      startDate: "2024-02-15",
+    },
+  ]);
 
   // Query form hook
   const {
@@ -84,6 +162,35 @@ function User() {
       password_confirmation: "",
     });
   }, [activeTab, dispatch]);
+
+  // Initialize profile data when user loads
+  useEffect(() => {
+    if (user) {
+      const userName = user?.name || user?.user?.name || "";
+      const userEmail = user?.email || user?.user?.email || "";
+      setProfileData({
+        name: userName,
+        email: userEmail,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    }
+  }, [user]);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    // Check if user is actually valid (has email or name, not just an empty object)
+    const userEmail = user?.email || user?.user?.email;
+    const userName = user?.name || user?.user?.name;
+    const hasValidUser = user && (userEmail || userName);
+    const hasValidAuth = isAuthenticated || hasValidUser;
+    
+    // If not loading and no valid authentication, redirect to login
+    if (!loading && !hasValidAuth) {
+      navigate("/login", { replace: true });
+    }
+  }, [user, isAuthenticated, loading, navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -340,8 +447,88 @@ function User() {
     );
   }
 
+  const handleProfileChange = (e) => {
+    setProfileData({
+      ...profileData,
+      [e.target.name]: e.target.value,
+    });
+    if (profileErrors[e.target.name]) {
+      setProfileErrors({
+        ...profileErrors,
+        [e.target.name]: null,
+      });
+    }
+  };
+
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
+
+    if (!profileData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+    if (!profileData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(profileData.email)) {
+      newErrors.email = "Email is invalid";
+    }
+
+    if (profileData.newPassword) {
+      if (!profileData.currentPassword) {
+        newErrors.currentPassword = "Current password is required to change password";
+      }
+      if (profileData.newPassword.length < 8) {
+        newErrors.newPassword = "Password must be at least 8 characters";
+      }
+      if (profileData.newPassword !== profileData.confirmPassword) {
+        newErrors.confirmPassword = "Passwords do not match";
+      }
+    }
+
+    setProfileErrors(newErrors);
+    if (Object.keys(newErrors).length === 0) {
+      // TODO: Make API call to update profile
+      console.log("Updating profile:", profileData);
+      setEditMode(false);
+      // Show success message
+    }
+  };
+
+  const handleCancelOrder = (orderId) => {
+    setItemToCancel(orderId);
+    setCancelType("order");
+    setCancelDialogOpen(true);
+  };
+
+  const handleCancelSubscription = (subscriptionId) => {
+    setItemToCancel(subscriptionId);
+    setCancelType("subscription");
+    setCancelDialogOpen(true);
+  };
+
+  const confirmCancel = () => {
+    if (cancelType === "order") {
+      setOrders(orders.filter((order) => order.id !== itemToCancel));
+    } else if (cancelType === "subscription") {
+      setSubscriptions(
+        subscriptions.map((sub) =>
+          sub.id === itemToCancel ? { ...sub, status: "cancelled" } : sub
+        )
+      );
+    }
+    setCancelDialogOpen(false);
+    setItemToCancel(null);
+    setCancelType(null);
+  };
+
+  // Check if user is actually valid (has email or name, not just an empty object)
+  const userEmailCheck = user?.email || user?.user?.email;
+  const userNameCheck = user?.name || user?.user?.name;
+  const hasValidUser = user && (userEmailCheck || userNameCheck);
+  const hasValidAuth = isAuthenticated || hasValidUser;
+
   // Show user profile if authenticated
-  if (isAuthenticated || user) {
+  if (hasValidAuth) {
     const userName = user?.name || user?.user?.name || "User";
     const userEmail = user?.email || user?.user?.email || "N/A";
 
@@ -364,14 +551,14 @@ function User() {
           </Box>
         )}
 
-        {/* Main content - User Profile */}
+        {/* Main content - User Dashboard */}
         <Box
           sx={{
             flexGrow: 1,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            flexDirection: "column",
             p: { xs: 2, sm: 4 },
+            overflow: "auto",
           }}
         >
           {/* Mobile menu button */}
@@ -389,7 +576,7 @@ function User() {
             </IconButton>
           )}
 
-          <Container maxWidth="sm" sx={{ width: "100%" }}>
+          <Container maxWidth="lg" sx={{ width: "100%", mt: { xs: 4, sm: 0 } }}>
             <Paper
               elevation={3}
               sx={{
@@ -401,83 +588,477 @@ function User() {
                     : theme.palette.background.paper,
               }}
             >
+              {/* User Header */}
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
+                  flexDirection: { xs: "column", sm: "row" },
+                  alignItems: { xs: "center", sm: "flex-start" },
                   mb: 3,
+                  gap: 2,
                 }}
               >
                 <Avatar
                   sx={{
                     width: 80,
                     height: 80,
-                    mb: 2,
                     backgroundColor: (theme) => theme.palette.primary.main,
-                    border: (theme) => 
-                      `0.5px solid ${theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)'}`,
+                    border: (theme) =>
+                      `0.5px solid ${theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.12)" : "rgba(255, 255, 255, 0.12)"}`,
                   }}
                 >
                   <AccountCircle sx={{ fontSize: 60 }} />
                 </Avatar>
-                <Typography
-                  variant="h4"
-                  component="h1"
+                <Box sx={{ flex: 1, textAlign: { xs: "center", sm: "left" } }}>
+                  <Typography
+                    variant="h4"
+                    component="h1"
+                    sx={{
+                      fontWeight: 600,
+                      color: (theme) => theme.palette.text.primary,
+                      mb: 1,
+                    }}
+                  >
+                    {userName}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: (theme) => theme.palette.text.secondary,
+                    }}
+                  >
+                    {userEmail}
+                  </Typography>
+                </Box>
+                <Button
+                  variant="outlined"
+                  onClick={handleLogout}
                   sx={{
-                    fontWeight: 600,
-                    color: (theme) => theme.palette.text.primary,
-                    mb: 1,
+                    borderColor: (theme) => theme.palette.primary.main,
+                    color: (theme) => theme.palette.primary.main,
+                    textTransform: "none",
+                    "&:hover": {
+                      borderColor: "#E57A44",
+                      backgroundColor: "transparent",
+                    },
                   }}
                 >
-                  {userName}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: (theme) => theme.palette.text.secondary,
-                    mb: 3,
-                  }}
-                >
-                  {userEmail}
-                </Typography>
+                  Logout
+                </Button>
               </Box>
 
               <Divider sx={{ mb: 3 }} />
 
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={handleLogout}
+              {/* Tabs */}
+              <Tabs
+                value={userProfileTab}
+                onChange={(e, newValue) => setUserProfileTab(newValue)}
                 sx={{
-                  backgroundColor: (theme) => theme.palette.primary.main,
-                  color: "#FFFFFF",
-                  fontWeight: 100,
-                  borderRadius: 2,
-                  py: 1.5,
-                  textTransform: "none",
-                  border: "1px solid transparent",
-                  transition: "all 0.3s ease",
-                  outline: "none",
-                  "&:focus": {
-                    outline: "none",
-                    boxShadow: "none",
+                  mb: 3,
+                  "& .MuiTab-root": {
+                    textTransform: "none",
+                    color: (theme) => theme.palette.text.secondary,
+                    "&.Mui-selected": {
+                      color: (theme) => theme.palette.primary.main,
+                    },
                   },
-                  "&:focus-visible": {
-                    outline: "none",
-                    boxShadow: "none",
-                  },
-                  "&:hover": {
-                    borderColor: "#E57A44",
-                    transform: "translateY(-4px)",
+                  "& .MuiTabs-indicator": {
+                    backgroundColor: (theme) => theme.palette.primary.main,
                   },
                 }}
               >
-                Logout
-              </Button>
+                <Tab icon={<AccountCircle />} iconPosition="start" label="Profile" />
+                <Tab icon={<ShoppingBag />} iconPosition="start" label="Orders" />
+                <Tab icon={<CardMembership />} iconPosition="start" label="Subscriptions" />
+                <Tab icon={<Settings />} iconPosition="start" label="Settings" />
+              </Tabs>
+
+              {/* Tab Content */}
+              {userProfileTab === 0 && (
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: 3,
+                    }}
+                  >
+                    <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                      Profile Information
+                    </Typography>
+                    {!editMode && (
+                      <Button
+                        startIcon={<Edit />}
+                        onClick={() => setEditMode(true)}
+                        sx={{
+                          textTransform: "none",
+                          color: (theme) => theme.palette.primary.main,
+                        }}
+                      >
+                        Edit Profile
+                      </Button>
+                    )}
+                  </Box>
+
+                  <Box component="form" onSubmit={handleProfileSubmit}>
+                    <TextField
+                      name="name"
+                      label="Name"
+                      fullWidth
+                      required
+                      value={profileData.name}
+                      onChange={handleProfileChange}
+                      disabled={!editMode}
+                      error={!!profileErrors.name}
+                      helperText={profileErrors.name}
+                      sx={{ mb: 2 }}
+                    />
+
+                    <TextField
+                      name="email"
+                      label="Email"
+                      type="email"
+                      fullWidth
+                      required
+                      value={profileData.email}
+                      onChange={handleProfileChange}
+                      disabled={!editMode}
+                      error={!!profileErrors.email}
+                      helperText={profileErrors.email}
+                      sx={{ mb: 2 }}
+                    />
+
+                    {editMode && (
+                      <>
+                        <Divider sx={{ my: 3 }} />
+                        <Typography variant="h6" sx={{ mb: 2 }}>
+                          Change Password (Optional)
+                        </Typography>
+
+                        <TextField
+                          name="currentPassword"
+                          label="Current Password"
+                          type={showCurrentPassword ? "text" : "password"}
+                          fullWidth
+                          value={profileData.currentPassword}
+                          onChange={handleProfileChange}
+                          error={!!profileErrors.currentPassword}
+                          helperText={profileErrors.currentPassword}
+                          sx={{ mb: 2 }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                  edge="end"
+                                >
+                                  {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+
+                        <TextField
+                          name="newPassword"
+                          label="New Password"
+                          type={showNewPassword ? "text" : "password"}
+                          fullWidth
+                          value={profileData.newPassword}
+                          onChange={handleProfileChange}
+                          error={!!profileErrors.newPassword}
+                          helperText={profileErrors.newPassword}
+                          sx={{ mb: 2 }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={() => setShowNewPassword(!showNewPassword)}
+                                  edge="end"
+                                >
+                                  {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+
+                        <TextField
+                          name="confirmPassword"
+                          label="Confirm New Password"
+                          type={showNewPassword ? "text" : "password"}
+                          fullWidth
+                          value={profileData.confirmPassword}
+                          onChange={handleProfileChange}
+                          error={!!profileErrors.confirmPassword}
+                          helperText={profileErrors.confirmPassword}
+                          sx={{ mb: 2 }}
+                        />
+                      </>
+                    )}
+
+                    {editMode && (
+                      <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          sx={{
+                            backgroundColor: (theme) => theme.palette.primary.main,
+                            textTransform: "none",
+                            "&:hover": {
+                              backgroundColor: "#C85A2E",
+                            },
+                          }}
+                        >
+                          Save Changes
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            setEditMode(false);
+                            setProfileErrors({});
+                            // Reset to original values
+                            const userName = user?.name || user?.user?.name || "";
+                            const userEmail = user?.email || user?.user?.email || "";
+                            setProfileData({
+                              name: userName,
+                              email: userEmail,
+                              currentPassword: "",
+                              newPassword: "",
+                              confirmPassword: "",
+                            });
+                          }}
+                          sx={{ textTransform: "none" }}
+                        >
+                          Cancel
+                        </Button>
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+              )}
+
+              {userProfileTab === 1 && (
+                <Box>
+                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
+                    My Orders
+                  </Typography>
+                  {orders.length === 0 ? (
+                    <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
+                      No orders found
+                    </Typography>
+                  ) : (
+                    <List>
+                      {orders.map((order) => (
+                        <Card key={order.id} sx={{ mb: 2 }}>
+                          <CardContent>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start",
+                                mb: 2,
+                              }}
+                            >
+                              <Box>
+                                <Typography variant="h6">{order.orderNumber}</Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  {new Date(order.date).toLocaleDateString()}
+                                </Typography>
+                              </Box>
+                              <Chip
+                                label={order.status}
+                                color={order.status === "completed" ? "success" : "warning"}
+                                size="small"
+                              />
+                            </Box>
+                            <Box sx={{ mb: 2 }}>
+                              {order.items.map((item, idx) => (
+                                <Typography key={idx} variant="body2" color="text.secondary">
+                                  • {item}
+                                </Typography>
+                              ))}
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Typography variant="h6">€{order.total.toFixed(2)}</Typography>
+                              {order.status === "pending" && (
+                                <Button
+                                  startIcon={<Cancel />}
+                                  onClick={() => handleCancelOrder(order.id)}
+                                  color="error"
+                                  size="small"
+                                  sx={{ textTransform: "none" }}
+                                >
+                                  Cancel Order
+                                </Button>
+                              )}
+                            </Box>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </List>
+                  )}
+                </Box>
+              )}
+
+              {userProfileTab === 2 && (
+                <Box>
+                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
+                    My Subscriptions
+                  </Typography>
+                  {subscriptions.length === 0 ? (
+                    <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
+                      No active subscriptions
+                    </Typography>
+                  ) : (
+                    <List>
+                      {subscriptions.map((subscription) => (
+                        <Card key={subscription.id} sx={{ mb: 2 }}>
+                          <CardContent>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start",
+                                mb: 2,
+                              }}
+                            >
+                              <Box>
+                                <Typography variant="h6">{subscription.name}</Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  {subscription.plan} Plan
+                                </Typography>
+                              </Box>
+                              <Chip
+                                label={subscription.status}
+                                color={subscription.status === "active" ? "success" : "default"}
+                                size="small"
+                              />
+                            </Box>
+                            <Box sx={{ mb: 2 }}>
+                              <Typography variant="body2" color="text.secondary">
+                                Price: €{subscription.price.toFixed(2)}/{subscription.plan === "Monthly" ? "month" : "year"}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary">
+                                Started: {new Date(subscription.startDate).toLocaleDateString()}
+                              </Typography>
+                              {subscription.status === "active" && (
+                                <Typography variant="body2" color="text.secondary">
+                                  Next billing: {new Date(subscription.nextBilling).toLocaleDateString()}
+                                </Typography>
+                              )}
+                            </Box>
+                            {subscription.status === "active" && (
+                              <Button
+                                startIcon={<Cancel />}
+                                onClick={() => handleCancelSubscription(subscription.id)}
+                                color="error"
+                                variant="outlined"
+                                size="small"
+                                sx={{ textTransform: "none" }}
+                              >
+                                Cancel Subscription
+                              </Button>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </List>
+                  )}
+                </Box>
+              )}
+
+              {userProfileTab === 3 && (
+                <Box>
+                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
+                    Settings
+                  </Typography>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6" sx={{ mb: 2 }}>
+                        Account Preferences
+                      </Typography>
+                      <List>
+                        <ListItem>
+                          <ListItemText
+                            primary="Email Notifications"
+                            secondary="Receive email updates about your orders and subscriptions"
+                          />
+                          <ListItemSecondaryAction>
+                            <Button size="small" sx={{ textTransform: "none" }}>
+                              Enable
+                            </Button>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                        <Divider />
+                        <ListItem>
+                          <ListItemText
+                            primary="Two-Factor Authentication"
+                            secondary="Add an extra layer of security to your account"
+                          />
+                          <ListItemSecondaryAction>
+                            <Button size="small" sx={{ textTransform: "none" }}>
+                              Setup
+                            </Button>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                        <Divider />
+                        <ListItem>
+                          <ListItemText
+                            primary="Delete Account"
+                            secondary="Permanently delete your account and all associated data"
+                          />
+                          <ListItemSecondaryAction>
+                            <Button
+                              size="small"
+                              color="error"
+                              startIcon={<Delete />}
+                              sx={{ textTransform: "none" }}
+                            >
+                              Delete
+                            </Button>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Box>
+              )}
             </Paper>
           </Container>
         </Box>
+
+        {/* Cancel Confirmation Dialog */}
+        <Dialog open={cancelDialogOpen} onClose={() => setCancelDialogOpen(false)}>
+          <DialogTitle>
+            Cancel {cancelType === "order" ? "Order" : "Subscription"}?
+          </DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to cancel this {cancelType}? This action cannot be undone.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setCancelDialogOpen(false)} sx={{ textTransform: "none" }}>
+              No, Keep It
+            </Button>
+            <Button
+              onClick={confirmCancel}
+              color="error"
+              variant="contained"
+              sx={{ textTransform: "none" }}
+            >
+              Yes, Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     );
   }

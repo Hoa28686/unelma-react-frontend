@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { SignInPage } from "@toolpad/core/SignInPage";
+import { SignInPage } from "@toolpad/core";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -8,6 +8,13 @@ import { useAuth } from "../../context/AuthContext";
 function Login() {
   const { user, login, logout, message, loading, error } = useAuth();
   const navigate = useNavigate();
+
+  // Navigate to home on successful login
+  useEffect(() => {
+    if (user && user.email) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   // Fix aria-hidden accessibility issue
   useEffect(() => {
@@ -55,9 +62,6 @@ function Login() {
     const password = formData.get("password");
     const remember = formData.get("remember") === "on";
     await login({ email, password, remember });
-    setTimeout(() => {
-      navigate("/");
-    }, 5000);
   };
 
   const handleLogout = async () => {

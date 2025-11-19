@@ -19,7 +19,7 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import Logo from "./Logo.jsx";
 import ThemeSwitch from "./ThemeSwitch";
@@ -39,6 +39,7 @@ function NavBar() {
   
   const mobileMenuWidth = 240;
   const location = useLocation();
+  const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const navItems = [
@@ -122,7 +123,7 @@ function NavBar() {
           ) : (
             <Button
               component={Link}
-              to="/user"
+              to="/login"
               sx={{
                 textTransform: "none",
                 fontSize: "1rem",
@@ -417,7 +418,7 @@ function NavBar() {
                   transform: "translateX(-50%)",
                   width: "60%",
                   height: "2px",
-                  backgroundColor: isIconActive("/user")
+                  backgroundColor: isIconActive("/user") || isIconActive("/login")
                     ? (theme) => theme.palette.primary.main
                     : "transparent",
                   transition: "background-color 0.3s ease",
@@ -435,8 +436,13 @@ function NavBar() {
                     backgroundColor: "transparent",
                   },
                 }}
-                component={Link}
-                to="/user"
+                onClick={() => {
+                  if (isAuthenticated) {
+                    navigate("/user");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
               >
                 <AccountCircleOutlinedIcon />
               </IconButton>
