@@ -2,6 +2,7 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import { API } from "../../api";
 
 function Register() {
   const [error, setError] = useState(null);
@@ -15,7 +16,7 @@ function Register() {
   });
 
   const navigate = useNavigate();
-  const registerAPI = import.meta.env.VITE_REGISTER_API_URL;
+  const registerAPI = API.register;
 
   const handleChange = (e) => {
     const { name, value } = e.target;

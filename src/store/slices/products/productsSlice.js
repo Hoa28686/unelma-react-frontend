@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API } from "../../../api";
 
 const initialState = {
   products: [],
@@ -9,7 +10,8 @@ const initialState = {
 };
 
 // const productAPI = "http://localhost:3001/products";
-const productAPI = "http://127.0.0.1:8000/api/products";
+// const productAPI = "http://127.0.0.1:8000/api/products";
+const productAPI = API.products;
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
