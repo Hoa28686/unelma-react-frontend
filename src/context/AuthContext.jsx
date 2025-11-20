@@ -4,9 +4,20 @@ import { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user") || "{}")
-  );
+  // Initialize user state - only set if there's a valid user with email or name
+  const getInitialUser = () => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return null;
+    try {
+      const parsed = JSON.parse(storedUser);
+      // Only return user if it has required fields (email or name)
+      return parsed && (parsed.email || parsed.name) ? parsed : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const [user, setUser] = useState(getInitialUser());
   const [token, setToken] = useState(localStorage.getItem("authToken") || null);
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -19,8 +30,34 @@ export function AuthProvider({ children }) {
     if (token) {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
-        setUser(JSON.parse(storedUser));
+        try {
+          const parsed = JSON.parse(storedUser);
+          // Only set user if it has required fields (email or name)
+          if (parsed && (parsed.email || parsed.name)) {
+            setUser(parsed);
+          } else {
+            // Invalid user data, clear it
+            setUser(null);
+            setToken(null);
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("user");
+          }
+        } catch {
+          // Invalid JSON, clear it
+          setUser(null);
+          setToken(null);
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
+        }
+      } else {
+        // No user in storage but token exists - clear token
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("authToken");
       }
+    } else {
+      // No token, ensure user is null
+      setUser(null);
     }
   }, [token]);
 

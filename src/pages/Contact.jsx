@@ -382,6 +382,18 @@ function Contact() {
                     >
                       Send Message
                     </Typography>
+                    {/* Success/Error Alert */}
+                    {submitStatus.success !== null && (
+                      <Alert
+                        severity={submitStatus.success ? "success" : "error"}
+                        sx={{
+                          mb: 2,
+                          borderRadius: 2,
+                        }}
+                      >
+                        {submitStatus.message}
+                      </Alert>
+                    )}
                     <Box
                       component="form"
                       onSubmit={handleSubmit}
@@ -430,7 +442,14 @@ function Contact() {
                           mt: 1,
                         }}
                       >
-                        Send Message
+                        {loading ? (
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <CircularProgress size={20} color="inherit" />
+                            Sending...
+                          </Box>
+                        ) : (
+                          "Send Message"
+                        )}
                       </Button>
                     </Box>
                   </Card>
