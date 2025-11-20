@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import { API } from "../api";
 
 const AuthContext = createContext(null);
 
@@ -12,8 +13,8 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const loginAPI = import.meta.env.VITE_LOGIN_API_URL;
-  const logoutAPI = import.meta.env.VITE_LOGOUT_API_URL;
+  const loginAPI = API.login;
+  const logoutAPI = API.logout;
 
   useEffect(() => {
     if (token) {
