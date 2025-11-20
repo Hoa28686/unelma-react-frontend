@@ -9,10 +9,13 @@ import {
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { timeConversion } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
-import heroImage from "../../assets/hero.webp";
+import axios from "axios";
+import { API } from "../../api";
+import { useAuth } from "../../context/AuthContext";
 
 function BlogDetail() {
   const { blogId } = useParams();
+  const { token } = useAuth();
   const dispatch = useDispatch();
   const [comment, setComment] = useState("");
   const { selectedBlog, loading, error, blogs } = useSelector(
@@ -25,7 +28,7 @@ function BlogDetail() {
   }, [blogs, dispatch]);
   useEffect(() => {
     if (blogId && blogs.length > 0) {
-      const foundBlog = blogs.find((b) => b.id === blogId);
+      const foundBlog = blogs.find((b) => b.id == blogId);
       if (foundBlog) {
         dispatch(setSelectedBlog(foundBlog));
       } else {
@@ -34,9 +37,31 @@ function BlogDetail() {
     }
   }, [blogId, blogs, dispatch]);
 
-  const handlePostComment = () => {
-    //
+  const handlePostComment = async () => {
+    const postCommentUrl = `${API.blogs}/${blogId}/comments`;
+    try {
+      await axios.post(
+        postCommentUrl,
+        {
+          content: comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      // Refetch blog with comments to get proper user objects
+      const res = await axios.get(`${API.blogs}/${blogId}`);
+      dispatch(setSelectedBlog(res.data.data));
+      setComment("");
+    } catch (e) {
+      console.error(e);
+    }
   };
+
   if (loading || blogs.length === 0) {
     return (
       <Box
@@ -99,30 +124,13 @@ function BlogDetail() {
           position: "relative",
           width: "100%",
           minHeight: "100vh",
-          overflow: "hidden",
+          backgroundColor: (theme) => theme.palette.background.default,
         }}
       >
-        {/* Hero Image - static, no animation */}
-        <Box
-          component="img"
-          src={heroImage}
-          alt="Hero background"
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100vh",
-            objectFit: "contain",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Content overlay */}
+        {/* Content */}
         <Box
           sx={{
             position: "relative",
-            zIndex: 1,
             minHeight: "100vh",
             width: "100%",
             display: "flex",
@@ -179,7 +187,7 @@ function BlogDetail() {
                 fontSize: { xs: "0.875rem", sm: "1rem" },
               }}
             >
-              {selectedBlog.author.name} •{" "}
+              {selectedBlog.author_name} •{" "}
               {timeConversion(selectedBlog.created_at)}
             </Typography>
             <Box
@@ -295,6 +303,18 @@ function BlogDetail() {
                     textTransform: "none",
                     px: 3,
                     py: 1,
+                    "&:focus": {
+                      outline: (theme) =>
+                        `2px solid ${theme.palette.primary.main}`,
+                      outlineOffset: "2px",
+                      boxShadow: "none",
+                    },
+                    "&:focus-visible": {
+                      outline: (theme) =>
+                        `2px solid ${theme.palette.primary.main}`,
+                      outlineOffset: "2px",
+                      boxShadow: "none",
+                    },
                     "&:hover": {
                       backgroundColor: (theme) =>
                         theme.palette.primary.dark || "#2563EB",
@@ -319,17 +339,13 @@ function BlogDetail() {
                           theme.palette.background.paper,
                         borderRadius: 2,
                         border: (theme) =>
-                          `1px solid ${
-                            theme.palette.mode === "dark"
-                              ? "rgba(255, 255, 255, 0.1)"
-                              : "rgba(0, 0, 0, 0.1)"
-                          }`,
+                          `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
                       }}
                     >
                       <Box
                         component="img"
-                        src={c.user.avatar}
-                        alt={c.user.name}
+                        src={c.user.profile_picture || "/logo.webp"}
+                        alt="user avatar"
                         sx={{
                           borderRadius: "50%",
                           width: { xs: 32, sm: 40 },
@@ -382,14 +398,14 @@ function BlogDetail() {
                             },
                           }}
                         >
-                          {c.text.includes("\n") ? (
-                            c.text
+                          {c.content.includes("\n") ? (
+                            c.content
                               .split("\n")
                               .map((paragraph, index) => (
                                 <p key={index}>{paragraph.trim()}</p>
                               ))
                           ) : (
-                            <p>{c.text}</p>
+                            <p>{c.content}</p>
                           )}
                         </Box>
                       </Box>

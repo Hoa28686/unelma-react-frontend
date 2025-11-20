@@ -153,14 +153,14 @@ export const CustomThemeProvider = ({ children }) => {
     if (saved) setCurrentTheme(saved);
   }, []);
 
-  function toogleTheme() {
+  function toggleTheme() {
     setCurrentTheme((prev) => (prev == "dark" ? "light" : "dark"));
   }
   useEffect(() => {
-    const saved = localStorage.setItem("theme", CurrentTheme);
+    localStorage.setItem("theme", CurrentTheme);
   }, [CurrentTheme]);
   return (
-    <ThemeContext.Provider value={{ CurrentTheme, toogleTheme }}>
+    <ThemeContext.Provider value={{ CurrentTheme, toggleTheme }}>
       <ThemeProvider theme={CurrentTheme == "dark" ? darkTheme : lightTheme}>
         {children}
       </ThemeProvider>

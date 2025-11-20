@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, Card, CardContent } from "@mui/material";
+import { useNavigate } from "react-router";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SendIcon from "@mui/icons-material/Send";
 import DescriptionIcon from "@mui/icons-material/Description";
 import PaymentIcon from "@mui/icons-material/Payment";
+import ComputerIcon from "@mui/icons-material/Computer";
+import SecurityIcon from "@mui/icons-material/Security";
+import StorageIcon from "@mui/icons-material/Storage";
+import ScienceIcon from "@mui/icons-material/Science";
+import CloudIcon from "@mui/icons-material/Cloud";
+import PsychologyIcon from "@mui/icons-material/Psychology";
 import heroImage from "../assets/hero.webp";
 import heroTilesImage from "../assets/hero-tiles.webp";
 
 function Home() {
+  const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     // Trigger animation on mount
     setIsLoaded(true);
   }, []);
+
+  const handleRequestQuote = () => {
+    navigate("/contact");
+  };
 
   return (
     <Box
@@ -114,6 +126,7 @@ function Home() {
               variant="contained"
               color="primary"
               size="large"
+              onClick={handleRequestQuote}
               sx={{
                 px: { xs: 3, sm: 4, md: 5 },
                 py: { xs: 1.25, sm: 1.5, md: 2 },
@@ -124,42 +137,26 @@ function Home() {
                 textTransform: "none",
                 whiteSpace: "nowrap",
                 width: { xs: "auto", md: "fit-content" },
-                border: "none",
-                position: "relative",
-                '&::after': {
-                  content: '""',
-                  position: "absolute",
-                  top: "8px",
-                  left: "8px",
-                  width: "100%",
-                  height: "100%",
-                  borderRight: "4px solid transparent",
-                  borderBottom: "4px solid transparent",
-                  borderRadius: 2,
-                  transition: "border-color 0.3s ease",
-                  pointerEvents: "none",
-                  zIndex: -1,
-                },
+                border: "1px solid transparent",
+                transition: "all 0.3s ease",
                 '&:hover': {
-                  boxShadow: "none",
-                  backgroundColor: (theme) => theme.palette.primary.main,
-                  '&::after': {
-                    borderRightColor: "#3B82F6",
-                    borderBottomColor: "#3B82F6",
-                  },
+                  borderColor: (theme) => theme.palette.primary.main,
+                  transform: "translateY(-4px)",
                 },
                 '&:focus': {
-                  outline: "none",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                  outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 '&:focus-visible': {
-                  outline: "none",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                  outlineOffset: "2px",
                   boxShadow: "none",
                 },
                 '&:active': {
-                  outline: "none",
+                  outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                  outlineOffset: "2px",
                   boxShadow: "none",
-                  border: "none",
                 },
               }}
               disableRipple
@@ -266,26 +263,32 @@ function Home() {
               {
                 title: "Cyber Security",
                 description: "We help with cyber security tools and services",
+                icon: SecurityIcon,
               },
               {
                 title: "Data Management",
                 description: "We at Unelma Platforms can help you with different types of data management products and services.",
+                icon: StorageIcon,
               },
               {
                 title: "Data Science",
                 description: "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services.",
+                icon: ScienceIcon,
               },
               {
                 title: "Cloud Service",
                 description: "We are masters of cloud services as we have developed one of the platforms called \"Unelma Cloud\".",
+                icon: CloudIcon,
               },
               {
                 title: "AI and machine learning",
                 description: "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning.",
+                icon: PsychologyIcon,
               },
               {
                 title: "Web and mobile development",
                 description: "We know this shit! Request a quote; you will not be disappointed.",
+                icon: ComputerIcon,
               },
             ].map((service, index) => (
               <Card
@@ -300,28 +303,62 @@ function Home() {
                   minWidth: { xs: "100%", sm: "280px", md: "300px" },
                   maxWidth: { xs: "100%", sm: "none", md: "400px" },
                   backgroundColor: (theme) => theme.palette.background.paper,
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  border: (theme) => 
+                    theme.palette.mode === 'dark' 
+                      ? "1px solid rgba(255, 255, 255, 0.1)" 
+                      : "1px solid rgba(0, 0, 0, 0.1)",
                   borderRadius: 2,
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    borderColor: "#3B82F6",
+                    borderColor: (theme) => theme.palette.primary.main,
                     transform: "translateY(-4px)",
                   },
                 }}
               >
                 <CardContent sx={{ padding: { xs: "1.5rem", sm: "2rem" } }}>
-                  <Typography
-                    variant="h5"
-                    component="h3"
+                  <Box
                     sx={{
-                      fontSize: { xs: "1.25rem", sm: "1.5rem" },
-                      fontWeight: 600,
-                      color: (theme) => theme.palette.text.primary,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
                       marginBottom: "1rem",
                     }}
                   >
-                    {service.title}
-                  </Typography>
+                    {service.icon && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: { xs: "48px", sm: "56px" },
+                          height: { xs: "48px", sm: "56px" },
+                          borderRadius: "50%",
+                          backgroundColor: (theme) => 
+                            theme.palette.mode === 'light' 
+                              ? `${theme.palette.primary.main}15` 
+                              : `${theme.palette.primary.main}25`,
+                          color: (theme) => theme.palette.primary.main,
+                        }}
+                      >
+                        <service.icon
+                          sx={{
+                            fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                          }}
+                        />
+                      </Box>
+                    )}
+                    <Typography
+                      variant="h5"
+                      component="h3"
+                      sx={{
+                        fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                        fontWeight: 600,
+                        color: (theme) => theme.palette.text.primary,
+                      }}
+                    >
+                      {service.title}
+                    </Typography>
+                  </Box>
                   <Typography
                     variant="body1"
                     sx={{
@@ -336,7 +373,7 @@ function Home() {
                   <Button
                     variant="text"
                     sx={{
-                      color: "#3B82F6",
+                      color: (theme) => theme.palette.primary.main,
                       textTransform: "none",
                       fontWeight: 500,
                       padding: 0,
@@ -349,7 +386,7 @@ function Home() {
                         left: 0,
                         width: "0",
                         height: "2px",
-                        backgroundColor: "#3B82F6",
+                        backgroundColor: (theme) => theme.palette.primary.main,
                         transition: "width 0.3s ease",
                       },
                       "&:hover": {
@@ -459,7 +496,7 @@ function Home() {
                     width: { xs: "50px", sm: "60px", md: "70px" },
                     height: { xs: "50px", sm: "60px", md: "70px" },
                     borderRadius: "50%",
-                    backgroundColor: "#3B82F6",
+                    backgroundColor: (theme) => theme.palette.primary.main,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -475,7 +512,7 @@ function Home() {
                 {/* Icon */}
                 <Box
                   sx={{
-                    color: "#3B82F6",
+                    color: (theme) => theme.palette.primary.main,
                     marginBottom: "1rem",
                     display: "flex",
                     alignItems: "center",
@@ -508,7 +545,7 @@ function Home() {
                       left: "calc(100% + 8px)",
                       width: "calc(20% - 16px)",
                       height: "2px",
-                      backgroundColor: "#3B82F6",
+                      backgroundColor: (theme) => theme.palette.primary.main,
                       opacity: 0.3,
                     }}
                   />

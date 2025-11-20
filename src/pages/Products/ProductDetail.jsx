@@ -11,6 +11,7 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
+import { getImageUrl } from "../../helpers/helpers";
 
 function ProductDetail() {
   const { productId } = useParams();
@@ -31,7 +32,7 @@ function ProductDetail() {
 
   useEffect(() => {
     if (productId && products.length > 0) {
-      const foundProduct = products.find((p) => p.id === productId);
+      const foundProduct = products.find((p) => p.id == productId);
       if (foundProduct) {
         dispatch(setSelectedProduct(foundProduct));
       } else {
@@ -113,7 +114,7 @@ function ProductDetail() {
           <Box
             component="img"
             sx={{ width: { xs: "100%", md: "50%" }, mb: { xs: 3, md: 0 } }}
-            src={product?.image_url}
+            src={getImageUrl(product?.image_url)}
             alt={product.name}
           />
           <Box
@@ -138,7 +139,7 @@ function ProductDetail() {
                 transform: { xs: "translateX(-50%)", md: "none" },
               }}
             >
-              <AddToCart />
+              <AddToCart product={product} />
             </Box>
           </Box>
         </Box>
@@ -154,17 +155,17 @@ function ProductDetail() {
             SKU: {product.sku}
           </Typography>
           <Typography variant="h6" mt={3} mb={2}>
-            Hightlights
+            Highlights
           </Typography>
           <Box>
-            {product.hightlights.includes("\n") ? (
-              product.hightlights.split("\n").map((paragraph, index) => (
+            {product.highlights.includes("\n") ? (
+              product.highlights.split("\n").map((paragraph, index) => (
                 <Typography variant="body1" key={index} mb={3}>
                   {paragraph.trim()}
                 </Typography>
               ))
             ) : (
-              <Typography variant="body1">{product.hightlights}</Typography>
+              <Typography variant="body1">{product.highlights}</Typography>
             )}
           </Box>
           <Typography variant="h6" mt={3} mb={2}>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../store/slices/products/productsSlice";
 import {
@@ -9,17 +9,30 @@ import {
   CardHeader,
   CardMedia,
   Typography,
+  TextField,
+  InputAdornment,
+  IconButton,
+  Pagination,
 } from "@mui/material";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useNavigate } from "react-router";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
+import { getImageUrl } from "../../helpers/helpers";
+
+const ITEMS_PER_PAGE = 9; // Show 9 products per page
 
 function Products() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products, loading, error } = useSelector((state) => state.products);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (products.length === 0) {
@@ -29,6 +42,59 @@ function Products() {
 
   const handleProductClick = (productId) => {
     navigate(`/products/${productId}`);
+  };
+
+  // Filter products based on search query
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return products;
+
+    const query = searchQuery.toLowerCase().trim();
+    const searchTerms = query.split(" ").filter((term) => term.length > 0);
+
+    return products.filter((product) => {
+      const searchableText = [
+        product.name,
+        product.category,
+        product.description,
+        product.highlights,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchTerms.some((term) => searchableText.includes(term));
+    });
+  }, [products, searchQuery]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
   if (loading || products.length === 0) {
     return (
@@ -63,71 +129,302 @@ function Products() {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        alignItems: "center",
-        justifyContent: "center",
+        width: "100%",
+        minHeight: "100vh",
+        padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
       }}
     >
-      {products.map((p) => (
-        <Card
-          key={p.id}
+      {/* Search Bar */}
+      <Box
+        sx={{
+          maxWidth: "1200px",
+          margin: "0 auto 3rem",
+        }}
+      >
+        <TextField
+          fullWidth
+          placeholder="Search products by name, category, or description..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          variant="outlined"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchOutlinedIcon
+                  sx={{
+                    color: (theme) => theme.palette.text.secondary,
+                  }}
+                />
+              </InputAdornment>
+            ),
+            endAdornment: searchQuery && (
+              <InputAdornment position="end">
+                <IconButton
+                  size="small"
+                  onClick={() => setSearchQuery("")}
+                  sx={{
+                    color: (theme) => theme.palette.text.secondary,
+                  }}
+                >
+                  <ClearOutlinedIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ),
+            sx: {
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.background.paper,
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.2)"
+                    : "rgba(0, 0, 0, 0.23)",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: (theme) => theme.palette.primary.main,
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: (theme) => theme.palette.primary.main,
+                borderWidth: "2px",
+              },
+            },
+          }}
+        />
+        {searchQuery && (
+          <Typography
+            variant="body2"
+            sx={{
+              mt: 1,
+              color: (theme) => theme.palette.text.secondary,
+            }}
+          >
+            {filteredProducts.length === 0
+              ? "No products found"
+              : `Found ${filteredProducts.length} product${filteredProducts.length !== 1 ? "s" : ""}`}
+          </Typography>
+        )}
+      </Box>
+
+      {/* Products Grid */}
+      {filteredProducts.length === 0 && searchQuery ? (
+        <Box
           sx={{
-            width: 350,
-            height: 480,
-            m: 2,
-            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "400px",
           }}
         >
-          <CardActions
+          <Typography
+            variant="h6"
             sx={{
-              flexDirection: "column",
-
-              alignItems: "flex-start",
-              p: 0,
+              color: (theme) => theme.palette.text.secondary,
+              textAlign: "center",
             }}
-            onClick={() => handleProductClick(p.id)}
           >
-            <CardMedia
-              component="img"
-              src={p.image_url}
-              alt={p.name}
+            No products match your search "{searchQuery}"
+          </Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          {paginatedProducts.map((p) => (
+            <Card
+              key={p.id}
               sx={{
-                width: "100%",
-                height: { xs: 220, md: 250 },
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
-            />
-            <CardHeader
-              title={
-                p.name.length > 50 ? (
-                  <Typography variant="h6">{`${p.name.substring(
-                    0,
-                    50
-                  )}...`}</Typography>
-                ) : (
-                  <Typography variant="h6">{p.name}</Typography>
-                )
-              }
-              subheader={p.category}
-            />
-            <CardContent>
-              <RatingDisplay rating={p.rating} />
-              <PriceDisplay price={p.price} />
-            </CardContent>
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 15,
-                right: 15,
+                width: 350,
+                height: 480,
+                m: 2,
+                position: "relative",
               }}
             >
-              <AddToCart />
+              <CardActions
+                sx={{
+                  flexDirection: "column",
+
+                  alignItems: "flex-start",
+                  p: 0,
+                }}
+                onClick={() => handleProductClick(p.id)}
+              >
+                <CardMedia
+                  component="img"
+                  src={getImageUrl(p.image_url)}
+                  alt={p.name}
+                  sx={{
+                    width: "100%",
+                    height: { xs: 220, md: 250 },
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
+                />
+                <CardHeader
+                  title={
+                    p.name.length > 50 ? (
+                      <Typography variant="h6">{`${p.name.substring(
+                        0,
+                        50
+                      )}...`}</Typography>
+                    ) : (
+                      <Typography variant="h6">{p.name}</Typography>
+                    )
+                  }
+                  subheader={p.category}
+                />
+                <CardContent>
+                  <RatingDisplay rating={p.rating} />
+                  <PriceDisplay price={p.price} />
+                </CardContent>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 15,
+                    right: 15,
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <AddToCart product={p} />
+                </Box>
+              </CardActions>
+            </Card>
+          ))}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 2,
+                marginTop: { xs: "2rem", sm: "3rem" },
+                flexWrap: "wrap",
+                width: "100%",
+              }}
+            >
+              {/* Previous Arrow */}
+              <IconButton
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                sx={{
+                  color: (theme) => theme.palette.text.primary,
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  "&:focus": {
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    outlineOffset: "2px",
+                  },
+                  "&:focus-visible": {
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    outlineOffset: "2px",
+                  },
+                  "&:hover": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                    transform: "translateY(-4px)",
+                    backgroundColor: "transparent",
+                  },
+                  "&:disabled": {
+                    opacity: 0.5,
+                  },
+                }}
+              >
+                <NavigateBeforeIcon />
+              </IconButton>
+
+              {/* Page Numbers */}
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={handlePageChange}
+                sx={{
+                  "& .MuiPaginationItem-root": {
+                    color: (theme) => theme.palette.text.primary,
+                    border: "1px solid transparent",
+                    boxShadow: "none !important",
+                    "&.Mui-selected": {
+                      backgroundColor: (theme) => theme.palette.primary.main,
+                      color: "#FFFFFF",
+                      border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                      boxShadow: "none !important",
+                      "&:hover": {
+                        backgroundColor: "#C85A2E",
+                      },
+                      "&:focus": {
+                        outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                        outlineOffset: "2px",
+                        boxShadow: "none !important",
+                      },
+                      "&:focus-visible": {
+                        outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                        outlineOffset: "2px",
+                        boxShadow: "none !important",
+                      },
+                    },
+                    "&:focus": {
+                      outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                      outlineOffset: "2px",
+                      boxShadow: "none !important",
+                      border: "1px solid transparent",
+                    },
+                    "&:focus-visible": {
+                      outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                      outlineOffset: "2px",
+                      boxShadow: "none !important",
+                      border: "1px solid transparent",
+                    },
+                    "&:hover": {
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "rgba(229, 122, 68, 0.1)"
+                          : "rgba(229, 122, 68, 0.2)",
+                      border: "1px solid transparent",
+                      boxShadow: "none !important",
+                    },
+                  },
+                }}
+              />
+
+              {/* Next Arrow */}
+              <IconButton
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                sx={{
+                  color: (theme) => theme.palette.text.primary,
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  "&:focus": {
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    outlineOffset: "2px",
+                  },
+                  "&:focus-visible": {
+                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    outlineOffset: "2px",
+                  },
+                  "&:hover": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                    transform: "translateY(-4px)",
+                    backgroundColor: "transparent",
+                  },
+                  "&:disabled": {
+                    opacity: 0.5,
+                  },
+                }}
+              >
+                <NavigateNextIcon />
+              </IconButton>
             </Box>
-          </CardActions>
-        </Card>
-      ))}
+          )}
+        </Box>
+      )}
     </Box>
   );
 }

@@ -1,43 +1,41 @@
-import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import React, { useState, useRef } from "react";
+import { Box, Typography, Grid, IconButton } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ComputerIcon from "@mui/icons-material/Computer";
 import SecurityIcon from "@mui/icons-material/Security";
 import PeopleIcon from "@mui/icons-material/People";
 import PublicIcon from "@mui/icons-material/Public";
-import heroImage from "../assets/hero.webp";
-import globalMapImage from "../assets/global-office-presence.png";
+import globalMapImage from "../assets/global_office_presence.png";
+import heroVideo from "../assets/hero_video.mp4?url";
 
 function About() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  const handlePlay = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+  };
+
   return (
     <Box
       sx={{
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      {/* Hero Image - static, no animation */}
-      <Box
-        component="img"
-        src={heroImage}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "contain",
-          zIndex: 0,
-        }}
-      />
-      
-      {/* Content overlay */}
+      {/* Content */}
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
           paddingBottom: { xs: "4rem", sm: "6rem" },
@@ -130,7 +128,7 @@ function About() {
               transition: theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
               ...(theme.palette.mode === 'light' ? {
                 "&:hover": {
-                  borderColor: "#3B82F6",
+                  borderColor: theme.palette.primary.main,
                   transform: "translateY(-4px)",
                 }
               } : {}),
@@ -171,7 +169,7 @@ function About() {
                 title: "Global support for all",
               },
             ].map((feature, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index} sx={{ display: "flex", justifyContent: "center" }}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index} sx={{ display: "flex", justifyContent: "center" }}>
                 <Box
                   sx={{
                     padding: { xs: "2rem 1.5rem", sm: "2.5rem 2rem", md: "3rem 2rem" },
@@ -191,7 +189,7 @@ function About() {
                 >
                   <Box
                     sx={{
-                      color: "#3B82F6",
+                      color: (theme) => theme.palette.primary.main,
                       marginBottom: "1.5rem",
                       display: "flex",
                       alignItems: "center",
@@ -268,7 +266,7 @@ function About() {
                     transition: theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
                     ...(theme.palette.mode === 'light' ? {
                       "&:hover": {
-                        borderColor: "#3B82F6",
+                        borderColor: theme.palette.primary.main,
                         transform: "translateY(-4px)",
                       }
                     } : {}),
@@ -315,6 +313,204 @@ function About() {
                     borderRadius: 3,
                   }}
                 />
+              </Box>
+            </Box>
+          </Box>
+
+          {/* 15 Years of Experience Section */}
+          <Box
+            sx={{
+              marginTop: { xs: "4rem", sm: "5rem", md: "6rem" },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                gap: { xs: 3, md: 4 },
+                alignItems: { xs: "stretch", md: "stretch" },
+              }}
+            >
+              {/* Video - Left Side */}
+              <Box
+                sx={{
+                  flex: { xs: "1 1 100%", md: "1 1 50%" },
+                  width: { xs: "100%", md: "50%" },
+                  display: "flex",
+                }}
+              >
+                <Box
+                  sx={{
+                    width: "100%",
+                    aspectRatio: "9/16",
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) => 
+                      theme.palette.mode === 'dark' 
+                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                        : "1px solid rgba(0, 0, 0, 0.1)",
+                    borderRadius: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <Box
+                    component="video"
+                    ref={videoRef}
+                    controls
+                    loop
+                    muted
+                    playsInline
+                    onPlay={handlePlay}
+                    onPause={handlePause}
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  >
+                    <source src={heroVideo} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </Box>
+                  {!isPlaying && (
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "rgba(0, 0, 0, 0.3)",
+                        cursor: "pointer",
+                        zIndex: 1,
+                      }}
+                      onClick={handlePlay}
+                    >
+                      <IconButton
+                        sx={{
+                          width: { xs: "64px", sm: "80px", md: "96px" },
+                          height: { xs: "64px", sm: "80px", md: "96px" },
+                          backgroundColor: (theme) => theme.palette.primary.main,
+                          color: "#FFFFFF",
+                          "&:hover": {
+                            backgroundColor: (theme) => theme.palette.primary.dark || theme.palette.primary.main,
+                            transform: "scale(1.1)",
+                          },
+                          transition: "all 0.3s ease",
+                        }}
+                        disableRipple
+                      >
+                        <PlayArrowIcon
+                          sx={{
+                            fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+                            marginLeft: "4px",
+                          }}
+                        />
+                      </IconButton>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+
+              {/* Text Content - Right Side */}
+              <Box
+                sx={{
+                  flex: { xs: "1 1 100%", md: "1 1 50%" },
+                  width: { xs: "100%", md: "50%" },
+                  display: "flex",
+                  "& p": {
+                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    fontWeight: 400,
+                    color: (theme) =>
+                      theme.palette.mode === "light"
+                        ? theme.palette.text.primary
+                        : "rgba(255, 255, 255, 0.95)",
+                    lineHeight: 1.8,
+                    textAlign: "right",
+                    marginBottom: "1.5rem",
+                    marginTop: 0,
+                    "&:last-child": {
+                      marginBottom: 0,
+                    },
+                  },
+                }}
+              >
+                <Box
+                  sx={(theme) => ({
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    backgroundColor:
+                      theme.palette.mode === "light"
+                        ? theme.palette.background.paper
+                        : "transparent",
+                    border:
+                      theme.palette.mode === "light"
+                        ? "1px solid rgba(0, 0, 0, 0.1)"
+                        : "none",
+                    borderRadius: theme.palette.mode === "light" ? 2 : 0,
+                    padding:
+                      theme.palette.mode === "light"
+                        ? { xs: "2rem", sm: "2.5rem", md: "3rem" }
+                        : 0,
+                    transition:
+                      theme.palette.mode === "light" ? "all 0.3s ease" : "none",
+                    ...(theme.palette.mode === "light"
+                      ? {
+                          "&:hover": {
+                            borderColor: theme.palette.primary.main,
+                            transform: "translateY(-4px)",
+                          },
+                        }
+                      : {}),
+                  })}
+                >
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    sx={{
+                      fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+                      fontWeight: 700,
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? theme.palette.text.primary
+                          : "#FFFFFF",
+                      marginBottom: { xs: "1.5rem", sm: "2rem" },
+                      lineHeight: 1.2,
+                      textAlign: "right",
+                    }}
+                  >
+                    We Have 15 Years Of Experience Of Tech
+                  </Typography>
+                  <p>
+                    For more than 15 years, Unelma Platforms has been at the
+                    forefront of helping businesses harness the power of
+                    technology to drive success. Our broad range of innovative
+                    and user-friendly software solutions have enabled businesses
+                    to operate more efficiently, reach their customers
+                    effectively, and ultimately, boost their bottom line.
+                  </p>
+                  <p>
+                    With a rich experience spanning over a decade, Unelma
+                    Platforms stands as a reliable partner in the journey of
+                    businesses toward growth and success. Our goal has, and
+                    always will be, to empower businesses with the best tech
+                    tools and services.
+                  </p>
+                  <p>
+                    Our broad range of innovative and user-friendly software
+                    solutions have enabled businesses to operate more efficiently,
+                    reach their customers effectively, and ultimately, boost
+                    their bottom line.
+                  </p>
+                </Box>
               </Box>
             </Box>
           </Box>

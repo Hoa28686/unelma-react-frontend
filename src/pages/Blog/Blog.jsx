@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { fetchBlogs } from "../../store/slices/blogs/blogsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,26 +10,90 @@ import {
   CardHeader,
   CardMedia,
   Typography,
+  TextField,
+  InputAdornment,
+  IconButton,
+  Pagination,
 } from "@mui/material";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useNavigate } from "react-router";
 import { timeConversion } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import heroImage from "../../assets/hero.webp";
+
+const ITEMS_PER_PAGE = 6; // Show 6 blogs per page
 
 function Blog() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { blogs, loading, error } = useSelector((state) => state.blogs);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (blogs.length === 0) {
       dispatch(fetchBlogs());
     }
   }, [dispatch, blogs]);
-  console.log(blogs);
 
   const handleBlogClick = (blogId) => {
     navigate(`/blog/${blogId}`);
+  };
+
+  // Filter blogs based on search query
+  const filteredBlogs = useMemo(() => {
+    if (!searchQuery.trim()) return blogs;
+
+    const query = searchQuery.toLowerCase().trim();
+    const searchTerms = query.split(" ").filter((term) => term.length > 0);
+
+    return blogs.filter((blog) => {
+      const searchableText = [
+        blog.title,
+        blog.content,
+        blog.author,
+        blog.category,
+        typeof blog.author === "object" ? blog.author_name : blog.author,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchTerms.some((term) => searchableText.includes(term));
+    });
+  }, [blogs, searchQuery]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex);
+
+  // Reset to page 1 when search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const handleBack = () => {
@@ -73,6 +137,8 @@ function Blog() {
           sx={{
             backgroundColor: (theme) => theme.palette.primary.main,
             color: "#FFFFFF",
+            border: "1px solid transparent",
+            transition: "all 0.3s ease",
             "&:hover": {
               backgroundColor: (theme) =>
                 theme.palette.primary.dark || "#2563EB",
@@ -91,30 +157,13 @@ function Blog() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        overflow: "hidden",
+        backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
-      {/* Hero Image - static, no animation */}
-      <Box
-        component="img"
-        src={heroImage}
-        alt="Hero background"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "contain",
-          zIndex: 0,
-        }}
-      />
-
-      {/* Content overlay */}
+      {/* Content */}
       <Box
         sx={{
           position: "relative",
-          zIndex: 1,
           minHeight: "100vh",
           width: "100%",
           display: "flex",
@@ -138,6 +187,79 @@ function Blog() {
           Our Blog
         </Typography>
 
+        {/* Search Bar */}
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: { xs: "100%", sm: "90%", md: "1200px" },
+            marginBottom: { xs: "2rem", sm: "3rem" },
+          }}
+        >
+          <TextField
+            fullWidth
+            placeholder="Search blogs by title, content, author, or category..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchOutlinedIcon
+                    sx={{
+                      color: (theme) => theme.palette.text.secondary,
+                    }}
+                  />
+                </InputAdornment>
+              ),
+              endAdornment: searchQuery && (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    onClick={() => setSearchQuery("")}
+                    sx={{
+                      color: (theme) => theme.palette.text.secondary,
+                    }}
+                  >
+                    <ClearOutlinedIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              ),
+              sx: {
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "#FFFFFF"
+                    : theme.palette.background.paper,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "rgba(0, 0, 0, 0.23)",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) => theme.palette.primary.main,
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) => theme.palette.primary.main,
+                  borderWidth: "2px",
+                },
+              },
+            }}
+          />
+          {searchQuery && (
+            <Typography
+              variant="body2"
+              sx={{
+                mt: 1,
+                color: (theme) => theme.palette.text.secondary,
+              }}
+            >
+              {filteredBlogs.length === 0
+                ? "No blogs found"
+                : `Found ${filteredBlogs.length} blog${filteredBlogs.length !== 1 ? "s" : ""}`}
+            </Typography>
+          )}
+        </Box>
+
         <Box
           sx={{
             width: "100%",
@@ -147,7 +269,7 @@ function Blog() {
             gap: { xs: 2, sm: 3 },
           }}
         >
-          {blogs.map((blog) => (
+          {paginatedBlogs.map((blog) => (
             <CardActionArea
               key={blog.id}
               sx={{
@@ -158,11 +280,7 @@ function Blog() {
                 position: "relative",
                 backgroundColor: (theme) => theme.palette.background.paper,
                 border: (theme) =>
-                  `1px solid ${
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.1)"
-                      : "rgba(0, 0, 0, 0.1)"
-                  }`,
+                  `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
                 transition: "all 0.3s ease",
@@ -219,7 +337,7 @@ function Blog() {
                         fontSize: "0.875rem",
                       }}
                     >
-                      {`${timeConversion(blog.created_at)} • ${blog.author}`}
+                      {`${timeConversion(blog.created_at)} • ${blog.author?.name}`}
                     </Typography>
                   }
                   sx={{ pb: 1, px: 0 }}
@@ -258,6 +376,140 @@ function Blog() {
               </Box>
             </CardActionArea>
           ))}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 2,
+                marginTop: { xs: "2rem", sm: "3rem" },
+                flexWrap: "wrap",
+              }}
+            >
+              {/* Previous Arrow */}
+              <IconButton
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                sx={{
+                  color: (theme) => theme.palette.text.primary,
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  "&:focus": {
+                    outline: (theme) =>
+                      `2px solid ${theme.palette.primary.main}`,
+                    outlineOffset: "2px",
+                  },
+                  "&:focus-visible": {
+                    outline: (theme) =>
+                      `2px solid ${theme.palette.primary.main}`,
+                    outlineOffset: "2px",
+                  },
+                  "&:hover": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                    transform: "translateY(-4px)",
+                    backgroundColor: "transparent",
+                  },
+                  "&:disabled": {
+                    opacity: 0.5,
+                  },
+                }}
+              >
+                <NavigateBeforeIcon />
+              </IconButton>
+
+              {/* Page Numbers */}
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={handlePageChange}
+                sx={{
+                  "& .MuiPaginationItem-root": {
+                    color: (theme) => theme.palette.text.primary,
+                    border: "1px solid transparent",
+                    boxShadow: "none !important",
+                    "&.Mui-selected": {
+                      backgroundColor: (theme) => theme.palette.primary.main,
+                      color: "#FFFFFF",
+                      border: (theme) =>
+                        `1px solid ${theme.palette.primary.main}`,
+                      boxShadow: "none !important",
+                      "&:hover": {
+                        backgroundColor: "#C85A2E",
+                      },
+                      "&:focus": {
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main} !important`,
+                        outlineOffset: "2px",
+                        boxShadow: "none !important",
+                      },
+                      "&:focus-visible": {
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main} !important`,
+                        outlineOffset: "2px",
+                        boxShadow: "none !important",
+                      },
+                    },
+                    "&:focus": {
+                      outline: (theme) =>
+                        `2px solid ${theme.palette.primary.main} !important`,
+                      outlineOffset: "2px",
+                      boxShadow: "none !important",
+                      border: "1px solid transparent",
+                    },
+                    "&:focus-visible": {
+                      outline: (theme) =>
+                        `2px solid ${theme.palette.primary.main} !important`,
+                      outlineOffset: "2px",
+                      boxShadow: "none !important",
+                      border: "1px solid transparent",
+                    },
+                    "&:hover": {
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "rgba(229, 122, 68, 0.1)"
+                          : "rgba(229, 122, 68, 0.2)",
+                      border: "1px solid transparent",
+                      boxShadow: "none !important",
+                    },
+                  },
+                }}
+              />
+
+              {/* Next Arrow */}
+              <IconButton
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                sx={{
+                  color: (theme) => theme.palette.text.primary,
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  "&:focus": {
+                    outline: (theme) =>
+                      `2px solid ${theme.palette.primary.main}`,
+                    outlineOffset: "2px",
+                  },
+                  "&:focus-visible": {
+                    outline: (theme) =>
+                      `2px solid ${theme.palette.primary.main}`,
+                    outlineOffset: "2px",
+                  },
+                  "&:hover": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                    transform: "translateY(-4px)",
+                    backgroundColor: "transparent",
+                  },
+                  "&:disabled": {
+                    opacity: 0.5,
+                  },
+                }}
+              >
+                <NavigateNextIcon />
+              </IconButton>
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

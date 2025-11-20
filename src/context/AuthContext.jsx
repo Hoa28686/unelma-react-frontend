@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import { API } from "../api";
 
 const AuthContext = createContext(null);
 
@@ -12,8 +13,8 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const loginAPI = import.meta.env.VITE_LOGIN_API_URL;
-  const logoutAPI = import.meta.env.VITE_LOGOUT_API_URL;
+  const loginAPI = API.login;
+  const logoutAPI = API.logout;
 
   useEffect(() => {
     if (token) {
@@ -27,7 +28,11 @@ export function AuthProvider({ children }) {
   const login = async ({ email, password, remember = false }) => {
     setLoading(true);
     setError(null);
+    setMessage(null);
     try {
+      if (!loginAPI) {
+        throw new Error("Login API URL is not configured");
+      }
       const res = await axios.post(
         loginAPI,
         { email, password, remember },
@@ -41,6 +46,8 @@ export function AuthProvider({ children }) {
       localStorage.setItem("user", JSON.stringify(data.user));
     } catch (e) {
       setError(e.response?.data?.message || "Invalid email or password");
+      setUser(null);
+      setToken(null);
     } finally {
       setLoading(false);
     }
@@ -49,26 +56,28 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     setLoading(true);
     setError(null);
+    setMessage(null);
     try {
-      await axios.post(
-        logoutAPI,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      if (token && logoutAPI) {
+        await axios.post(
+          logoutAPI,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      }
     } catch (e) {
-      setError(e.response?.data?.message || "Logout failed");
+      // Logout even if API call fails
+      console.error("Logout API error:", e);
     } finally {
       localStorage.removeItem("authToken");
       localStorage.removeItem("user");
       setMessage("Logged out successfully");
-      setUser({});
+      setUser(null);
       setToken(null);
       setLoading(false);
     }
-    setUser(null);
-    localStorage.removeItem("user");
   };
   return (
     <AuthContext.Provider

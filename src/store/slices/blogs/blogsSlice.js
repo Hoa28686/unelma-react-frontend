@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API } from "../../../api";
 
 const initialState = {
   blogs: [],
@@ -8,11 +9,12 @@ const initialState = {
   error: null,
 };
 
-const blogAPI = "http://localhost:3001/blogs";
+// const blogAPI = "http://localhost:3001/blogs";
+const blogAPI = API.blogs;
 
 export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async () => {
   const res = await axios.get(blogAPI);
-  return res.data;
+  return res.data.data;
 });
 
 export const blogsSlice = createSlice({
