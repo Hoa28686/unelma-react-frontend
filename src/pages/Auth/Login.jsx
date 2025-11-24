@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { SignInPage } from "@toolpad/core";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
 import { Link, useNavigate } from "react-router";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useAuth } from "../../context/AuthContext";
@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 function Login() {
   const { user, login, logout, message, loading, error } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   // Navigate to home on successful login
   useEffect(() => {
@@ -70,36 +71,64 @@ function Login() {
 
   // custom Slots
   const Title = () => (
-    <h3 style={{ marginBottom: 2 }}>Welcome to Unelma Platforms</h3>
+    <Typography
+      variant="h4"
+      component="h3"
+      sx={{
+        marginBottom: 2,
+        fontWeight: 600,
+        color: (theme) => theme.palette.text.primary,
+      }}
+    >
+      Welcome to Unelma Platforms
+    </Typography>
   );
 
-  const Subtitle = () => <p>Get started by logging in</p>;
+  const Subtitle = () => (
+    <Typography
+      variant="body1"
+      component="p"
+      sx={{
+        color: (theme) => theme.palette.text.secondary,
+        mb: 2,
+      }}
+    >
+      Get started by logging in
+    </Typography>
+  );
 
   const RememberMe = (props) => (
-    <label
-      style={{
+    <Box
+      component="label"
+      sx={{
         fontSize: "0.9rem",
         marginBlock: ".6rem .5rem",
-        color: "#545353",
+        color: (theme) => theme.palette.text.secondary,
+        display: "flex",
+        alignItems: "center",
+        cursor: "pointer",
+        "&:hover": {
+          color: (theme) => theme.palette.text.primary,
+        },
       }}
     >
       <input
         type="checkbox"
         name="remember"
         {...props}
-        style={{ marginInline: "0 .5rem" }}
+        style={{ marginInline: "0 .5rem", cursor: "pointer" }}
       />
       Remember me
-    </label>
+    </Box>
   );
   const SignUpLink = () => (
-    <Typography variant="body2" sx={{ mt: 3 }}>
+    <Typography variant="body2" sx={{ mt: 3, color: (theme) => theme.palette.text.secondary }}>
       Don't have an account?{" "}
       <Link
         to={"/register"}
         style={{
           fontWeight: "bold",
-          color: (theme) => theme.palette.primary.main,
+          color: theme.palette.primary.main,
           cursor: "pointer",
           textDecoration: "none",
         }}
@@ -156,34 +185,95 @@ function Login() {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box
+      sx={{
+        position: "relative",
+        minHeight: "auto",
+        backgroundColor: (theme) => theme.palette.background.default,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        py: { xs: 3, sm: 4, md: 5 },
+        px: { xs: 2, sm: 2.5 },
+      }}
+    >
       {(message || error) && (
-        <Typography
-          variant="body1"
-          sx={{
-            width: "100%",
-            color: message
-              ? (theme) => theme.palette.primary.main
-              : (theme) => theme.palette.error.main,
-            textAlign: "center",
-            fontWeight: message ? 500 : 400,
-          }}
-        >
-          {message || error}
-        </Typography>
+        <Box sx={{ width: "100%", maxWidth: { xs: "90%", sm: "500px", md: "550px" }, mb: 2 }}>
+          <Typography
+            variant="body1"
+            sx={{
+              width: "100%",
+              color: message
+                ? (theme) => theme.palette.primary.main
+                : (theme) => theme.palette.error.main,
+              textAlign: "center",
+              fontWeight: message ? 500 : 400,
+            }}
+          >
+            {message || error}
+          </Typography>
+        </Box>
       )}
       {!user && (
-        <SignInPage
-          providers={providers}
-          signIn={signIn}
-          slots={{
-            title: Title,
-            subtitle: Subtitle,
-            rememberMe: RememberMe,
-            signUpLink: SignUpLink,
-            submitButton: SubmitButton,
+        <Paper
+          elevation={3}
+          sx={{
+            width: "100%",
+            maxWidth: { xs: "90%", sm: "500px", md: "550px" },
+            p: { xs: 3, sm: 4 },
+            borderRadius: 2,
+            backgroundColor: (theme) => theme.palette.background.paper,
+            "& input": {
+              color: (theme) => theme.palette.text.primary,
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.background.default,
+            },
+            "& input::placeholder": {
+              color: (theme) => theme.palette.text.secondary,
+              opacity: 0.7,
+            },
+            "& label": {
+              color: (theme) => theme.palette.text.secondary,
+            },
+            "& .MuiInputBase-root": {
+              color: (theme) => theme.palette.text.primary,
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.background.default,
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.2)"
+                    : "rgba(0, 0, 0, 0.23)",
+              },
+              "&:hover fieldset": {
+                borderColor: (theme) => theme.palette.primary.main,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: (theme) => theme.palette.primary.main,
+                borderWidth: "2px",
+              },
+            },
           }}
-        />
+        >
+          <SignInPage
+            providers={providers}
+            signIn={signIn}
+            slots={{
+              title: Title,
+              subtitle: Subtitle,
+              rememberMe: RememberMe,
+              signUpLink: SignUpLink,
+              submitButton: SubmitButton,
+            }}
+          />
+        </Paper>
       )}{" "}
       {user && (
         <Paper

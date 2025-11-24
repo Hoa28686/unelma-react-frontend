@@ -12,9 +12,13 @@ const initialState = {
 // const blogAPI = "http://localhost:3001/blogs";
 const blogAPI = API.blogs;
 
-export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async () => {
-  const res = await axios.get(blogAPI);
-  return res.data.data;
+export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async (_, { rejectWithValue }) => {
+  try {
+    const res = await axios.get(blogAPI);
+    return res.data.data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch blogs");
+  }
 });
 
 export const blogsSlice = createSlice({
@@ -32,12 +36,18 @@ export const blogsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchBlogs.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchBlogs.fulfilled, (state, action) => {
         state.blogs = action.payload;
         state.loading = false;
+        state.error = null;
       })
-      .addCase(fetchBlogs.pending, (state) => {
-        state.loading = true;
+      .addCase(fetchBlogs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to fetch blogs";
       });
   },
 });

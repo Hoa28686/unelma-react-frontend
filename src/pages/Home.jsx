@@ -12,8 +12,8 @@ import StorageIcon from "@mui/icons-material/Storage";
 import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import heroImage from "../assets/hero.webp";
-import heroTilesImage from "../assets/hero-tiles.webp";
+import heroTile3 from "../assets/hero_tile_3.webp";
+import heroTile4 from "../assets/hero_tile_4.webp";
 
 function Home() {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function Home() {
         }}
       >
         {/* Hero Images - layered, animates from top, behind header, to below header */}
-        {/* First image (tiles) - back layer */}
+        {/* First image (tile 3) - back layer */}
         <Box
           sx={(theme) => ({
             position: "absolute",
@@ -52,8 +52,8 @@ function Home() {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundImage: `url(${heroTilesImage})`,
-            backgroundRepeat: "repeat-y",
+            backgroundImage: `url(${heroTile3})`,
+            backgroundRepeat: { xs: "no-repeat", md: "repeat-y" },
             backgroundSize: { xs: "100% auto", md: "100% auto" },
             backgroundPosition: "top center",
             zIndex: 0,
@@ -64,7 +64,7 @@ function Home() {
             willChange: "transform",
           })}
         />
-        {/* Second image (black background) - front layer with delay */}
+        {/* Second image (tile 4) - front layer with delay */}
         <Box
           sx={(theme) => ({
             position: "absolute",
@@ -72,8 +72,8 @@ function Home() {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundImage: `url(${heroImage})`,
-            backgroundRepeat: "repeat-y",
+            backgroundImage: `url(${heroTile4})`,
+            backgroundRepeat: { xs: "no-repeat", md: "repeat-y" },
             backgroundSize: { xs: "100% auto", md: "100% auto" },
             backgroundPosition: "top center",
             zIndex: 1,
@@ -172,7 +172,10 @@ function Home() {
             "& p": {
               fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
               fontWeight: 400,
-              color: "rgba(255, 255, 255, 0.9)",
+              color: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255, 255, 255, 0.9)"
+                  : theme.palette.text.primary,
               lineHeight: 1.8,
               textAlign: "left",
               maxWidth: "900px",
@@ -186,6 +189,16 @@ function Home() {
             <Box
               sx={{
                 padding: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(0, 0, 0, 0.2)"
+                    : "rgba(255, 255, 255, 0.15)",
+                borderRadius: 2,
+                backdropFilter: "blur(10px)",
+                border: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "1px solid rgba(255, 255, 255, 0.1)"
+                    : "1px solid rgba(0, 0, 0, 0.1)",
               }}
             >
               {/* Title */}
@@ -195,7 +208,10 @@ function Home() {
                 sx={{
                   fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem", lg: "4rem" },
                   fontWeight: 700,
-                  color: "#FFFFFF",
+                  color: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "#FFFFFF"
+                      : theme.palette.text.primary,
                   marginBottom: { xs: "1.5rem", sm: "2rem" },
                   lineHeight: 1.2,
                   textAlign: "left",
@@ -208,7 +224,10 @@ function Home() {
               <Box
                 sx={{
                   "& p": {
-                    color: "rgba(255, 255, 255, 0.95)",
+                    color: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(255, 255, 255, 0.95)"
+                        : theme.palette.text.primary,
                   },
                 }}
               >

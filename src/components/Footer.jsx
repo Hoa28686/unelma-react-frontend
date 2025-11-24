@@ -1,8 +1,9 @@
-import React from 'react';
-import { Box, Typography, Link, Button, Grid, TextField } from "@mui/material";
+import React, { useState } from 'react';
+import { Box, Typography, Link, Button, Grid, TextField, Alert, CircularProgress } from "@mui/material";
 import businessFinlandLogo from "../assets/business-finland-logo.webp";
 import estoniaLogo from "../assets/republic-of-estonia-logo.webp";
 import shortlistLogo from "../assets/shortlist-logo.webp";
+import { subscribeToNewsletter } from "../lib/api/subscriptionService";
 
 // Style Guide Colors as defined:
 // Updated to match blue theme from main branch
@@ -76,12 +77,56 @@ const partnerLogos = [
 
 // Renamed component from App to Footer
 const Footer = () => { 
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState({
+        success: null,
+        message: '',
+    });
 
-    // Simple handler for the newsletter form
-    const handleNewsletterSubmit = (e) => { 
+    // Handler for the newsletter form
+    const handleNewsletterSubmit = async (e) => { 
         e.preventDefault(); 
-        console.log('Newsletter subscription attempted!');
-        // Add actual subscription logic here
+        
+        if (!email.trim()) {
+            setSubmitStatus({
+                success: false,
+                message: 'Please enter a valid email address.',
+            });
+            return;
+        }
+
+        setLoading(true);
+        setSubmitStatus({ success: null, message: '' });
+
+        try {
+            const result = await subscribeToNewsletter({ email: email.trim() });
+            
+            if (result.success) {
+                setSubmitStatus({
+                    success: true,
+                    message: result.message,
+                });
+                // Reset form
+                setEmail('');
+                // Clear success message after 5 seconds
+                setTimeout(() => {
+                    setSubmitStatus({ success: null, message: '' });
+                }, 5000);
+            } else {
+                setSubmitStatus({
+                    success: false,
+                    message: result.message,
+                });
+            }
+        } catch (error) {
+            setSubmitStatus({
+                success: false,
+                message: 'An unexpected error occurred. Please try again.',
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -215,6 +260,24 @@ const Footer = () => {
                             Based on the GDPR rule, we will only contact you if it is essential and all personal data collected is anonymized.
                         </Typography>
                         
+                        {/* Success/Error Alert */}
+                        {submitStatus.success !== null && (
+                            <Alert 
+                                severity={submitStatus.success ? "success" : "error"}
+                                sx={{ 
+                                    mb: 2, 
+                                    borderRadius: 2,
+                                    backgroundColor: submitStatus.success 
+                                        ? 'rgba(52, 211, 153, 0.1)' 
+                                        : 'rgba(248, 113, 113, 0.1)',
+                                    color: COLORS.textDark,
+                                }}
+                                onClose={() => setSubmitStatus({ success: null, message: '' })}
+                            >
+                                {submitStatus.message}
+                            </Alert>
+                        )}
+                        
                         {/* Newsletter Form */}
                         <Box 
                             component="form" 
@@ -227,6 +290,15 @@ const Footer = () => {
                                 type="email" 
                                 placeholder="your email" 
                                 required
+                                value={email}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    // Clear error when user types
+                                    if (submitStatus.success === false) {
+                                        setSubmitStatus({ success: null, message: '' });
+                                    }
+                                }}
+                                disabled={loading}
                                 variant="outlined"
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
@@ -237,6 +309,9 @@ const Footer = () => {
                                         '&:hover fieldset': { borderColor: (theme) => theme.palette.primary.main },
                                         '&.Mui-focused fieldset': { borderColor: (theme) => theme.palette.primary.main, borderWidth: '2px' },
                                         '& input::placeholder': { color: 'rgba(255, 255, 255, 0.5)', opacity: 1 },
+                                        '&.Mui-disabled': {
+                                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                        },
                                     },
                                 }}
                             />
@@ -244,6 +319,7 @@ const Footer = () => {
                                 type="submit" 
                                 variant="contained"
                                 color="primary"
+                                disabled={loading}
                                 sx={{ 
                                     backgroundColor: (theme) => theme.palette.primary.main,
                                     color: '#FFFFFF',
@@ -254,6 +330,7 @@ const Footer = () => {
                                     whiteSpace: 'nowrap',
                                     border: "1px solid transparent",
                                     transition: "all 0.3s ease",
+                                    minWidth: { xs: '100%', sm: '120px' },
                                     '&:hover': { 
                                         borderColor: (theme) => theme.palette.primary.main,
                                         transform: "translateY(-4px)",
@@ -268,9 +345,19 @@ const Footer = () => {
                                         outlineOffset: "2px",
                                         boxShadow: "none",
                                     },
+                                    '&:disabled': {
+                                        opacity: 0.6,
+                                    },
                                 }}
                             >
-                                Subscribe
+                                {loading ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <CircularProgress size={16} color="inherit" />
+                                        Subscribing...
+                                    </Box>
+                                ) : (
+                                    'Subscribe'
+                                )}
                             </Button>
                         </Box>
                     </Grid>

@@ -6,7 +6,11 @@ function PriceDisplay({ price }) {
   const validPrice = isNaN(numericPrice) ? 0 : numericPrice;
   const [euro, cent] = validPrice.toFixed(2).split(".");
   return (
-    <Typography variant="h6" component="div">
+    <Typography 
+      variant="h6" 
+      component="div"
+      sx={{ color: (theme) => theme.palette.text.primary }}
+    >
       <Box component="span" sx={{ fontSize: "1rem", mr: 0.3 }}>
         €
       </Box>
