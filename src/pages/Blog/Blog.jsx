@@ -293,7 +293,10 @@ function Blog() {
             >
               <CardMedia
                 component="img"
-                src={getImageUrl(blog.featured_image_url || blog.featured_image)}
+                src={
+                  getImageUrl(blog.featured_image_url || blog.featured_image) ||
+                  blog.image_url
+                }
                 alt={blog.title}
                 sx={{
                   width: { xs: "100%", md: "30%" },

@@ -152,7 +152,12 @@ function BlogDetail() {
           >
             <Box
               component="img"
-              src={getImageUrl(selectedBlog?.featured_image_url || selectedBlog?.featured_image)}
+              src={
+                getImageUrl(
+                  selectedBlog?.featured_image_url ||
+                    selectedBlog?.featured_image
+                ) || selectedBlog.image_url
+              }
               alt={selectedBlog.title}
               sx={{
                 width: "100%",
