@@ -157,13 +157,14 @@ function Cart() {
                         {/* Product Image */}
                         <CardMedia
                           component="img"
-                          image={getImageUrl(item.image_url)}
+                          src={getImageUrl(item.image_local_url || item.image_url || item.image)}
                           alt={item.name}
                           sx={{
                             width: { xs: "100%", md: "150px" },
                             height: { xs: "200px", md: "150px" },
                             objectFit: "cover",
                             borderRadius: 2,
+                            backgroundColor: (theme) => theme.palette.background.paper,
                           }}
                         />
 

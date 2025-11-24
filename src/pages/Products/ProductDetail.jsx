@@ -150,7 +150,7 @@ function ProductDetail() {
         sx={{
           position: "relative",
           width: "100%",
-          padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
+          padding: { xs: "1rem 1rem", sm: "2rem 2rem", md: "4rem 3rem" },
         }}
       >
         <Box
@@ -165,7 +165,7 @@ function ProductDetail() {
           </Box>
 
           {/* Main Product Section */}
-          <Grid container spacing={4} sx={{ mb: 4 }}>
+          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} sx={{ mb: { xs: 3, md: 4 } }}>
             {/* Product Image */}
             <Grid item xs={12} md={6}>
               <Card
@@ -187,8 +187,9 @@ function ProductDetail() {
                     height: { xs: "auto", md: "500px" },
                     objectFit: "cover",
                     display: "block",
+                    backgroundColor: (theme) => theme.palette.background.paper,
                   }}
-                  src={getImageUrl(product?.image_url)}
+                  src={getImageUrl(product?.image_local_url || product?.image_url || product?.image)}
                   alt={product.name}
                 />
               </Card>
@@ -200,7 +201,7 @@ function ProductDetail() {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: 3,
+                  gap: { xs: 2, sm: 2.5, md: 3 },
                   height: "100%",
                 }}
               >
@@ -218,26 +219,10 @@ function ProductDetail() {
                   {product.name}
                 </Typography>
 
-                {/* Category Badge */}
-                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                  <Chip
-                    icon={<CategoryIcon />}
-                    label={product.category}
-                    sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? `${theme.palette.primary.main}20`
-                          : `${theme.palette.primary.main}15`,
-                      color: (theme) => theme.palette.primary.main,
-                      fontWeight: 500,
-                    }}
-                  />
-                </Box>
-
                 {/* Rating */}
                 <Box
                   sx={{
-                    p: 2,
+                    p: { xs: 1.5, md: 2 },
                     borderRadius: 2,
                     backgroundColor: (theme) =>
                       theme.palette.mode === "dark"
@@ -257,7 +242,7 @@ function ProductDetail() {
                 {/* Price */}
                 <Box
                   sx={{
-                    p: 2,
+                    p: { xs: 1.5, md: 2 },
                     borderRadius: 2,
                     backgroundColor: (theme) =>
                       theme.palette.mode === "dark"
@@ -272,12 +257,13 @@ function ProductDetail() {
                 <Box
                   sx={{
                     mt: "auto",
-                    position: { xs: "fixed", md: "static" },
-                    bottom: { xs: 20 },
-                    left: { xs: "50%" },
-                    transform: { xs: "translateX(-50%)", md: "none" },
-                    width: { xs: "calc(100% - 2rem)", md: "100%" },
-                    zIndex: { xs: 1000, md: "auto" },
+                    position: { xs: "sticky", md: "static" },
+                    bottom: { xs: 0 },
+                    width: { xs: "100%", md: "100%" },
+                    zIndex: { xs: 100, md: "auto" },
+                    backgroundColor: { xs: (theme) => theme.palette.background.default, md: "transparent" },
+                    pt: { xs: 2, md: 0 },
+                    pb: { xs: 2, md: 0 },
                   }}
                 >
                   <AddToCart product={product} />
@@ -287,7 +273,7 @@ function ProductDetail() {
           </Grid>
 
           {/* Product Details Section */}
-          <Grid container spacing={3}>
+          <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
             {/* Product Information Card */}
             <Grid item xs={12} md={4}>
               <Card
@@ -302,12 +288,13 @@ function ProductDetail() {
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               >
-                <CardContent>
+                <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
                   <Typography
                     variant="h6"
                     sx={{
                       fontWeight: 600,
                       mb: 2,
+                      fontSize: { xs: "1.1rem", md: "1.25rem" },
                       color: (theme) => theme.palette.text.primary,
                     }}
                   >
@@ -384,12 +371,13 @@ function ProductDetail() {
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               >
-                <CardContent>
+                <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
                   <Typography
                     variant="h6"
                     sx={{
                       fontWeight: 600,
                       mb: 2,
+                      fontSize: { xs: "1.1rem", md: "1.25rem" },
                       color: (theme) => theme.palette.text.primary,
                     }}
                   >
@@ -438,12 +426,13 @@ function ProductDetail() {
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               >
-                <CardContent>
+                <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
                   <Typography
                     variant="h6"
                     sx={{
                       fontWeight: 600,
                       mb: 2,
+                      fontSize: { xs: "1.1rem", md: "1.25rem" },
                       color: (theme) => theme.palette.text.primary,
                     }}
                   >

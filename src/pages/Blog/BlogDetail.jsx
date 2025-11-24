@@ -7,7 +7,7 @@ import {
   setSelectedBlog,
 } from "../../store/slices/blogs/blogsSlice";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
-import { timeConversion } from "../../helpers/helpers";
+import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
 import { API } from "../../api";
@@ -152,14 +152,15 @@ function BlogDetail() {
           >
             <Box
               component="img"
+              src={getImageUrl(selectedBlog?.featured_image_url || selectedBlog?.featured_image)}
+              alt={selectedBlog.title}
               sx={{
                 width: "100%",
                 borderRadius: 2,
                 objectFit: "cover",
                 maxHeight: "500px",
+                backgroundColor: (theme) => theme.palette.background.paper,
               }}
-              src={selectedBlog?.image_url}
-              alt={selectedBlog.title}
             />
             <Typography
               variant="h4"

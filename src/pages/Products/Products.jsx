@@ -258,13 +258,14 @@ function Products() {
               >
                 <CardMedia
                   component="img"
-                  src={getImageUrl(p.image_url)}
+                  src={getImageUrl(p.image_local_url || p.image_url || p.image)}
                   alt={p.name}
                   sx={{
                     width: "100%",
                     height: { xs: 220, md: 250 },
                     objectFit: "cover",
                     objectPosition: "center",
+                    backgroundColor: (theme) => theme.palette.background.paper,
                   }}
                 />
                 <CardHeader

@@ -28,7 +28,7 @@ const lightTheme = createTheme({
       main: "#3B82F6", // Blue accent
     },
     background: {
-      default: "#F0F4F8", // Faint blue background
+      default: "#F0F4F8", // Faint blue background (kept from recent change)
       paper: "#F5F5F5", // Slightly darker for cards/surfaces
     },
     text: {

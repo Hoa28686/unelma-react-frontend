@@ -20,7 +20,7 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useNavigate } from "react-router";
-import { timeConversion } from "../../helpers/helpers";
+import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const ITEMS_PER_PAGE = 6; // Show 6 blogs per page
@@ -293,15 +293,15 @@ function Blog() {
             >
               <CardMedia
                 component="img"
+                src={getImageUrl(blog.featured_image_url || blog.featured_image)}
+                alt={blog.title}
                 sx={{
                   width: { xs: "100%", md: "30%" },
                   height: { xs: "250px", md: "100%" },
                   objectFit: "cover",
-                  display: "block",
-                  padding: 0,
+                  objectPosition: "center",
+                  backgroundColor: (theme) => theme.palette.background.paper,
                 }}
-                image={blog.image_url}
-                alt={blog.title}
               />
               <Box
                 sx={{

@@ -12,7 +12,9 @@ export const timeConversion = (time) => {
  * @returns {string} - Absolute URL to the image
  */
 export const getImageUrl = (imageUrl) => {
-  if (!imageUrl) return null;
+  if (!imageUrl) {
+    return null;
+  }
   
   // If already an absolute URL (starts with http:// or https://), return as is
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {

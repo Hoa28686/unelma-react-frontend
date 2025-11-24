@@ -14,7 +14,6 @@ import {
   CircularProgress,
   InputAdornment,
   IconButton,
-  Drawer,
   useTheme,
   useMediaQuery,
   Divider,
@@ -34,7 +33,6 @@ import {
 import { 
   Visibility, 
   VisibilityOff, 
-  Menu as MenuIcon, 
   AccountCircle,
   Edit,
   Cancel,
@@ -51,7 +49,6 @@ import { getUserFromSources, clearAuthData } from "../utils/authUtils";
 function User() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [activeTab, setActiveTab] = useState(0);
   const [userProfileTab, setUserProfileTab] = useState(0); // Tab for authenticated user (Profile, Orders, Subscriptions, Settings)
   const [showPassword, setShowPassword] = useState(false);
@@ -266,7 +263,7 @@ function User() {
     }
   };
 
-  // Sidebar styling (reused for both authenticated and unauthenticated views)
+  // Sidebar styling (desktop only)
   const sidebarSx = {
     width: { md: 380, lg: 420 },
     flexShrink: 0,
@@ -289,15 +286,6 @@ function User() {
           ? "2px 0 8px rgba(0, 0, 0, 0.15)"
           : "2px 0 8px rgba(0, 0, 0, 0.4)",
       pointerEvents: "none",
-    },
-  };
-
-  const drawerSx = {
-    "& .MuiDrawer-paper": {
-      boxSizing: "border-box",
-      width: { xs: 320, sm: 380 },
-      backgroundColor: "transparent",
-      backgroundImage: "none",
     },
   };
 
@@ -533,19 +521,9 @@ function User() {
     const userEmail = user?.email || user?.user?.email || "N/A";
 
     return (
-      <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)" }}>
-        {/* Sidebar */}
-        {isMobile ? (
-          <Drawer
-            anchor="left"
-            open={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
-            ModalProps={{ keepMounted: true }}
-            sx={drawerSx}
-          >
-            {sidebarContent}
-          </Drawer>
-        ) : (
+      <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)", flexDirection: { xs: "column", md: "row" } }}>
+        {/* Sidebar - Desktop only */}
+        {!isMobile && (
           <Box sx={sidebarSx}>
             {sidebarContent}
           </Box>
@@ -561,22 +539,7 @@ function User() {
             overflow: "auto",
           }}
         >
-          {/* Mobile menu button */}
-          {isMobile && (
-            <IconButton
-              onClick={() => setSidebarOpen(true)}
-              sx={{
-                position: "absolute",
-                top: 16,
-                left: 16,
-                zIndex: 1,
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-
-          <Container maxWidth="lg" sx={{ width: "100%", mt: { xs: 4, sm: 0 } }}>
+          <Container maxWidth="lg" sx={{ width: "100%" }}>
             <Paper
               elevation={3}
               sx={{
@@ -1033,6 +996,28 @@ function User() {
               )}
             </Paper>
           </Container>
+
+          {/* Query Form - Mobile only, at bottom */}
+          {isMobile && (
+            <Box
+              sx={{
+                mt: 4,
+                mb: 2,
+                width: "100%",
+              }}
+            >
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  backgroundColor: (theme) => theme.palette.background.paper,
+                }}
+              >
+                {sidebarContent}
+              </Paper>
+            </Box>
+          )}
         </Box>
 
         {/* Cancel Confirmation Dialog */}
@@ -1064,19 +1049,9 @@ function User() {
   }
 
   return (
-    <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)" }}>
-      {/* Sidebar */}
-      {isMobile ? (
-        <Drawer
-          anchor="left"
-          open={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-          ModalProps={{ keepMounted: true }}
-          sx={drawerSx}
-        >
-          {sidebarContent}
-        </Drawer>
-      ) : (
+    <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)", flexDirection: { xs: "column", md: "row" } }}>
+      {/* Sidebar - Desktop only */}
+      {!isMobile && (
         <Box sx={sidebarSx}>
           {sidebarContent}
         </Box>
@@ -1087,26 +1062,12 @@ function User() {
         sx={{
           flexGrow: 1,
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           p: { xs: 2, sm: 4 },
         }}
       >
-        {/* Mobile menu button */}
-        {isMobile && (
-          <IconButton
-            onClick={() => setSidebarOpen(true)}
-            sx={{
-              position: "absolute",
-              top: 16,
-              left: 16,
-              zIndex: 1,
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
-
         <Container maxWidth="sm" sx={{ width: "100%" }}>
       <Paper
         elevation={3}
@@ -1281,6 +1242,29 @@ function User() {
         </Box>
       </Paper>
         </Container>
+
+        {/* Query Form - Mobile only, at bottom */}
+        {isMobile && (
+          <Box
+            sx={{
+              mt: 4,
+              mb: 2,
+              width: "100%",
+              maxWidth: "sm",
+            }}
+          >
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                borderRadius: 2,
+                backgroundColor: (theme) => theme.palette.background.paper,
+              }}
+            >
+              {sidebarContent}
+            </Paper>
+          </Box>
+        )}
       </Box>
     </Box>
   );

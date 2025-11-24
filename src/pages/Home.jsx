@@ -191,10 +191,14 @@ function Home() {
                 padding: { xs: "2rem", sm: "2.5rem", md: "3rem" },
                 backgroundColor: (theme) =>
                   theme.palette.mode === "dark"
-                    ? "rgba(0, 0, 0, 0.3)"
-                    : "rgba(255, 255, 255, 0.2)",
+                    ? "rgba(0, 0, 0, 0.2)"
+                    : "rgba(255, 255, 255, 0.15)",
                 borderRadius: 2,
                 backdropFilter: "blur(10px)",
+                border: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "1px solid rgba(255, 255, 255, 0.1)"
+                    : "1px solid rgba(0, 0, 0, 0.1)",
               }}
             >
               {/* Title */}
