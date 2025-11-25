@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API } from "../../../api";
 
 const initialState = {
   services: [],
@@ -8,7 +9,7 @@ const initialState = {
   error: null,
 };
 
-const servicesAPI = "http://localhost:3001/services";
+const servicesAPI = API.services;
 
 export const fetchServices = createAsyncThunk(
   "services/fetchServices",
@@ -50,4 +51,3 @@ const servicesSlice = createSlice({
 export const { setSelectedService, clearSelectedService } =
   servicesSlice.actions;
 export default servicesSlice.reducer;
-
