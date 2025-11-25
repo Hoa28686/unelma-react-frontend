@@ -90,10 +90,6 @@ function BlogDetail() {
     }
   };
 
-  const handleChange = (e) => {
-    setSortOrder(e.target.value);
-  };
-
   const textFieldStyles = {
     color: (theme) => theme.palette.text.primary,
     backgroundColor: (theme) => theme.palette.background.paper,
@@ -360,7 +356,7 @@ function BlogDetail() {
                 <Box sx={{ mt: 4 }}>
                   <Select
                     value={sortOrder}
-                    onChange={handleChange}
+                    onChange={(e) => setSortOrder(e.target.value)}
                     sx={{ borderRadius: 3, p: 0 }}
                   >
                     <MenuItem value="newest">Newest</MenuItem>

@@ -14,6 +14,8 @@ import {
   InputAdornment,
   IconButton,
   Pagination,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -31,6 +33,7 @@ function Blog() {
   const { blogs, loading, error } = useSelector((state) => state.blogs);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
     if (blogs.length === 0) {
@@ -44,26 +47,42 @@ function Blog() {
 
   // Filter blogs based on search query
   const filteredBlogs = useMemo(() => {
-    if (!searchQuery.trim()) return blogs;
-
-    const query = searchQuery.toLowerCase().trim();
-    const searchTerms = query.split(" ").filter((term) => term.length > 0);
-
     return blogs.filter((blog) => {
+      // category filter
+      const categoryMatch =
+        selectedCategory === "all"
+          ? true
+          : selectedCategory === "others"
+            ? !blog.category
+            : blog.category === selectedCategory;
+      if (!categoryMatch) return false;
+
+      // search  filter
+      if (!searchQuery.trim()) return true;
+
+      // const query = searchQuery.toLowerCase().trim();
+      // const searchTerms = query.split(" ").filter((term) => term.length > 0);
+
+      const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
+
       const searchableText = [
         blog.title,
         blog.content,
         blog.author,
         blog.category,
-        typeof blog.author === "object" ? blog.author_name : blog.author,
+        blog.author?.name,
       ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
 
-      return searchTerms.some((term) => searchableText.includes(term));
+      const searchMatch = searchTerms.some((term) =>
+        searchableText.includes(term)
+      );
+
+      return searchMatch && categoryMatch;
     });
-  }, [blogs, searchQuery]);
+  }, [blogs, searchQuery, selectedCategory]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE);
@@ -99,6 +118,10 @@ function Blog() {
   const handleBack = () => {
     navigate("/");
   };
+
+  const categories = [
+    ...new Set(blogs.map((b) => (b.category === null ? "others" : b.category))),
+  ];
 
   if (loading || blogs.length === 0) {
     return (
@@ -260,6 +283,31 @@ function Blog() {
           )}
         </Box>
 
+        {/* Category Filter */}
+        <Select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          sx={{
+            minWidth: 180,
+            borderRadius: 3,
+            p: 0,
+            mb: 5,
+          }}
+        >
+          <MenuItem value="all">All categories</MenuItem>
+          {categories
+            .filter((cat) => cat !== "others")
+            .map((cat, index) => (
+              <MenuItem
+                key={index}
+                value={cat}
+                sx={{ textTransform: "capitalize" }}
+              >
+                {cat}
+              </MenuItem>
+            ))}
+          <MenuItem value="others">Others</MenuItem>
+        </Select>
         <Box
           sx={{
             width: "100%",
