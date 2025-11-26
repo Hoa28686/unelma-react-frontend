@@ -6,7 +6,18 @@ import {
   fetchBlogs,
   setSelectedBlog,
 } from "../../store/slices/blogs/blogsSlice";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
@@ -15,17 +26,21 @@ import { useAuth } from "../../context/AuthContext";
 
 function BlogDetail() {
   const { blogId } = useParams();
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const dispatch = useDispatch();
-  const [comment, setComment] = useState("");
+  const [newComment, setNewComment] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [sortedComment, setSortedComment] = useState([]);
   const { selectedBlog, loading, error, blogs } = useSelector(
     (state) => state.blogs
   );
+
   useEffect(() => {
     if (blogs.length === 0) {
       dispatch(fetchBlogs());
     }
   }, [blogs, dispatch]);
+
   useEffect(() => {
     if (blogId && blogs.length > 0) {
       const foundBlog = blogs.find((b) => b.id == blogId);
@@ -37,13 +52,26 @@ function BlogDetail() {
     }
   }, [blogId, blogs, dispatch]);
 
+  useEffect(() => {
+    if (selectedBlog?.comments.length > 0) {
+      const sorted = [...selectedBlog.comments];
+
+      sortOrder === "newest"
+        ? sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        : sorted.sort(
+            (a, b) => new Date(a.created_at) - new Date(b.created_at)
+          );
+
+      setSortedComment(sorted);
+    }
+  }, [sortOrder, selectedBlog]);
   const handlePostComment = async () => {
     const postCommentUrl = `${API.blogs}/${blogId}/comments`;
     try {
       await axios.post(
         postCommentUrl,
         {
-          content: comment,
+          content: newComment,
         },
         {
           headers: {
@@ -56,12 +84,29 @@ function BlogDetail() {
       // Refetch blog with comments to get proper user objects
       const res = await axios.get(`${API.blogs}/${blogId}`);
       dispatch(setSelectedBlog(res.data.data));
-      setComment("");
+      setNewComment("");
     } catch (e) {
       console.error(e);
     }
   };
 
+  const textFieldStyles = {
+    color: (theme) => theme.palette.text.primary,
+    backgroundColor: (theme) => theme.palette.background.paper,
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: (theme) =>
+        theme.palette.mode === "dark"
+          ? "rgba(255, 255, 255, 0.2)"
+          : "rgba(0, 0, 0, 0.23)",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: (theme) => theme.palette.primary.main,
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: (theme) => theme.palette.primary.main,
+      borderWidth: "2px",
+    },
+  };
   if (loading || blogs.length === 0) {
     return (
       <Box
@@ -115,6 +160,7 @@ function BlogDetail() {
       </Box>
     );
   }
+
   // main component render
   return (
     <>
@@ -152,7 +198,12 @@ function BlogDetail() {
           >
             <Box
               component="img"
-              src={getImageUrl(selectedBlog?.featured_image_url || selectedBlog?.featured_image)}
+              src={
+                getImageUrl(
+                  selectedBlog?.featured_image_url ||
+                    selectedBlog?.featured_image
+                ) || selectedBlog.image_url
+              }
               alt={selectedBlog.title}
               sx={{
                 width: "100%",
@@ -245,90 +296,73 @@ function BlogDetail() {
                   mb: 3,
                 }}
               />
-              <Box sx={{ mt: 2 }}>
+              {user ? (
+                <Box sx={{ mt: 2 }}>
+                  <Typography
+                    variant="h6"
+                    component="h3"
+                    sx={{
+                      fontWeight: 600,
+                      color: (theme) => theme.palette.text.primary,
+                      mb: 2,
+                      fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                    }}
+                  >
+                    Leave a comment
+                  </Typography>
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <Avatar
+                      alt={user.name}
+                      src={user.profile_picture || "/logo.webp"}
+                      sx={{
+                        width: { xs: 32, sm: 40 },
+                        height: { xs: 32, sm: 40 },
+                      }}
+                    />
+
+                    <TextField
+                      multiline
+                      minRows={1}
+                      fullWidth
+                      sx={textFieldStyles}
+                      placeholder="💭 Add a comment..."
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                    />
+                    <Button
+                      type="button"
+                      onClick={handlePostComment}
+                      aria-label="Post comment"
+                      disabled={newComment.trim() === ""}
+                    >
+                      <SendIcon />
+                    </Button>
+                  </Stack>
+                </Box>
+              ) : (
                 <Typography
-                  variant="h6"
+                  variant="subheading1"
                   component="h3"
                   sx={{
-                    fontWeight: 600,
                     color: (theme) => theme.palette.text.primary,
-                    mb: 2,
+                    my: 2,
                     fontSize: { xs: "1.125rem", sm: "1.25rem" },
                   }}
                 >
-                  Leave a comment
+                  Log in to leave a comment.
                 </Typography>
-                <TextField
-                  multiline
-                  minRows={3}
-                  fullWidth
-                  InputProps={{
-                    sx: {
-                      color: (theme) => theme.palette.text.primary,
-                      backgroundColor: (theme) =>
-                        theme.palette.background.paper,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: (theme) =>
-                          theme.palette.mode === "dark"
-                            ? "rgba(255, 255, 255, 0.2)"
-                            : "rgba(0, 0, 0, 0.23)",
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: (theme) => theme.palette.primary.main,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: (theme) => theme.palette.primary.main,
-                        borderWidth: "2px",
-                      },
-                    },
-                  }}
-                  InputLabelProps={{
-                    sx: {
-                      color: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? "rgba(255, 255, 255, 0.7)"
-                          : "rgba(0, 0, 0, 0.6)",
-                    },
-                  }}
-                  placeholder="Write your comment..."
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-                <Button
-                  variant="contained"
-                  sx={{
-                    mt: 2,
-                    backgroundColor: (theme) => theme.palette.primary.main,
-                    color: "#FFFFFF",
-                    fontWeight: 600,
-                    textTransform: "none",
-                    px: 3,
-                    py: 1,
-                    "&:focus": {
-                      outline: (theme) =>
-                        `2px solid ${theme.palette.primary.main}`,
-                      outlineOffset: "2px",
-                      boxShadow: "none",
-                    },
-                    "&:focus-visible": {
-                      outline: (theme) =>
-                        `2px solid ${theme.palette.primary.main}`,
-                      outlineOffset: "2px",
-                      boxShadow: "none",
-                    },
-                    "&:hover": {
-                      backgroundColor: (theme) =>
-                        theme.palette.primary.dark || "#2563EB",
-                    },
-                  }}
-                  onClick={handlePostComment}
-                >
-                  Post Comment
-                </Button>
-              </Box>
+              )}
               {selectedBlog.comments.length > 0 && (
                 <Box sx={{ mt: 4 }}>
-                  {selectedBlog.comments.map((c, index) => (
+                  <Select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    sx={{ borderRadius: 3, p: 0 }}
+                  >
+                    <MenuItem value="newest">Newest</MenuItem>
+                    <MenuItem value="oldest">Oldest</MenuItem>
+                  </Select>
+                  {sortedComment.map((c, index) => (
                     <Box
                       key={index}
                       sx={{
@@ -336,25 +370,17 @@ function BlogDetail() {
                         gap: 2,
                         my: 3,
                         padding: 2,
-                        backgroundColor: (theme) =>
-                          theme.palette.background.paper,
-                        borderRadius: 2,
-                        border: (theme) =>
-                          `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
                       }}
                     >
-                      <Box
-                        component="img"
+                      <Avatar
+                        alt={c.user.name}
                         src={c.user.profile_picture || "/logo.webp"}
-                        alt="user avatar"
                         sx={{
-                          borderRadius: "50%",
                           width: { xs: 32, sm: 40 },
                           height: { xs: 32, sm: 40 },
-                          objectFit: "cover",
-                          flexShrink: 0,
                         }}
                       />
+
                       <Box
                         sx={{
                           display: "flex",
