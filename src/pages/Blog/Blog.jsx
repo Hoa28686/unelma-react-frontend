@@ -16,6 +16,9 @@ import {
   Pagination,
   Select,
   MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Stack,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -25,6 +28,9 @@ import { useNavigate } from "react-router";
 import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useAuth } from "../../context/AuthContext";
 
 const ITEMS_PER_PAGE = 6; // Show 6 blogs per page
 
@@ -35,6 +41,11 @@ function Blog() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const favorites = useSelector((state) => state.favorites.favorites);
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+  const { user } = useAuth();
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [sortedBlogs, setSortedBlogs] = useState([]);
 
   useEffect(() => {
     if (blogs.length === 0) {
@@ -58,12 +69,18 @@ function Blog() {
             : blog.category === selectedCategory;
       if (!categoryMatch) return false;
 
+      //favorite filter
+      let favoriteMatch = true;
+      if (onlyFavorites && user) {
+        favoriteMatch = favorites.some(
+          (fav) =>
+            fav.user_id == user.id &&
+            fav.favorite_type === "blog" &&
+            fav.item_id == blog.id
+        );
+      }
+
       // search  filter
-      if (!searchQuery.trim()) return true;
-
-      // const query = searchQuery.toLowerCase().trim();
-      // const searchTerms = query.split(" ").filter((term) => term.length > 0);
-
       const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
 
       const searchableText = [
@@ -77,13 +94,15 @@ function Blog() {
         .join(" ")
         .toLowerCase();
 
-      const searchMatch = searchTerms.some((term) =>
-        searchableText.includes(term)
-      );
+      const searchMatch =
+        searchTerms.length === 0
+          ? true
+          : searchTerms.some((term) => searchableText.includes(term));
 
-      return searchMatch && categoryMatch;
+      //sort blogs
+      if (sortOrder) return searchMatch && categoryMatch && favoriteMatch;
     });
-  }, [blogs, searchQuery, selectedCategory]);
+  }, [blogs, searchQuery, selectedCategory, onlyFavorites, favorites, user]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE);
@@ -123,6 +142,15 @@ function Blog() {
   const categories = [
     ...new Set(blogs.map((b) => (b.category === null ? "others" : b.category))),
   ];
+
+  const handleFavoriteFilter = (e) => {
+    if (!user) {
+      alert("Log in to filter favorites");
+      return;
+    }
+
+    setOnlyFavorites(e.target.checked);
+  };
 
   if (loading || blogs.length === 0) {
     return (
@@ -284,31 +312,67 @@ function Blog() {
           )}
         </Box>
 
-        {/* Category Filter */}
-        <Select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          sx={{
-            minWidth: 180,
-            borderRadius: 3,
-            p: 0,
-            mb: 5,
-          }}
+        <Stack
+          spacing={2}
+          direction={{ xs: "column", sm: "row" }}
+          sx={{ mb: 5 }}
         >
-          <MenuItem value="all">All categories</MenuItem>
-          {categories
-            .filter((cat) => cat !== "others")
-            .map((cat, index) => (
-              <MenuItem
-                key={index}
-                value={cat}
-                sx={{ textTransform: "capitalize" }}
-              >
-                {cat}
-              </MenuItem>
-            ))}
-          <MenuItem value="others">Others</MenuItem>
-        </Select>
+          {/* Category Filter */}
+          <Select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            sx={{
+              minWidth: 180,
+              borderRadius: 3,
+              p: 0,
+              mb: 2,
+            }}
+          >
+            <MenuItem value="all">All categories</MenuItem>
+            {categories
+              .filter((cat) => cat !== "others")
+              .map((cat, index) => (
+                <MenuItem
+                  key={index}
+                  value={cat}
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  {cat}
+                </MenuItem>
+              ))}
+            <MenuItem value="others">Others</MenuItem>
+          </Select>
+
+          {/* Sort by created time, most favorites */}
+          <Select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            sx={{ borderRadius: 3, p: 0 }}
+          >
+            <Typography component="span" sx={{ pl: 1 }}>
+              Sort by:{" "}
+            </Typography>
+            <MenuItem value="newest">Newest</MenuItem>
+            <MenuItem value="oldest">Oldest</MenuItem>
+            <MenuItem value="mostFav">Most Favorited</MenuItem>
+          </Select>
+          {/* Favorite Filter */}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={onlyFavorites}
+                onChange={handleFavoriteFilter}
+                icon={<FavoriteBorderIcon sx={{ color: "#ED310C" }} />}
+                checkedIcon={<FavoriteIcon sx={{ color: "#ED310C" }} />}
+              />
+            }
+            label="Only show my favorites"
+            sx={{
+              mb: 5,
+              color: (theme) => theme.palette.text.primary,
+            }}
+          />
+        </Stack>
         <Box
           sx={{
             width: "100%",
@@ -398,7 +462,7 @@ function Blog() {
                   }
                   sx={{ pb: 1, px: 0, cursor: "pointer" }}
                 />
-                <Count type="blog" item={blog} />
+                <FavoriteButtonAndCount type="blog" item={blog} />
                 <CardContent sx={{ mb: 0, px: 0, pt: 1 }}>
                   <Typography
                     variant="body1"
