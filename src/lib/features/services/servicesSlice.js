@@ -20,7 +20,7 @@ export const fetchServices = createAsyncThunk(
   "services/fetchServices",
   async () => {
     const res = await axios.get(servicesAPI);
-    return res.data;
+    return res.data.data;
   }
 );
 

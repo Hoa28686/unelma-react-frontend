@@ -31,25 +31,29 @@ const servicesData = [
   {
     id: 2,
     name: "Data Management",
-    description: "We at Unelma Platforms can help you with different types of data management products and services.",
+    description:
+      "We at Unelma Platforms can help you with different types of data management products and services.",
     icon: StorageIcon,
   },
   {
     id: 3,
     name: "Data Science",
-    description: "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services.",
+    description:
+      "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services.",
     icon: ScienceIcon,
   },
   {
     id: 4,
     name: "Cloud Service",
-    description: "We are masters of cloud services as we have developed one of the platforms called \"Unelma Cloud\".",
+    description:
+      'We are masters of cloud services as we have developed one of the platforms called "Unelma Cloud".',
     icon: CloudIcon,
   },
   {
     id: 5,
     name: "AI and machine learning",
-    description: "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning.",
+    description:
+      "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning.",
     icon: PsychologyIcon,
   },
 ];
@@ -117,7 +121,6 @@ function Services() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-
 
   return (
     <Box
@@ -271,10 +274,11 @@ function Services() {
                       navigate(`/services/${serviceId}`);
                     }}
                     sx={{
-                      backgroundColor: (theme) => theme.palette.background.paper,
-                      border: (theme) => 
-                        theme.palette.mode === 'dark' 
-                          ? "1px solid rgba(255, 255, 255, 0.1)" 
+                      backgroundColor: (theme) =>
+                        theme.palette.background.paper,
+                      border: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "1px solid rgba(255, 255, 255, 0.1)"
                           : "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: 2,
                       transition: "all 0.3s ease",
@@ -363,11 +367,13 @@ function Services() {
                       border: "1px solid transparent",
                       transition: "all 0.3s ease",
                       "&:focus": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                       },
                       "&:focus-visible": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                       },
                       "&:hover": {
@@ -394,32 +400,38 @@ function Services() {
                         border: "1px solid transparent",
                         boxShadow: "none !important",
                         "&.Mui-selected": {
-                          backgroundColor: (theme) => theme.palette.primary.main,
+                          backgroundColor: (theme) =>
+                            theme.palette.primary.main,
                           color: "#FFFFFF",
-                          border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                          border: (theme) =>
+                            `1px solid ${theme.palette.primary.main}`,
                           boxShadow: "none !important",
                           "&:hover": {
                             backgroundColor: "#C85A2E",
                           },
                           "&:focus": {
-                            outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                            outline: (theme) =>
+                              `2px solid ${theme.palette.primary.main} !important`,
                             outlineOffset: "2px",
                             boxShadow: "none !important",
                           },
                           "&:focus-visible": {
-                            outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                            outline: (theme) =>
+                              `2px solid ${theme.palette.primary.main} !important`,
                             outlineOffset: "2px",
                             boxShadow: "none !important",
                           },
                         },
                         "&:focus": {
-                          outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                          outline: (theme) =>
+                            `2px solid ${theme.palette.primary.main} !important`,
                           outlineOffset: "2px",
                           boxShadow: "none !important",
                           border: "1px solid transparent",
                         },
                         "&:focus-visible": {
-                          outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                          outline: (theme) =>
+                            `2px solid ${theme.palette.primary.main} !important`,
                           outlineOffset: "2px",
                           boxShadow: "none !important",
                           border: "1px solid transparent",
@@ -445,11 +457,13 @@ function Services() {
                       border: "1px solid transparent",
                       transition: "all 0.3s ease",
                       "&:focus": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                       },
                       "&:focus-visible": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                       },
                       "&:hover": {
@@ -475,4 +489,3 @@ function Services() {
 }
 
 export default Services;
-

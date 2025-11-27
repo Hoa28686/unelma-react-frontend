@@ -24,6 +24,7 @@ import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
 import { getImageUrl } from "../../helpers/helpers";
+import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 
 const ITEMS_PER_PAGE = 9; // Show 9 products per page
 
@@ -247,28 +248,29 @@ function Products() {
                 position: "relative",
               }}
             >
-              <CardActions
+              <Box
                 sx={{
                   flexDirection: "column",
-
                   alignItems: "flex-start",
                   p: 0,
                 }}
-                onClick={() => handleProductClick(p.id)}
               >
                 <CardMedia
                   component="img"
+                  onClick={() => handleProductClick(p.id)}
                   src={getImageUrl(p.image_local_url || p.image_url || p.image)}
                   alt={p.name}
                   sx={{
                     width: "100%",
                     height: { xs: 220, md: 250 },
                     objectFit: "cover",
+                    cursor: "point",
                     objectPosition: "center",
                     backgroundColor: (theme) => theme.palette.background.paper,
                   }}
                 />
                 <CardHeader
+                  onClick={() => handleProductClick(p.id)}
                   title={
                     p.name.length > 50 ? (
                       <Typography variant="h6">{`${p.name.substring(
@@ -280,7 +282,9 @@ function Products() {
                     )
                   }
                   subheader={p.category}
+                  sx={{ cursor: "pointer" }}
                 />
+                <FavoriteButtonAndCount type="product" item={p} />
                 <CardContent>
                   <RatingDisplay rating={p.rating} />
                   <PriceDisplay price={p.price} />
@@ -295,7 +299,7 @@ function Products() {
                 >
                   <AddToCart product={p} />
                 </Box>
-              </CardActions>
+              </Box>
             </Card>
           ))}
 
@@ -321,11 +325,13 @@ function Products() {
                   border: "1px solid transparent",
                   transition: "all 0.3s ease",
                   "&:focus": {
-                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    outline: (theme) =>
+                      `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                   },
                   "&:focus-visible": {
-                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    outline: (theme) =>
+                      `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                   },
                   "&:hover": {
@@ -354,30 +360,35 @@ function Products() {
                     "&.Mui-selected": {
                       backgroundColor: (theme) => theme.palette.primary.main,
                       color: "#FFFFFF",
-                      border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                      border: (theme) =>
+                        `1px solid ${theme.palette.primary.main}`,
                       boxShadow: "none !important",
                       "&:hover": {
                         backgroundColor: "#C85A2E",
                       },
                       "&:focus": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main} !important`,
                         outlineOffset: "2px",
                         boxShadow: "none !important",
                       },
                       "&:focus-visible": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main} !important`,
                         outlineOffset: "2px",
                         boxShadow: "none !important",
                       },
                     },
                     "&:focus": {
-                      outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                      outline: (theme) =>
+                        `2px solid ${theme.palette.primary.main} !important`,
                       outlineOffset: "2px",
                       boxShadow: "none !important",
                       border: "1px solid transparent",
                     },
                     "&:focus-visible": {
-                      outline: (theme) => `2px solid ${theme.palette.primary.main} !important`,
+                      outline: (theme) =>
+                        `2px solid ${theme.palette.primary.main} !important`,
                       outlineOffset: "2px",
                       boxShadow: "none !important",
                       border: "1px solid transparent",
@@ -403,11 +414,13 @@ function Products() {
                   border: "1px solid transparent",
                   transition: "all 0.3s ease",
                   "&:focus": {
-                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    outline: (theme) =>
+                      `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                   },
                   "&:focus-visible": {
-                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    outline: (theme) =>
+                      `2px solid ${theme.palette.primary.main}`,
                     outlineOffset: "2px",
                   },
                   "&:hover": {

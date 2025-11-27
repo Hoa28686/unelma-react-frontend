@@ -23,6 +23,8 @@ import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
 import { API } from "../../api";
 import { useAuth } from "../../context/AuthContext";
+import FavoriteButton from "../../components/FavoriteButton";
+import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 
 function BlogDetail() {
   const { blogId } = useParams();
@@ -176,277 +178,267 @@ function BlogDetail() {
           position: "relative",
           width: "100%",
           minHeight: "100vh",
+          py: { xs: 3, sm: 4, md: 5 },
+          gap: 3,
           backgroundColor: (theme) => theme.palette.background.default,
         }}
       >
         {/* Content */}
+
         <Box
           sx={{
-            position: "relative",
-            minHeight: "100vh",
-            width: "100%",
+            width: { xs: "95%", sm: "90%", md: "80%", lg: "60%" },
+            margin: "auto",
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            py: { xs: 3, sm: 4, md: 5 },
             gap: 3,
           }}
         >
           <Box
+            component="img"
+            src={
+              getImageUrl(
+                selectedBlog?.featured_image_url || selectedBlog?.featured_image
+              ) || selectedBlog.image_url
+            }
+            alt={selectedBlog.title}
             sx={{
-              width: { xs: "95%", sm: "90%", md: "80%", lg: "60%" },
-              margin: "auto",
-              display: "flex",
-              flexDirection: "column",
-              gap: 3,
+              width: "100%",
+              borderRadius: 2,
+              objectFit: "cover",
+              maxHeight: "500px",
+              backgroundColor: (theme) => theme.palette.background.paper,
+            }}
+          />
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{
+              fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+              fontWeight: 700,
+              color: (theme) => theme.palette.text.primary,
+              textAlign: "center",
+              width: "100%",
             }}
           >
-            <Box
-              component="img"
-              src={
-                getImageUrl(
-                  selectedBlog?.featured_image_url ||
-                    selectedBlog?.featured_image
-                ) || selectedBlog.image_url
-              }
-              alt={selectedBlog.title}
-              sx={{
-                width: "100%",
-                borderRadius: 2,
-                objectFit: "cover",
-                maxHeight: "500px",
-                backgroundColor: (theme) => theme.palette.background.paper,
-              }}
-            />
-            <Typography
-              variant="h4"
-              component="h1"
-              sx={{
-                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
-                fontWeight: 700,
-                color: (theme) => theme.palette.text.primary,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              {selectedBlog.title}
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{
+            {selectedBlog.title}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              color: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255, 255, 255, 0.7)"
+                  : "rgba(0, 0, 0, 0.6)",
+              textAlign: "center",
+              width: "100%",
+              fontSize: { xs: "0.875rem", sm: "1rem" },
+            }}
+          >
+            {selectedBlog.author_name} •{" "}
+            {timeConversion(selectedBlog.created_at)}
+          </Typography>
+          <Box sx={{ alignSelf: "center" }}>
+            <FavoriteButtonAndCount type="blog" item={selectedBlog} />
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              "& p": {
+                fontSize: { xs: "1rem", sm: "1.125rem" },
+                fontWeight: 400,
                 color: (theme) =>
                   theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.7)"
-                    : "rgba(0, 0, 0, 0.6)",
-                mb: 2,
+                    ? "rgba(255, 255, 255, 0.95)"
+                    : "rgba(0, 0, 0, 0.87)",
+                lineHeight: 1.8,
                 textAlign: "left",
-                width: "100%",
-                fontSize: { xs: "0.875rem", sm: "1rem" },
-              }}
-            >
-              {selectedBlog.author_name} •{" "}
-              {timeConversion(selectedBlog.created_at)}
-            </Typography>
-            <Box
-              sx={{
-                width: "100%",
-                "& p": {
-                  fontSize: { xs: "1rem", sm: "1.125rem" },
-                  fontWeight: 400,
-                  color: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.95)"
-                      : "rgba(0, 0, 0, 0.87)",
-                  lineHeight: 1.8,
-                  textAlign: "left",
-                  marginBottom: "1.5rem",
-                  marginTop: 0,
-                  "&:last-child": {
-                    marginBottom: 0,
-                  },
+                marginBottom: "1.5rem",
+                marginTop: 0,
+                "&:last-child": {
+                  marginBottom: 0,
                 },
+              },
+            }}
+          >
+            {selectedBlog.content.includes("\n") ? (
+              selectedBlog.content
+                .split("\n")
+                .map((paragraph, index) => (
+                  <p key={index}>{paragraph.trim()}</p>
+                ))
+            ) : (
+              <p>{selectedBlog.content}</p>
+            )}
+          </Box>
+          <Box
+            sx={{ width: "100%", textAlign: "left", alignSelf: "flex-start" }}
+          >
+            <Typography
+              variant="h6"
+              component="h2"
+              sx={{
+                fontWeight: 600,
+                color: (theme) => theme.palette.text.primary,
+                mb: 2,
+                fontSize: { xs: "1.25rem", sm: "1.5rem" },
               }}
             >
-              {selectedBlog.content.includes("\n") ? (
-                selectedBlog.content
-                  .split("\n")
-                  .map((paragraph, index) => (
-                    <p key={index}>{paragraph.trim()}</p>
-                  ))
-              ) : (
-                <p>{selectedBlog.content}</p>
-              )}
-            </Box>
-            <Box
-              sx={{ width: "100%", textAlign: "left", alignSelf: "flex-start" }}
-            >
+              Comments
+            </Typography>
+            <Divider
+              sx={{
+                borderColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.2)"
+                    : "rgba(0, 0, 0, 0.12)",
+                mb: 3,
+              }}
+            />
+            {user ? (
+              <Box sx={{ mt: 2 }}>
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  sx={{
+                    fontWeight: 600,
+                    color: (theme) => theme.palette.text.primary,
+                    mb: 2,
+                    fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                  }}
+                >
+                  Leave a comment
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Avatar
+                    alt={user.name}
+                    src={user.profile_picture || "/logo.webp"}
+                    sx={{
+                      width: { xs: 32, sm: 40 },
+                      height: { xs: 32, sm: 40 },
+                    }}
+                  />
+
+                  <TextField
+                    multiline
+                    minRows={1}
+                    fullWidth
+                    sx={textFieldStyles}
+                    placeholder="💭 Add a comment..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    onClick={handlePostComment}
+                    aria-label="Post comment"
+                    disabled={newComment.trim() === ""}
+                  >
+                    <SendIcon />
+                  </Button>
+                </Stack>
+              </Box>
+            ) : (
               <Typography
-                variant="h6"
-                component="h2"
+                variant="subheading1"
+                component="h3"
                 sx={{
-                  fontWeight: 600,
                   color: (theme) => theme.palette.text.primary,
-                  mb: 2,
-                  fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                  my: 2,
+                  fontSize: { xs: "1.125rem", sm: "1.25rem" },
                 }}
               >
-                Comments
+                Log in to leave a comment.
               </Typography>
-              <Divider
-                sx={{
-                  borderColor: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.2)"
-                      : "rgba(0, 0, 0, 0.12)",
-                  mb: 3,
-                }}
-              />
-              {user ? (
-                <Box sx={{ mt: 2 }}>
-                  <Typography
-                    variant="h6"
-                    component="h3"
+            )}
+            {selectedBlog?.comments?.length > 0 && (
+              <Box sx={{ mt: 4 }}>
+                <Select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
+                  sx={{ borderRadius: 3, p: 0 }}
+                >
+                  <MenuItem value="newest">Newest</MenuItem>
+                  <MenuItem value="oldest">Oldest</MenuItem>
+                </Select>
+                {sortedComment.map((c, index) => (
+                  <Box
+                    key={index}
                     sx={{
-                      fontWeight: 600,
-                      color: (theme) => theme.palette.text.primary,
-                      mb: 2,
-                      fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                      display: "flex",
+                      gap: 2,
+                      my: 3,
+                      padding: 2,
                     }}
                   >
-                    Leave a comment
-                  </Typography>
-                  <Stack direction="row" spacing={2} alignItems="center">
                     <Avatar
-                      alt={user.name}
-                      src={user.profile_picture || "/logo.webp"}
+                      alt={c.user.name}
+                      src={c.user.profile_picture || "/logo.webp"}
                       sx={{
                         width: { xs: 32, sm: 40 },
                         height: { xs: 32, sm: 40 },
                       }}
                     />
 
-                    <TextField
-                      multiline
-                      minRows={1}
-                      fullWidth
-                      sx={textFieldStyles}
-                      placeholder="💭 Add a comment..."
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                    />
-                    <Button
-                      type="button"
-                      onClick={handlePostComment}
-                      aria-label="Post comment"
-                      disabled={newComment.trim() === ""}
-                    >
-                      <SendIcon />
-                    </Button>
-                  </Stack>
-                </Box>
-              ) : (
-                <Typography
-                  variant="subheading1"
-                  component="h3"
-                  sx={{
-                    color: (theme) => theme.palette.text.primary,
-                    my: 2,
-                    fontSize: { xs: "1.125rem", sm: "1.25rem" },
-                  }}
-                >
-                  Log in to leave a comment.
-                </Typography>
-              )}
-              {selectedBlog.comments.length > 0 && (
-                <Box sx={{ mt: 4 }}>
-                  <Select
-                    value={sortOrder}
-                    onChange={(e) => setSortOrder(e.target.value)}
-                    sx={{ borderRadius: 3, p: 0 }}
-                  >
-                    <MenuItem value="newest">Newest</MenuItem>
-                    <MenuItem value="oldest">Oldest</MenuItem>
-                  </Select>
-                  {sortedComment.map((c, index) => (
                     <Box
-                      key={index}
                       sx={{
                         display: "flex",
-                        gap: 2,
-                        my: 3,
-                        padding: 2,
+                        flexDirection: "column",
+                        gap: 1,
+                        flex: 1,
                       }}
                     >
-                      <Avatar
-                        alt={c.user.name}
-                        src={c.user.profile_picture || "/logo.webp"}
+                      <Typography
+                        variant="body1"
                         sx={{
-                          width: { xs: 32, sm: 40 },
-                          height: { xs: 32, sm: 40 },
-                        }}
-                      />
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          flex: 1,
+                          fontWeight: 600,
+                          color: (theme) => theme.palette.text.primary,
                         }}
                       >
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            fontWeight: 600,
-                            color: (theme) => theme.palette.text.primary,
-                          }}
-                        >
-                          {c.user.name}
-                          <Box
-                            component="span"
-                            sx={{
-                              fontSize: "0.875rem",
-                              color: (theme) =>
-                                theme.palette.mode === "dark"
-                                  ? "rgba(255, 255, 255, 0.7)"
-                                  : "rgba(0, 0, 0, 0.6)",
-                              ml: 1,
-                              fontWeight: 400,
-                            }}
-                          >
-                            {timeConversion(c.created_at)}
-                          </Box>
-                        </Typography>
+                        {c.user.name}
                         <Box
+                          component="span"
                           sx={{
-                            "& p": {
-                              fontSize: "0.9375rem",
-                              color: (theme) =>
-                                theme.palette.mode === "dark"
-                                  ? "rgba(255, 255, 255, 0.9)"
-                                  : "rgba(0, 0, 0, 0.87)",
-                              lineHeight: 1.8,
-                              margin: 0,
-                            },
+                            fontSize: "0.875rem",
+                            color: (theme) =>
+                              theme.palette.mode === "dark"
+                                ? "rgba(255, 255, 255, 0.7)"
+                                : "rgba(0, 0, 0, 0.6)",
+                            ml: 1,
+                            fontWeight: 400,
                           }}
                         >
-                          {c.content.includes("\n") ? (
-                            c.content
-                              .split("\n")
-                              .map((paragraph, index) => (
-                                <p key={index}>{paragraph.trim()}</p>
-                              ))
-                          ) : (
-                            <p>{c.content}</p>
-                          )}
+                          {timeConversion(c.created_at)}
                         </Box>
+                      </Typography>
+                      <Box
+                        sx={{
+                          "& p": {
+                            fontSize: "0.9375rem",
+                            color: (theme) =>
+                              theme.palette.mode === "dark"
+                                ? "rgba(255, 255, 255, 0.9)"
+                                : "rgba(0, 0, 0, 0.87)",
+                            lineHeight: 1.8,
+                            margin: 0,
+                          },
+                        }}
+                      >
+                        {c.content.includes("\n") ? (
+                          c.content
+                            .split("\n")
+                            .map((paragraph, index) => (
+                              <p key={index}>{paragraph.trim()}</p>
+                            ))
+                        ) : (
+                          <p>{c.content}</p>
+                        )}
                       </Box>
                     </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
+                  </Box>
+                ))}
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

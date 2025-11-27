@@ -492,7 +492,6 @@ function User() {
       // Show success message
     }
   };
-  console.log(authContextUser.profile_picture);
 
   const handleCancelOrder = (orderId) => {
     setItemToCancel(orderId);

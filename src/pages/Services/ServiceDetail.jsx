@@ -27,7 +27,11 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import { commonButtonStyles } from "../../constants/styles";
 import { useAuth } from "../../context/AuthContext";
 import { createCheckoutSession } from "../../lib/api/paymentService";
-import { getUserFromSources, isUserAuthenticated as checkIsUserAuthenticated } from "../../utils/authUtils";
+import {
+  getUserFromSources,
+  isUserAuthenticated as checkIsUserAuthenticated,
+} from "../../utils/authUtils";
+import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 
 // Service data with details
 const serviceDetails = {
@@ -35,7 +39,8 @@ const serviceDetails = {
     id: 1,
     name: "Cyber Security",
     icon: SecurityIcon,
-    description: "Cyber security is fundamental in today's day and age. We provide you with cyber security tools and services with a wide range of Open Web Application Security Project® toolbox that can help you and your company in security-related tasks efficiently and conveniently. Our comprehensive security solutions protect your digital assets from threats, vulnerabilities, and attacks while ensuring compliance with industry standards.",
+    description:
+      "Cyber security is fundamental in today's day and age. We provide you with cyber security tools and services with a wide range of Open Web Application Security Project® toolbox that can help you and your company in security-related tasks efficiently and conveniently. Our comprehensive security solutions protect your digital assets from threats, vulnerabilities, and attacks while ensuring compliance with industry standards.",
     plans: [
       {
         name: "Essential",
@@ -70,7 +75,8 @@ const serviceDetails = {
     id: 2,
     name: "Data Management",
     icon: StorageIcon,
-    description: "We at Unelma Platforms can help you with different types of data management products and services. Our solutions enable organizations to collect, store, organize, and analyze data efficiently. From database design to data warehousing, we provide end-to-end data management services that transform raw data into actionable insights. Our expertise includes data migration, data quality assurance, and implementing robust data governance frameworks.",
+    description:
+      "We at Unelma Platforms can help you with different types of data management products and services. Our solutions enable organizations to collect, store, organize, and analyze data efficiently. From database design to data warehousing, we provide end-to-end data management services that transform raw data into actionable insights. Our expertise includes data migration, data quality assurance, and implementing robust data governance frameworks.",
     plans: [
       {
         name: "Starter",
@@ -104,7 +110,8 @@ const serviceDetails = {
     id: 3,
     name: "Data Science",
     icon: ScienceIcon,
-    description: "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services. Our team of expert data scientists helps you extract meaningful insights from complex datasets using advanced statistical methods, machine learning algorithms, and predictive analytics. We transform your data into strategic business intelligence.",
+    description:
+      "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services. Our team of expert data scientists helps you extract meaningful insights from complex datasets using advanced statistical methods, machine learning algorithms, and predictive analytics. We transform your data into strategic business intelligence.",
     plans: [
       {
         name: "Analytics",
@@ -138,7 +145,8 @@ const serviceDetails = {
     id: 4,
     name: "Cloud Service",
     icon: CloudIcon,
-    description: "We are masters of cloud services as we have developed one of the platforms called \"Unelma Cloud\". Our cloud solutions provide scalable, secure, and cost-effective infrastructure for businesses of all sizes. From cloud migration to multi-cloud strategies, we help you leverage the power of cloud computing to enhance agility, reduce costs, and accelerate innovation. Experience seamless scalability and enterprise-grade security.",
+    description:
+      'We are masters of cloud services as we have developed one of the platforms called "Unelma Cloud". Our cloud solutions provide scalable, secure, and cost-effective infrastructure for businesses of all sizes. From cloud migration to multi-cloud strategies, we help you leverage the power of cloud computing to enhance agility, reduce costs, and accelerate innovation. Experience seamless scalability and enterprise-grade security.',
     plans: [
       {
         name: "Basic",
@@ -172,7 +180,8 @@ const serviceDetails = {
     id: 5,
     name: "AI and Machine Learning",
     icon: PsychologyIcon,
-    description: "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning. Our AI services help businesses automate processes, enhance decision-making, and create intelligent applications. From chatbots to recommendation systems, we build custom AI solutions that learn, adapt, and evolve with your business needs.",
+    description:
+      "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning. Our AI services help businesses automate processes, enhance decision-making, and create intelligent applications. From chatbots to recommendation systems, we build custom AI solutions that learn, adapt, and evolve with your business needs.",
     plans: [
       {
         name: "AI Starter",
@@ -218,14 +227,23 @@ function ServiceDetail() {
 
   // Check authentication from both AuthContext and Redux
   const { user: authContextUser, token: authContextToken } = useAuth();
-  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated, token: reduxToken } = useSelector((state) => state.auth);
-  
+  const {
+    user: reduxUser,
+    isAuthenticated: reduxIsAuthenticated,
+    token: reduxToken,
+  } = useSelector((state) => state.auth);
+
   // Get user from either system using utility
   const user = getUserFromSources(reduxUser, authContextUser);
-  
+
   // User is authenticated if they have a token or user data
-  const isUserAuthenticated = checkIsUserAuthenticated(reduxIsAuthenticated, reduxToken, authContextToken, user);
-  
+  const isUserAuthenticated = checkIsUserAuthenticated(
+    reduxIsAuthenticated,
+    reduxToken,
+    authContextToken,
+    user
+  );
+
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(null); // Track which plan is loading (plan name)
   const [paymentError, setPaymentError] = useState(null);
@@ -246,7 +264,9 @@ function ServiceDetail() {
     try {
       // Check if Stripe Price ID is available (required)
       if (!plan.stripePriceId) {
-        setPaymentError("This plan is not yet available for purchase. Please contact support.");
+        setPaymentError(
+          "This plan is not yet available for purchase. Please contact support."
+        );
         setPaymentLoading(null);
         return;
       }
@@ -386,6 +406,7 @@ function ServiceDetail() {
             >
               {service.name}
             </Typography>
+            <FavoriteButtonAndCount type="service" item={service} />
           </Box>
 
           {/* Main Content and Sidebar Layout */}
@@ -428,9 +449,9 @@ function ServiceDetail() {
                             theme.palette.mode === "light"
                               ? theme.palette.background.paper
                               : theme.palette.background.paper,
-                          border: (theme) => 
-                            theme.palette.mode === 'dark' 
-                              ? "1px solid rgba(255, 255, 255, 0.1)" 
+                          border: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "1px solid rgba(255, 255, 255, 0.1)"
                               : "1px solid rgba(0, 0, 0, 0.1)",
                           borderRadius: 2,
                           padding: { xs: "2rem", sm: "2.5rem" },
@@ -499,7 +520,8 @@ function ServiceDetail() {
                                   width: "8px",
                                   height: "8px",
                                   borderRadius: "50%",
-                                  backgroundColor: (theme) => theme.palette.primary.main,
+                                  backgroundColor: (theme) =>
+                                    theme.palette.primary.main,
                                   marginRight: 2,
                                 }}
                               />
@@ -507,7 +529,8 @@ function ServiceDetail() {
                                 variant="body1"
                                 sx={{
                                   fontSize: { xs: "0.875rem", sm: "1rem" },
-                                  color: (theme) => theme.palette.text.secondary,
+                                  color: (theme) =>
+                                    theme.palette.text.secondary,
                                 }}
                               >
                                 {feature}
@@ -521,7 +544,8 @@ function ServiceDetail() {
                           onClick={() => handleOrderNow(plan)}
                           disabled={paymentLoading === plan.name}
                           sx={{
-                            backgroundColor: (theme) => theme.palette.primary.main,
+                            backgroundColor: (theme) =>
+                              theme.palette.primary.main,
                             color: "#FFFFFF",
                             fontWeight: 100,
                             borderRadius: 2,
@@ -530,24 +554,30 @@ function ServiceDetail() {
                             border: "1px solid transparent",
                             transition: "all 0.3s ease",
                             "&:focus": {
-                              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                              outline: (theme) =>
+                                `2px solid ${theme.palette.primary.main}`,
                               outlineOffset: "2px",
                               boxShadow: "none",
                             },
                             "&:focus-visible": {
-                              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                              outline: (theme) =>
+                                `2px solid ${theme.palette.primary.main}`,
                               outlineOffset: "2px",
                               boxShadow: "none",
                             },
                             "&:hover": {
-                              borderColor: (theme) => theme.palette.primary.main,
+                              borderColor: (theme) =>
+                                theme.palette.primary.main,
                               transform: "translateY(-4px)",
                             },
                           }}
                         >
                           {paymentLoading === plan.name ? (
                             <>
-                              <CircularProgress size={20} sx={{ mr: 1, color: "#FFFFFF" }} />
+                              <CircularProgress
+                                size={20}
+                                sx={{ mr: 1, color: "#FFFFFF" }}
+                              />
                               Processing...
                             </>
                           ) : (
@@ -572,9 +602,9 @@ function ServiceDetail() {
                 <Card
                   sx={{
                     backgroundColor: (theme) => theme.palette.background.paper,
-                    border: (theme) => 
-                      theme.palette.mode === 'dark' 
-                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                    border: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "1px solid rgba(255, 255, 255, 0.1)"
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     padding: { xs: "2rem", sm: "2.5rem" },
@@ -592,11 +622,10 @@ function ServiceDetail() {
                   >
                     Have Query?
                   </Typography>
-                  <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                  >
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <Box component="form" onSubmit={handleSubmit}>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    >
                       <StyledTextField
                         name="name"
                         label="Your Name"
@@ -705,7 +734,8 @@ function ServiceDetail() {
         <DialogTitle>Login Required</DialogTitle>
         <DialogContent>
           <Typography>
-            You need to be logged in to proceed with the order. Please log in or create an account to continue.
+            You need to be logged in to proceed with the order. Please log in or
+            create an account to continue.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ p: 2, gap: 1 }}>
@@ -764,4 +794,3 @@ function ServiceDetail() {
 }
 
 export default ServiceDetail;
-

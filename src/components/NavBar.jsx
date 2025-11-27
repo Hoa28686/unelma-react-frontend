@@ -59,7 +59,8 @@ function NavBar() {
     { label: "About", path: "/about" },
     { label: "Products", path: "/products" },
     { label: "Services", path: "/services" },
-    { label: "Blogs", path: "/blogss" },
+    { label: "Blogs", path: "/blogs" },
+    { label: "Favorites", path: "/Favorites" },
     { label: "Contact us", path: "/contact" },
   ];
   const [mobile, setMobile] = useState(false);

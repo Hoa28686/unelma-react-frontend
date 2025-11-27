@@ -24,6 +24,7 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useNavigate } from "react-router";
 import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 
 const ITEMS_PER_PAGE = 6; // Show 6 blogs per page
 
@@ -318,7 +319,7 @@ function Blog() {
           }}
         >
           {paginatedBlogs.map((blog) => (
-            <CardActionArea
+            <Card
               key={blog.id}
               sx={{
                 borderRadius: 2,
@@ -337,10 +338,10 @@ function Blog() {
                   transform: "translateY(-4px)",
                 },
               }}
-              onClick={() => handleBlogClick(blog.id)}
             >
               <CardMedia
                 component="img"
+                onClick={() => handleBlogClick(blog.id)}
                 src={
                   getImageUrl(blog.featured_image_url || blog.featured_image) ||
                   blog.image_url
@@ -352,6 +353,7 @@ function Blog() {
                   objectFit: "cover",
                   display: "block",
                   padding: 0,
+                  cursor: "pointer",
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               />
@@ -364,6 +366,7 @@ function Blog() {
                 }}
               >
                 <CardHeader
+                  onClick={() => handleBlogClick(blog.id)}
                   title={
                     <Typography
                       variant="h5"
@@ -373,6 +376,7 @@ function Blog() {
                         fontWeight: 600,
                         color: (theme) => theme.palette.text.primary,
                         mb: 1,
+                        ":hover": { textDecoration: "underline" },
                       }}
                     >
                       {blog.title}
@@ -392,8 +396,9 @@ function Blog() {
                       {`${timeConversion(blog.created_at)} • ${blog.author?.name}`}
                     </Typography>
                   }
-                  sx={{ pb: 1, px: 0 }}
+                  sx={{ pb: 1, px: 0, cursor: "pointer" }}
                 />
+                <Count type="blog" item={blog} />
                 <CardContent sx={{ mb: 0, px: 0, pt: 1 }}>
                   <Typography
                     variant="body1"
@@ -415,6 +420,7 @@ function Blog() {
                             color: (theme) => theme.palette.primary.main,
                             fontWeight: 500,
                             ml: 0.5,
+                            cursor: "pointer",
                           }}
                         >
                           . . . continue reading
@@ -426,7 +432,7 @@ function Blog() {
                   </Typography>
                 </CardContent>
               </Box>
-            </CardActionArea>
+            </Card>
           ))}
 
           {/* Pagination */}

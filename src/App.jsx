@@ -18,6 +18,7 @@ import Register from "./pages/Auth/Register.jsx";
 import User from "./pages/User.jsx";
 import PaymentSuccess from "./pages/Payment/PaymentSuccess.jsx";
 import PaymentCancel from "./pages/Payment/PaymentCancel.jsx";
+import Favorites from "./pages/Favorites.jsx";
 
 function App() {
   return (
@@ -32,9 +33,10 @@ function App() {
               <Route path="/products/:productId" element={<ProductDetail />} />
               <Route path="/services" element={<Services />} />
               <Route path="/services/:serviceId" element={<ServiceDetail />} />
-              <Route path="/blogss" element={<Blog />} />
-              <Route path="/blogss/:blogId" element={<BlogDetail />} />
+              <Route path="/blogs" element={<Blog />} />
+              <Route path="/blogs/:blogId" element={<BlogDetail />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/favorites" element={<Favorites />} />
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
