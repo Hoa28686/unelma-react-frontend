@@ -35,12 +35,14 @@ function BlogDetail() {
     (state) => state.blogs
   );
 
+  // fetch blog data
   useEffect(() => {
     if (blogs.length === 0) {
       dispatch(fetchBlogs());
     }
   }, [blogs, dispatch]);
 
+  // get selected blog
   useEffect(() => {
     if (blogId && blogs.length > 0) {
       const foundBlog = blogs.find((b) => b.id == blogId);
@@ -52,8 +54,9 @@ function BlogDetail() {
     }
   }, [blogId, blogs, dispatch]);
 
+  // sort comments based on sortOrder
   useEffect(() => {
-    if (selectedBlog?.comments.length > 0) {
+    if (selectedBlog?.comments?.length > 0) {
       const sorted = [...selectedBlog.comments];
 
       sortOrder === "newest"
@@ -65,6 +68,7 @@ function BlogDetail() {
       setSortedComment(sorted);
     }
   }, [sortOrder, selectedBlog]);
+
   const handlePostComment = async () => {
     const postCommentUrl = `${API.blogs}/${blogId}/comments`;
     try {
@@ -90,6 +94,7 @@ function BlogDetail() {
     }
   };
 
+  // custom style for TextField
   const textFieldStyles = {
     color: (theme) => theme.palette.text.primary,
     backgroundColor: (theme) => theme.palette.background.paper,
@@ -107,6 +112,7 @@ function BlogDetail() {
       borderWidth: "2px",
     },
   };
+
   if (loading || blogs.length === 0) {
     return (
       <Box
@@ -137,7 +143,7 @@ function BlogDetail() {
         }}
       >
         <Typography>Error loading blog: {error}</Typography>
-        <HandleBackButton content="Blog List" link="/blog" />
+        <HandleBackButton content="Blog List" link="/blogs" />
       </Box>
     );
   }
@@ -156,7 +162,7 @@ function BlogDetail() {
         }}
       >
         <Typography>Blog not found</Typography>
-        <HandleBackButton content="Blog List" link="/blog" />
+        <HandleBackButton content="Blog List" link="/blogs" />
       </Box>
     );
   }
@@ -164,7 +170,7 @@ function BlogDetail() {
   // main component render
   return (
     <>
-      <HandleBackButton content="Blog List" link="/blog" />
+      <HandleBackButton content="Blog List" link="/blogs" />
       <Box
         sx={{
           position: "relative",

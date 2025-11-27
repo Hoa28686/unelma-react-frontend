@@ -42,10 +42,10 @@ function Blog() {
   }, [dispatch, blogs]);
 
   const handleBlogClick = (blogId) => {
-    navigate(`/blog/${blogId}`);
+    navigate(`/blogs/${blogId}`);
   };
 
-  // Filter blogs based on search query
+  // Filter blogs based on search query and category
   const filteredBlogs = useMemo(() => {
     return blogs.filter((blog) => {
       // category filter
@@ -314,7 +314,7 @@ function Blog() {
             maxWidth: { xs: "100%", sm: "90%", md: "1200px" },
             display: "flex",
             flexDirection: "column",
-            gap: { xs: 2, sm: 3 },
+            gap: { xs: 3, sm: 4 },
           }}
         >
           {paginatedBlogs.map((blog) => (
@@ -323,7 +323,7 @@ function Blog() {
               sx={{
                 borderRadius: 2,
                 width: "100%",
-                minHeight: { xs: "auto", md: 300 },
+                height: { xs: "auto", md: 300 },
                 padding: 0,
                 position: "relative",
                 backgroundColor: (theme) => theme.palette.background.paper,
@@ -348,9 +348,10 @@ function Blog() {
                 alt={blog.title}
                 sx={{
                   width: { xs: "100%", md: "30%" },
-                  height: { xs: "250px", md: "100%" },
+                  height: { xs: "30%", md: "100%" },
                   objectFit: "cover",
-                  objectPosition: "center",
+                  display: "block",
+                  padding: 0,
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               />

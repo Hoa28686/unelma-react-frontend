@@ -30,9 +30,9 @@ import {
   ListItemText,
   ListItemSecondaryAction,
 } from "@mui/material";
-import { 
-  Visibility, 
-  VisibilityOff, 
+import {
+  Visibility,
+  VisibilityOff,
   AccountCircle,
   Edit,
   Cancel,
@@ -41,7 +41,12 @@ import {
   Settings,
   Delete,
 } from "@mui/icons-material";
-import { login, register, clearError, logout } from "../lib/features/auth/authSlice";
+import {
+  login,
+  register,
+  clearError,
+  logout,
+} from "../lib/features/auth/authSlice";
 import { useContactForm } from "../hooks/useContactForm";
 import { useAuth } from "../context/AuthContext";
 import { getUserFromSources, clearAuthData } from "../utils/authUtils";
@@ -128,7 +133,12 @@ function User() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated, user: reduxUser } = useSelector((state) => state.auth);
+  const {
+    loading,
+    error,
+    isAuthenticated,
+    user: reduxUser,
+  } = useSelector((state) => state.auth);
   const { user: authContextUser, logout: authContextLogout } = useAuth();
 
   // Get user from either Redux or AuthContext using utility
@@ -182,7 +192,7 @@ function User() {
     const userName = user?.name || user?.user?.name;
     const hasValidUser = user && (userEmail || userName);
     const hasValidAuth = isAuthenticated || hasValidUser;
-    
+
     // If not loading and no valid authentication, redirect to login
     if (!loading && !hasValidAuth) {
       navigate("/login", { replace: true });
@@ -463,7 +473,8 @@ function User() {
 
     if (profileData.newPassword) {
       if (!profileData.currentPassword) {
-        newErrors.currentPassword = "Current password is required to change password";
+        newErrors.currentPassword =
+          "Current password is required to change password";
       }
       if (profileData.newPassword.length < 8) {
         newErrors.newPassword = "Password must be at least 8 characters";
@@ -481,6 +492,7 @@ function User() {
       // Show success message
     }
   };
+  console.log(authContextUser.profile_picture);
 
   const handleCancelOrder = (orderId) => {
     setItemToCancel(orderId);
@@ -521,13 +533,15 @@ function User() {
     const userEmail = user?.email || user?.user?.email || "N/A";
 
     return (
-      <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)", flexDirection: { xs: "column", md: "row" } }}>
+      <Box
+        sx={{
+          display: "flex",
+          minHeight: "calc(100vh - 64px)",
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
         {/* Sidebar - Desktop only */}
-        {!isMobile && (
-          <Box sx={sidebarSx}>
-            {sidebarContent}
-          </Box>
-        )}
+        {!isMobile && <Box sx={sidebarSx}>{sidebarContent}</Box>}
 
         {/* Main content - User Dashboard */}
         <Box
@@ -630,10 +644,26 @@ function User() {
                   },
                 }}
               >
-                <Tab icon={<AccountCircle />} iconPosition="start" label="Profile" />
-                <Tab icon={<ShoppingBag />} iconPosition="start" label="Orders" />
-                <Tab icon={<CardMembership />} iconPosition="start" label="Subscriptions" />
-                <Tab icon={<Settings />} iconPosition="start" label="Settings" />
+                <Tab
+                  icon={<AccountCircle />}
+                  iconPosition="start"
+                  label="Profile"
+                />
+                <Tab
+                  icon={<ShoppingBag />}
+                  iconPosition="start"
+                  label="Orders"
+                />
+                <Tab
+                  icon={<CardMembership />}
+                  iconPosition="start"
+                  label="Subscriptions"
+                />
+                <Tab
+                  icon={<Settings />}
+                  iconPosition="start"
+                  label="Settings"
+                />
               </Tabs>
 
               {/* Tab Content */}
@@ -713,10 +743,16 @@ function User() {
                             endAdornment: (
                               <InputAdornment position="end">
                                 <IconButton
-                                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                  onClick={() =>
+                                    setShowCurrentPassword(!showCurrentPassword)
+                                  }
                                   edge="end"
                                 >
-                                  {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                  {showCurrentPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
                                 </IconButton>
                               </InputAdornment>
                             ),
@@ -737,10 +773,16 @@ function User() {
                             endAdornment: (
                               <InputAdornment position="end">
                                 <IconButton
-                                  onClick={() => setShowNewPassword(!showNewPassword)}
+                                  onClick={() =>
+                                    setShowNewPassword(!showNewPassword)
+                                  }
                                   edge="end"
                                 >
-                                  {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                                  {showNewPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
                                 </IconButton>
                               </InputAdornment>
                             ),
@@ -767,7 +809,8 @@ function User() {
                           type="submit"
                           variant="contained"
                           sx={{
-                            backgroundColor: (theme) => theme.palette.primary.main,
+                            backgroundColor: (theme) =>
+                              theme.palette.primary.main,
                             textTransform: "none",
                             "&:hover": {
                               backgroundColor: "#C85A2E",
@@ -782,8 +825,10 @@ function User() {
                             setEditMode(false);
                             setProfileErrors({});
                             // Reset to original values
-                            const userName = user?.name || user?.user?.name || "";
-                            const userEmail = user?.email || user?.user?.email || "";
+                            const userName =
+                              user?.name || user?.user?.name || "";
+                            const userEmail =
+                              user?.email || user?.user?.email || "";
                             setProfileData({
                               name: userName,
                               email: userEmail,
@@ -808,7 +853,10 @@ function User() {
                     My Orders
                   </Typography>
                   {orders.length === 0 ? (
-                    <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
+                    <Typography
+                      color="text.secondary"
+                      sx={{ textAlign: "center", py: 4 }}
+                    >
                       No orders found
                     </Typography>
                   ) : (
@@ -825,20 +873,33 @@ function User() {
                               }}
                             >
                               <Box>
-                                <Typography variant="h6">{order.orderNumber}</Typography>
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="h6">
+                                  {order.orderNumber}
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
                                   {new Date(order.date).toLocaleDateString()}
                                 </Typography>
                               </Box>
                               <Chip
                                 label={order.status}
-                                color={order.status === "completed" ? "success" : "warning"}
+                                color={
+                                  order.status === "completed"
+                                    ? "success"
+                                    : "warning"
+                                }
                                 size="small"
                               />
                             </Box>
                             <Box sx={{ mb: 2 }}>
                               {order.items.map((item, idx) => (
-                                <Typography key={idx} variant="body2" color="text.secondary">
+                                <Typography
+                                  key={idx}
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
                                   • {item}
                                 </Typography>
                               ))}
@@ -850,7 +911,9 @@ function User() {
                                 alignItems: "center",
                               }}
                             >
-                              <Typography variant="h6">€{order.total.toFixed(2)}</Typography>
+                              <Typography variant="h6">
+                                €{order.total.toFixed(2)}
+                              </Typography>
                               {order.status === "pending" && (
                                 <Button
                                   startIcon={<Cancel />}
@@ -877,7 +940,10 @@ function User() {
                     My Subscriptions
                   </Typography>
                   {subscriptions.length === 0 ? (
-                    <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
+                    <Typography
+                      color="text.secondary"
+                      sx={{ textAlign: "center", py: 4 }}
+                    >
                       No active subscriptions
                     </Typography>
                   ) : (
@@ -894,34 +960,63 @@ function User() {
                               }}
                             >
                               <Box>
-                                <Typography variant="h6">{subscription.name}</Typography>
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="h6">
+                                  {subscription.name}
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
                                   {subscription.plan} Plan
                                 </Typography>
                               </Box>
                               <Chip
                                 label={subscription.status}
-                                color={subscription.status === "active" ? "success" : "default"}
+                                color={
+                                  subscription.status === "active"
+                                    ? "success"
+                                    : "default"
+                                }
                                 size="small"
                               />
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                              <Typography variant="body2" color="text.secondary">
-                                Price: €{subscription.price.toFixed(2)}/{subscription.plan === "Monthly" ? "month" : "year"}
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                Price: €{subscription.price.toFixed(2)}/
+                                {subscription.plan === "Monthly"
+                                  ? "month"
+                                  : "year"}
                               </Typography>
-                              <Typography variant="body2" color="text.secondary">
-                                Started: {new Date(subscription.startDate).toLocaleDateString()}
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                Started:{" "}
+                                {new Date(
+                                  subscription.startDate
+                                ).toLocaleDateString()}
                               </Typography>
                               {subscription.status === "active" && (
-                                <Typography variant="body2" color="text.secondary">
-                                  Next billing: {new Date(subscription.nextBilling).toLocaleDateString()}
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  Next billing:{" "}
+                                  {new Date(
+                                    subscription.nextBilling
+                                  ).toLocaleDateString()}
                                 </Typography>
                               )}
                             </Box>
                             {subscription.status === "active" && (
                               <Button
                                 startIcon={<Cancel />}
-                                onClick={() => handleCancelSubscription(subscription.id)}
+                                onClick={() =>
+                                  handleCancelSubscription(subscription.id)
+                                }
                                 color="error"
                                 variant="outlined"
                                 size="small"
@@ -1021,17 +1116,24 @@ function User() {
         </Box>
 
         {/* Cancel Confirmation Dialog */}
-        <Dialog open={cancelDialogOpen} onClose={() => setCancelDialogOpen(false)}>
+        <Dialog
+          open={cancelDialogOpen}
+          onClose={() => setCancelDialogOpen(false)}
+        >
           <DialogTitle>
             Cancel {cancelType === "order" ? "Order" : "Subscription"}?
           </DialogTitle>
           <DialogContent>
             <Typography>
-              Are you sure you want to cancel this {cancelType}? This action cannot be undone.
+              Are you sure you want to cancel this {cancelType}? This action
+              cannot be undone.
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setCancelDialogOpen(false)} sx={{ textTransform: "none" }}>
+            <Button
+              onClick={() => setCancelDialogOpen(false)}
+              sx={{ textTransform: "none" }}
+            >
               No, Keep It
             </Button>
             <Button
@@ -1049,13 +1151,15 @@ function User() {
   }
 
   return (
-    <Box sx={{ display: "flex", minHeight: "calc(100vh - 64px)", flexDirection: { xs: "column", md: "row" } }}>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "calc(100vh - 64px)",
+        flexDirection: { xs: "column", md: "row" },
+      }}
+    >
       {/* Sidebar - Desktop only */}
-      {!isMobile && (
-        <Box sx={sidebarSx}>
-          {sidebarContent}
-        </Box>
-      )}
+      {!isMobile && <Box sx={sidebarSx}>{sidebarContent}</Box>}
 
       {/* Main content */}
       <Box
@@ -1069,178 +1173,188 @@ function User() {
         }}
       >
         <Container maxWidth="sm" sx={{ width: "100%" }}>
-      <Paper
-        elevation={3}
-        sx={{
-          p: 4,
-          borderRadius: 2,
-          backgroundColor: (theme) => theme.palette.background.paper,
-        }}
-      >
-        <Typography
-          variant="h4"
-          component="h1"
-          gutterBottom
-          sx={{
-            fontWeight: 600,
-            textAlign: "center",
-            color: (theme) => theme.palette.text.primary,
-            mb: 3,
-          }}
-        >
-          {activeTab === 0 ? "Login" : "Register"}
-        </Typography>
-
-        <Tabs
-          value={activeTab}
-          onChange={(e, newValue) => setActiveTab(newValue)}
-          centered
-          sx={{
-            mb: 3,
-            "& .MuiTab-root": {
-              color: (theme) => theme.palette.text.secondary,
-              "&.Mui-selected": {
-                color: (theme) => theme.palette.primary.main,
-              },
-            },
-            "& .MuiTabs-indicator": {
-              backgroundColor: (theme) => theme.palette.primary.main,
-            },
-          }}
-        >
-          <Tab label="Login" />
-          <Tab label="Register" />
-        </Tabs>
-
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }} onClose={() => dispatch(clearError())}>
-            {error}
-          </Alert>
-        )}
-
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-          {activeTab === 1 && (
-            <TextField
-              name="name"
-              label="Name"
-              variant="outlined"
-              fullWidth
-              required
-              value={formData.name}
-              onChange={handleChange}
-              error={!!errors.name}
-              helperText={errors.name}
-              sx={{ mb: 2 }}
-            />
-          )}
-
-          <TextField
-            name="email"
-            label="Email"
-            type="email"
-            variant="outlined"
-            fullWidth
-            required
-            value={formData.email}
-            onChange={handleChange}
-            error={!!errors.email}
-            helperText={errors.email}
-            sx={{ mb: 2 }}
-          />
-
-          <TextField
-            name="password"
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            variant="outlined"
-            fullWidth
-            required
-            value={formData.password}
-            onChange={handleChange}
-            error={!!errors.password}
-            helperText={errors.password}
-            sx={{ mb: activeTab === 1 ? 2 : 3 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          {activeTab === 1 && (
-            <TextField
-              name="password_confirmation"
-              label="Confirm Password"
-              type={showConfirmPassword ? "text" : "password"}
-              variant="outlined"
-              fullWidth
-              required
-              value={formData.password_confirmation}
-              onChange={handleChange}
-              error={!!errors.password_confirmation}
-              helperText={errors.password_confirmation}
-              sx={{ mb: 3 }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      edge="end"
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )}
-
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={loading}
+          <Paper
+            elevation={3}
             sx={{
-              backgroundColor: (theme) => theme.palette.primary.main,
-              color: "#FFFFFF",
-              fontWeight: 100,
+              p: 4,
               borderRadius: 2,
-              py: 1.5,
-              textTransform: "none",
-              border: "1px solid transparent",
-              transition: "all 0.3s ease",
-              outline: "none",
-              "&:focus": {
-                outline: "none",
-                boxShadow: "none",
-              },
-              "&:focus-visible": {
-                outline: "none",
-                boxShadow: "none",
-              },
-              "&:hover": {
-                borderColor: (theme) => theme.palette.primary.main,
-                transform: "translateY(-4px)",
-              },
+              backgroundColor: (theme) => theme.palette.background.paper,
             }}
           >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : activeTab === 0 ? (
-              "Login"
-            ) : (
-              "Register"
+            <Typography
+              variant="h4"
+              component="h1"
+              gutterBottom
+              sx={{
+                fontWeight: 600,
+                textAlign: "center",
+                color: (theme) => theme.palette.text.primary,
+                mb: 3,
+              }}
+            >
+              {activeTab === 0 ? "Login" : "Register"}
+            </Typography>
+
+            <Tabs
+              value={activeTab}
+              onChange={(e, newValue) => setActiveTab(newValue)}
+              centered
+              sx={{
+                mb: 3,
+                "& .MuiTab-root": {
+                  color: (theme) => theme.palette.text.secondary,
+                  "&.Mui-selected": {
+                    color: (theme) => theme.palette.primary.main,
+                  },
+                },
+                "& .MuiTabs-indicator": {
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                },
+              }}
+            >
+              <Tab label="Login" />
+              <Tab label="Register" />
+            </Tabs>
+
+            {error && (
+              <Alert
+                severity="error"
+                sx={{ mb: 2 }}
+                onClose={() => dispatch(clearError())}
+              >
+                {error}
+              </Alert>
             )}
-          </Button>
-        </Box>
-      </Paper>
+
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+              {activeTab === 1 && (
+                <TextField
+                  name="name"
+                  label="Name"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  error={!!errors.name}
+                  helperText={errors.name}
+                  sx={{ mb: 2 }}
+                />
+              )}
+
+              <TextField
+                name="email"
+                label="Email"
+                type="email"
+                variant="outlined"
+                fullWidth
+                required
+                value={formData.email}
+                onChange={handleChange}
+                error={!!errors.email}
+                helperText={errors.email}
+                sx={{ mb: 2 }}
+              />
+
+              <TextField
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                variant="outlined"
+                fullWidth
+                required
+                value={formData.password}
+                onChange={handleChange}
+                error={!!errors.password}
+                helperText={errors.password}
+                sx={{ mb: activeTab === 1 ? 2 : 3 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              {activeTab === 1 && (
+                <TextField
+                  name="password_confirmation"
+                  label="Confirm Password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  variant="outlined"
+                  fullWidth
+                  required
+                  value={formData.password_confirmation}
+                  onChange={handleChange}
+                  error={!!errors.password_confirmation}
+                  helperText={errors.password_confirmation}
+                  sx={{ mb: 3 }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          edge="end"
+                        >
+                          {showConfirmPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
+
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={loading}
+                sx={{
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: "#FFFFFF",
+                  fontWeight: 100,
+                  borderRadius: 2,
+                  py: 1.5,
+                  textTransform: "none",
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  outline: "none",
+                  "&:focus": {
+                    outline: "none",
+                    boxShadow: "none",
+                  },
+                  "&:focus-visible": {
+                    outline: "none",
+                    boxShadow: "none",
+                  },
+                  "&:hover": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                    transform: "translateY(-4px)",
+                  },
+                }}
+              >
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : activeTab === 0 ? (
+                  "Login"
+                ) : (
+                  "Register"
+                )}
+              </Button>
+            </Box>
+          </Paper>
         </Container>
 
         {/* Query Form - Mobile only, at bottom */}

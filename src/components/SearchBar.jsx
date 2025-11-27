@@ -131,7 +131,10 @@ function SearchBar({ open, onClose }) {
           <Box
             key={`highlight-${parts.length}`}
             component="span"
-            sx={{ fontWeight: 700, color: (theme) => theme.palette.primary.main }}
+            sx={{
+              fontWeight: 700,
+              color: (theme) => theme.palette.primary.main,
+            }}
           >
             {remainingText.substring(index, index + term.length)}
           </Box>
@@ -178,7 +181,7 @@ function SearchBar({ open, onClose }) {
       navigate(`/products/${item.id}`);
     } else if (resultIndex < results.products.length + results.blogs.length) {
       item = results.blogs[resultIndex - results.products.length];
-      navigate(`/blog/${item.id}`);
+      navigate(`/blogs/${item.id}`);
     } else {
       item =
         results.services[

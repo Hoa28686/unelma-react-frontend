@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "../../../api";
+import { updateFavoriteCount } from "../../../helpers/helpers";
+import { addFavorite, removeFavorite } from "../favorites/favoritesSlice";
 
 const initialState = {
   products: [],
@@ -9,8 +11,6 @@ const initialState = {
   error: null,
 };
 
-// const productAPI = "http://localhost:3001/products";
-// const productAPI = "http://127.0.0.1:8000/api/products";
 const productAPI = API.products;
 
 export const fetchProducts = createAsyncThunk(
@@ -42,6 +42,16 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
+      })
+      .addCase(addFavorite.fulfilled, (state, action) => {
+        const { favorite_type: type, item_id: itemId } = action.payload;
+        if (type === "product")
+          updateFavoriteCount(state.products, itemId, true);
+      })
+      .addCase(removeFavorite.fulfilled, (state, action) => {
+        const { type, itemId } = action.payload;
+        if (type === "product")
+          updateFavoriteCount(state.products, itemId, false);
       });
   },
 });

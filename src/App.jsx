@@ -8,7 +8,7 @@ import Cart from "./pages/Cart.jsx";
 import { CustomThemeProvider } from "./context/ThemeContext.jsx";
 import { CssBaseline } from "@mui/material";
 import ProductDetail from "./pages/Products/ProductDetail.jsx";
-import BlogDetail from "./pages/Blog/BlogDetail.jsx";
+import BlogDetail from "./pages/Blog/blogDetail.jsx";
 import Blog from "./pages/Blog/Blog.jsx";
 import Products from "./pages/Products/Products.jsx";
 import Services from "./pages/Services/Services.jsx";
@@ -32,8 +32,8 @@ function App() {
               <Route path="/products/:productId" element={<ProductDetail />} />
               <Route path="/services" element={<Services />} />
               <Route path="/services/:serviceId" element={<ServiceDetail />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:blogId" element={<BlogDetail />} />
+              <Route path="/blogss" element={<Blog />} />
+              <Route path="/blogss/:blogId" element={<BlogDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login />} />
