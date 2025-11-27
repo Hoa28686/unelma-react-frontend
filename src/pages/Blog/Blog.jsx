@@ -58,57 +58,81 @@ function Blog() {
   };
 
   // Filter blogs based on search query and category
-  const filteredBlogs = useMemo(() => {
-    return blogs.filter((blog) => {
-      // category filter
-      const categoryMatch =
-        selectedCategory === "all"
-          ? true
-          : selectedCategory === "others"
-            ? !blog.category
-            : blog.category === selectedCategory;
-      if (!categoryMatch) return false;
+  const filteredAndSortedBlogs = useMemo(() => {
+    let result = [...blogs];
 
-      //favorite filter
-      let favoriteMatch = true;
-      if (onlyFavorites && user) {
-        favoriteMatch = favorites.some(
+    // category filter
+    if (selectedCategory !== "all") {
+      result = result.filter((blog) =>
+        selectedCategory === "others"
+          ? !blog.category
+          : blog.category === selectedCategory
+      );
+    }
+
+    //favorite filter
+    if (onlyFavorites && user) {
+      result = result.filter((blog) =>
+        favorites.some(
           (fav) =>
             fav.user_id == user.id &&
             fav.favorite_type === "blog" &&
             fav.item_id == blog.id
-        );
-      }
+        )
+      );
+    }
 
-      // search  filter
+    // search  filter
+    if (searchQuery.trim()) {
       const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
+      result = result.filter((blog) => {
+        const searchableText = [
+          blog.title,
+          blog.content,
+          blog.author,
+          blog.category,
+          blog.author?.name,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
 
-      const searchableText = [
-        blog.title,
-        blog.content,
-        blog.author,
-        blog.category,
-        blog.author?.name,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
+        return searchTerms.some((term) => searchableText.includes(term));
+      });
+    }
+    //sort blogs
+    if (sortOrder === "newest") {
+      result = result.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+    }
+    if (sortOrder === "oldest") {
+      result = result.sort(
+        (a, b) => new Date(a.created_at) - new Date(b.created_at)
+      );
+    }
+    if (sortOrder === "mostFav") {
+      result = result.sort(
+        (a, b) => (b.favorite_count || 0) - (a.favorite_count || 0)
+      );
+    }
 
-      const searchMatch =
-        searchTerms.length === 0
-          ? true
-          : searchTerms.some((term) => searchableText.includes(term));
-
-      //sort blogs
-      if (sortOrder) return searchMatch && categoryMatch && favoriteMatch;
-    });
-  }, [blogs, searchQuery, selectedCategory, onlyFavorites, favorites, user]);
+    return result;
+  }, [
+    blogs,
+    searchQuery,
+    selectedCategory,
+    onlyFavorites,
+    favorites,
+    user,
+    sortOrder,
+  ]);
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredAndSortedBlogs.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex);
+  const paginatedBlogs = filteredAndSortedBlogs.slice(startIndex, endIndex);
 
   // Reset to page 1 when search changes
   useEffect(() => {
@@ -305,9 +329,9 @@ function Blog() {
                 color: (theme) => theme.palette.text.secondary,
               }}
             >
-              {filteredBlogs.length === 0
+              {filteredAndSortedBlogs.length === 0
                 ? "No blogs found"
-                : `Found ${filteredBlogs.length} blog${filteredBlogs.length !== 1 ? "s" : ""}`}
+                : `Found ${filteredAndSortedBlogs.length} blog${filteredAndSortedBlogs.length !== 1 ? "s" : ""}`}
             </Typography>
           )}
         </Box>
