@@ -25,18 +25,31 @@ import Logo from "./Logo.jsx";
 import ThemeSwitch from "./ThemeSwitch";
 import SearchBar from "./SearchBar";
 import { useAuth } from "../context/AuthContext.jsx";
-import { getUserFromSources, isUserAuthenticated as checkIsUserAuthenticated } from "../utils/authUtils";
+import {
+  getUserFromSources,
+  isUserAuthenticated as checkIsUserAuthenticated,
+} from "../utils/authUtils";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 function NavBar() {
   const { user: authContextUser, logout, token: authContextToken } = useAuth();
-  const { user: reduxUser, isAuthenticated: reduxIsAuthenticated, token: reduxToken } = useSelector((state) => state.auth);
-  
+  const {
+    user: reduxUser,
+    isAuthenticated: reduxIsAuthenticated,
+    token: reduxToken,
+  } = useSelector((state) => state.auth);
+
   // Get user from either system using utility
   const user = getUserFromSources(reduxUser, authContextUser);
-  
+
   // Check authentication from both systems using utility
-  const isAuthenticated = checkIsUserAuthenticated(reduxIsAuthenticated, reduxToken, authContextToken, user);
-  
+  const isAuthenticated = checkIsUserAuthenticated(
+    reduxIsAuthenticated,
+    reduxToken,
+    authContextToken,
+    user
+  );
+
   const mobileMenuWidth = 240;
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,7 +60,7 @@ function NavBar() {
     { label: "About", path: "/about" },
     { label: "Products", path: "/products" },
     { label: "Services", path: "/services" },
-    { label: "Blogs", path: "/blog" },
+    { label: "Blogs", path: "/blogs" },
     { label: "Contact us", path: "/contact" },
   ];
   const [mobile, setMobile] = useState(false);
@@ -355,6 +368,46 @@ function NavBar() {
                 <SearchOutlinedIcon />
               </IconButton>
             </Box>
+
+            {/*Favorite list button */}
+            <Box
+              sx={{
+                position: "relative",
+                display: "inline-flex",
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: "-4px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "60%",
+                  height: "2px",
+                  backgroundColor: isIconActive("/cart")
+                    ? (theme) => theme.palette.primary.main
+                    : "transparent",
+                  transition: "background-color 0.3s ease",
+                },
+                "&:hover::after": {
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                },
+              }}
+            >
+              <IconButton
+                sx={{
+                  color: (theme) => theme.palette.text.primary,
+                  position: "relative",
+                  "&:hover": {
+                    color: (theme) => theme.palette.text.primary,
+                    backgroundColor: "transparent",
+                  },
+                }}
+                component={Link}
+                to="/favorites"
+              >
+                <FavoriteIcon />
+              </IconButton>
+            </Box>
+
             {/*Product cart button */}
             <Box
               sx={{
@@ -418,9 +471,10 @@ function NavBar() {
                   transform: "translateX(-50%)",
                   width: "60%",
                   height: "2px",
-                  backgroundColor: isIconActive("/user") || isIconActive("/login")
-                    ? (theme) => theme.palette.primary.main
-                    : "transparent",
+                  backgroundColor:
+                    isIconActive("/user") || isIconActive("/login")
+                      ? (theme) => theme.palette.primary.main
+                      : "transparent",
                   transition: "background-color 0.3s ease",
                 },
                 "&:hover::after": {

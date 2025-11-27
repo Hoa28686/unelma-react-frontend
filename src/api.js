@@ -6,5 +6,6 @@ export const API = {
   logout: `${baseUrl}/logout`,
   products: `${baseUrl}/products`,
   blogs: `${baseUrl}/blogs`,
+  favorites: `${baseUrl}/favorites`,
   services: `${baseUrl}/services`,
 };

@@ -16,6 +16,9 @@ import {
   Pagination,
   Select,
   MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Stack,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -24,6 +27,10 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useNavigate } from "react-router";
 import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useAuth } from "../../context/AuthContext";
 
 const ITEMS_PER_PAGE = 6; // Show 6 blogs per page
 
@@ -34,6 +41,11 @@ function Blog() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const favorites = useSelector((state) => state.favorites.favorites);
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+  const { user } = useAuth();
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [sortedBlogs, setSortedBlogs] = useState([]);
 
   useEffect(() => {
     if (blogs.length === 0) {
@@ -42,53 +54,85 @@ function Blog() {
   }, [dispatch, blogs]);
 
   const handleBlogClick = (blogId) => {
-    navigate(`/blog/${blogId}`);
+    navigate(`/blogs/${blogId}`);
   };
 
-  // Filter blogs based on search query
-  const filteredBlogs = useMemo(() => {
-    return blogs.filter((blog) => {
-      // category filter
-      const categoryMatch =
-        selectedCategory === "all"
-          ? true
-          : selectedCategory === "others"
-            ? !blog.category
-            : blog.category === selectedCategory;
-      if (!categoryMatch) return false;
+  // Filter blogs based on search query and category
+  const filteredAndSortedBlogs = useMemo(() => {
+    let result = [...blogs];
 
-      // search  filter
-      if (!searchQuery.trim()) return true;
-
-      // const query = searchQuery.toLowerCase().trim();
-      // const searchTerms = query.split(" ").filter((term) => term.length > 0);
-
-      const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
-
-      const searchableText = [
-        blog.title,
-        blog.content,
-        blog.author,
-        blog.category,
-        blog.author?.name,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      const searchMatch = searchTerms.some((term) =>
-        searchableText.includes(term)
+    // category filter
+    if (selectedCategory !== "all") {
+      result = result.filter((blog) =>
+        selectedCategory === "others"
+          ? !blog.category
+          : blog.category === selectedCategory
       );
+    }
 
-      return searchMatch && categoryMatch;
-    });
-  }, [blogs, searchQuery, selectedCategory]);
+    //favorite filter
+    if (onlyFavorites && user) {
+      result = result.filter((blog) =>
+        favorites.some(
+          (fav) =>
+            fav.user_id == user.id &&
+            fav.favorite_type === "blog" &&
+            fav.item_id == blog.id
+        )
+      );
+    }
+
+    // search  filter
+    if (searchQuery.trim()) {
+      const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
+      result = result.filter((blog) => {
+        const searchableText = [
+          blog.title,
+          blog.content,
+          blog.author,
+          blog.category,
+          blog.author?.name,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        return searchTerms.some((term) => searchableText.includes(term));
+      });
+    }
+    //sort blogs
+    if (sortOrder === "newest") {
+      result = result.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+    }
+    if (sortOrder === "oldest") {
+      result = result.sort(
+        (a, b) => new Date(a.created_at) - new Date(b.created_at)
+      );
+    }
+    if (sortOrder === "mostFav") {
+      result = result.sort(
+        (a, b) => (b.favorite_count || 0) - (a.favorite_count || 0)
+      );
+    }
+
+    return result;
+  }, [
+    blogs,
+    searchQuery,
+    selectedCategory,
+    onlyFavorites,
+    favorites,
+    user,
+    sortOrder,
+  ]);
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredAndSortedBlogs.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex);
+  const paginatedBlogs = filteredAndSortedBlogs.slice(startIndex, endIndex);
 
   // Reset to page 1 when search changes
   useEffect(() => {
@@ -122,6 +166,15 @@ function Blog() {
   const categories = [
     ...new Set(blogs.map((b) => (b.category === null ? "others" : b.category))),
   ];
+
+  const handleFavoriteFilter = (e) => {
+    if (!user) {
+      alert("Log in to filter favorites");
+      return;
+    }
+
+    setOnlyFavorites(e.target.checked);
+  };
 
   if (loading || blogs.length === 0) {
     return (
@@ -276,54 +329,90 @@ function Blog() {
                 color: (theme) => theme.palette.text.secondary,
               }}
             >
-              {filteredBlogs.length === 0
+              {filteredAndSortedBlogs.length === 0
                 ? "No blogs found"
-                : `Found ${filteredBlogs.length} blog${filteredBlogs.length !== 1 ? "s" : ""}`}
+                : `Found ${filteredAndSortedBlogs.length} blog${filteredAndSortedBlogs.length !== 1 ? "s" : ""}`}
             </Typography>
           )}
         </Box>
 
-        {/* Category Filter */}
-        <Select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          sx={{
-            minWidth: 180,
-            borderRadius: 3,
-            p: 0,
-            mb: 5,
-          }}
+        <Stack
+          spacing={2}
+          direction={{ xs: "column", sm: "row" }}
+          sx={{ mb: 5 }}
         >
-          <MenuItem value="all">All categories</MenuItem>
-          {categories
-            .filter((cat) => cat !== "others")
-            .map((cat, index) => (
-              <MenuItem
-                key={index}
-                value={cat}
-                sx={{ textTransform: "capitalize" }}
-              >
-                {cat}
-              </MenuItem>
-            ))}
-          <MenuItem value="others">Others</MenuItem>
-        </Select>
+          {/* Category Filter */}
+          <Select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            sx={{
+              minWidth: 180,
+              borderRadius: 3,
+              p: 0,
+              mb: 2,
+            }}
+          >
+            <MenuItem value="all">All categories</MenuItem>
+            {categories
+              .filter((cat) => cat !== "others")
+              .map((cat, index) => (
+                <MenuItem
+                  key={index}
+                  value={cat}
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  {cat}
+                </MenuItem>
+              ))}
+            <MenuItem value="others">Others</MenuItem>
+          </Select>
+
+          {/* Sort by created time, most favorites */}
+          <Select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            sx={{ borderRadius: 3, p: 0 }}
+          >
+            <Typography component="span" sx={{ pl: 1 }}>
+              Sort by:{" "}
+            </Typography>
+            <MenuItem value="newest">Newest</MenuItem>
+            <MenuItem value="oldest">Oldest</MenuItem>
+            <MenuItem value="mostFav">Most Favorited</MenuItem>
+          </Select>
+          {/* Favorite Filter */}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={onlyFavorites}
+                onChange={handleFavoriteFilter}
+                icon={<FavoriteBorderIcon sx={{ color: "#ED310C" }} />}
+                checkedIcon={<FavoriteIcon sx={{ color: "#ED310C" }} />}
+              />
+            }
+            label="Only show my favorites"
+            sx={{
+              mb: 5,
+              color: (theme) => theme.palette.text.primary,
+            }}
+          />
+        </Stack>
         <Box
           sx={{
             width: "100%",
             maxWidth: { xs: "100%", sm: "90%", md: "1200px" },
             display: "flex",
             flexDirection: "column",
-            gap: { xs: 2, sm: 3 },
+            gap: { xs: 3, sm: 4 },
           }}
         >
           {paginatedBlogs.map((blog) => (
-            <CardActionArea
+            <Card
               key={blog.id}
               sx={{
                 borderRadius: 2,
                 width: "100%",
-                minHeight: { xs: "auto", md: 300 },
+                height: { xs: "auto", md: 300 },
                 padding: 0,
                 position: "relative",
                 backgroundColor: (theme) => theme.palette.background.paper,
@@ -337,10 +426,10 @@ function Blog() {
                   transform: "translateY(-4px)",
                 },
               }}
-              onClick={() => handleBlogClick(blog.id)}
             >
               <CardMedia
                 component="img"
+                onClick={() => handleBlogClick(blog.id)}
                 src={
                   getImageUrl(blog.featured_image_url || blog.featured_image) ||
                   blog.image_url
@@ -348,9 +437,11 @@ function Blog() {
                 alt={blog.title}
                 sx={{
                   width: { xs: "100%", md: "30%" },
-                  height: { xs: "250px", md: "100%" },
+                  height: { xs: "30%", md: "100%" },
                   objectFit: "cover",
-                  objectPosition: "center",
+                  display: "block",
+                  padding: 0,
+                  cursor: "pointer",
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               />
@@ -363,6 +454,7 @@ function Blog() {
                 }}
               >
                 <CardHeader
+                  onClick={() => handleBlogClick(blog.id)}
                   title={
                     <Typography
                       variant="h5"
@@ -372,6 +464,7 @@ function Blog() {
                         fontWeight: 600,
                         color: (theme) => theme.palette.text.primary,
                         mb: 1,
+                        ":hover": { textDecoration: "underline" },
                       }}
                     >
                       {blog.title}
@@ -391,8 +484,9 @@ function Blog() {
                       {`${timeConversion(blog.created_at)} • ${blog.author?.name}`}
                     </Typography>
                   }
-                  sx={{ pb: 1, px: 0 }}
+                  sx={{ pb: 1, px: 0, cursor: "pointer" }}
                 />
+                <FavoriteButtonAndCount type="blog" item={blog} />
                 <CardContent sx={{ mb: 0, px: 0, pt: 1 }}>
                   <Typography
                     variant="body1"
@@ -414,6 +508,7 @@ function Blog() {
                             color: (theme) => theme.palette.primary.main,
                             fontWeight: 500,
                             ml: 0.5,
+                            cursor: "pointer",
                           }}
                         >
                           . . . continue reading
@@ -425,7 +520,7 @@ function Blog() {
                   </Typography>
                 </CardContent>
               </Box>
-            </CardActionArea>
+            </Card>
           ))}
 
           {/* Pagination */}

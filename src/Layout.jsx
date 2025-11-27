@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
 import { Outlet } from "react-router";
 import { Box, CssBaseline } from "@mui/material";
+import { useAuth } from "./context/AuthContext";
+import { useDispatch } from "react-redux";
+import { fetchFavorites } from "./store/slices/favorites/favoritesSlice";
 
 function Layout() {
+  const { token } = useAuth();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (token) dispatch(fetchFavorites({ token }));
+  }, [token, dispatch]);
+
   return (
     <Box
       sx={{
