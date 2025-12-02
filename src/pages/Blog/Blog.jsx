@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { fetchBlogs } from "../../store/slices/blogs/blogsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  Link as MuiLink,
   Box,
   Button,
   Card,
@@ -24,7 +25,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
@@ -45,7 +46,6 @@ function Blog() {
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const { user } = useAuth();
   const [sortOrder, setSortOrder] = useState("newest");
-  const [sortedBlogs, setSortedBlogs] = useState([]);
 
   useEffect(() => {
     if (blogs.length === 0) {
@@ -502,17 +502,13 @@ function Blog() {
                     {blog.content.length > 150 ? (
                       <>
                         {blog.content.substring(0, 150)}
-                        <Box
-                          component="span"
-                          sx={{
-                            color: (theme) => theme.palette.primary.main,
-                            fontWeight: 500,
-                            ml: 0.5,
-                            cursor: "pointer",
-                          }}
+                        <MuiLink
+                          component={Link}
+                          to={`/blogs/${blog.id}`}
+                          sx={{ textDecoration: "none" }}
                         >
-                          . . . continue reading
-                        </Box>
+                          ...continue reading
+                        </MuiLink>
                       </>
                     ) : (
                       blog.content

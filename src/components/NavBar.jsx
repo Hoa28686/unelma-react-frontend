@@ -51,13 +51,18 @@ function NavBar() {
     authContextToken,
     user
   );
-  
+
   // Debug: Log user data to check profile_picture
   React.useEffect(() => {
     if (isAuthenticated && user) {
       console.log("NavBar - User data:", user);
       console.log("NavBar - Profile picture:", user.profile_picture);
-      console.log("NavBar - Image URL:", user.profile_picture ? getImageUrl(user.profile_picture) : "No profile picture");
+      console.log(
+        "NavBar - Image URL:",
+        user.profile_picture
+          ? getImageUrl(user.profile_picture)
+          : "No profile picture"
+      );
     }
   }, [user, isAuthenticated]);
 
@@ -393,7 +398,7 @@ function NavBar() {
                   transform: "translateX(-50%)",
                   width: "60%",
                   height: "2px",
-                  backgroundColor: isIconActive("/cart")
+                  backgroundColor: isIconActive("/favorites")
                     ? (theme) => theme.palette.primary.main
                     : "transparent",
                   transition: "background-color 0.3s ease",
@@ -524,7 +529,10 @@ function NavBar() {
                         e.target.style.display = "none";
                       }}
                       onLoad={() => {
-                        console.log("Profile picture loaded successfully:", getImageUrl(user.profile_picture));
+                        console.log(
+                          "Profile picture loaded successfully:",
+                          getImageUrl(user.profile_picture)
+                        );
                       }}
                       sx={{
                         width: 32,
