@@ -50,6 +50,7 @@ import {
 import { useContactForm } from "../hooks/useContactForm";
 import { useAuth } from "../context/AuthContext";
 import { getUserFromSources, clearAuthData } from "../utils/authUtils";
+import { getImageUrl } from "../helpers/helpers";
 
 function User() {
   const theme = useTheme();
@@ -575,6 +576,8 @@ function User() {
                 }}
               >
                 <Avatar
+                  src={user?.profile_picture ? getImageUrl(user.profile_picture) : undefined}
+                  alt="User avatar"
                   sx={{
                     width: 80,
                     height: 80,
@@ -583,7 +586,9 @@ function User() {
                       `0.5px solid ${theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.12)" : "rgba(255, 255, 255, 0.12)"}`,
                   }}
                 >
-                  <AccountCircle sx={{ fontSize: 60 }} />
+                  {!user?.profile_picture && (
+                    <AccountCircle sx={{ fontSize: 60 }} />
+                  )}
                 </Avatar>
                 <Box sx={{ flex: 1, textAlign: { xs: "center", sm: "left" } }}>
                   <Typography

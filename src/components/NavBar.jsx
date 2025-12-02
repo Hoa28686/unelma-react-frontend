@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   AppBar,
+  Avatar,
   Badge,
   Box,
   Button,
@@ -30,6 +31,7 @@ import {
   isUserAuthenticated as checkIsUserAuthenticated,
 } from "../utils/authUtils";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { getImageUrl } from "../helpers/helpers";
 
 function NavBar() {
   const { user: authContextUser, logout, token: authContextToken } = useAuth();
@@ -49,6 +51,15 @@ function NavBar() {
     authContextToken,
     user
   );
+  
+  // Debug: Log user data to check profile_picture
+  React.useEffect(() => {
+    if (isAuthenticated && user) {
+      console.log("NavBar - User data:", user);
+      console.log("NavBar - Profile picture:", user.profile_picture);
+      console.log("NavBar - Image URL:", user.profile_picture ? getImageUrl(user.profile_picture) : "No profile picture");
+    }
+  }, [user, isAuthenticated]);
 
   const mobileMenuWidth = 240;
   const location = useLocation();
@@ -498,7 +509,38 @@ function NavBar() {
                   }
                 }}
               >
-                <AccountCircleOutlinedIcon />
+                {isAuthenticated ? (
+                  user?.profile_picture ? (
+                    <Avatar
+                      src={getImageUrl(user.profile_picture)}
+                      alt="User avatar"
+                      onError={(e) => {
+                        console.error("Profile picture failed to load:", {
+                          profile_picture: user.profile_picture,
+                          imageUrl: getImageUrl(user.profile_picture),
+                          user: user,
+                        });
+                        // Hide the broken image and show icon instead
+                        e.target.style.display = "none";
+                      }}
+                      onLoad={() => {
+                        console.log("Profile picture loaded successfully:", getImageUrl(user.profile_picture));
+                      }}
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        border: (theme) => `1px solid ${theme.palette.divider}`,
+                      }}
+                    >
+                      {/* Fallback icon if image fails to load */}
+                      <AccountCircleOutlinedIcon sx={{ fontSize: 20 }} />
+                    </Avatar>
+                  ) : (
+                    <AccountCircleOutlinedIcon />
+                  )
+                ) : (
+                  <AccountCircleOutlinedIcon />
+                )}
               </IconButton>
             </Box>
             <ThemeSwitch />

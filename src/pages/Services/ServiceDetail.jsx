@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchServices, setSelectedService, clearSelectedService } from "../../lib/features/services/servicesSlice";
 import {
   Box,
   Typography,
@@ -18,12 +19,14 @@ import {
 } from "@mui/material";
 import { useContactForm } from "../../hooks/useContactForm";
 import StyledTextField from "../../components/StyledTextField";
+import { getImageUrl } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SecurityIcon from "@mui/icons-material/Security";
 import StorageIcon from "@mui/icons-material/Storage";
 import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import ComputerIcon from "@mui/icons-material/Computer";
 import { commonButtonStyles } from "../../constants/styles";
 import { useAuth } from "../../context/AuthContext";
 import { createCheckoutSession } from "../../lib/api/paymentService";
@@ -33,7 +36,32 @@ import {
 } from "../../utils/authUtils";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 
-// Service data with details
+// Helper function to map service name to icon
+const getServiceIcon = (serviceName) => {
+  const name = serviceName?.toLowerCase() || "";
+  if (name.includes("cyber") || name.includes("security")) return SecurityIcon;
+  if (name.includes("data management") || name.includes("storage")) return StorageIcon;
+  if (name.includes("data science") || name.includes("science")) return ScienceIcon;
+  if (name.includes("cloud")) return CloudIcon;
+  if (name.includes("ai") || name.includes("machine learning") || name.includes("psychology")) return PsychologyIcon;
+  if (name.includes("web") || name.includes("mobile") || name.includes("development")) return ComputerIcon;
+  return ComputerIcon; // Default icon
+};
+
+// Helper function to convert service name to URL slug
+const getServiceSlug = (serviceName) => {
+  const name = serviceName?.toLowerCase() || "";
+  if (name.includes("cyber") || name.includes("security")) return "cyber-security";
+  if (name.includes("data management")) return "data-management";
+  if (name.includes("data science")) return "data-science";
+  if (name.includes("cloud")) return "cloud-service";
+  if (name.includes("ai") || name.includes("machine learning")) return "ai-machine-learning";
+  if (name.includes("web") || name.includes("mobile")) return "web-mobile-development";
+  return serviceName?.toLowerCase().replace(/\s+/g, "-") || "";
+};
+
+// Hardcoded plans data (to be replaced when backend provides this)
+// This is kept as fallback for pricing/plans that may not be in backend yet
 const serviceDetails = {
   "cyber-security": {
     id: 1,
@@ -211,11 +239,48 @@ const serviceDetails = {
       },
     ],
   },
+  "web-mobile-development": {
+    id: 6,
+    name: "Web and Mobile Development",
+    icon: ComputerIcon,
+    description: "We know this shit! Request a quote; you will not be disappointed. Our expert team specializes in building cutting-edge web and mobile applications that deliver exceptional user experiences. From responsive web applications to native and cross-platform mobile apps, we create scalable, performant, and user-friendly solutions. We leverage modern frameworks and technologies to build applications that are fast, secure, and maintainable. Whether you need a simple website, a complex web application, or a mobile app for iOS and Android, we've got you covered.",
+    plans: [
+      {
+        name: "Starter",
+        price: 199,
+        period: "/Mo",
+        features: [
+          "Responsive Web Design",
+          "Basic Mobile App (1 Platform)",
+          "Up to 5 Pages/Screens",
+          "Email Support",
+          "3 Months Maintenance",
+        ],
+      },
+      {
+        name: "Professional",
+        price: 599,
+        period: "/Mo",
+        features: [
+          "Full-Stack Web Application",
+          "Cross-Platform Mobile App",
+          "Unlimited Pages/Screens",
+          "Custom Features & Integrations",
+          "Priority Support",
+          "6 Months Maintenance",
+          "Performance Optimization",
+          "Security Implementation",
+        ],
+      },
+    ],
+  },
 };
 
 function ServiceDetail() {
   const { serviceId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { services, selectedService, loading: servicesLoading } = useSelector((state) => state.services);
   const {
     formData,
     loading,
@@ -248,7 +313,41 @@ function ServiceDetail() {
   const [paymentLoading, setPaymentLoading] = useState(null); // Track which plan is loading (plan name)
   const [paymentError, setPaymentError] = useState(null);
 
-  const service = serviceDetails[serviceId];
+  // Fetch services if not loaded
+  useEffect(() => {
+    if (services.length === 0) {
+      dispatch(fetchServices());
+    }
+  }, [dispatch, services.length]);
+
+  // Find service from backend by matching slug
+  useEffect(() => {
+    if (serviceId && services.length > 0) {
+      const backendService = services.find((s) => {
+        const slug = getServiceSlug(s.name);
+        return slug === serviceId;
+      });
+      
+      if (backendService) {
+        // Merge backend service with hardcoded plans (if available)
+        const hardcodedDetails = serviceDetails[serviceId];
+        const mergedService = {
+          ...backendService,
+          // Use hardcoded plans if available, otherwise use empty array
+          plans: hardcodedDetails?.plans || [],
+        };
+        // Don't store icon component in Redux - derive it during render instead
+        dispatch(setSelectedService(mergedService));
+      } else {
+        dispatch(clearSelectedService());
+      }
+    }
+  }, [serviceId, services, dispatch]);
+
+  // Use selectedService from Redux, or fallback to hardcoded if backend service not found
+  const backendService = selectedService;
+  const hardcodedService = serviceDetails[serviceId];
+  const service = backendService || (hardcodedService ? { ...hardcodedService, ...hardcodedService } : null);
 
   // Handle order now - Stripe integration
   const handleOrderNow = async (plan) => {
@@ -300,6 +399,22 @@ function ServiceDetail() {
     }
   };
 
+  // Show loading state
+  if (servicesLoading || (services.length === 0 && !hardcodedService)) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   if (!service) {
     return (
       <Box
@@ -323,7 +438,7 @@ function ServiceDetail() {
     );
   }
 
-  const IconComponent = service.icon;
+  const IconComponent = service.icon || getServiceIcon(service.name);
 
   return (
     <Box
@@ -334,6 +449,41 @@ function ServiceDetail() {
         backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
+      {/* Hero Image Section */}
+      {(service.image_url || service.image_local_url || service.image) && (
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            height: { xs: "300px", sm: "400px", md: "500px" },
+            overflow: "hidden",
+            backgroundColor: (theme) => theme.palette.background.default,
+          }}
+        >
+          <Box
+            component="img"
+            src={getImageUrl(service.image_url || service.image_local_url || service.image)}
+            alt={service.name}
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+          {/* Overlay gradient for better text readability */}
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: "50%",
+              background: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+            }}
+          />
+        </Box>
+      )}
+      
       {/* Content */}
       <Box
         sx={{
@@ -377,24 +527,35 @@ function ServiceDetail() {
               marginBottom: { xs: "2rem", sm: "3rem" },
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: { xs: "64px", sm: "80px" },
-                height: { xs: "64px", sm: "80px" },
-                borderRadius: "50%",
-                backgroundColor: "rgba(229, 122, 68, 0.1)",
-                color: (theme) => theme.palette.primary.main,
-              }}
-            >
-              <IconComponent
+            {IconComponent && (
+              <Box
                 sx={{
-                  fontSize: { xs: "2rem", sm: "2.5rem" },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: { xs: "64px", sm: "80px" },
+                  height: { xs: "64px", sm: "80px" },
+                  minWidth: { xs: "64px", sm: "80px" },
+                  minHeight: { xs: "64px", sm: "80px" },
+                  maxWidth: { xs: "64px", sm: "80px" },
+                  maxHeight: { xs: "64px", sm: "80px" },
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  flexShrink: 0,
+                  backgroundColor: (theme) => 
+                    theme.palette.mode === 'light' 
+                      ? `${theme.palette.primary.main}15` 
+                      : `${theme.palette.primary.main}25`,
+                  color: (theme) => theme.palette.primary.main,
                 }}
-              />
-            </Box>
+              >
+                <IconComponent
+                  sx={{
+                    fontSize: { xs: "2rem", sm: "2.5rem" },
+                  }}
+                />
+              </Box>
+            )}
             <Typography
               variant="h2"
               component="h1"

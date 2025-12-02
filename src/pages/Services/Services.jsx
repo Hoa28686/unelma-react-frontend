@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Box,
   Card,
@@ -8,7 +8,12 @@ import {
   InputAdornment,
   IconButton,
   Pagination,
+  CircularProgress,
 } from "@mui/material";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchServices } from "../../lib/features/services/servicesSlice";
+import { getImageUrl } from "../../helpers/helpers";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -18,70 +23,65 @@ import StorageIcon from "@mui/icons-material/Storage";
 import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import { useNavigate } from "react-router";
+import ComputerIcon from "@mui/icons-material/Computer";
 
-// Hardcoded services data with icons
-const servicesData = [
-  {
-    id: 1,
-    name: "Cyber Security",
-    description: "We help with cyber security tools and services",
-    icon: SecurityIcon,
-  },
-  {
-    id: 2,
-    name: "Data Management",
-    description:
-      "We at Unelma Platforms can help you with different types of data management products and services.",
-    icon: StorageIcon,
-  },
-  {
-    id: 3,
-    name: "Data Science",
-    description:
-      "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services.",
-    icon: ScienceIcon,
-  },
-  {
-    id: 4,
-    name: "Cloud Service",
-    description:
-      'We are masters of cloud services as we have developed one of the platforms called "Unelma Cloud".',
-    icon: CloudIcon,
-  },
-  {
-    id: 5,
-    name: "AI and machine learning",
-    description:
-      "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning.",
-    icon: PsychologyIcon,
-  },
-];
+// Helper function to map service name to icon
+const getServiceIcon = (serviceName) => {
+  const name = serviceName?.toLowerCase() || "";
+  if (name.includes("cyber") || name.includes("security")) return SecurityIcon;
+  if (name.includes("data management") || name.includes("storage")) return StorageIcon;
+  if (name.includes("data science") || name.includes("science")) return ScienceIcon;
+  if (name.includes("cloud")) return CloudIcon;
+  if (name.includes("ai") || name.includes("machine learning") || name.includes("psychology")) return PsychologyIcon;
+  if (name.includes("web") || name.includes("mobile") || name.includes("development")) return ComputerIcon;
+  return ComputerIcon; // Default icon
+};
+
+// Helper function to convert service name to URL slug
+const getServiceSlug = (serviceName) => {
+  const name = serviceName?.toLowerCase() || "";
+  if (name.includes("cyber") || name.includes("security")) return "cyber-security";
+  if (name.includes("data management")) return "data-management";
+  if (name.includes("data science")) return "data-science";
+  if (name.includes("cloud")) return "cloud-service";
+  if (name.includes("ai") || name.includes("machine learning")) return "ai-machine-learning";
+  if (name.includes("web") || name.includes("mobile")) return "web-mobile-development";
+  return serviceName?.toLowerCase().replace(/\s+/g, "-") || "";
+};
 
 const ITEMS_PER_PAGE = 3; // Show 3 services per page
 
-// Service ID mapping
-const serviceIdMap = {
-  1: "cyber-security",
-  2: "data-management",
-  3: "data-science",
-  4: "cloud-service",
-  5: "ai-machine-learning",
-};
-
 function Services() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { services, loading, error } = useSelector((state) => state.services);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  useEffect(() => {
+    if (services.length === 0) {
+      dispatch(fetchServices());
+    }
+  }, [dispatch, services.length]);
+
+  // Map services with icons and slugs
+  const servicesWithIcons = useMemo(() => {
+    return services
+      .filter((service) => service.is_active !== false)
+      .map((service) => ({
+        ...service,
+        serviceId: getServiceSlug(service.name),
+      }));
+  }, [services]);
+
   // Filter services based on search query
   const filteredServices = useMemo(() => {
-    if (!searchQuery.trim()) return servicesData;
+    if (!searchQuery.trim()) return servicesWithIcons;
 
     const query = searchQuery.toLowerCase().trim();
     const searchTerms = query.split(" ").filter((term) => term.length > 0);
 
-    return servicesData.filter((service) => {
+    return servicesWithIcons.filter((service) => {
       const searchableText = [service.name, service.description]
         .filter(Boolean)
         .join(" ")
@@ -89,7 +89,7 @@ function Services() {
 
       return searchTerms.some((term) => searchableText.includes(term));
     });
-  }, [searchQuery]);
+  }, [searchQuery, servicesWithIcons]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredServices.length / ITEMS_PER_PAGE);
@@ -232,8 +232,44 @@ function Services() {
             )}
           </Box>
 
+          {/* Loading State */}
+          {loading && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "400px",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          )}
+
+          {/* Error State */}
+          {error && !loading && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "400px",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  color: (theme) => theme.palette.error.main,
+                  textAlign: "center",
+                }}
+              >
+                Error loading services: {error}
+              </Typography>
+            </Box>
+          )}
+
           {/* Services Grid */}
-          {filteredServices.length === 0 && searchQuery ? (
+          {!loading && !error && filteredServices.length === 0 && searchQuery ? (
             <Box
               sx={{
                 display: "flex",
@@ -266,12 +302,13 @@ function Services() {
                   marginBottom: { xs: "2rem", sm: "3rem" },
                 }}
               >
-                {paginatedServices.map((service) => (
+                {paginatedServices.map((service) => {
+                  const ServiceIconComponent = getServiceIcon(service.name);
+                  return (
                   <Card
                     key={service.id}
                     onClick={() => {
-                      const serviceId = serviceIdMap[service.id];
-                      navigate(`/services/${serviceId}`);
+                      navigate(`/services/${service.serviceId}`);
                     }}
                     sx={{
                       backgroundColor: (theme) =>
@@ -284,12 +321,40 @@ function Services() {
                       transition: "all 0.3s ease",
                       overflow: "hidden",
                       cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
                       "&:hover": {
                         borderColor: (theme) => theme.palette.primary.main,
                         transform: "translateY(-4px)",
                       },
                     }}
                   >
+                    {/* Service Image */}
+                    {(service.image_url || service.image_local_url || service.image) && (
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: { xs: "200px", sm: "220px", md: "240px" },
+                          overflow: "hidden",
+                          backgroundColor: (theme) => theme.palette.background.default,
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          src={getImageUrl(service.image_url || service.image_local_url || service.image)}
+                          alt={service.name}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            transition: "transform 0.3s ease",
+                            "&:hover": {
+                              transform: "scale(1.05)",
+                            },
+                          }}
+                        />
+                      </Box>
+                    )}
                     <CardContent sx={{ padding: { xs: "1.5rem", sm: "2rem" } }}>
                       <Box
                         sx={{
@@ -299,7 +364,7 @@ function Services() {
                           marginBottom: "1rem",
                         }}
                       >
-                        {service.icon && (
+                        {ServiceIconComponent && (
                           <Box
                             sx={{
                               display: "flex",
@@ -307,12 +372,21 @@ function Services() {
                               justifyContent: "center",
                               width: { xs: "48px", sm: "56px" },
                               height: { xs: "48px", sm: "56px" },
+                              minWidth: { xs: "48px", sm: "56px" },
+                              minHeight: { xs: "48px", sm: "56px" },
+                              maxWidth: { xs: "48px", sm: "56px" },
+                              maxHeight: { xs: "48px", sm: "56px" },
                               borderRadius: "50%",
-                              backgroundColor: "rgba(229, 122, 68, 0.1)",
+                              overflow: "hidden",
+                              flexShrink: 0,
+                              backgroundColor: (theme) => 
+                                theme.palette.mode === 'light' 
+                                  ? `${theme.palette.primary.main}15` 
+                                  : `${theme.palette.primary.main}25`,
                               color: (theme) => theme.palette.primary.main,
                             }}
                           >
-                            <service.icon
+                            <ServiceIconComponent
                               sx={{
                                 fontSize: { xs: "1.5rem", sm: "1.75rem" },
                               }}
@@ -343,7 +417,8 @@ function Services() {
                       </Typography>
                     </CardContent>
                   </Card>
-                ))}
+                  );
+                })}
               </Box>
 
               {/* Pagination */}

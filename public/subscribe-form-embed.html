@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UnelmaMail Subscription Form</title>
+  
+  <!-- Load Poppins font first -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Links - External UnelmaMail styles -->
+  <link href="https://core.unelmamail.com/core/css/embedded.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+  <link href="https://core.unelmamail.com/core/css/app.css?v=4.1.5-p15" rel="stylesheet" type="text/css" />
+  
+  <!-- Custom Styles - Dark Theme to Match Footer (loaded AFTER external CSS) -->
+  <style>
+    /* Reset and base styles with !important to override external CSS */
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0 !important;
+      padding: 1rem !important; /* Padding for content */
+      background-color: #0A0F1C !important;
+      color: #FFFFFF !important;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+      overflow-y: auto !important; /* Allow vertical scrolling */
+      overflow-x: hidden !important; /* Prevent horizontal scroll */
+    }
+    
+    html {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      height: 100% !important;
+    }
+    
+    /* Override UnelmaMail default styles */
+    .subscribe-embedded-form {
+      color: #FFFFFF !important;
+      font-family: 'Poppins', sans-serif !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background-color: #0A0F1C !important;
+    }
+    
+    .subscribe-embedded-form .text-sm {
+      font-size: 0.875rem !important;
+      color: rgba(255, 255, 255, 0.7) !important;
+      margin-bottom: 0.5rem !important;
+      text-align: right !important;
+    }
+    
+    .subscribe-embedded-form .text-danger {
+      color: #F87171 !important; /* Your error color */
+    }
+    
+    .subscribe-embedded-form label {
+      color: #FFFFFF !important;
+      font-size: 0.875rem !important;
+      margin-bottom: 0.5rem !important;
+      display: block !important;
+      font-family: 'Poppins', sans-serif !important;
+      font-weight: 400 !important;
+    }
+    
+    /* Form input styling */
+    .subscribe-embedded-form .form-control,
+    .subscribe-embedded-form input.form-control,
+    .subscribe-embedded-form input[type="text"],
+    .subscribe-embedded-form input[type="email"] {
+      width: 100% !important;
+      padding: 0.75rem 1rem !important;
+      border-radius: 8px !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      background-color: #151B2E !important;
+      color: #FFFFFF !important;
+      font-size: 0.875rem !important;
+      font-family: 'Poppins', sans-serif !important;
+      transition: all 0.3s ease !important;
+      box-sizing: border-box !important;
+    }
+    
+    .subscribe-embedded-form .form-control::placeholder,
+    .subscribe-embedded-form input::placeholder {
+      color: rgba(255, 255, 255, 0.5) !important;
+      opacity: 1 !important;
+    }
+    
+    .subscribe-embedded-form .form-control:focus,
+    .subscribe-embedded-form input:focus {
+      outline: none !important;
+      border-color: #3B82F6 !important; /* Your primary blue */
+      border-width: 2px !important;
+      background-color: #151B2E !important;
+    }
+    
+    .subscribe-embedded-form .form-control:disabled,
+    .subscribe-embedded-form input:disabled {
+      background-color: rgba(255, 255, 255, 0.05) !important;
+      opacity: 0.6 !important;
+    }
+    
+    .subscribe-embedded-form .form-group {
+      margin-bottom: 1rem !important;
+    }
+    
+    /* Terms checkbox section */
+    .subscribe-embedded-form .d-flex {
+      display: flex !important;
+      align-items: flex-start !important;
+      margin-bottom: 1rem !important;
+      margin-top: 1rem !important;
+      padding-top: 0.5rem !important;
+      position: relative !important;
+    }
+    
+    .subscribe-embedded-form .mr-2 {
+      margin-right: 0.5rem !important;
+      margin-top: 0.25rem !important;
+    }
+    
+    .subscribe-embedded-form .d-flex > div:last-child {
+      color: rgba(255, 255, 255, 0.7) !important;
+      font-size: 0.875rem !important;
+      line-height: 1.5 !important;
+      flex: 1 !important;
+      font-family: 'Poppins', sans-serif !important;
+    }
+    
+    .subscribe-embedded-form input[type="checkbox"] {
+      width: 18px !important;
+      height: 18px !important;
+      cursor: pointer !important;
+      accent-color: #3B82F6 !important; /* Your primary blue */
+      margin-right: 0.5rem !important;
+    }
+    
+    .subscribe-embedded-form a {
+      color: #3B82F6 !important; /* Your primary blue */
+      text-decoration: none !important;
+      transition: color 0.2s ease !important;
+    }
+    
+    .subscribe-embedded-form a:hover {
+      color: #FFFFFF !important;
+      text-decoration: underline !important;
+    }
+    
+    .subscribe-embedded-form .form-button {
+      margin-top: 1rem !important;
+    }
+    
+    /* Button styling */
+    .subscribe-embedded-form .btn,
+    .subscribe-embedded-form button.btn,
+    .subscribe-embedded-form button.btn-primary,
+    .subscribe-embedded-form button[type="submit"] {
+      padding: 0.75rem 1.5rem !important;
+      border-radius: 8px !important;
+      border: 1px solid transparent !important;
+      font-size: 1rem !important;
+      font-weight: 100 !important;
+      font-family: 'Poppins', sans-serif !important;
+      text-transform: none !important;
+      cursor: pointer !important;
+      transition: all 0.3s ease !important;
+      white-space: nowrap !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    .subscribe-embedded-form .btn-primary,
+    .subscribe-embedded-form button.btn-primary {
+      background-color: #3B82F6 !important; /* Your primary blue */
+      color: #FFFFFF !important;
+      box-shadow: none !important;
+    }
+    
+    .subscribe-embedded-form .btn-primary:hover,
+    .subscribe-embedded-form button.btn-primary:hover {
+      border-color: #3B82F6 !important;
+      transform: translateY(-4px) !important;
+      background-color: #3B82F6 !important;
+    }
+    
+    .subscribe-embedded-form .btn-primary:focus,
+    .subscribe-embedded-form button.btn-primary:focus {
+      outline: 2px solid #3B82F6 !important;
+      outline-offset: 2px !important;
+      box-shadow: none !important;
+    }
+    
+    .subscribe-embedded-form .btn-primary:disabled,
+    .subscribe-embedded-form button.btn-primary:disabled {
+      opacity: 0.6 !important;
+      cursor: not-allowed !important;
+    }
+    
+    /* Error styling for validation */
+    .subscribe-embedded-form .form-control.error,
+    .subscribe-embedded-form input.error {
+      border-color: rgba(248, 113, 113, 0.8) !important;
+    }
+    
+    .subscribe-embedded-form label.error {
+      color: rgba(248, 113, 113, 0.8) !important;
+      font-size: 0.75rem !important;
+      margin-top: 0.25rem !important;
+      display: block !important;
+    }
+    
+    /* Override any inline styles from external CSS */
+    .subscribe-embedded-form * {
+      font-family: 'Poppins', sans-serif !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Subscription Form -->
+  <div class="subscribe-embedded-form">
+    <p class="text-sm text-end">
+      <span class="text-danger">*</span> indicates required
+    </p>
+    
+    <form 
+      action="https://core.unelmamail.com/lists/691ef0d6757a2/691ee933b3614/embedded-form-subscribe-captcha" 
+      method="POST" 
+      class="form-validate-jqueryz"
+    >
+      <!-- Email Field -->
+      <div class="form-group control-text">
+        <label>
+          Email <span class="text-danger">*</span>
+        </label>
+        <input 
+          id="EMAIL" 
+          placeholder="your email" 
+          value="" 
+          type="text" 
+          name="EMAIL" 
+          class="form-control required email:rfc,filter" 
+        />
+      </div>
+      
+      <!-- Terms and Conditions Checkbox -->
+      <div class="d-flex align-items-top mb-4 mt-4 pt-2" style="position: relative">
+        <div class="mr-2">
+          <input type="checkbox" name="acm_term" required />
+        </div>
+        <div>
+          By checking this box, I acknowledge that I have read and understood the
+          <a href="" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
+          governing this subscription service and agree to be bound by them.
+        </div>
+      </div>
+      
+      <!-- Submit Button -->
+      <div class="form-button">
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- JavaScript Libraries -->
+  <script type="text/javascript" src="https://core.unelmamail.com/core/js/jquery-3.6.4.min.js"></script>
+  <script type="text/javascript" src="https://core.unelmamail.com/core/js/jquery-migrate-3.4.1.min.js"></script>
+  <script type="text/javascript" src="https://core.unelmamail.com/core/validate/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="https://core.unelmamail.com/jquery_validate_locale"></script>
+  <script type="text/javascript" src="https://core.unelmamail.com/core/datetime/anytime.min.js"></script>
+  <script type="text/javascript" src="https://core.unelmamail.com/core/datetime/moment.min.js"></script>
+  <script type="text/javascript" src="https://core.unelmamail.com/core/datetime/pickadate/picker.js"></script>
+  <script type="text/javascript" src="https://core.unelmamail.com/core/datetime/pickadate/picker.date.js"></script>
+  <script type="text/javascript" src="https://core.unelmamail.com/core/js/functions.js"></script>
+  
+  <!-- Global Variables -->
+  <script>
+    var APP_URL = 'https://core.unelmamail.com';
+    var LANG_OK = 'OK';
+    var LANG_CONFIRM = 'Confirm';
+    var LANG_YES = 'Yes';
+    var LANG_NO = 'No';
+    var LANG_ARE_YOU_SURE = 'Are you sure?';
+    var LANG_CANCEL = 'Cancel';
+    var LANG_DELETE_VALIDATE = 'Please enter the text exactly as it is displayed to confirm deletion.';
+    var LANG_DATE_FORMAT = 'yyyy-mm-dd';
+    var LANG_ANY_DATETIME_FORMAT = '%Z-%m-%d, %H:%i';
+    var CSRF_TOKEN = "OlLRQJU3JiyXVhErwBvyzH7bgfi8yG709akGccmH";
+    var LANG_SUCCESS = 'Success';
+    var LANG_ALERT = 'Alert';
+    var LANG_ERROR = 'Error';
+    var LANG_CONFIRMATION = 'Confirmation';
+    var LANG_NOTIFY = {
+      'success': 'Success',
+      'error': 'Error',
+      'notice': 'Notice'
+    };
+    var LOADING_WAIT = 'Loading, please wait...';
+    var LANG_LICENSE_REQUIRED = 'Please add a valid license for your application to use this feature';
+  </script>
+  
+  <!-- Form Validation Initialization -->
+  <script>
+    jQuery(document).ready(function($) {
+      $(".subscribe-embedded-form form").validate({
+        rules: {
+          EMAIL: {
+            required: true,
+            email: true,
+            remote: "https://core.unelmamail.com/lists/691ef0d6757a2/check-email"
+          }
+        }
+      });
+      initJs($('.subscribe-embedded-form'));
+    });
+  </script>
+</body>
+</html>
