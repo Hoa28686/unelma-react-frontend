@@ -55,6 +55,7 @@ function Blog() {
 
   const handleBlogClick = (blogId) => {
     navigate(`/blogs/${blogId}`);
+    window.scrollTo({ top: 80, behavior: "smooth" });
   };
 
   // Filter blogs based on search query and category
@@ -504,9 +505,7 @@ function Blog() {
                     variant="body1"
                     sx={{
                       color: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? "rgba(255, 255, 255, 0.9)"
-                          : "rgba(0, 0, 0, 0.87)",
+                        theme.palette.mode === "dark" ? "#ffffff" : "#000000",
                       lineHeight: 1.8,
                       fontSize: { xs: "0.9375rem", sm: "1rem" },
                     }}
@@ -517,6 +516,9 @@ function Blog() {
                         <MuiLink
                           component={Link}
                           to={`/blogs/${blog.id}`}
+                          onClick={() =>
+                            window.scrollTo({ top: 80, behavior: "smooth" })
+                          }
                           sx={{ textDecoration: "none" }}
                         >
                           ...continue reading

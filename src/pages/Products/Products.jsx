@@ -243,7 +243,7 @@ function Products() {
               key={p.id}
               sx={{
                 width: 350,
-                height: 480,
+                height: 500,
                 m: 2,
                 position: "relative",
               }}
@@ -285,14 +285,14 @@ function Products() {
                   sx={{ cursor: "pointer" }}
                 />
                 <FavoriteButtonAndCount type="product" item={p} />
-                <CardContent>
+                <CardContent sx={{ pt: 0 }}>
                   <RatingDisplay rating={p.rating} />
                   <PriceDisplay price={p.price} />
                 </CardContent>
                 <Box
                   sx={{
                     position: "absolute",
-                    bottom: 15,
+                    bottom: 20,
                     right: 15,
                   }}
                   onClick={(e) => e.stopPropagation()}
