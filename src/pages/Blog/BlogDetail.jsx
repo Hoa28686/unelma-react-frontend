@@ -26,6 +26,7 @@ import { API } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import FavoriteButton from "../../components/FavoriteButton";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
+import SuggestedBlog from "../../components/SuggestedBlog";
 
 function BlogDetail() {
   const { blogId } = useParams();
@@ -195,6 +196,17 @@ function BlogDetail() {
             gap: 3,
           }}
         >
+          {selectedBlog.category && (
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: (theme) => theme.palette.text.secondary,
+                textTransform: "uppercase",
+              }}
+            >
+              {selectedBlog.category}
+            </Typography>
+          )}
           <Box
             component="img"
             src={
@@ -272,6 +284,8 @@ function BlogDetail() {
               <p>{selectedBlog.content}</p>
             )}
           </Box>
+
+          {/* Comment section */}
           <Box
             sx={{ width: "100%", textAlign: "left", alignSelf: "flex-start" }}
           >
@@ -373,7 +387,11 @@ function BlogDetail() {
                     }}
                   >
                     <Avatar
-                      src={c.user.profile_picture ? getImageUrl(c.user.profile_picture) : undefined}
+                      src={
+                        c.user.profile_picture
+                          ? getImageUrl(c.user.profile_picture)
+                          : undefined
+                      }
                       alt="user avatar"
                       sx={{
                         width: { xs: 32, sm: 40 },
@@ -449,6 +467,8 @@ function BlogDetail() {
             )}
           </Box>
         </Box>
+        {/* Suggested Blogs */}
+        <SuggestedBlog currentBlog={selectedBlog} allBlogs={blogs} />
       </Box>
     </>
   );

@@ -336,6 +336,7 @@ function Blog() {
           )}
         </Box>
 
+        {/* Sort and filter */}
         <Stack
           spacing={2}
           direction={{ xs: "column", sm: "row" }}
@@ -453,6 +454,18 @@ function Blog() {
                   padding: { xs: 2, sm: 3 },
                 }}
               >
+                {blog.category && (
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      color: (theme) => theme.palette.text.secondary,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {blog.category}
+                  </Typography>
+                )}
+
                 <CardHeader
                   onClick={() => handleBlogClick(blog.id)}
                   title={
@@ -474,10 +487,8 @@ function Blog() {
                     <Typography
                       variant="body2"
                       sx={{
-                        color: (theme) =>
-                          theme.palette.mode === "dark"
-                            ? "rgba(255, 255, 255, 0.7)"
-                            : "rgba(0, 0, 0, 0.6)",
+                        color: (theme) => theme.palette.text.secondary,
+
                         fontSize: "0.875rem",
                       }}
                     >
@@ -486,6 +497,7 @@ function Blog() {
                   }
                   sx={{ pb: 1, px: 0, cursor: "pointer" }}
                 />
+
                 <FavoriteButtonAndCount type="blog" item={blog} />
                 <CardContent sx={{ mb: 0, px: 0, pt: 1 }}>
                   <Typography
