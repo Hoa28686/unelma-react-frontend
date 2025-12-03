@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { SignInPage } from "@toolpad/core";
-import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
+import { Box, Link as MuiLink, Button, Paper, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useAuth } from "../../context/AuthContext";
@@ -8,7 +8,6 @@ import { useAuth } from "../../context/AuthContext";
 function Login() {
   const { user, login, logout, message, loading, error } = useAuth();
   const navigate = useNavigate();
-  const theme = useTheme();
 
   // Navigate to home on successful login
   useEffect(() => {
@@ -24,7 +23,7 @@ function Login() {
       // Remove aria-hidden from root if it's incorrectly set
       rootElement.removeAttribute("aria-hidden");
     }
-    
+
     // Monitor for aria-hidden changes and fix them
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -75,9 +74,10 @@ function Login() {
       variant="h4"
       component="h3"
       sx={{
-        marginBottom: 2,
+        marginBlock: 2,
         fontWeight: 600,
         color: (theme) => theme.palette.text.primary,
+        textAlign: "center",
       }}
     >
       Welcome to Unelma Platforms
@@ -122,15 +122,20 @@ function Login() {
     </Box>
   );
   const SignUpLink = () => (
-    <Typography variant="body2" sx={{ mt: 3, color: (theme) => theme.palette.text.secondary }}>
+    <Typography
+      variant="body2"
+      sx={{ mt: 3, color: (theme) => theme.palette.text.secondary }}
+    >
       Don't have an account?{" "}
-      <Link
+      <MuiLink
+        component={Link}
         to={"/register"}
         style={{
           fontWeight: "bold",
-          color: theme.palette.primary.main,
+          color: (theme) => theme.palette.primary.main,
           cursor: "pointer",
           textDecoration: "none",
+          mb: 2,
         }}
         onMouseEnter={(e) => {
           e.target.style.textDecoration = "underline";
@@ -140,7 +145,7 @@ function Login() {
         }}
       >
         Create one.
-      </Link>
+      </MuiLink>
     </Typography>
   );
   const SubmitButton = (props) => {
@@ -199,7 +204,13 @@ function Login() {
       }}
     >
       {(message || error) && (
-        <Box sx={{ width: "100%", maxWidth: { xs: "90%", sm: "500px", md: "550px" }, mb: 2 }}>
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: { xs: "90%", sm: "500px", md: "550px" },
+            mb: 2,
+          }}
+        >
           <Typography
             variant="body1"
             sx={{
@@ -216,64 +227,17 @@ function Login() {
         </Box>
       )}
       {!user && (
-        <Paper
-          elevation={3}
-          sx={{
-            width: "100%",
-            maxWidth: { xs: "90%", sm: "500px", md: "550px" },
-            p: { xs: 3, sm: 4 },
-            borderRadius: 2,
-            backgroundColor: (theme) => theme.palette.background.paper,
-            "& input": {
-              color: (theme) => theme.palette.text.primary,
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? "#FFFFFF"
-                  : theme.palette.background.default,
-            },
-            "& input::placeholder": {
-              color: (theme) => theme.palette.text.secondary,
-              opacity: 0.7,
-            },
-            "& label": {
-              color: (theme) => theme.palette.text.secondary,
-            },
-            "& .MuiInputBase-root": {
-              color: (theme) => theme.palette.text.primary,
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? "#FFFFFF"
-                  : theme.palette.background.default,
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.2)"
-                    : "rgba(0, 0, 0, 0.23)",
-              },
-              "&:hover fieldset": {
-                borderColor: (theme) => theme.palette.primary.main,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: (theme) => theme.palette.primary.main,
-                borderWidth: "2px",
-              },
-            },
+        <SignInPage
+          providers={providers}
+          signIn={signIn}
+          slots={{
+            title: Title,
+            subtitle: Subtitle,
+            rememberMe: RememberMe,
+            signUpLink: SignUpLink,
+            submitButton: SubmitButton,
           }}
-        >
-          <SignInPage
-            providers={providers}
-            signIn={signIn}
-            slots={{
-              title: Title,
-              subtitle: Subtitle,
-              rememberMe: RememberMe,
-              signUpLink: SignUpLink,
-              submitButton: SubmitButton,
-            }}
-          />
-        </Paper>
+        />
       )}{" "}
       {user && (
         <Paper
