@@ -24,10 +24,13 @@ export const getImageUrl = (imageUrl) => {
   if (!imageUrl) {
     return null;
   }
-
+  
+  // Normalize escaped slashes (from JSON encoding)
+  let normalizedUrl = imageUrl.replace(/\\\//g, '/');
+  
   // If already an absolute URL (starts with http:// or https://), return as is
-  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
-    return imageUrl;
+  if (normalizedUrl.startsWith('http://') || normalizedUrl.startsWith('https://')) {
+    return normalizedUrl;
   }
 
   // Get Laravel base URL from environment or use default
@@ -37,10 +40,10 @@ export const getImageUrl = (imageUrl) => {
   const laravelBaseUrl = apiBaseUrl.replace(/\/api$/, "");
 
   // Handle relative paths (starting with /)
-  if (imageUrl.startsWith("/")) {
-    return `${laravelBaseUrl}${imageUrl}`;
+  if (normalizedUrl.startsWith('/')) {
+    return `${laravelBaseUrl}${normalizedUrl}`;
   }
 
   // Handle paths without leading slash (e.g., "storage/products/image.jpg")
-  return `${laravelBaseUrl}/${imageUrl}`;
+  return `${laravelBaseUrl}/${normalizedUrl}`;
 };

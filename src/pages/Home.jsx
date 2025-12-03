@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button, Card, CardContent } from "@mui/material";
+import { Box, Typography, Button, Card, CardContent, Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import { useNavigate } from "react-router";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import CloseIcon from "@mui/icons-material/Close";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SendIcon from "@mui/icons-material/Send";
@@ -15,9 +17,56 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import heroTile3 from "../assets/hero_tile_3.webp";
 import heroTile4 from "../assets/hero_tile_4.webp";
 
+// Hardcoded services for Home page
+const hardcodedServices = [
+  {
+    id: 1,
+    name: "Cyber Security",
+    description: "Protect your digital assets with our comprehensive security solutions.",
+    icon: SecurityIcon,
+    serviceId: "cyber-security",
+  },
+  {
+    id: 2,
+    name: "Data Management",
+    description: "Efficiently organize and manage your data with our advanced systems.",
+    icon: StorageIcon,
+    serviceId: "data-management",
+  },
+  {
+    id: 3,
+    name: "Data Science",
+    description: "Unlock insights from your data with our analytics and science expertise.",
+    icon: ScienceIcon,
+    serviceId: "data-science",
+  },
+  {
+    id: 4,
+    name: "Cloud Service",
+    description: "Scale your infrastructure with our reliable cloud solutions.",
+    icon: CloudIcon,
+    serviceId: "cloud-service",
+  },
+  {
+    id: 5,
+    name: "AI and Machine Learning",
+    description: "Leverage artificial intelligence to transform your business processes.",
+    icon: PsychologyIcon,
+    serviceId: "ai-machine-learning",
+  },
+  {
+    id: 6,
+    name: "Web and Mobile Development",
+    description: "We know this shit! Request a quote; you will not be disappointed.",
+    icon: ComputerIcon,
+    serviceId: "web-mobile-development",
+  },
+];
+
 function Home() {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     // Trigger animation on mount
@@ -26,6 +75,14 @@ function Home() {
 
   const handleRequestQuote = () => {
     navigate("/contact");
+  };
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -202,48 +259,143 @@ function Home() {
               }}
             >
               {/* Title */}
-              <Typography
-                variant="h1"
-                component="h1"
-                sx={{
-                  fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem", lg: "4rem" },
-                  fontWeight: 700,
-                  color: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "#FFFFFF"
-                      : theme.palette.text.primary,
-                  marginBottom: { xs: "1.5rem", sm: "2rem" },
-                  lineHeight: 1.2,
-                  textAlign: "left",
-                }}
-              >
-                We are Software Platform Development Company
-              </Typography>
-              
-              {/* Body Text */}
               <Box
                 sx={{
-                  "& p": {
-                    color: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.95)"
-                        : theme.palette.text.primary,
-                  },
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  flexWrap: "wrap",
                 }}
               >
-                <p>
-                  Unelma Platforms is a private limited company in multiple jurisdictions (Asia, EU and North America). We are a software platform development agency specialising in state-of-the-art software intended to develop business-specific software and offer IT consulting services.
-                </p>
+                <Typography
+                  variant="h1"
+                  component="h1"
+                  sx={{
+                    fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem", lg: "4rem" },
+                    fontWeight: 700,
+                    color: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "#FFFFFF"
+                        : theme.palette.text.primary,
+                    marginBottom: 0,
+                    lineHeight: 1.2,
+                    textAlign: "left",
+                    flex: 1,
+                    minWidth: { xs: "100%", sm: "auto" },
+                  }}
+                >
+                  We are Software Platform Development Company
+                </Typography>
                 
-                <p>
-                  In other words, we are the operator of a software platform development company intended to develop business-specific software and offer IT consulting services. The company's platform develops custom business applications and web-based platforms. We also provide API for various sites and other IT services, enabling higher education, healthcare, and business markets to design cloud applications for improving customer engagement.
-                </p>
+                {/* Arrow Icon Button */}
+                <IconButton
+                  onClick={handleOpenModal}
+                  sx={{
+                    color: (theme) => theme.palette.primary.main,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(255, 255, 255, 0.1)"
+                        : "rgba(0, 0, 0, 0.05)",
+                    "&:hover": {
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "rgba(255, 255, 255, 0.2)"
+                          : "rgba(0, 0, 0, 0.1)",
+                      transform: "translateX(4px)",
+                    },
+                    transition: "all 0.3s ease",
+                    padding: { xs: "0.75rem", sm: "1rem" },
+                  }}
+                  aria-label="Read more about us"
+                >
+                  <ArrowForwardIcon sx={{ fontSize: { xs: "1.5rem", sm: "2rem" } }} />
+                </IconButton>
               </Box>
             </Box>
           </Box>
+          </Box>
         </Box>
       </Box>
-      </Box>
+
+      {/* Modal for Detailed Description */}
+      <Dialog
+        open={modalOpen}
+        onClose={handleCloseModal}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            backgroundColor: (theme) => theme.palette.background.paper,
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: { xs: "1.5rem", sm: "2rem" },
+            borderBottom: (theme) =>
+              `1px solid ${
+                theme.palette.mode === "dark"
+                  ? "rgba(255, 255, 255, 0.1)"
+                  : "rgba(0, 0, 0, 0.1)"
+              }`,
+          }}
+        >
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{
+              fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
+              fontWeight: 700,
+              color: (theme) => theme.palette.text.primary,
+              flex: 1,
+            }}
+          >
+            We are Software Platform Development Company
+          </Typography>
+          <IconButton
+            onClick={handleCloseModal}
+            sx={{
+              color: (theme) => theme.palette.text.secondary,
+              "&:hover": {
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.1)"
+                    : "rgba(0, 0, 0, 0.05)",
+              },
+            }}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            padding: { xs: "1.5rem", sm: "2rem" },
+            "& p": {
+              fontSize: { xs: "1rem", sm: "1.125rem" },
+              fontWeight: 400,
+              color: (theme) => theme.palette.text.primary,
+              lineHeight: 1.8,
+              marginBottom: "1.5rem",
+              "&:last-child": {
+                marginBottom: 0,
+              },
+            },
+          }}
+        >
+          <Typography component="p">
+            Unelma Platforms is a private limited company in multiple jurisdictions (Asia, EU and North America). We are a software platform development agency specialising in state-of-the-art software intended to develop business-specific software and offer IT consulting services.
+          </Typography>
+          
+          <Typography component="p">
+            In other words, we are the operator of a software platform development company intended to develop business-specific software and offer IT consulting services. The company's platform develops custom business applications and web-based platforms. We also provide API for various sites and other IT services, enabling higher education, healthcare, and business markets to design cloud applications for improving customer engagement.
+          </Typography>
+        </DialogContent>
+      </Dialog>
 
       {/* What We Offer Section */}
       <Box
@@ -278,40 +430,12 @@ function Home() {
               justifyContent: { xs: "center", sm: "flex-start" },
             }}
           >
-            {[
-              {
-                title: "Cyber Security",
-                description: "We help with cyber security tools and services",
-                icon: SecurityIcon,
-              },
-              {
-                title: "Data Management",
-                description: "We at Unelma Platforms can help you with different types of data management products and services.",
-                icon: StorageIcon,
-              },
-              {
-                title: "Data Science",
-                description: "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services.",
-                icon: ScienceIcon,
-              },
-              {
-                title: "Cloud Service",
-                description: "We are masters of cloud services as we have developed one of the platforms called \"Unelma Cloud\".",
-                icon: CloudIcon,
-              },
-              {
-                title: "AI and machine learning",
-                description: "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning.",
-                icon: PsychologyIcon,
-              },
-              {
-                title: "Web and mobile development",
-                description: "We know this shit! Request a quote; you will not be disappointed.",
-                icon: ComputerIcon,
-              },
-            ].map((service, index) => (
+            {hardcodedServices.map((service, index) => {
+              const IconComponent = service.icon;
+              return (
               <Card
-                key={index}
+                key={service.id}
+                onClick={() => navigate(`/services/${service.serviceId}`)}
                 sx={{
                   flex: { 
                     xs: "1 1 100%", 
@@ -328,9 +452,17 @@ function Home() {
                       : "1px solid rgba(0, 0, 0, 0.1)",
                   borderRadius: 2,
                   transition: "all 0.3s ease",
+                  cursor: "pointer",
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
                   "&:hover": {
                     borderColor: (theme) => theme.palette.primary.main,
                     transform: "translateY(-4px)",
+                    boxShadow: (theme) => 
+                      theme.palette.mode === 'dark'
+                        ? "0 8px 16px rgba(0, 0, 0, 0.3)"
+                        : "0 8px 16px rgba(0, 0, 0, 0.1)",
                   },
                 }}
               >
@@ -343,7 +475,7 @@ function Home() {
                       marginBottom: "1rem",
                     }}
                   >
-                    {service.icon && (
+                    {IconComponent && (
                       <Box
                         sx={{
                           display: "flex",
@@ -351,7 +483,13 @@ function Home() {
                           justifyContent: "center",
                           width: { xs: "48px", sm: "56px" },
                           height: { xs: "48px", sm: "56px" },
+                          minWidth: { xs: "48px", sm: "56px" },
+                          minHeight: { xs: "48px", sm: "56px" },
+                          maxWidth: { xs: "48px", sm: "56px" },
+                          maxHeight: { xs: "48px", sm: "56px" },
                           borderRadius: "50%",
+                          overflow: "hidden",
+                          flexShrink: 0,
                           backgroundColor: (theme) => 
                             theme.palette.mode === 'light' 
                               ? `${theme.palette.primary.main}15` 
@@ -359,7 +497,7 @@ function Home() {
                           color: (theme) => theme.palette.primary.main,
                         }}
                       >
-                        <service.icon
+                        <IconComponent
                           sx={{
                             fontSize: { xs: "1.5rem", sm: "1.75rem" },
                           }}
@@ -375,7 +513,7 @@ function Home() {
                         color: (theme) => theme.palette.text.primary,
                       }}
                     >
-                      {service.title}
+                      {service.name}
                     </Typography>
                   </Box>
                   <Typography
@@ -426,7 +564,8 @@ function Home() {
                   </Button>
                 </CardContent>
               </Card>
-            ))}
+              );
+            })}
           </Box>
         </Box>
       </Box>

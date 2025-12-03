@@ -18,6 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
@@ -372,13 +373,20 @@ function BlogDetail() {
                     }}
                   >
                     <Avatar
-                      alt={c.user.name}
-                      src={c.user.profile_picture || "/logo.webp"}
+                      src={c.user.profile_picture ? getImageUrl(c.user.profile_picture) : undefined}
+                      alt="user avatar"
                       sx={{
                         width: { xs: 32, sm: 40 },
                         height: { xs: 32, sm: 40 },
+                        flexShrink: 0,
+                        border: (theme) =>
+                          `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
                       }}
-                    />
+                    >
+                      {!c.user.profile_picture && (
+                        <AccountCircle sx={{ fontSize: { xs: 32, sm: 40 } }} />
+                      )}
+                    </Avatar>
 
                     <Box
                       sx={{

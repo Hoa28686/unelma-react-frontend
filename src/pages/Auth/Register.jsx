@@ -1,13 +1,20 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import {
+  Link as MuiLink,
+  Button,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { API } from "../../api";
 
 function Register() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -166,6 +173,26 @@ function Register() {
           {loading ? "Registering..." : "Register"}
         </Button>
       </form>
+      <Typography
+        variant="body2"
+        sx={{ mt: 3, color: (theme) => theme.palette.text.secondary }}
+      >
+        Already have an account?{" "}
+        <MuiLink
+          to={"/login"}
+          component={Link}
+          sx={{
+            fontWeight: "bold",
+            color: (theme) => theme.palette.primary.main,
+            cursor: "pointer",
+            textDecoration: "none",
+            mb: 2,
+          }}
+        >
+          Log in
+        </MuiLink>
+      </Typography>
+
       {(message || error) && (
         <Typography
           variant="body1"
