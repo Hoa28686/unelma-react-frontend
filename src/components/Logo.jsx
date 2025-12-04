@@ -8,26 +8,24 @@ function Logo() {
       component={Link}
       to="/"
       sx={{
-        height: { xs: "56px", sm: "64px" },
-        width: { xs: "56px", sm: "64px" },
-        backgroundColor: "#FFFFFF",
+        height: "3rem",
+        width: "auto",
+        py: ".25rem",
+        mr: 2,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
-        marginLeft: { xs: "48px", sm: "48px" },
-        mr: { xs: 1, sm: 2 },
         flexShrink: 0,
       }}
     >
       <img
         src="/logo.webp"
         alt="unelma-logo"
-        style={{ 
-          height: "100%", 
-          width: "auto", 
+        style={{
+          height: "100%",
+          width: "auto",
           maxWidth: "100%",
           objectFit: "contain",
-          objectPosition: "center center"
+          objectPosition: "center center",
         }}
       />
     </Box>

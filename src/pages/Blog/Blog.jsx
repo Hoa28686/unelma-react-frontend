@@ -75,6 +75,7 @@ function Blog() {
       result = result.filter((blog) =>
         favorites.some(
           (fav) =>
+            fav.user_id == user.id &&
             fav.favorite_type === "blog" &&
             fav.item_id == blog.id
         )
@@ -474,15 +475,13 @@ function Blog() {
               <CardMedia
                 component="img"
                 onClick={() => handleBlogClick(blog.id)}
-                src={
-                  getImageUrl(
-                    blog.featured_image_local_url ||
+                src={getImageUrl(
+                  blog.featured_image_local_url ||
                     blog.featured_image_url ||
                     blog.featured_image ||
                     blog.image_local_url ||
                     blog.image_url
-                  )
-                }
+                )}
                 alt={blog.title}
                 sx={{
                   width: { xs: "100%", md: "30%" },

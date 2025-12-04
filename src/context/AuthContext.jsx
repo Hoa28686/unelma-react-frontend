@@ -114,6 +114,7 @@ export function AuthProvider({ children }) {
       setUser(null);
       setToken(null);
       setLoading(false);
+      window.location.reload();
     }
   };
 
