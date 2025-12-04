@@ -25,7 +25,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { timeConversion, getImageUrl, placeholderLogo } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
