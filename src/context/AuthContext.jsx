@@ -25,9 +25,6 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Computed property for isAuthenticated
-  const isAuthenticated = !!(user && token);
-
   const loginAPI = API.login;
   const logoutAPI = API.logout;
 
@@ -127,7 +124,8 @@ export function AuthProvider({ children }) {
     if (storedToken && storedUser) {
       try {
         // Try to verify token with backend (optional)
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+        const baseUrl =
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
         const response = await axios.get(`${baseUrl}/user`, {
           headers: {
             Authorization: `Bearer ${storedToken}`,
@@ -142,11 +140,14 @@ export function AuthProvider({ children }) {
         if (
           error.response?.status === 404 ||
           error.response?.status === 500 ||
-          error.code === 'ERR_NETWORK'
+          error.code === "ERR_NETWORK"
         ) {
           // API endpoint doesn't exist, server error, or network error - use stored user data
           try {
-            const parsed = typeof storedUser === 'string' ? JSON.parse(storedUser) : storedUser;
+            const parsed =
+              typeof storedUser === "string"
+                ? JSON.parse(storedUser)
+                : storedUser;
             if (parsed && (parsed.email || parsed.name)) {
               setUser(parsed);
               setToken(storedToken);
@@ -156,7 +157,10 @@ export function AuthProvider({ children }) {
           } catch {
             clearAuthData();
           }
-        } else if (error.response?.status === 401 || error.response?.status === 403) {
+        } else if (
+          error.response?.status === 401 ||
+          error.response?.status === 403
+        ) {
           // Token is invalid (401/403), clear it
           clearAuthData();
           setUser(null);
@@ -164,7 +168,10 @@ export function AuthProvider({ children }) {
         } else {
           // For other errors, use stored user data
           try {
-            const parsed = typeof storedUser === 'string' ? JSON.parse(storedUser) : storedUser;
+            const parsed =
+              typeof storedUser === "string"
+                ? JSON.parse(storedUser)
+                : storedUser;
             if (parsed && (parsed.email || parsed.name)) {
               setUser(parsed);
               setToken(storedToken);
@@ -195,7 +202,6 @@ export function AuthProvider({ children }) {
         message,
         loading,
         error,
-        isAuthenticated,
         login,
         logout,
         checkAuth,

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchServices, setSelectedService, clearSelectedService } from "../../lib/features/services/servicesSlice";
+import {
+  fetchServices,
+  setSelectedService,
+  clearSelectedService,
+} from "../../lib/features/services/servicesSlice";
 import {
   Box,
   Typography,
@@ -36,23 +40,38 @@ import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 const getServiceIcon = (serviceName) => {
   const name = serviceName?.toLowerCase() || "";
   if (name.includes("cyber") || name.includes("security")) return SecurityIcon;
-  if (name.includes("data management") || name.includes("storage")) return StorageIcon;
-  if (name.includes("data science") || name.includes("science")) return ScienceIcon;
+  if (name.includes("data management") || name.includes("storage"))
+    return StorageIcon;
+  if (name.includes("data science") || name.includes("science"))
+    return ScienceIcon;
   if (name.includes("cloud")) return CloudIcon;
-  if (name.includes("ai") || name.includes("machine learning") || name.includes("psychology")) return PsychologyIcon;
-  if (name.includes("web") || name.includes("mobile") || name.includes("development")) return ComputerIcon;
+  if (
+    name.includes("ai") ||
+    name.includes("machine learning") ||
+    name.includes("psychology")
+  )
+    return PsychologyIcon;
+  if (
+    name.includes("web") ||
+    name.includes("mobile") ||
+    name.includes("development")
+  )
+    return ComputerIcon;
   return ComputerIcon; // Default icon
 };
 
 // Helper function to convert service name to URL slug
 const getServiceSlug = (serviceName) => {
   const name = serviceName?.toLowerCase() || "";
-  if (name.includes("cyber") || name.includes("security")) return "cyber-security";
+  if (name.includes("cyber") || name.includes("security"))
+    return "cyber-security";
   if (name.includes("data management")) return "data-management";
   if (name.includes("data science")) return "data-science";
   if (name.includes("cloud")) return "cloud-service";
-  if (name.includes("ai") || name.includes("machine learning")) return "ai-machine-learning";
-  if (name.includes("web") || name.includes("mobile")) return "web-mobile-development";
+  if (name.includes("ai") || name.includes("machine learning"))
+    return "ai-machine-learning";
+  if (name.includes("web") || name.includes("mobile"))
+    return "web-mobile-development";
   return serviceName?.toLowerCase().replace(/\s+/g, "-") || "";
 };
 
@@ -239,7 +258,8 @@ const serviceDetails = {
     id: 6,
     name: "Web and Mobile Development",
     icon: ComputerIcon,
-    description: "We know this shit! Request a quote; you will not be disappointed. Our expert team specializes in building cutting-edge web and mobile applications that deliver exceptional user experiences. From responsive web applications to native and cross-platform mobile apps, we create scalable, performant, and user-friendly solutions. We leverage modern frameworks and technologies to build applications that are fast, secure, and maintainable. Whether you need a simple website, a complex web application, or a mobile app for iOS and Android, we've got you covered.",
+    description:
+      "We know this shit! Request a quote; you will not be disappointed. Our expert team specializes in building cutting-edge web and mobile applications that deliver exceptional user experiences. From responsive web applications to native and cross-platform mobile apps, we create scalable, performant, and user-friendly solutions. We leverage modern frameworks and technologies to build applications that are fast, secure, and maintainable. Whether you need a simple website, a complex web application, or a mobile app for iOS and Android, we've got you covered.",
     plans: [
       {
         name: "Starter",
@@ -276,7 +296,11 @@ function ServiceDetail() {
   const { serviceId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { services, selectedService, loading: servicesLoading } = useSelector((state) => state.services);
+  const {
+    services,
+    selectedService,
+    loading: servicesLoading,
+  } = useSelector((state) => state.services);
   const {
     formData,
     loading,
@@ -287,7 +311,7 @@ function ServiceDetail() {
   } = useContactForm({ name: "", email: "", message: "" });
 
   // Check authentication from AuthContext
-  const { user, isAuthenticated: isUserAuthenticated } = useAuth();
+  const { user } = useAuth();
 
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(null); // Track which plan is loading (plan name)
@@ -307,7 +331,7 @@ function ServiceDetail() {
         const slug = getServiceSlug(s.name);
         return slug === serviceId;
       });
-      
+
       if (backendService) {
         // Merge backend service with hardcoded plans (if available)
         const hardcodedDetails = serviceDetails[serviceId];
@@ -327,12 +351,14 @@ function ServiceDetail() {
   // Use selectedService from Redux, or fallback to hardcoded if backend service not found
   const backendService = selectedService;
   const hardcodedService = serviceDetails[serviceId];
-  const service = backendService || (hardcodedService ? { ...hardcodedService, ...hardcodedService } : null);
+  const service =
+    backendService ||
+    (hardcodedService ? { ...hardcodedService, ...hardcodedService } : null);
 
   // Handle order now - Stripe integration
   const handleOrderNow = async (plan) => {
     // Check if user is authenticated
-    if (!isUserAuthenticated) {
+    if (!user) {
       setLoginDialogOpen(true);
       return;
     }
@@ -442,7 +468,9 @@ function ServiceDetail() {
         >
           <Box
             component="img"
-            src={getImageUrl(service.image_url || service.image_local_url || service.image)}
+            src={getImageUrl(
+              service.image_url || service.image_local_url || service.image
+            )}
             alt={service.name}
             onError={(e) => {
               e.target.src = placeholderLogo;
@@ -461,12 +489,13 @@ function ServiceDetail() {
               left: 0,
               right: 0,
               height: "50%",
-              background: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
             }}
           />
         </Box>
       )}
-      
+
       {/* Content */}
       <Box
         sx={{
@@ -525,9 +554,9 @@ function ServiceDetail() {
                   borderRadius: "50%",
                   overflow: "hidden",
                   flexShrink: 0,
-                  backgroundColor: (theme) => 
-                    theme.palette.mode === 'light' 
-                      ? `${theme.palette.primary.main}15` 
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? `${theme.palette.primary.main}15`
                       : `${theme.palette.primary.main}25`,
                   color: (theme) => theme.palette.primary.main,
                 }}

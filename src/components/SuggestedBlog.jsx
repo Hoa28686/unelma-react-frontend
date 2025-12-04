@@ -3,7 +3,7 @@ import {
   useMediaQuery,
   useTheme as useMuiTheme,
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 
 import { getImageUrl, timeConversion } from "../helpers/helpers";
@@ -16,10 +16,12 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const isMedium = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
-  let suggestedBlogs = allBlogs
-    .filter((blog) => blog.id !== currentBlog.id)
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 3);
+  let suggestedBlogs = useMemo(() => {
+    return allBlogs
+      .filter((blog) => blog.id !== currentBlog.id)
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 3);
+  }, [allBlogs, currentBlog.id]);
 
   if (isSmall) {
     suggestedBlogs = suggestedBlogs.slice(0, 1);
@@ -30,7 +32,6 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
 
   const handleBlogClick = (blogId) => {
     navigate(`/blogs/${blogId}`);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (suggestedBlogs.length === 0) {
@@ -66,8 +67,7 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
               p: 0,
               flexShrink: 0,
               backgroundColor: (theme) => theme.palette.background.paper,
-              border: (theme) =>
-                `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
+              border: (theme) => `1px solid ${theme.palette.text.secondary}20`,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -82,8 +82,8 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
               component="img"
               onClick={() => handleBlogClick(blog.id)}
               src={
-                getImageUrl(blog.featured_image_url || blog.featured_image) ||
-                blog.image_url
+                blog.image_url ||
+                getImageUrl(blog.featured_image_url || blog.featured_image)
               }
               alt={blog.title}
               sx={{
@@ -129,10 +129,7 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
                   <Typography
                     variant="body2"
                     sx={{
-                      color: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? "rgba(255, 255, 255, 0.7)"
-                          : "rgba(0, 0, 0, 0.6)",
+                      color: (theme) => theme.palette.text.secondary,
                       fontSize: "0.875rem",
                     }}
                   >
@@ -146,10 +143,7 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
                 <Typography
                   variant="body1"
                   sx={{
-                    color: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.9)"
-                        : "rgba(0, 0, 0, 0.87)",
+                    color: (theme) => theme.palette.text.primary,
                   }}
                 >
                   {blog.content.length > 150 ? (

@@ -11,7 +11,7 @@ const Contact = lazy(() => import("./pages/Contact.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 const Cart = lazy(() => import("./pages/Cart.jsx"));
 const ProductDetail = lazy(() => import("./pages/Products/ProductDetail.jsx"));
-const BlogDetail = lazy(() => import("./pages/Blog/blogDetail.jsx"));
+const BlogDetail = lazy(() => import("./pages/Blog/BlogDetail.jsx"));
 const Blog = lazy(() => import("./pages/Blog/Blog.jsx"));
 const Products = lazy(() => import("./pages/Products/Products.jsx"));
 const Services = lazy(() => import("./pages/Services/Services.jsx"));
@@ -48,9 +48,15 @@ function App() {
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="/products" element={<Products />} />
-                <Route path="/products/:productId" element={<ProductDetail />} />
+                <Route
+                  path="/products/:productId"
+                  element={<ProductDetail />}
+                />
                 <Route path="/services" element={<Services />} />
-                <Route path="/services/:serviceId" element={<ServiceDetail />} />
+                <Route
+                  path="/services/:serviceId"
+                  element={<ServiceDetail />}
+                />
                 <Route path="/blogs" element={<Blog />} />
                 <Route path="/blogs/:blogId" element={<BlogDetail />} />
                 <Route path="/contact" element={<Contact />} />

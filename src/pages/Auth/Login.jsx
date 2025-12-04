@@ -11,8 +11,10 @@ function Login() {
 
   // Navigate to home on successful login
   useEffect(() => {
-    if (user && user.email) {
-      navigate("/");
+    if (user) {
+      navigate("/user");
+    } else {
+      navigate("/login");
     }
   }, [user, navigate]);
 
@@ -62,10 +64,6 @@ function Login() {
     const password = formData.get("password");
     const remember = formData.get("remember") === "on";
     await login({ email, password, remember });
-  };
-
-  const handleLogout = async () => {
-    await logout();
   };
 
   // custom Slots
@@ -292,7 +290,7 @@ function Login() {
                 transform: "translateY(-4px)",
               },
             }}
-            onClick={handleLogout}
+            onClick={logout}
           >
             Log out
           </Button>

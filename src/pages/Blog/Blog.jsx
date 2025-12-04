@@ -25,8 +25,8 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { useNavigate, Link } from "react-router";
-import { timeConversion, getImageUrl, placeholderLogo } from "../../helpers/helpers";
+import { Link, useNavigate } from "react-router";
+import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -55,7 +55,6 @@ function Blog() {
 
   const handleBlogClick = (blogId) => {
     navigate(`/blogs/${blogId}`);
-    window.scrollTo({ top: 80, behavior: "smooth" });
   };
 
   // Filter blogs based on search query and category
@@ -433,13 +432,10 @@ function Blog() {
                 component="img"
                 onClick={() => handleBlogClick(blog.id)}
                 src={
-                  getImageUrl(blog.featured_image_url || blog.featured_image) ||
-                  blog.image_url
+                  blog.image_url ||
+                  getImageUrl(blog.featured_image_url || blog.featured_image)
                 }
                 alt={blog.title}
-                onError={(e) => {
-                  e.target.src = placeholderLogo;
-                }}
                 sx={{
                   width: { xs: "100%", md: "30%" },
                   height: { xs: "30%", md: "100%" },
@@ -508,7 +504,9 @@ function Blog() {
                     variant="body1"
                     sx={{
                       color: (theme) =>
-                        theme.palette.mode === "dark" ? "#ffffff" : "#000000",
+                        theme.palette.mode === "dark"
+                          ? "rgba(255, 255, 255, 0.9)"
+                          : "rgba(0, 0, 0, 0.87)",
                       lineHeight: 1.8,
                       fontSize: { xs: "0.9375rem", sm: "1rem" },
                     }}
@@ -519,9 +517,6 @@ function Blog() {
                         <MuiLink
                           component={Link}
                           to={`/blogs/${blog.id}`}
-                          onClick={() =>
-                            window.scrollTo({ top: 80, behavior: "smooth" })
-                          }
                           sx={{ textDecoration: "none" }}
                         >
                           ...continue reading

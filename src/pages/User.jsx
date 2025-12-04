@@ -43,7 +43,6 @@ import {
 } from "@mui/icons-material";
 import { useContactForm } from "../hooks/useContactForm";
 import { useAuth } from "../context/AuthContext";
-import { clearAuthData } from "../utils/authUtils";
 import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 import { API } from "../api";
 
@@ -128,25 +127,10 @@ function User() {
   } = useContactForm({ name: "", email: "", message: "" });
 
   const navigate = useNavigate();
-  const {
-    user,
-    loading,
-    error,
-    isAuthenticated,
-    login,
-    logout,
-    clearError,
-  } = useAuth();
-  
+  const { user, loading, error, login, logout, clearError } = useAuth();
+
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState(null);
-
-  const handleLogout = async () => {
-    await logout();
-    clearAuthData();
-    // Redirect to home
-    window.location.href = "/";
-  };
 
   // Clear errors when switching tabs
   useEffect(() => {
@@ -182,13 +166,13 @@ function User() {
     const userEmail = user?.email || user?.user?.email;
     const userName = user?.name || user?.user?.name;
     const hasValidUser = user && (userEmail || userName);
-    const hasValidAuth = isAuthenticated || hasValidUser;
+    const hasValidAuth = hasValidUser;
 
     // If not loading and no valid authentication, redirect to login
     if (!loading && !hasValidAuth) {
       navigate("/login", { replace: true });
     }
-  }, [user, isAuthenticated, loading, navigate]);
+  }, [user, loading, navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -533,7 +517,7 @@ function User() {
   const userEmailCheck = user?.email || user?.user?.email;
   const userNameCheck = user?.name || user?.user?.name;
   const hasValidUser = user && (userEmailCheck || userNameCheck);
-  const hasValidAuth = isAuthenticated || hasValidUser;
+  const hasValidAuth = hasValidUser;
 
   // Show user profile if authenticated
   if (hasValidAuth) {
@@ -584,7 +568,11 @@ function User() {
                 }}
               >
                 <Avatar
-                  src={user?.profile_picture ? getImageUrl(user.profile_picture) : placeholderLogo}
+                  src={
+                    user?.profile_picture
+                      ? getImageUrl(user.profile_picture)
+                      : placeholderLogo
+                  }
                   alt="User avatar"
                   onError={(e) => {
                     e.target.src = placeholderLogo;
@@ -624,7 +612,7 @@ function User() {
                 </Box>
                 <Button
                   variant="outlined"
-                  onClick={handleLogout}
+                  onClick={logout}
                   sx={{
                     borderColor: (theme) => theme.palette.primary.main,
                     color: (theme) => theme.palette.primary.main,

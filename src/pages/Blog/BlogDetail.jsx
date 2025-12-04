@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { timeConversion, getImageUrl, placeholderLogo } from "../../helpers/helpers";
+import { timeConversion, getImageUrl } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
 import { API } from "../../api";
@@ -57,6 +57,11 @@ function BlogDetail() {
       }
     }
   }, [blogId, blogs, dispatch]);
+
+  // scroll to top when blogId changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   // sort comments based on sortOrder
   useEffect(() => {
@@ -97,16 +102,16 @@ function BlogDetail() {
       console.error(e);
     }
   };
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   // custom style for TextField
   const textFieldStyles = {
     color: (theme) => theme.palette.text.primary,
     backgroundColor: (theme) => theme.palette.background.paper,
     "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: (theme) =>
-        theme.palette.mode === "dark"
-          ? "rgba(255, 255, 255, 0.2)"
-          : "rgba(0, 0, 0, 0.23)",
+      borderColor: (theme) => `${theme.palette.text.secondary}40`,
     },
     "&:hover .MuiOutlinedInput-notchedOutline": {
       borderColor: (theme) => theme.palette.primary.main,
@@ -210,14 +215,12 @@ function BlogDetail() {
           <Box
             component="img"
             src={
+              selectedBlog.image_url ||
               getImageUrl(
                 selectedBlog?.featured_image_url || selectedBlog?.featured_image
-              ) || selectedBlog.image_url
+              )
             }
             alt={selectedBlog.title}
-            onError={(e) => {
-              e.target.src = placeholderLogo;
-            }}
             sx={{
               width: "100%",
               borderRadius: 2,
@@ -306,10 +309,7 @@ function BlogDetail() {
             </Typography>
             <Divider
               sx={{
-                borderColor: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.2)"
-                    : "rgba(0, 0, 0, 0.12)",
+                borderColor: (theme) => theme.palette.text.secondary + "40",
                 mb: 3,
               }}
             />
@@ -379,9 +379,9 @@ function BlogDetail() {
                   <MenuItem value="newest">Newest</MenuItem>
                   <MenuItem value="oldest">Oldest</MenuItem>
                 </Select>
-                {sortedComment.map((c, index) => (
+                {sortedComment.map((c) => (
                   <Box
-                    key={index}
+                    key={c.id}
                     sx={{
                       display: "flex",
                       gap: 2,
@@ -390,11 +390,12 @@ function BlogDetail() {
                     }}
                   >
                     <Avatar
-                      src={c.user.profile_picture ? getImageUrl(c.user.profile_picture) : placeholderLogo}
+                      src={
+                        c.user.profile_picture
+                          ? getImageUrl(c.user.profile_picture)
+                          : undefined
+                      }
                       alt="user avatar"
-                      onError={(e) => {
-                        e.target.src = placeholderLogo;
-                      }}
                       sx={{
                         width: { xs: 32, sm: 40 },
                         height: { xs: 32, sm: 40 },

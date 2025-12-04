@@ -30,20 +30,20 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 
 function NavBar() {
-  const { user, isAuthenticated, logout, token } = useAuth();
+  const { user, logout } = useAuth();
   // Debug: Log user data to check profile_picture
-  React.useEffect(() => {
-    if (isAuthenticated && user) {
-      console.log("NavBar - User data:", user);
-      console.log("NavBar - Profile picture:", user.profile_picture);
-      console.log(
-        "NavBar - Image URL:",
-        user.profile_picture
-          ? getImageUrl(user.profile_picture)
-          : "No profile picture"
-      );
-    }
-  }, [user, isAuthenticated]);
+  // React.useEffect(() => {
+  //   if (user) {
+  //     console.log("NavBar - User data:", user);
+  //     console.log("NavBar - Profile picture:", user.profile_picture);
+  //     console.log(
+  //       "NavBar - Image URL:",
+  //       user.profile_picture
+  //         ? getImageUrl(user.profile_picture)
+  //         : "No profile picture"
+  //     );
+  //   }
+  // }, [user]);
 
   const mobileMenuWidth = 240;
   const location = useLocation();
@@ -78,7 +78,7 @@ function NavBar() {
   };
 
   const mobileMenu = (
-    <Box sx={{ textAlign: "center" }}>
+    <Box sx={{ textAlign: "center" }} onClick={handleNavToggle}>
       <Box
         sx={{
           display: "flex",
@@ -107,7 +107,7 @@ function NavBar() {
             },
           }}
         >
-          {isAuthenticated ? (
+          {user ? (
             <Button
               onClick={logout}
               color="inherit"
@@ -170,7 +170,6 @@ function NavBar() {
               outline: "none",
             },
           }}
-          onClick={handleNavToggle}
           disableRipple
         >
           <ClearOutlinedIcon />
@@ -195,7 +194,6 @@ function NavBar() {
               }}
               component={Link}
               to={item.path}
-              onClick={handleNavToggle}
             >
               <Box
                 component="span"
@@ -240,7 +238,8 @@ function NavBar() {
         position="static"
         elevation={0}
         sx={{
-          backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#F5F5F5' : '#000000',
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark" ? "#F5F5F5" : "#000000",
           boxShadow: "none",
           borderBottom: "none",
           backgroundImage: "none",
@@ -253,7 +252,8 @@ function NavBar() {
           sx={{
             minHeight: { xs: "56px", sm: "64px" },
             padding: { xs: "0 0.5rem", sm: "0 1rem" },
-            backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#F5F5F5' : '#000000',
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "#F5F5F5" : "#000000",
             "&::before": {
               display: "none",
             },
@@ -273,7 +273,8 @@ function NavBar() {
               <Button
                 key={item.label}
                 sx={{
-                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                   textTransform: "none",
                   fontSize: "1rem",
                   fontWeight: 400,
@@ -282,7 +283,8 @@ function NavBar() {
                   borderRadius: 0,
                   "&:hover": {
                     backgroundColor: "transparent",
-                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                    color: (theme) =>
+                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                     "& span::after": {
                       backgroundColor: (theme) => theme.palette.primary.main,
                     },
@@ -318,11 +320,11 @@ function NavBar() {
           {/* Buttons on the right side of the NavBar */}
           <Box
             component="div"
-            sx={{ 
-              marginLeft: "auto", 
+            sx={{
+              marginLeft: "auto",
               marginRight: { xs: "48px", sm: "48px" },
-              display: "flex", 
-              alignItems: "center" 
+              display: "flex",
+              alignItems: "center",
             }}
           >
             {/* Search */}
@@ -350,9 +352,11 @@ function NavBar() {
             >
               <IconButton
                 sx={{
-                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                   "&:hover": {
-                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                    color: (theme) =>
+                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                     backgroundColor: "transparent",
                   },
                   "&:focus": {
@@ -394,10 +398,12 @@ function NavBar() {
             >
               <IconButton
                 sx={{
-                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                   position: "relative",
                   "&:hover": {
-                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                    color: (theme) =>
+                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                     backgroundColor: "transparent",
                   },
                 }}
@@ -433,10 +439,12 @@ function NavBar() {
             >
               <IconButton
                 sx={{
-                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                   position: "relative",
                   "&:hover": {
-                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                    color: (theme) =>
+                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                     backgroundColor: "transparent",
                   },
                 }}
@@ -484,21 +492,23 @@ function NavBar() {
             >
               <IconButton
                 sx={{
-                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                   "&:hover": {
-                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                    color: (theme) =>
+                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                     backgroundColor: "transparent",
                   },
                 }}
                 onClick={() => {
-                  if (isAuthenticated) {
+                  if (user) {
                     navigate("/user");
                   } else {
                     navigate("/login");
                   }
                 }}
               >
-                {isAuthenticated ? (
+                {user ? (
                   user?.profile_picture ? (
                     <Avatar
                       src={getImageUrl(user.profile_picture)}
@@ -528,10 +538,12 @@ function NavBar() {
             {/* Mobile Menu Button */}
             <IconButton
               sx={{
-                color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                color: (theme) =>
+                  theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                 display: { xs: "flex", md: "none" },
                 "&:hover": {
-                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
                   backgroundColor: "transparent",
                 },
                 "&:focus": {
