@@ -351,6 +351,7 @@ function Blog() {
               borderRadius: 3,
               p: 0,
               mb: 2,
+              textTransform: "capitalize",
             }}
           >
             <MenuItem value="all">All categories</MenuItem>
