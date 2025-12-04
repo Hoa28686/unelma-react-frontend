@@ -8,13 +8,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { store } from "./store/store.js";
 import { Provider } from "react-redux";
-import { checkAuth } from "./lib/features/auth/authSlice";
 import { AuthProvider } from "./context/AuthContext.jsx";
-
-// Check authentication status on app load (fail silently if API is not available)
-store.dispatch(checkAuth()).catch(() => {
-  // Silently handle errors - user might not be logged in or API might not be available
-});
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

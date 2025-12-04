@@ -16,7 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { removeFromCart, updateQuantity, clearCart } from "../lib/features/cart/cartSlice";
 import PriceDisplay from "../components/PriceDisplay";
-import { getImageUrl } from "../helpers/helpers";
+import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -159,6 +159,9 @@ function Cart() {
                           component="img"
                           src={getImageUrl(item.image_local_url || item.image_url || item.image)}
                           alt={item.name}
+                          onError={(e) => {
+                            e.target.src = placeholderLogo;
+                          }}
                           sx={{
                             width: { xs: "100%", md: "150px" },
                             height: { xs: "200px", md: "150px" },

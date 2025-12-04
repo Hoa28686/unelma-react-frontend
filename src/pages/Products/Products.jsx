@@ -23,7 +23,7 @@ import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
-import { getImageUrl } from "../../helpers/helpers";
+import { getImageUrl, placeholderLogo } from "../../helpers/helpers";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 
 const ITEMS_PER_PAGE = 9; // Show 9 products per page
@@ -243,7 +243,7 @@ function Products() {
               key={p.id}
               sx={{
                 width: 350,
-                height: 480,
+                height: 500,
                 m: 2,
                 position: "relative",
               }}
@@ -260,6 +260,9 @@ function Products() {
                   onClick={() => handleProductClick(p.id)}
                   src={getImageUrl(p.image_local_url || p.image_url || p.image)}
                   alt={p.name}
+                  onError={(e) => {
+                    e.target.src = placeholderLogo;
+                  }}
                   sx={{
                     width: "100%",
                     height: { xs: 220, md: 250 },
@@ -285,14 +288,14 @@ function Products() {
                   sx={{ cursor: "pointer" }}
                 />
                 <FavoriteButtonAndCount type="product" item={p} />
-                <CardContent>
+                <CardContent sx={{ pt: 0 }}>
                   <RatingDisplay rating={p.rating} />
                   <PriceDisplay price={p.price} />
                 </CardContent>
                 <Box
                   sx={{
                     position: "absolute",
-                    bottom: 15,
+                    bottom: 20,
                     right: 15,
                   }}
                   onClick={(e) => e.stopPropagation()}

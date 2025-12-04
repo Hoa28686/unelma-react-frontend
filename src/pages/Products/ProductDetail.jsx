@@ -23,7 +23,7 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import { getImageUrl } from "../../helpers/helpers";
+import { getImageUrl, placeholderLogo } from "../../helpers/helpers";
 import { useAuth } from "../../context/AuthContext";
 import { submitProductRating } from "../../lib/api/ratingService";
 
@@ -191,6 +191,9 @@ function ProductDetail() {
                   }}
                   src={getImageUrl(product?.image_local_url || product?.image_url || product?.image)}
                   alt={product.name}
+                  onError={(e) => {
+                    e.target.src = placeholderLogo;
+                  }}
                 />
               </Card>
             </Grid>

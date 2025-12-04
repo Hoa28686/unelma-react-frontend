@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
+import TopButtons from "./components/TopButtons";
 import { Outlet } from "react-router";
-import { Box, CssBaseline } from "@mui/material";
+import { Box } from "@mui/material";
 import { useAuth } from "./context/AuthContext";
 import { useDispatch } from "react-redux";
 import { fetchFavorites } from "./store/slices/favorites/favoritesSlice";
@@ -20,11 +21,12 @@ function Layout() {
     <Box
       sx={{
         display: "grid",
-        gridTemplateRows: { xs: "56px 1fr auto", sm: "64px 1fr auto" },
+        gridTemplateRows: { xs: "28px 56px 1fr auto", sm: "32px 64px 1fr auto" },
         minHeight: "100vh",
         backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
+      <TopButtons />
       <NavBar />
       <Box
         sx={{

@@ -1,5 +1,5 @@
 "use client";
-import { createTheme, CssBaseline } from "@mui/material";
+import { createTheme } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 import { ThemeProvider } from "@mui/material/styles";
@@ -33,7 +33,7 @@ const lightTheme = createTheme({
     },
     text: {
       primary: "#000000", // Pure black text
-      secondary: "#6B7280", // Muted gray for secondary text
+      secondary: "#676e7c", // Muted gray for secondary text
     },
     divider: "#c4c4c4",
   },
@@ -70,6 +70,44 @@ const lightTheme = createTheme({
     h6: {
       fontWeight: 500,
       fontSize: "1rem",
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:active": {
+            outline: "none",
+            boxShadow: "none",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:active": {
+            outline: "none",
+            boxShadow: "none",
+          },
+        },
+      },
     },
   },
 });
@@ -144,14 +182,51 @@ const darkTheme = createTheme({
       fontSize: "1rem",
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:active": {
+            outline: "none",
+            boxShadow: "none",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:active": {
+            outline: "none",
+            boxShadow: "none",
+          },
+        },
+      },
+    },
+  },
 });
 
 export const CustomThemeProvider = ({ children }) => {
-  const [CurrentTheme, setCurrentTheme] = useState("dark");
-  useEffect(() => {
+  const [CurrentTheme, setCurrentTheme] = useState(() => {
     const saved = localStorage.getItem("theme");
-    if (saved) setCurrentTheme(saved);
-  }, []);
+    return saved ? saved : "dark";
+  });
 
   function toggleTheme() {
     setCurrentTheme((prev) => (prev == "dark" ? "light" : "dark"));

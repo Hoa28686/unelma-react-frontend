@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import { API } from "../api";
+import { getAuthToken, getStoredUser, clearAuthData } from "../utils/authUtils";
 
 const AuthContext = createContext(null);
 
@@ -108,14 +109,91 @@ export function AuthProvider({ children }) {
       // Logout even if API call fails
       console.error("Logout API error:", e);
     } finally {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
+      clearAuthData();
       setMessage("Logged out successfully");
       setUser(null);
       setToken(null);
       setLoading(false);
     }
   };
+
+  const checkAuth = async () => {
+    const storedToken = getAuthToken();
+    const storedUser = getStoredUser();
+
+    if (storedToken && storedUser) {
+      try {
+        // Try to verify token with backend (optional)
+        const baseUrl =
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+        const response = await axios.get(`${baseUrl}/user`, {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        });
+        setUser(response.data);
+        setToken(storedToken);
+        localStorage.setItem("authToken", storedToken);
+        localStorage.setItem("user", JSON.stringify(response.data));
+      } catch (error) {
+        // Token is invalid, endpoint doesn't exist, or server error - use stored user data
+        if (
+          error.response?.status === 404 ||
+          error.response?.status === 500 ||
+          error.code === "ERR_NETWORK"
+        ) {
+          // API endpoint doesn't exist, server error, or network error - use stored user data
+          try {
+            const parsed =
+              typeof storedUser === "string"
+                ? JSON.parse(storedUser)
+                : storedUser;
+            if (parsed && (parsed.email || parsed.name)) {
+              setUser(parsed);
+              setToken(storedToken);
+            } else {
+              clearAuthData();
+            }
+          } catch {
+            clearAuthData();
+          }
+        } else if (
+          error.response?.status === 401 ||
+          error.response?.status === 403
+        ) {
+          // Token is invalid (401/403), clear it
+          clearAuthData();
+          setUser(null);
+          setToken(null);
+        } else {
+          // For other errors, use stored user data
+          try {
+            const parsed =
+              typeof storedUser === "string"
+                ? JSON.parse(storedUser)
+                : storedUser;
+            if (parsed && (parsed.email || parsed.name)) {
+              setUser(parsed);
+              setToken(storedToken);
+            } else {
+              clearAuthData();
+            }
+          } catch {
+            clearAuthData();
+          }
+        }
+      }
+    } else {
+      // No token or user, ensure state is cleared
+      setUser(null);
+      setToken(null);
+    }
+  };
+
+  const clearError = () => {
+    setError(null);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -126,6 +204,8 @@ export function AuthProvider({ children }) {
         error,
         login,
         logout,
+        checkAuth,
+        clearError,
       }}
     >
       {children}

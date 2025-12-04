@@ -26,6 +26,7 @@ import { API } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import FavoriteButton from "../../components/FavoriteButton";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
+import SuggestedBlog from "../../components/SuggestedBlog";
 
 function BlogDetail() {
   const { blogId } = useParams();
@@ -56,6 +57,11 @@ function BlogDetail() {
       }
     }
   }, [blogId, blogs, dispatch]);
+
+  // scroll to top when blogId changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   // sort comments based on sortOrder
   useEffect(() => {
@@ -96,16 +102,16 @@ function BlogDetail() {
       console.error(e);
     }
   };
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   // custom style for TextField
   const textFieldStyles = {
     color: (theme) => theme.palette.text.primary,
     backgroundColor: (theme) => theme.palette.background.paper,
     "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: (theme) =>
-        theme.palette.mode === "dark"
-          ? "rgba(255, 255, 255, 0.2)"
-          : "rgba(0, 0, 0, 0.23)",
+      borderColor: (theme) => `${theme.palette.text.secondary}40`,
     },
     "&:hover .MuiOutlinedInput-notchedOutline": {
       borderColor: (theme) => theme.palette.primary.main,
@@ -195,12 +201,24 @@ function BlogDetail() {
             gap: 3,
           }}
         >
+          {selectedBlog.category && (
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: (theme) => theme.palette.text.secondary,
+                textTransform: "uppercase",
+              }}
+            >
+              {selectedBlog.category}
+            </Typography>
+          )}
           <Box
             component="img"
             src={
+              selectedBlog.image_url ||
               getImageUrl(
                 selectedBlog?.featured_image_url || selectedBlog?.featured_image
-              ) || selectedBlog.image_url
+              )
             }
             alt={selectedBlog.title}
             sx={{
@@ -272,6 +290,8 @@ function BlogDetail() {
               <p>{selectedBlog.content}</p>
             )}
           </Box>
+
+          {/* Comment section */}
           <Box
             sx={{ width: "100%", textAlign: "left", alignSelf: "flex-start" }}
           >
@@ -289,10 +309,7 @@ function BlogDetail() {
             </Typography>
             <Divider
               sx={{
-                borderColor: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.2)"
-                    : "rgba(0, 0, 0, 0.12)",
+                borderColor: (theme) => theme.palette.text.secondary + "40",
                 mb: 3,
               }}
             />
@@ -362,9 +379,9 @@ function BlogDetail() {
                   <MenuItem value="newest">Newest</MenuItem>
                   <MenuItem value="oldest">Oldest</MenuItem>
                 </Select>
-                {sortedComment.map((c, index) => (
+                {sortedComment.map((c) => (
                   <Box
-                    key={index}
+                    key={c.id}
                     sx={{
                       display: "flex",
                       gap: 2,
@@ -373,7 +390,11 @@ function BlogDetail() {
                     }}
                   >
                     <Avatar
-                      src={c.user.profile_picture ? getImageUrl(c.user.profile_picture) : undefined}
+                      src={
+                        c.user.profile_picture
+                          ? getImageUrl(c.user.profile_picture)
+                          : undefined
+                      }
                       alt="user avatar"
                       sx={{
                         width: { xs: 32, sm: 40 },
@@ -449,6 +470,8 @@ function BlogDetail() {
             )}
           </Box>
         </Box>
+        {/* Suggested Blogs */}
+        <SuggestedBlog currentBlog={selectedBlog} allBlogs={blogs} />
       </Box>
     </>
   );

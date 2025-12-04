@@ -29,10 +29,13 @@ function Register() {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setMessage(null);
+    
     // form validation
     if (
       !form.name ||

@@ -51,7 +51,7 @@
       font-size: 0.875rem !important;
       color: rgba(255, 255, 255, 0.7) !important;
       margin-bottom: 0.5rem !important;
-      text-align: right !important;
+      text-align: left !important;
     }
     
     .subscribe-embedded-form .text-danger {
@@ -222,7 +222,7 @@
 <body>
   <!-- Subscription Form -->
   <div class="subscribe-embedded-form">
-    <p class="text-sm text-end">
+    <p class="text-sm text-start">
       <span class="text-danger">*</span> indicates required
     </p>
     
@@ -315,6 +315,40 @@
         }
       });
       initJs($('.subscribe-embedded-form'));
+      
+      // Send content height to parent window for iframe resizing
+      function sendHeight() {
+        const height = Math.max(
+          document.body.scrollHeight,
+          document.body.offsetHeight,
+          document.documentElement.clientHeight,
+          document.documentElement.scrollHeight,
+          document.documentElement.offsetHeight
+        );
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'iframe-resize',
+            height: height
+          }, '*');
+        }
+      }
+      
+      // Send height on load and after delays to account for dynamic content
+      sendHeight();
+      setTimeout(sendHeight, 100);
+      setTimeout(sendHeight, 500);
+      setTimeout(sendHeight, 1000);
+      
+      // Send height when window is resized
+      window.addEventListener('resize', sendHeight);
+      
+      // Send height when form content changes
+      const observer = new MutationObserver(sendHeight);
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true
+      });
     });
   </script>
 </body>

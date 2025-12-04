@@ -45,8 +45,7 @@ apiClient.interceptors.response.use(
       if (error.response.status === 401 || error.response.status === 403) {
         // Clear auth data and redirect to login using utility
         clearAuthData();
-        // Optionally dispatch logout action if you have access to store
-        // For now, we'll let components handle this
+        // Components using AuthContext will automatically update when auth state changes
         if (window.location.pathname !== "/user" && window.location.pathname !== "/login") {
           window.location.href = "/login";
         }
