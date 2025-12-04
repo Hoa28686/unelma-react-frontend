@@ -215,9 +215,12 @@ function BlogDetail() {
           <Box
             component="img"
             src={
-              selectedBlog.image_url ||
               getImageUrl(
-                selectedBlog?.featured_image_url || selectedBlog?.featured_image
+                selectedBlog?.featured_image_local_url || 
+                selectedBlog?.featured_image_url || 
+                selectedBlog?.featured_image ||
+                selectedBlog?.image_local_url ||
+                selectedBlog?.image_url
               )
             }
             alt={selectedBlog.title}

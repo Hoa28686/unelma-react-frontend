@@ -75,223 +75,6 @@ const getServiceSlug = (serviceName) => {
   return serviceName?.toLowerCase().replace(/\s+/g, "-") || "";
 };
 
-// Hardcoded plans data (to be replaced when backend provides this)
-// This is kept as fallback for pricing/plans that may not be in backend yet
-const serviceDetails = {
-  "cyber-security": {
-    id: 1,
-    name: "Cyber Security",
-    icon: SecurityIcon,
-    description:
-      "Cyber security is fundamental in today's day and age. We provide you with cyber security tools and services with a wide range of Open Web Application Security Project® toolbox that can help you and your company in security-related tasks efficiently and conveniently. Our comprehensive security solutions protect your digital assets from threats, vulnerabilities, and attacks while ensuring compliance with industry standards.",
-    plans: [
-      {
-        name: "Essential",
-        price: 99,
-        period: "/Yr",
-        stripePriceId: "price_1SSwI9RtwC76q4jZxYnbUsqp", // Cyber Security Essential
-        features: [
-          "Basic Threat Detection",
-          "Security Audit Reports",
-          "Email Support",
-          "OWASP Top 10 Protection",
-          "Monthly Security Updates",
-        ],
-      },
-      {
-        name: "Professional",
-        price: 199,
-        period: "/Mo",
-        stripePriceId: null, // Add your Stripe Price ID here when available
-        features: [
-          "Advanced Threat Protection",
-          "24/7 Security Monitoring",
-          "Priority Support",
-          "Custom Security Policies",
-          "Penetration Testing",
-          "Incident Response Team",
-        ],
-      },
-    ],
-  },
-  "data-management": {
-    id: 2,
-    name: "Data Management",
-    icon: StorageIcon,
-    description:
-      "We at Unelma Platforms can help you with different types of data management products and services. Our solutions enable organizations to collect, store, organize, and analyze data efficiently. From database design to data warehousing, we provide end-to-end data management services that transform raw data into actionable insights. Our expertise includes data migration, data quality assurance, and implementing robust data governance frameworks.",
-    plans: [
-      {
-        name: "Starter",
-        price: 149,
-        period: "/Mo",
-        features: [
-          "Up to 100GB Storage",
-          "Basic Database Setup",
-          "Data Backup & Recovery",
-          "Email Support",
-          "Monthly Reports",
-        ],
-      },
-      {
-        name: "Enterprise",
-        price: 499,
-        period: "/Mo",
-        features: [
-          "Unlimited Storage",
-          "Advanced Analytics",
-          "Real-time Data Sync",
-          "24/7 Support",
-          "Custom Data Models",
-          "Data Governance Tools",
-          "API Integration",
-        ],
-      },
-    ],
-  },
-  "data-science": {
-    id: 3,
-    name: "Data Science",
-    icon: ScienceIcon,
-    description:
-      "Previously, we have developed AI-powered email applications which have scaled to millions of users and subscribers. Feel free to contact us if you would need help with data science-related services. Our team of expert data scientists helps you extract meaningful insights from complex datasets using advanced statistical methods, machine learning algorithms, and predictive analytics. We transform your data into strategic business intelligence.",
-    plans: [
-      {
-        name: "Analytics",
-        price: 299,
-        period: "/Mo",
-        features: [
-          "Data Analysis & Visualization",
-          "Statistical Modeling",
-          "Custom Dashboards",
-          "Monthly Consultations",
-          "Report Generation",
-        ],
-      },
-      {
-        name: "Advanced",
-        price: 799,
-        period: "/Mo",
-        features: [
-          "Machine Learning Models",
-          "Predictive Analytics",
-          "Real-time Insights",
-          "Dedicated Data Scientist",
-          "Custom Algorithm Development",
-          "A/B Testing Framework",
-          "Priority Support",
-        ],
-      },
-    ],
-  },
-  "cloud-service": {
-    id: 4,
-    name: "Cloud Service",
-    icon: CloudIcon,
-    description:
-      'We are masters of cloud services as we have developed one of the platforms called "Unelma Cloud". Our cloud solutions provide scalable, secure, and cost-effective infrastructure for businesses of all sizes. From cloud migration to multi-cloud strategies, we help you leverage the power of cloud computing to enhance agility, reduce costs, and accelerate innovation. Experience seamless scalability and enterprise-grade security.',
-    plans: [
-      {
-        name: "Basic",
-        price: 79,
-        period: "/Mo",
-        features: [
-          "50GB Cloud Storage",
-          "Basic Compute Resources",
-          "Automated Backups",
-          "Email Support",
-          "99.9% Uptime SLA",
-        ],
-      },
-      {
-        name: "Premium",
-        price: 299,
-        period: "/Mo",
-        features: [
-          "Unlimited Storage",
-          "High-Performance Computing",
-          "Auto-scaling",
-          "24/7 Support",
-          "99.99% Uptime SLA",
-          "Multi-region Deployment",
-          "Advanced Security Features",
-        ],
-      },
-    ],
-  },
-  "ai-machine-learning": {
-    id: 5,
-    name: "AI and Machine Learning",
-    icon: PsychologyIcon,
-    description:
-      "We deliver AI-driven solutions to our clients by providing world-class AI expertise and tooling for computer vision, natural language processing and machine learning. Our AI services help businesses automate processes, enhance decision-making, and create intelligent applications. From chatbots to recommendation systems, we build custom AI solutions that learn, adapt, and evolve with your business needs.",
-    plans: [
-      {
-        name: "AI Starter",
-        price: 399,
-        period: "/Mo",
-        features: [
-          "Pre-built AI Models",
-          "Basic NLP & Computer Vision",
-          "API Access",
-          "Documentation & Training",
-          "Email Support",
-        ],
-      },
-      {
-        name: "AI Enterprise",
-        price: 1299,
-        period: "/Mo",
-        features: [
-          "Custom AI Development",
-          "Advanced ML Models",
-          "Real-time Processing",
-          "Dedicated AI Team",
-          "Model Training & Optimization",
-          "Integration Services",
-          "Priority Support & SLA",
-        ],
-      },
-    ],
-  },
-  "web-mobile-development": {
-    id: 6,
-    name: "Web and Mobile Development",
-    icon: ComputerIcon,
-    description:
-      "We know this shit! Request a quote; you will not be disappointed. Our expert team specializes in building cutting-edge web and mobile applications that deliver exceptional user experiences. From responsive web applications to native and cross-platform mobile apps, we create scalable, performant, and user-friendly solutions. We leverage modern frameworks and technologies to build applications that are fast, secure, and maintainable. Whether you need a simple website, a complex web application, or a mobile app for iOS and Android, we've got you covered.",
-    plans: [
-      {
-        name: "Starter",
-        price: 199,
-        period: "/Mo",
-        features: [
-          "Responsive Web Design",
-          "Basic Mobile App (1 Platform)",
-          "Up to 5 Pages/Screens",
-          "Email Support",
-          "3 Months Maintenance",
-        ],
-      },
-      {
-        name: "Professional",
-        price: 599,
-        period: "/Mo",
-        features: [
-          "Full-Stack Web Application",
-          "Cross-Platform Mobile App",
-          "Unlimited Pages/Screens",
-          "Custom Features & Integrations",
-          "Priority Support",
-          "6 Months Maintenance",
-          "Performance Optimization",
-          "Security Implementation",
-        ],
-      },
-    ],
-  },
-};
-
 function ServiceDetail() {
   const { serviceId } = useParams();
   const navigate = useNavigate();
@@ -333,27 +116,15 @@ function ServiceDetail() {
       });
 
       if (backendService) {
-        // Merge backend service with hardcoded plans (if available)
-        const hardcodedDetails = serviceDetails[serviceId];
-        const mergedService = {
-          ...backendService,
-          // Use hardcoded plans if available, otherwise use empty array
-          plans: hardcodedDetails?.plans || [],
-        };
-        // Don't store icon component in Redux - derive it during render instead
-        dispatch(setSelectedService(mergedService));
+        dispatch(setSelectedService(backendService));
       } else {
         dispatch(clearSelectedService());
       }
     }
   }, [serviceId, services, dispatch]);
 
-  // Use selectedService from Redux, or fallback to hardcoded if backend service not found
-  const backendService = selectedService;
-  const hardcodedService = serviceDetails[serviceId];
-  const service =
-    backendService ||
-    (hardcodedService ? { ...hardcodedService, ...hardcodedService } : null);
+  // Use selectedService from Redux (backend data only)
+  const service = selectedService;
 
   // Handle order now - Stripe integration
   const handleOrderNow = async (plan) => {
@@ -406,7 +177,7 @@ function ServiceDetail() {
   };
 
   // Show loading state
-  if (servicesLoading || (services.length === 0 && !hardcodedService)) {
+  if (servicesLoading || services.length === 0) {
     return (
       <Box
         sx={{
@@ -456,7 +227,7 @@ function ServiceDetail() {
       }}
     >
       {/* Hero Image Section */}
-      {(service.image_url || service.image_local_url || service.image) && (
+      {(service.image_local_url || service.image_url || service.image) && (
         <Box
           sx={{
             position: "relative",
@@ -468,9 +239,7 @@ function ServiceDetail() {
         >
           <Box
             component="img"
-            src={getImageUrl(
-              service.image_url || service.image_local_url || service.image
-            )}
+            src={getImageUrl(service.image_local_url || service.image_url || service.image)}
             alt={service.name}
             onError={(e) => {
               e.target.src = placeholderLogo;
@@ -600,21 +369,22 @@ function ServiceDetail() {
               </Typography>
 
               {/* Pricing Plans */}
-              <Box>
-                <Typography
-                  variant="h3"
-                  component="h2"
-                  sx={{
-                    fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
-                    fontWeight: 600,
-                    color: (theme) => theme.palette.text.primary,
-                    marginBottom: { xs: "2rem", sm: "3rem" },
-                  }}
-                >
-                  Pricing Plans
-                </Typography>
-                <Grid container spacing={3}>
-                  {service.plans.map((plan, index) => (
+              {service.plans && service.plans.length > 0 && (
+                <Box>
+                  <Typography
+                    variant="h3"
+                    component="h2"
+                    sx={{
+                      fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+                      fontWeight: 600,
+                      color: (theme) => theme.palette.text.primary,
+                      marginBottom: { xs: "2rem", sm: "3rem" },
+                    }}
+                  >
+                    Pricing Plans
+                  </Typography>
+                  <Grid container spacing={3}>
+                    {service.plans.map((plan, index) => (
                     <Grid size={{ xs: 12, sm: 6 }} key={index}>
                       <Card
                         sx={{
@@ -760,8 +530,9 @@ function ServiceDetail() {
                       </Card>
                     </Grid>
                   ))}
-                </Grid>
-              </Box>
+                  </Grid>
+                </Box>
+              )}
             </Grid>
 
             {/* Right Side - Contact Form Sidebar */}

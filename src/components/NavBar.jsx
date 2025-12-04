@@ -231,7 +231,7 @@ function NavBar() {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", width: "100%" }}>
       {/* App Bar */}
       <AppBar
         component="nav"
@@ -251,12 +251,11 @@ function NavBar() {
         <Toolbar
           sx={{
             minHeight: { xs: "56px", sm: "64px" },
-            padding: { xs: "0 0.5rem", sm: "0 1rem" },
+            px: { xs: 1, sm: 2, md: 4, lg: 6 },
             backgroundColor: (theme) =>
               theme.palette.mode === "dark" ? "#F5F5F5" : "#000000",
-            "&::before": {
-              display: "none",
-            },
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
           {/* logo */}
@@ -322,7 +321,6 @@ function NavBar() {
             component="div"
             sx={{
               marginLeft: "auto",
-              marginRight: { xs: "48px", sm: "48px" },
               display: "flex",
               alignItems: "center",
             }}

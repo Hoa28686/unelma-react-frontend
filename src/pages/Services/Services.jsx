@@ -330,7 +330,7 @@ function Services() {
                     }}
                   >
                     {/* Service Image */}
-                    {(service.image_url || service.image_local_url || service.image) && (
+                    {(service.image_local_url || service.image_url || service.image) && (
                       <Box
                         sx={{
                           width: "100%",
@@ -341,7 +341,7 @@ function Services() {
                       >
                         <Box
                           component="img"
-                          src={getImageUrl(service.image_url || service.image_local_url || service.image)}
+                          src={getImageUrl(service.image_local_url || service.image_url || service.image)}
                           alt={service.name}
                           onError={(e) => {
                             e.target.src = placeholderLogo;

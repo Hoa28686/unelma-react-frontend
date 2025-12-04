@@ -82,8 +82,13 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
               component="img"
               onClick={() => handleBlogClick(blog.id)}
               src={
-                blog.image_url ||
-                getImageUrl(blog.featured_image_url || blog.featured_image)
+                getImageUrl(
+                  blog.featured_image_local_url ||
+                  blog.featured_image_url ||
+                  blog.featured_image ||
+                  blog.image_local_url ||
+                  blog.image_url
+                )
               }
               alt={blog.title}
               sx={{

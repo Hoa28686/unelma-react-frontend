@@ -134,10 +134,10 @@ function Blog() {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedBlogs = filteredAndSortedBlogs.slice(startIndex, endIndex);
 
-  // Reset to page 1 when search changes
+  // Reset to page 1 when search or favorite filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery]);
+  }, [searchQuery, onlyFavorites, selectedCategory]);
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
@@ -407,6 +407,50 @@ function Blog() {
             gap: { xs: 3, sm: 4 },
           }}
         >
+          {paginatedBlogs.length === 0 && onlyFavorites && user && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "300px",
+                gap: 2,
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ color: (theme) => theme.palette.text.secondary }}
+              >
+                No favorite blogs found
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: (theme) => theme.palette.text.secondary }}
+              >
+                Start favoriting blogs to see them here!
+              </Typography>
+            </Box>
+          )}
+          {paginatedBlogs.length === 0 && !onlyFavorites && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "300px",
+                gap: 2,
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ color: (theme) => theme.palette.text.secondary }}
+              >
+                No blogs found
+              </Typography>
+            </Box>
+          )}
           {paginatedBlogs.map((blog) => (
             <Card
               key={blog.id}
@@ -431,10 +475,13 @@ function Blog() {
               <CardMedia
                 component="img"
                 onClick={() => handleBlogClick(blog.id)}
-                src={
-                  blog.image_url ||
-                  getImageUrl(blog.featured_image_url || blog.featured_image)
-                }
+                src={getImageUrl(
+                  blog.featured_image_local_url ||
+                    blog.featured_image_url ||
+                    blog.featured_image ||
+                    blog.image_local_url ||
+                    blog.image_url
+                )}
                 alt={blog.title}
                 sx={{
                   width: { xs: "100%", md: "30%" },
