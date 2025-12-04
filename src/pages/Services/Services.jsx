@@ -13,7 +13,7 @@ import {
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchServices } from "../../lib/features/services/servicesSlice";
-import { getImageUrl } from "../../helpers/helpers";
+import { getImageUrl, placeholderLogo } from "../../helpers/helpers";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -343,6 +343,9 @@ function Services() {
                           component="img"
                           src={getImageUrl(service.image_url || service.image_local_url || service.image)}
                           alt={service.name}
+                          onError={(e) => {
+                            e.target.src = placeholderLogo;
+                          }}
                           sx={{
                             width: "100%",
                             height: "100%",

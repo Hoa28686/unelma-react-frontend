@@ -25,8 +25,8 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { Link, useNavigate } from "react-router";
-import { timeConversion, getImageUrl } from "../../helpers/helpers";
+import { useNavigate } from "react-router";
+import { timeConversion, getImageUrl, placeholderLogo } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -435,6 +435,9 @@ function Blog() {
                   blog.image_url
                 }
                 alt={blog.title}
+                onError={(e) => {
+                  e.target.src = placeholderLogo;
+                }}
                 sx={{
                   width: { xs: "100%", md: "30%" },
                   height: { xs: "30%", md: "100%" },

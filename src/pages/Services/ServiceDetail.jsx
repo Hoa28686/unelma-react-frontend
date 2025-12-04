@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { useContactForm } from "../../hooks/useContactForm";
 import StyledTextField from "../../components/StyledTextField";
-import { getImageUrl } from "../../helpers/helpers";
+import { getImageUrl, placeholderLogo } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SecurityIcon from "@mui/icons-material/Security";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -30,10 +30,6 @@ import ComputerIcon from "@mui/icons-material/Computer";
 import { commonButtonStyles } from "../../constants/styles";
 import { useAuth } from "../../context/AuthContext";
 import { createCheckoutSession } from "../../lib/api/paymentService";
-import {
-  getUserFromSources,
-  isUserAuthenticated as checkIsUserAuthenticated,
-} from "../../utils/authUtils";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 
 // Helper function to map service name to icon
@@ -290,24 +286,8 @@ function ServiceDetail() {
     handleSubmit,
   } = useContactForm({ name: "", email: "", message: "" });
 
-  // Check authentication from both AuthContext and Redux
-  const { user: authContextUser, token: authContextToken } = useAuth();
-  const {
-    user: reduxUser,
-    isAuthenticated: reduxIsAuthenticated,
-    token: reduxToken,
-  } = useSelector((state) => state.auth);
-
-  // Get user from either system using utility
-  const user = getUserFromSources(reduxUser, authContextUser);
-
-  // User is authenticated if they have a token or user data
-  const isUserAuthenticated = checkIsUserAuthenticated(
-    reduxIsAuthenticated,
-    reduxToken,
-    authContextToken,
-    user
-  );
+  // Check authentication from AuthContext
+  const { user, isAuthenticated: isUserAuthenticated } = useAuth();
 
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(null); // Track which plan is loading (plan name)
@@ -464,6 +444,9 @@ function ServiceDetail() {
             component="img"
             src={getImageUrl(service.image_url || service.image_local_url || service.image)}
             alt={service.name}
+            onError={(e) => {
+              e.target.src = placeholderLogo;
+            }}
             sx={{
               width: "100%",
               height: "100%",

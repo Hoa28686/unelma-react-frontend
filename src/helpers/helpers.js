@@ -1,3 +1,5 @@
+import placeholderLogo from '../assets/placeholder_logo.webp';
+
 export const timeConversion = (time) => {
   return new Date(time).toLocaleDateString("en-US", {
     year: "numeric",
@@ -17,12 +19,13 @@ export const updateFavoriteCount = (items = [], itemId, isAddition) => {
 
 /**
  * Converts a relative image URL from Laravel to an absolute URL
+ * Returns placeholder image if no imageUrl is provided
  * @param {string} imageUrl - The image URL from the API (can be relative or absolute)
- * @returns {string} - Absolute URL to the image
+ * @returns {string} - Absolute URL to the image or placeholder
  */
 export const getImageUrl = (imageUrl) => {
   if (!imageUrl) {
-    return null;
+    return placeholderLogo;
   }
   
   // Normalize escaped slashes (from JSON encoding)
@@ -47,3 +50,8 @@ export const getImageUrl = (imageUrl) => {
   // Handle paths without leading slash (e.g., "storage/products/image.jpg")
   return `${laravelBaseUrl}/${normalizedUrl}`;
 };
+
+/**
+ * Export placeholder logo for use in onError handlers
+ */
+export { placeholderLogo };

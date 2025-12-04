@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { timeConversion, getImageUrl } from "../../helpers/helpers";
+import { timeConversion, getImageUrl, placeholderLogo } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
 import { API } from "../../api";
@@ -203,6 +203,9 @@ function BlogDetail() {
               ) || selectedBlog.image_url
             }
             alt={selectedBlog.title}
+            onError={(e) => {
+              e.target.src = placeholderLogo;
+            }}
             sx={{
               width: "100%",
               borderRadius: 2,
@@ -373,8 +376,11 @@ function BlogDetail() {
                     }}
                   >
                     <Avatar
-                      src={c.user.profile_picture ? getImageUrl(c.user.profile_picture) : undefined}
+                      src={c.user.profile_picture ? getImageUrl(c.user.profile_picture) : placeholderLogo}
                       alt="user avatar"
+                      onError={(e) => {
+                        e.target.src = placeholderLogo;
+                      }}
                       sx={{
                         width: { xs: 32, sm: 40 },
                         height: { xs: 32, sm: 40 },

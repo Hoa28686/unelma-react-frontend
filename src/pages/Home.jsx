@@ -14,8 +14,6 @@ import StorageIcon from "@mui/icons-material/Storage";
 import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import heroTile3 from "../assets/hero_tile_3.webp";
-import heroTile4 from "../assets/hero_tile_4.webp";
 
 // Hardcoded services for Home page
 const hardcodedServices = [
@@ -92,61 +90,17 @@ function Home() {
         width: "100%",
       }}
     >
-      {/* Hero Section Container - limits hero images to content area */}
+      {/* Hero Section Container */}
       <Box
         sx={{
           position: "relative",
           width: "100%",
-          overflow: "hidden",
         }}
       >
-        {/* Hero Images - layered, animates from top, behind header, to below header */}
-        {/* First image (tile 3) - back layer */}
-        <Box
-          sx={(theme) => ({
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundImage: `url(${heroTile3})`,
-            backgroundRepeat: { xs: "no-repeat", md: "repeat-y" },
-            backgroundSize: { xs: "100% auto", md: "100% auto" },
-            backgroundPosition: "top center",
-            zIndex: 0,
-            transform: isLoaded 
-              ? "translateY(0)" 
-              : "translateY(-100vh)",
-            transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
-            willChange: "transform",
-          })}
-        />
-        {/* Second image (tile 4) - front layer with delay */}
-        <Box
-          sx={(theme) => ({
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundImage: `url(${heroTile4})`,
-            backgroundRepeat: { xs: "no-repeat", md: "repeat-y" },
-            backgroundSize: { xs: "100% auto", md: "100% auto" },
-            backgroundPosition: "top center",
-            zIndex: 1,
-            transform: isLoaded 
-              ? "translateY(0)" 
-              : "translateY(-100vh)",
-            transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
-            willChange: "transform",
-          })}
-        />
-        
-        {/* Content overlay - ensures content is above the image */}
+        {/* Hero Content */}
         <Box
           sx={{
             position: "relative",
-            zIndex: 2,
             width: "100%",
             display: "flex",
             alignItems: "center",
@@ -243,74 +197,58 @@ function Home() {
               },
             },
           }}>
+            {/* Title */}
             <Box
               sx={{
-                padding: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-                backgroundColor: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(0, 0, 0, 0.2)"
-                    : "rgba(255, 255, 255, 0.15)",
-                borderRadius: 2,
-                backdropFilter: "blur(10px)",
-                border: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "1px solid rgba(255, 255, 255, 0.1)"
-                    : "1px solid rgba(0, 0, 0, 0.1)",
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                flexWrap: "wrap",
               }}
             >
-              {/* Title */}
-              <Box
+              <Typography
+                variant="h1"
+                component="h1"
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  flexWrap: "wrap",
+                  fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem", lg: "4rem" },
+                  fontWeight: 700,
+                  color: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "#FFFFFF"
+                      : theme.palette.text.primary,
+                  marginBottom: 0,
+                  lineHeight: 1.2,
+                  textAlign: "left",
+                  flex: 1,
+                  minWidth: { xs: "100%", sm: "auto" },
                 }}
               >
-                <Typography
-                  variant="h1"
-                  component="h1"
-                  sx={{
-                    fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem", lg: "4rem" },
-                    fontWeight: 700,
-                    color: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "#FFFFFF"
-                        : theme.palette.text.primary,
-                    marginBottom: 0,
-                    lineHeight: 1.2,
-                    textAlign: "left",
-                    flex: 1,
-                    minWidth: { xs: "100%", sm: "auto" },
-                  }}
-                >
-                  We are Software Platform Development Company
-                </Typography>
-                
-                {/* Arrow Icon Button */}
-                <IconButton
-                  onClick={handleOpenModal}
-                  sx={{
-                    color: (theme) => theme.palette.primary.main,
+                We are Software Platform Development Company
+              </Typography>
+              
+              {/* Arrow Icon Button */}
+              <IconButton
+                onClick={handleOpenModal}
+                sx={{
+                  color: (theme) => theme.palette.primary.main,
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.1)"
+                      : "rgba(0, 0, 0, 0.05)",
+                  "&:hover": {
                     backgroundColor: (theme) =>
                       theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.1)"
-                        : "rgba(0, 0, 0, 0.05)",
-                    "&:hover": {
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? "rgba(255, 255, 255, 0.2)"
-                          : "rgba(0, 0, 0, 0.1)",
-                      transform: "translateX(4px)",
-                    },
-                    transition: "all 0.3s ease",
-                    padding: { xs: "0.75rem", sm: "1rem" },
-                  }}
-                  aria-label="Read more about us"
-                >
-                  <ArrowForwardIcon sx={{ fontSize: { xs: "1.5rem", sm: "2rem" } }} />
-                </IconButton>
-              </Box>
+                        ? "rgba(255, 255, 255, 0.2)"
+                        : "rgba(0, 0, 0, 0.1)",
+                    transform: "translateX(4px)",
+                  },
+                  transition: "all 0.3s ease",
+                  padding: { xs: "0.75rem", sm: "1rem" },
+                }}
+                aria-label="Read more about us"
+              >
+                <ArrowForwardIcon sx={{ fontSize: { xs: "1.5rem", sm: "2rem" } }} />
+              </IconButton>
             </Box>
           </Box>
           </Box>

@@ -72,6 +72,44 @@ const lightTheme = createTheme({
       fontSize: "1rem",
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:active": {
+            outline: "none",
+            boxShadow: "none",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:active": {
+            outline: "none",
+            boxShadow: "none",
+          },
+        },
+      },
+    },
+  },
 });
 
 // Dark Theme here
@@ -142,6 +180,44 @@ const darkTheme = createTheme({
     h6: {
       fontWeight: 500,
       fontSize: "1rem",
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:active": {
+            outline: "none",
+            boxShadow: "none",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:focus-visible": {
+            outline: "none",
+            boxShadow: "none",
+          },
+          "&:active": {
+            outline: "none",
+            boxShadow: "none",
+          },
+        },
+      },
     },
   },
 });

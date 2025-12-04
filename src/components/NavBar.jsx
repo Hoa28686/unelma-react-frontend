@@ -26,32 +26,11 @@ import Logo from "./Logo.jsx";
 import ThemeSwitch from "./ThemeSwitch";
 import SearchBar from "./SearchBar";
 import { useAuth } from "../context/AuthContext.jsx";
-import {
-  getUserFromSources,
-  isUserAuthenticated as checkIsUserAuthenticated,
-} from "../utils/authUtils";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { getImageUrl } from "../helpers/helpers";
+import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 
 function NavBar() {
-  const { user: authContextUser, logout, token: authContextToken } = useAuth();
-  const {
-    user: reduxUser,
-    isAuthenticated: reduxIsAuthenticated,
-    token: reduxToken,
-  } = useSelector((state) => state.auth);
-
-  // Get user from either system using utility
-  const user = getUserFromSources(reduxUser, authContextUser);
-
-  // Check authentication from both systems using utility
-  const isAuthenticated = checkIsUserAuthenticated(
-    reduxIsAuthenticated,
-    reduxToken,
-    authContextToken,
-    user
-  );
-
+  const { user, isAuthenticated, logout, token } = useAuth();
   // Debug: Log user data to check profile_picture
   React.useEffect(() => {
     if (isAuthenticated && user) {
@@ -261,7 +240,7 @@ function NavBar() {
         position="static"
         elevation={0}
         sx={{
-          backgroundColor: "transparent !important",
+          backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#F5F5F5' : '#000000',
           boxShadow: "none",
           borderBottom: "none",
           backgroundImage: "none",
@@ -274,7 +253,7 @@ function NavBar() {
           sx={{
             minHeight: { xs: "56px", sm: "64px" },
             padding: { xs: "0 0.5rem", sm: "0 1rem" },
-            backgroundColor: "transparent !important",
+            backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#F5F5F5' : '#000000',
             "&::before": {
               display: "none",
             },
@@ -294,7 +273,7 @@ function NavBar() {
               <Button
                 key={item.label}
                 sx={{
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                   textTransform: "none",
                   fontSize: "1rem",
                   fontWeight: 400,
@@ -303,7 +282,7 @@ function NavBar() {
                   borderRadius: 0,
                   "&:hover": {
                     backgroundColor: "transparent",
-                    color: (theme) => theme.palette.text.primary,
+                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                     "& span::after": {
                       backgroundColor: (theme) => theme.palette.primary.main,
                     },
@@ -339,7 +318,12 @@ function NavBar() {
           {/* Buttons on the right side of the NavBar */}
           <Box
             component="div"
-            sx={{ marginLeft: "auto", display: "flex", alignItems: "center" }}
+            sx={{ 
+              marginLeft: "auto", 
+              marginRight: { xs: "48px", sm: "48px" },
+              display: "flex", 
+              alignItems: "center" 
+            }}
           >
             {/* Search */}
             <Box
@@ -366,9 +350,9 @@ function NavBar() {
             >
               <IconButton
                 sx={{
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                   "&:hover": {
-                    color: (theme) => theme.palette.text.primary,
+                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                     backgroundColor: "transparent",
                   },
                   "&:focus": {
@@ -410,10 +394,10 @@ function NavBar() {
             >
               <IconButton
                 sx={{
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                   position: "relative",
                   "&:hover": {
-                    color: (theme) => theme.palette.text.primary,
+                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                     backgroundColor: "transparent",
                   },
                 }}
@@ -449,10 +433,10 @@ function NavBar() {
             >
               <IconButton
                 sx={{
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                   position: "relative",
                   "&:hover": {
-                    color: (theme) => theme.palette.text.primary,
+                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                     backgroundColor: "transparent",
                   },
                 }}
@@ -500,9 +484,9 @@ function NavBar() {
             >
               <IconButton
                 sx={{
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                   "&:hover": {
-                    color: (theme) => theme.palette.text.primary,
+                    color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                     backgroundColor: "transparent",
                   },
                 }}
@@ -520,19 +504,7 @@ function NavBar() {
                       src={getImageUrl(user.profile_picture)}
                       alt="User avatar"
                       onError={(e) => {
-                        console.error("Profile picture failed to load:", {
-                          profile_picture: user.profile_picture,
-                          imageUrl: getImageUrl(user.profile_picture),
-                          user: user,
-                        });
-                        // Hide the broken image and show icon instead
-                        e.target.style.display = "none";
-                      }}
-                      onLoad={() => {
-                        console.log(
-                          "Profile picture loaded successfully:",
-                          getImageUrl(user.profile_picture)
-                        );
+                        e.target.src = placeholderLogo;
                       }}
                       sx={{
                         width: 32,
@@ -556,10 +528,10 @@ function NavBar() {
             {/* Mobile Menu Button */}
             <IconButton
               sx={{
-                color: (theme) => theme.palette.text.primary,
+                color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                 display: { xs: "flex", md: "none" },
                 "&:hover": {
-                  color: (theme) => theme.palette.text.primary,
+                  color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                   backgroundColor: "transparent",
                 },
                 "&:focus": {

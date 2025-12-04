@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import axios from "axios";
 import {
   Box,
   Container,
@@ -41,16 +41,11 @@ import {
   Settings,
   Delete,
 } from "@mui/icons-material";
-import {
-  login,
-  register,
-  clearError,
-  logout,
-} from "../lib/features/auth/authSlice";
 import { useContactForm } from "../hooks/useContactForm";
 import { useAuth } from "../context/AuthContext";
-import { getUserFromSources, clearAuthData } from "../utils/authUtils";
-import { getImageUrl } from "../helpers/helpers";
+import { clearAuthData } from "../utils/authUtils";
+import { getImageUrl, placeholderLogo } from "../helpers/helpers";
+import { API } from "../api";
 
 function User() {
   const theme = useTheme();
@@ -132,28 +127,22 @@ function User() {
     handleSubmit: handleQuerySubmit,
   } = useContactForm({ name: "", email: "", message: "" });
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
+    user,
     loading,
     error,
     isAuthenticated,
-    user: reduxUser,
-  } = useSelector((state) => state.auth);
-  const { user: authContextUser, logout: authContextLogout } = useAuth();
-
-  // Get user from either Redux or AuthContext using utility
-  const user = getUserFromSources(reduxUser, authContextUser);
+    login,
+    logout,
+    clearError,
+  } = useAuth();
+  
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [registerError, setRegisterError] = useState(null);
 
   const handleLogout = async () => {
-    // Try both logout methods
-    if (isAuthenticated) {
-      dispatch(logout());
-    }
-    if (authContextUser) {
-      await authContextLogout();
-    }
-    // Clear localStorage using utility
+    await logout();
     clearAuthData();
     // Redirect to home
     window.location.href = "/";
@@ -161,7 +150,8 @@ function User() {
 
   // Clear errors when switching tabs
   useEffect(() => {
-    dispatch(clearError());
+    clearError();
+    setRegisterError(null);
     setErrors({});
     setFormData({
       name: "",
@@ -169,7 +159,7 @@ function User() {
       password: "",
       password_confirmation: "",
     });
-  }, [activeTab, dispatch]);
+  }, [activeTab, clearError]);
 
   // Initialize profile data when user loads
   useEffect(() => {
@@ -260,17 +250,35 @@ function User() {
 
     if (activeTab === 0) {
       // Login
-      dispatch(login({ email: formData.email, password: formData.password }));
+      await login({ email: formData.email, password: formData.password });
     } else {
       // Register
-      dispatch(
-        register({
+      setRegisterLoading(true);
+      setRegisterError(null);
+      try {
+        await axios.post(API.register, {
           name: formData.name,
           email: formData.email,
           password: formData.password,
           password_confirmation: formData.password_confirmation,
-        })
-      );
+        });
+        // Registration successful - show message and redirect to login
+        setRegisterError(null);
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          password_confirmation: "",
+        });
+        // Switch to login tab after successful registration
+        setTimeout(() => {
+          setActiveTab(0);
+          setRegisterLoading(false);
+        }, 1000);
+      } catch (e) {
+        setRegisterError(e.response?.data?.message || "Registration failed");
+        setRegisterLoading(false);
+      }
     }
   };
 
@@ -576,8 +584,11 @@ function User() {
                 }}
               >
                 <Avatar
-                  src={user?.profile_picture ? getImageUrl(user.profile_picture) : undefined}
+                  src={user?.profile_picture ? getImageUrl(user.profile_picture) : placeholderLogo}
                   alt="User avatar"
+                  onError={(e) => {
+                    e.target.src = placeholderLogo;
+                  }}
                   sx={{
                     width: 80,
                     height: 80,
@@ -1220,13 +1231,22 @@ function User() {
               <Tab label="Register" />
             </Tabs>
 
-            {error && (
+            {error && activeTab === 0 && (
               <Alert
                 severity="error"
                 sx={{ mb: 2 }}
-                onClose={() => dispatch(clearError())}
+                onClose={() => clearError()}
               >
                 {error}
+              </Alert>
+            )}
+            {registerError && activeTab === 1 && (
+              <Alert
+                severity="error"
+                sx={{ mb: 2 }}
+                onClose={() => setRegisterError(null)}
+              >
+                {registerError}
               </Alert>
             )}
 
@@ -1324,7 +1344,7 @@ function User() {
                 type="submit"
                 variant="contained"
                 fullWidth
-                disabled={loading}
+                disabled={activeTab === 0 ? loading : registerLoading}
                 sx={{
                   backgroundColor: (theme) => theme.palette.primary.main,
                   color: "#FFFFFF",
@@ -1349,7 +1369,7 @@ function User() {
                   },
                 }}
               >
-                {loading ? (
+                {(activeTab === 0 ? loading : registerLoading) ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : activeTab === 0 ? (
                   "Login"

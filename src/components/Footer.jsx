@@ -1,5 +1,6 @@
-import React from 'react';
-import { Box, Typography, Link, Grid } from "@mui/material";
+import React, { useState } from 'react';
+import { Box, Typography, Link, Grid, Button, Dialog, DialogContent, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import businessFinlandLogo from "../assets/business-finland-logo.webp";
 import estoniaLogo from "../assets/republic-of-estonia-logo.webp";
 import shortlistLogo from "../assets/shortlist-logo.webp";
@@ -76,9 +77,19 @@ const partnerLogos = [
 
 // Renamed component from App to Footer
 const Footer = () => {
+    const [subscribeModalOpen, setSubscribeModalOpen] = useState(false);
+
+    const handleOpenSubscribeModal = () => {
+        setSubscribeModalOpen(true);
+    };
+
+    const handleCloseSubscribeModal = () => {
+        setSubscribeModalOpen(false);
+    };
 
     return (
-        // This is the footer element itself. The parent Layout.jsx handles the full-page layout.
+        <>
+        {/* This is the footer element itself. The parent Layout.jsx handles the full-page layout. */}
         <Box 
             component="footer" 
             sx={{ 
@@ -208,37 +219,45 @@ const Footer = () => {
                             Based on the GDPR rule, we will only contact you if it is essential and all personal data collected is anonymized.
                         </Typography>
                         
-                        {/* UnelmaMail Embedded Subscription Form */}
-                        <Box
+                        {/* Subscribe Button */}
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleOpenSubscribeModal}
                             sx={{
-                                width: '100%',
-                                backgroundColor: '#0A0F1C', // Match Footer background
-                                borderRadius: '8px',
-                                overflow: 'hidden', // Ensure content respects border radius
-                                '& iframe': {
-                                    width: '100%',
-                                    height: { xs: '400px', sm: '350px' }, // Fixed height, scrollable
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    backgroundColor: '#0A0F1C', // Match Footer
-                                    display: 'block',
+                                py: 1, 
+                                px: 3,
+                                fontWeight: 100,
+                                borderRadius: 2,
+                                boxShadow: "none",
+                                textTransform: "none",
+                                whiteSpace: "nowrap",
+                                border: "1px solid transparent",
+                                transition: "all 0.3s ease",
+                                '&:hover': {
+                                    borderColor: (theme) => theme.palette.primary.main,
+                                    transform: "translateY(-4px)",
+                                },
+                                '&:focus': {
+                                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                                    outlineOffset: "2px",
+                                    boxShadow: "none",
+                                },
+                                '&:focus-visible': {
+                                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                                    outlineOffset: "2px",
+                                    boxShadow: "none",
+                                },
+                                '&:active': {
+                                    outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                                    outlineOffset: "2px",
+                                    boxShadow: "none",
                                 },
                             }}
+                            disableRipple
                         >
-                            <iframe
-                                src="/subscribe-form-embed.html"
-                                title="Newsletter Subscription Form"
-                                scrolling="yes"
-                                style={{
-                                    width: '100%',
-                                    height: '100%', // Fill parent Box height
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    display: 'block',
-                                }}
-                                loading="lazy"
-                            />
-                        </Box>
+                            Subscribe
+                        </Button>
                     </Grid>
 
                     {/* Office Locations - Horizontal Layout */}
@@ -384,6 +403,73 @@ const Footer = () => {
 
             </Box>
         </Box>
+
+        {/* Subscribe Modal */}
+        <Dialog
+            open={subscribeModalOpen}
+            onClose={handleCloseSubscribeModal}
+            maxWidth="sm"
+            sx={{
+                '& .MuiDialog-container': {
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                },
+            }}
+            PaperProps={{
+                sx: {
+                    borderRadius: 2,
+                    backgroundColor: '#0A0F1C',
+                    maxHeight: '95vh',
+                    width: { xs: '90%', sm: '500px', md: '550px' },
+                    margin: { xs: '16px', sm: '32px' },
+                    position: 'relative',
+                },
+            }}
+        >
+            <DialogContent
+                sx={{
+                    p: 0,
+                    position: 'relative',
+                    overflow: 'hidden',
+                    height: '400px',
+                }}
+            >
+                {/* Close Button */}
+                <IconButton
+                    onClick={handleCloseSubscribeModal}
+                    sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        zIndex: 1,
+                        color: '#FFFFFF',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        },
+                    }}
+                    aria-label="close"
+                >
+                    <CloseIcon />
+                </IconButton>
+                
+                {/* UnelmaMail Embedded Subscription Form */}
+                <iframe
+                    src="/subscribe-form-embed.html"
+                    title="Newsletter Subscription Form"
+                    scrolling="no"
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        border: 'none',
+                        borderRadius: '8px',
+                        display: 'block',
+                    }}
+                    loading="lazy"
+                />
+            </DialogContent>
+        </Dialog>
+        </>
     );
 };
 

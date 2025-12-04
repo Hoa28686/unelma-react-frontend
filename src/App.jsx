@@ -1,24 +1,41 @@
 import { BrowserRouter, Route, Routes } from "react-router";
+import { lazy, Suspense } from "react";
 import Layout from "./Layout.jsx";
-import Home from "./pages/Home.jsx";
-import About from "./pages/About.jsx";
-import Contact from "./pages/Contact.jsx";
-import NotFound from "./pages/NotFound.jsx";
-import Cart from "./pages/Cart.jsx";
 import { CustomThemeProvider } from "./context/ThemeContext.jsx";
-import { CssBaseline } from "@mui/material";
-import ProductDetail from "./pages/Products/ProductDetail.jsx";
-import BlogDetail from "./pages/Blog/blogDetail.jsx";
-import Blog from "./pages/Blog/Blog.jsx";
-import Products from "./pages/Products/Products.jsx";
-import Services from "./pages/Services/Services.jsx";
-import ServiceDetail from "./pages/Services/ServiceDetail.jsx";
-import Login from "./pages/Auth/Login.jsx";
-import Register from "./pages/Auth/Register.jsx";
-import User from "./pages/User.jsx";
-import PaymentSuccess from "./pages/Payment/PaymentSuccess.jsx";
-import PaymentCancel from "./pages/Payment/PaymentCancel.jsx";
-import Favorites from "./pages/Favorites.jsx";
+import { CssBaseline, CircularProgress, Box } from "@mui/material";
+
+// Lazy load all pages for code splitting - only load what's needed
+const Home = lazy(() => import("./pages/Home.jsx"));
+const About = lazy(() => import("./pages/About.jsx"));
+const Contact = lazy(() => import("./pages/Contact.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound.jsx"));
+const Cart = lazy(() => import("./pages/Cart.jsx"));
+const ProductDetail = lazy(() => import("./pages/Products/ProductDetail.jsx"));
+const BlogDetail = lazy(() => import("./pages/Blog/blogDetail.jsx"));
+const Blog = lazy(() => import("./pages/Blog/Blog.jsx"));
+const Products = lazy(() => import("./pages/Products/Products.jsx"));
+const Services = lazy(() => import("./pages/Services/Services.jsx"));
+const ServiceDetail = lazy(() => import("./pages/Services/ServiceDetail.jsx"));
+const Login = lazy(() => import("./pages/Auth/Login.jsx"));
+const Register = lazy(() => import("./pages/Auth/Register.jsx"));
+const User = lazy(() => import("./pages/User.jsx"));
+const PaymentSuccess = lazy(() => import("./pages/Payment/PaymentSuccess.jsx"));
+const PaymentCancel = lazy(() => import("./pages/Payment/PaymentCancel.jsx"));
+const Favorites = lazy(() => import("./pages/Favorites.jsx"));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "100vh",
+    }}
+  >
+    <CircularProgress />
+  </Box>
+);
 
 function App() {
   return (
@@ -26,27 +43,29 @@ function App() {
       <CssBaseline />
       <CustomThemeProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/products/:productId" element={<ProductDetail />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/services/:serviceId" element={<ServiceDetail />} />
-              <Route path="/blogs" element={<Blog />} />
-              <Route path="/blogs/:blogId" element={<BlogDetail />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/user" element={<User />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/payment/success" element={<PaymentSuccess />} />
-              <Route path="/payment/cancel" element={<PaymentCancel />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/:productId" element={<ProductDetail />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/services/:serviceId" element={<ServiceDetail />} />
+                <Route path="/blogs" element={<Blog />} />
+                <Route path="/blogs/:blogId" element={<BlogDetail />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/user" element={<User />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/payment/success" element={<PaymentSuccess />} />
+                <Route path="/payment/cancel" element={<PaymentCancel />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </CustomThemeProvider>
     </>
