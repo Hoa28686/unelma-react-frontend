@@ -29,23 +29,38 @@ import ComputerIcon from "@mui/icons-material/Computer";
 const getServiceIcon = (serviceName) => {
   const name = serviceName?.toLowerCase() || "";
   if (name.includes("cyber") || name.includes("security")) return SecurityIcon;
-  if (name.includes("data management") || name.includes("storage")) return StorageIcon;
-  if (name.includes("data science") || name.includes("science")) return ScienceIcon;
+  if (name.includes("data management") || name.includes("storage"))
+    return StorageIcon;
+  if (name.includes("data science") || name.includes("science"))
+    return ScienceIcon;
   if (name.includes("cloud")) return CloudIcon;
-  if (name.includes("ai") || name.includes("machine learning") || name.includes("psychology")) return PsychologyIcon;
-  if (name.includes("web") || name.includes("mobile") || name.includes("development")) return ComputerIcon;
+  if (
+    name.includes("ai") ||
+    name.includes("machine learning") ||
+    name.includes("psychology")
+  )
+    return PsychologyIcon;
+  if (
+    name.includes("web") ||
+    name.includes("mobile") ||
+    name.includes("development")
+  )
+    return ComputerIcon;
   return ComputerIcon; // Default icon
 };
 
 // Helper function to convert service name to URL slug
 const getServiceSlug = (serviceName) => {
   const name = serviceName?.toLowerCase() || "";
-  if (name.includes("cyber") || name.includes("security")) return "cyber-security";
+  if (name.includes("cyber") || name.includes("security"))
+    return "cyber-security";
   if (name.includes("data management")) return "data-management";
   if (name.includes("data science")) return "data-science";
   if (name.includes("cloud")) return "cloud-service";
-  if (name.includes("ai") || name.includes("machine learning")) return "ai-machine-learning";
-  if (name.includes("web") || name.includes("mobile")) return "web-mobile-development";
+  if (name.includes("ai") || name.includes("machine learning"))
+    return "ai-machine-learning";
+  if (name.includes("web") || name.includes("mobile"))
+    return "web-mobile-development";
   return serviceName?.toLowerCase().replace(/\s+/g, "-") || "";
 };
 
@@ -269,7 +284,10 @@ function Services() {
           )}
 
           {/* Services Grid */}
-          {!loading && !error && filteredServices.length === 0 && searchQuery ? (
+          {!loading &&
+          !error &&
+          filteredServices.length === 0 &&
+          searchQuery ? (
             <Box
               sx={{
                 display: "flex",
@@ -305,121 +323,130 @@ function Services() {
                 {paginatedServices.map((service) => {
                   const ServiceIconComponent = getServiceIcon(service.name);
                   return (
-                  <Card
-                    key={service.id}
-                    onClick={() => {
-                      navigate(`/services/${service.serviceId}`);
-                    }}
-                    sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.background.paper,
-                      border: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? "1px solid rgba(255, 255, 255, 0.1)"
-                          : "1px solid rgba(0, 0, 0, 0.1)",
-                      borderRadius: 2,
-                      transition: "all 0.3s ease",
-                      overflow: "hidden",
-                      cursor: "pointer",
-                      display: "flex",
-                      flexDirection: "column",
-                      "&:hover": {
-                        borderColor: (theme) => theme.palette.primary.main,
-                        transform: "translateY(-4px)",
-                      },
-                    }}
-                  >
-                    {/* Service Image */}
-                    {(service.image_local_url || service.image_url || service.image) && (
-                      <Box
-                        sx={{
-                          width: "100%",
-                          height: { xs: "200px", sm: "220px", md: "240px" },
-                          overflow: "hidden",
-                          backgroundColor: (theme) => theme.palette.background.default,
-                        }}
-                      >
+                    <Card
+                      key={service.id}
+                      onClick={() => {
+                        navigate(`/services/${service.serviceId}`);
+                      }}
+                      sx={{
+                        backgroundColor: (theme) =>
+                          theme.palette.background.paper,
+                        border: (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "1px solid rgba(255, 255, 255, 0.1)"
+                            : "1px solid rgba(0, 0, 0, 0.1)",
+                        borderRadius: 2,
+                        transition: "all 0.3s ease",
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        display: "flex",
+                        flexDirection: "column",
+                        "&:hover": {
+                          borderColor: (theme) => theme.palette.primary.main,
+                          transform: "translateY(-4px)",
+                        },
+                      }}
+                    >
+                      {/* Service Image */}
+                      {(service.image_local_url ||
+                        service.image_url ||
+                        service.image) && (
                         <Box
-                          component="img"
-                          src={getImageUrl(service.image_local_url || service.image_url || service.image)}
-                          alt={service.name}
-                          onError={(e) => {
-                            e.target.src = placeholderLogo;
-                          }}
                           sx={{
                             width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            transition: "transform 0.3s ease",
-                            "&:hover": {
-                              transform: "scale(1.05)",
-                            },
-                          }}
-                        />
-                      </Box>
-                    )}
-                    <CardContent sx={{ padding: { xs: "1.5rem", sm: "2rem" } }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          marginBottom: "1rem",
-                        }}
-                      >
-                        {ServiceIconComponent && (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              width: { xs: "48px", sm: "56px" },
-                              height: { xs: "48px", sm: "56px" },
-                              minWidth: { xs: "48px", sm: "56px" },
-                              minHeight: { xs: "48px", sm: "56px" },
-                              maxWidth: { xs: "48px", sm: "56px" },
-                              maxHeight: { xs: "48px", sm: "56px" },
-                              borderRadius: "50%",
-                              overflow: "hidden",
-                              flexShrink: 0,
-                              backgroundColor: (theme) => 
-                                theme.palette.mode === 'light' 
-                                  ? `${theme.palette.primary.main}15` 
-                                  : `${theme.palette.primary.main}25`,
-                              color: (theme) => theme.palette.primary.main,
-                            }}
-                          >
-                            <ServiceIconComponent
-                              sx={{
-                                fontSize: { xs: "1.5rem", sm: "1.75rem" },
-                              }}
-                            />
-                          </Box>
-                        )}
-                        <Typography
-                          variant="h5"
-                          component="h3"
-                          sx={{
-                            fontSize: { xs: "1.25rem", sm: "1.5rem" },
-                            fontWeight: 600,
-                            color: (theme) => theme.palette.text.primary,
+                            height: { xs: "200px", sm: "220px", md: "240px" },
+                            overflow: "hidden",
+                            backgroundColor: (theme) =>
+                              theme.palette.background.default,
                           }}
                         >
-                          {service.name}
-                        </Typography>
-                      </Box>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontSize: { xs: "0.875rem", sm: "1rem" },
-                          color: (theme) => theme.palette.text.secondary,
-                          lineHeight: 1.6,
-                        }}
+                          <Box
+                            component="img"
+                            src={getImageUrl(
+                              service.image_local_url ||
+                                service.image_url ||
+                                service.image
+                            )}
+                            alt={service.name}
+                            onError={(e) => {
+                              e.target.src = placeholderLogo;
+                            }}
+                            sx={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              transition: "transform 0.3s ease",
+                              "&:hover": {
+                                transform: "scale(1.05)",
+                              },
+                            }}
+                          />
+                        </Box>
+                      )}
+                      <CardContent
+                        sx={{ padding: { xs: "1.5rem", sm: "2rem" } }}
                       >
-                        {service.description}
-                      </Typography>
-                    </CardContent>
-                  </Card>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 2,
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          {ServiceIconComponent && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: { xs: "48px", sm: "56px" },
+                                height: { xs: "48px", sm: "56px" },
+                                minWidth: { xs: "48px", sm: "56px" },
+                                minHeight: { xs: "48px", sm: "56px" },
+                                maxWidth: { xs: "48px", sm: "56px" },
+                                maxHeight: { xs: "48px", sm: "56px" },
+                                borderRadius: "50%",
+                                overflow: "hidden",
+                                flexShrink: 0,
+                                backgroundColor: (theme) =>
+                                  theme.palette.mode === "light"
+                                    ? `${theme.palette.primary.main}15`
+                                    : `${theme.palette.primary.main}25`,
+                                color: (theme) => theme.palette.primary.main,
+                              }}
+                            >
+                              <ServiceIconComponent
+                                sx={{
+                                  fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                                }}
+                              />
+                            </Box>
+                          )}
+                          <Typography
+                            variant="h5"
+                            component="h3"
+                            sx={{
+                              fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                              fontWeight: 600,
+                              color: (theme) => theme.palette.text.primary,
+                            }}
+                          >
+                            {service.name}
+                          </Typography>
+                        </Box>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontSize: { xs: "0.875rem", sm: "1rem" },
+                            color: (theme) => theme.palette.text.secondary,
+                            lineHeight: 1.6,
+                          }}
+                        >
+                          {service.description}
+                        </Typography>
+                      </CardContent>
+                    </Card>
                   );
                 })}
               </Box>

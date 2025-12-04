@@ -214,15 +214,13 @@ function BlogDetail() {
           )}
           <Box
             component="img"
-            src={
-              getImageUrl(
-                selectedBlog?.featured_image_local_url || 
-                selectedBlog?.featured_image_url || 
+            src={getImageUrl(
+              selectedBlog?.featured_image_local_url ||
+                selectedBlog?.featured_image_url ||
                 selectedBlog?.featured_image ||
                 selectedBlog?.image_local_url ||
                 selectedBlog?.image_url
-              )
-            }
+            )}
             alt={selectedBlog.title}
             sx={{
               width: "100%",
@@ -396,7 +394,7 @@ function BlogDetail() {
                       src={
                         c.user.profile_picture
                           ? getImageUrl(c.user.profile_picture)
-                          : undefined
+                          : `/logo.webp`
                       }
                       alt="user avatar"
                       sx={{
