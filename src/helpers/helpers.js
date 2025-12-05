@@ -1,4 +1,4 @@
-import placeholderLogo from '../assets/placeholder_logo.webp';
+import placeholderLogo from "../assets/placeholder_logo.webp";
 
 export const timeConversion = (time) => {
   return new Date(time).toLocaleDateString("en-US", {
@@ -27,12 +27,15 @@ export const getImageUrl = (imageUrl) => {
   if (!imageUrl) {
     return placeholderLogo;
   }
-  
+
   // Normalize escaped slashes (from JSON encoding)
-  let normalizedUrl = imageUrl.replace(/\\\//g, '/');
-  
+  let normalizedUrl = imageUrl.replace(/\\\//g, "/");
+
   // If already an absolute URL (starts with http:// or https://), return as is
-  if (normalizedUrl.startsWith('http://') || normalizedUrl.startsWith('https://')) {
+  if (
+    normalizedUrl.startsWith("http://") ||
+    normalizedUrl.startsWith("https://")
+  ) {
     return normalizedUrl;
   }
 
@@ -43,7 +46,7 @@ export const getImageUrl = (imageUrl) => {
   const laravelBaseUrl = apiBaseUrl.replace(/\/api$/, "");
 
   // Handle relative paths (starting with /)
-  if (normalizedUrl.startsWith('/')) {
+  if (normalizedUrl.startsWith("/")) {
     return `${laravelBaseUrl}${normalizedUrl}`;
   }
 
