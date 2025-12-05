@@ -42,7 +42,12 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
     <>
       <Typography
         variant="h3"
-        sx={{ textAlign: "center", marginBlock: 4, fontWeight: 500 }}
+        sx={{
+          textAlign: "center",
+          marginBlock: 4,
+          fontWeight: 500,
+          color: (theme) => theme.palette.text.primary,
+        }}
       >
         You might also like:
       </Typography>
@@ -81,15 +86,13 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
             <CardMedia
               component="img"
               onClick={() => handleBlogClick(blog.id)}
-              src={
-                getImageUrl(
-                  blog.featured_image_local_url ||
+              src={getImageUrl(
+                blog.featured_image_local_url ||
                   blog.featured_image_url ||
                   blog.featured_image ||
                   blog.image_local_url ||
                   blog.image_url
-                )
-              }
+              )}
               alt={blog.title}
               sx={{
                 width: "100%",

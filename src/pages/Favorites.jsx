@@ -2,7 +2,14 @@ import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import FavoriteButton from "../components/FavoriteButton";
-import { Box, Link as MuiLink, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  darken,
+  Link as MuiLink,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { fetchBlogs } from "../store/slices/blogs/blogsSlice";
 import { fetchProducts } from "../store/slices/products/productsSlice";
 
@@ -48,9 +55,18 @@ function Favorites() {
             return (
               <Box key={fav.id}>
                 <FavoriteButton type={type} itemId={item.id} />
-                <Link to={`/${type}s/${item.id}`}>
+
+                <MuiLink
+                  component={Link}
+                  to={`/${type}s/${item.id}`}
+                  sx={{
+                    textDecoration: "none",
+
+                    color: (theme) => darken(theme.palette.secondary.main, 0.1),
+                  }}
+                >
                   {item.title || item.name}
-                </Link>
+                </MuiLink>
               </Box>
             );
           })}

@@ -110,18 +110,27 @@ function ServiceDetail() {
   // Find service from backend by matching slug
   useEffect(() => {
     if (serviceId && services.length > 0) {
-      const backendService = services.find((s) => {
-        const slug = getServiceSlug(s.name);
-        return slug === serviceId;
-      });
+      let foundService = null;
 
-      if (backendService) {
-        dispatch(setSelectedService(backendService));
+      // find the service by slug first
+      foundService = services.find((s) => getServiceSlug(s.name) === serviceId);
+
+      // if no slug match, try match by ID
+      if (!foundService && !isNaN(serviceId)) {
+        foundService = services.find((s) => String(s.id) === String(serviceId));
+      }
+
+      if (foundService) {
+        dispatch(setSelectedService(foundService));
+        const serviceSlug = getServiceSlug(foundService.name);
+        if (serviceId !== serviceSlug) {
+          navigate(`/services/${serviceSlug}`, { replace: true });
+        }
       } else {
         dispatch(clearSelectedService());
       }
     }
-  }, [serviceId, services, dispatch]);
+  }, [serviceId, services, dispatch, navigate]);
 
   // Use selectedService from Redux (backend data only)
   const service = selectedService;
@@ -239,7 +248,9 @@ function ServiceDetail() {
         >
           <Box
             component="img"
-            src={getImageUrl(service.image_local_url || service.image_url || service.image)}
+            src={getImageUrl(
+              service.image_local_url || service.image_url || service.image
+            )}
             alt={service.name}
             onError={(e) => {
               e.target.src = placeholderLogo;
@@ -348,7 +359,7 @@ function ServiceDetail() {
             >
               {service.name}
             </Typography>
-            <FavoriteButtonAndCount type="service" item={service} />
+            <FavoriteButtonAndCount type="service" item={selectedService} />
           </Box>
 
           {/* Main Content and Sidebar Layout */}
@@ -385,129 +396,23 @@ function ServiceDetail() {
                   </Typography>
                   <Grid container spacing={3}>
                     {service.plans.map((plan, index) => (
-                    <Grid size={{ xs: 12, sm: 6 }} key={index}>
-                      <Card
-                        sx={{
-                          backgroundColor: (theme) =>
-                            theme.palette.mode === "light"
-                              ? theme.palette.background.paper
-                              : theme.palette.background.paper,
-                          border: (theme) =>
-                            theme.palette.mode === "dark"
-                              ? "1px solid rgba(255, 255, 255, 0.1)"
-                              : "1px solid rgba(0, 0, 0, 0.1)",
-                          borderRadius: 2,
-                          padding: { xs: "2rem", sm: "2.5rem" },
-                          height: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                          transition: "all 0.3s ease",
-                          "&:hover": {
-                            borderColor: (theme) => theme.palette.primary.main,
-                            transform: "translateY(-4px)",
-                          },
-                        }}
-                      >
-                        <Typography
-                          variant="h4"
-                          component="h3"
-                          sx={{
-                            fontSize: { xs: "1.5rem", sm: "1.75rem" },
-                            fontWeight: 600,
-                            color: (theme) => theme.palette.text.primary,
-                            marginBottom: "1rem",
-                          }}
-                        >
-                          {plan.name}
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "baseline",
-                            marginBottom: "2rem",
-                          }}
-                        >
-                          <Typography
-                            variant="h3"
-                            sx={{
-                              fontSize: { xs: "2rem", sm: "2.5rem" },
-                              fontWeight: 700,
-                              color: (theme) => theme.palette.primary.main,
-                            }}
-                          >
-                            ${plan.price}
-                          </Typography>
-                          <Typography
-                            variant="body1"
-                            sx={{
-                              fontSize: { xs: "1rem", sm: "1.125rem" },
-                              color: (theme) => theme.palette.text.secondary,
-                              marginLeft: 1,
-                            }}
-                          >
-                            {plan.period}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ flexGrow: 1, marginBottom: "2rem" }}>
-                          {plan.features.map((feature, featureIndex) => (
-                            <Box
-                              key={featureIndex}
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginBottom: "1rem",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  width: "8px",
-                                  height: "8px",
-                                  borderRadius: "50%",
-                                  backgroundColor: (theme) =>
-                                    theme.palette.primary.main,
-                                  marginRight: 2,
-                                }}
-                              />
-                              <Typography
-                                variant="body1"
-                                sx={{
-                                  fontSize: { xs: "0.875rem", sm: "1rem" },
-                                  color: (theme) =>
-                                    theme.palette.text.secondary,
-                                }}
-                              >
-                                {feature}
-                              </Typography>
-                            </Box>
-                          ))}
-                        </Box>
-                        <Button
-                          variant="contained"
-                          fullWidth
-                          onClick={() => handleOrderNow(plan)}
-                          disabled={paymentLoading === plan.name}
+                      <Grid size={{ xs: 12, sm: 6 }} key={index}>
+                        <Card
                           sx={{
                             backgroundColor: (theme) =>
-                              theme.palette.primary.main,
-                            color: "#FFFFFF",
-                            fontWeight: 100,
+                              theme.palette.mode === "light"
+                                ? theme.palette.background.paper
+                                : theme.palette.background.paper,
+                            border: (theme) =>
+                              theme.palette.mode === "dark"
+                                ? "1px solid rgba(255, 255, 255, 0.1)"
+                                : "1px solid rgba(0, 0, 0, 0.1)",
                             borderRadius: 2,
-                            boxShadow: "none",
-                            textTransform: "none",
-                            border: "1px solid transparent",
+                            padding: { xs: "2rem", sm: "2.5rem" },
+                            height: "100%",
+                            display: "flex",
+                            flexDirection: "column",
                             transition: "all 0.3s ease",
-                            "&:focus": {
-                              outline: (theme) =>
-                                `2px solid ${theme.palette.primary.main}`,
-                              outlineOffset: "2px",
-                              boxShadow: "none",
-                            },
-                            "&:focus-visible": {
-                              outline: (theme) =>
-                                `2px solid ${theme.palette.primary.main}`,
-                              outlineOffset: "2px",
-                              boxShadow: "none",
-                            },
                             "&:hover": {
                               borderColor: (theme) =>
                                 theme.palette.primary.main,
@@ -515,21 +420,128 @@ function ServiceDetail() {
                             },
                           }}
                         >
-                          {paymentLoading === plan.name ? (
-                            <>
-                              <CircularProgress
-                                size={20}
-                                sx={{ mr: 1, color: "#FFFFFF" }}
-                              />
-                              Processing...
-                            </>
-                          ) : (
-                            "Order Now"
-                          )}
-                        </Button>
-                      </Card>
-                    </Grid>
-                  ))}
+                          <Typography
+                            variant="h4"
+                            component="h3"
+                            sx={{
+                              fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                              fontWeight: 600,
+                              color: (theme) => theme.palette.text.primary,
+                              marginBottom: "1rem",
+                            }}
+                          >
+                            {plan.name}
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "baseline",
+                              marginBottom: "2rem",
+                            }}
+                          >
+                            <Typography
+                              variant="h3"
+                              sx={{
+                                fontSize: { xs: "2rem", sm: "2.5rem" },
+                                fontWeight: 700,
+                                color: (theme) => theme.palette.primary.main,
+                              }}
+                            >
+                              ${plan.price}
+                            </Typography>
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                fontSize: { xs: "1rem", sm: "1.125rem" },
+                                color: (theme) => theme.palette.text.secondary,
+                                marginLeft: 1,
+                              }}
+                            >
+                              {plan.period}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ flexGrow: 1, marginBottom: "2rem" }}>
+                            {plan.features.map((feature, featureIndex) => (
+                              <Box
+                                key={featureIndex}
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  marginBottom: "1rem",
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: "8px",
+                                    height: "8px",
+                                    borderRadius: "50%",
+                                    backgroundColor: (theme) =>
+                                      theme.palette.primary.main,
+                                    marginRight: 2,
+                                  }}
+                                />
+                                <Typography
+                                  variant="body1"
+                                  sx={{
+                                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                                    color: (theme) =>
+                                      theme.palette.text.secondary,
+                                  }}
+                                >
+                                  {feature}
+                                </Typography>
+                              </Box>
+                            ))}
+                          </Box>
+                          <Button
+                            variant="contained"
+                            fullWidth
+                            onClick={() => handleOrderNow(plan)}
+                            disabled={paymentLoading === plan.name}
+                            sx={{
+                              backgroundColor: (theme) =>
+                                theme.palette.primary.main,
+                              color: "#FFFFFF",
+                              fontWeight: 100,
+                              borderRadius: 2,
+                              boxShadow: "none",
+                              textTransform: "none",
+                              border: "1px solid transparent",
+                              transition: "all 0.3s ease",
+                              "&:focus": {
+                                outline: (theme) =>
+                                  `2px solid ${theme.palette.primary.main}`,
+                                outlineOffset: "2px",
+                                boxShadow: "none",
+                              },
+                              "&:focus-visible": {
+                                outline: (theme) =>
+                                  `2px solid ${theme.palette.primary.main}`,
+                                outlineOffset: "2px",
+                                boxShadow: "none",
+                              },
+                              "&:hover": {
+                                borderColor: (theme) =>
+                                  theme.palette.primary.main,
+                                transform: "translateY(-4px)",
+                              },
+                            }}
+                          >
+                            {paymentLoading === plan.name ? (
+                              <>
+                                <CircularProgress
+                                  size={20}
+                                  sx={{ mr: 1, color: "#FFFFFF" }}
+                                />
+                                Processing...
+                              </>
+                            ) : (
+                              "Order Now"
+                            )}
+                          </Button>
+                        </Card>
+                      </Grid>
+                    ))}
                   </Grid>
                 </Box>
               )}
