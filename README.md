@@ -1,4 +1,5 @@
 This is the frontend part of Unelma project
+TEST
 
 Note: after cloning the repository, install dependencies and run the development server:
 
