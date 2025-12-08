@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import {
   Box,
   Typography,
@@ -10,6 +11,12 @@ import {
   Button,
   Divider,
   TextField,
+  Alert,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -17,10 +24,21 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { removeFromCart, updateQuantity, clearCart } from "../lib/features/cart/cartSlice";
 import PriceDisplay from "../components/PriceDisplay";
 import { getImageUrl, placeholderLogo } from "../helpers/helpers";
+import { getAuthToken } from "../utils/authUtils";
+import { createCartCheckoutSession } from "../lib/api/paymentService";
 
 function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { items } = useSelector((state) => state.cart);
+  
+  // Check authentication using token from localStorage
+  const localStorageToken = getAuthToken();
+  const isAuthenticated = !!localStorageToken;
+
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState(null);
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
 
   const handleRemoveItem = (productId) => {
     dispatch(removeFromCart(productId));
@@ -36,6 +54,51 @@ function Cart() {
 
   const handleClearCart = () => {
     dispatch(clearCart());
+  };
+
+  const handleCheckout = async () => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      setCheckoutError("Please log in to proceed with checkout.");
+      setLoginDialogOpen(true);
+      return;
+    }
+
+    if (items.length === 0) {
+      setCheckoutError("Your cart is empty.");
+      return;
+    }
+
+    // Check if any item has stripe_price_id
+    const hasValidPriceId = items.some((item) => item.stripe_price_id);
+    if (!hasValidPriceId) {
+      setCheckoutError(
+        "Online checkout is not yet available for these products. Please contact us to complete your purchase."
+      );
+      return;
+    }
+
+    setCheckoutLoading(true);
+    setCheckoutError(null);
+
+    try {
+      // Call backend to create Stripe session
+      const result = await createCartCheckoutSession(items);
+
+      if (result.success && result.url) {
+        // Redirect to Stripe Checkout page
+        window.location.href = result.url;
+      } else {
+        setCheckoutError(
+          result.message || "Failed to initiate payment. Please try again."
+        );
+        setCheckoutLoading(false);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      setCheckoutError("An unexpected error occurred. Please try again.");
+      setCheckoutLoading(false);
+    }
   };
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -400,6 +463,8 @@ function Cart() {
                   <Button
                     variant="contained"
                     color="primary"
+                    onClick={handleCheckout}
+                    disabled={checkoutLoading}
                     sx={{
                       backgroundColor: (theme) => theme.palette.primary.main,
                       color: "#FFFFFF",
@@ -423,9 +488,22 @@ function Cart() {
                         borderColor: (theme) => theme.palette.primary.main,
                         transform: "translateY(-4px)",
                       },
+                      "&:disabled": {
+                        opacity: 0.6,
+                      },
                     }}
                   >
-                    Checkout
+                    {checkoutLoading ? (
+                      <>
+                        <CircularProgress
+                          size={20}
+                          sx={{ mr: 1, color: "#FFFFFF" }}
+                        />
+                        Processing...
+                      </>
+                    ) : (
+                      "Checkout"
+                    )}
                   </Button>
                 </Box>
               </Box>
@@ -433,8 +511,87 @@ function Cart() {
           )}
         </Box>
       </Box>
+
+      {/* Checkout Error Alert */}
+      {checkoutError && (
+        <Alert
+          severity="error"
+          onClose={() => setCheckoutError(null)}
+          sx={{
+            position: "fixed",
+            top: 20,
+            right: 20,
+            zIndex: 9999,
+            maxWidth: 400,
+          }}
+        >
+          {checkoutError}
+        </Alert>
+      )}
+
+      {/* Login Required Dialog */}
+      <Dialog open={loginDialogOpen} onClose={() => setLoginDialogOpen(false)}>
+        <DialogTitle>Login Required</DialogTitle>
+        <DialogContent>
+          <Typography>
+            You need to be logged in to proceed with checkout. Please log in or
+            create an account to continue.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, gap: 1 }}>
+          <Button
+            onClick={() => setLoginDialogOpen(false)}
+            sx={{
+              textTransform: "none",
+              color: (theme) => theme.palette.text.primary,
+              "&:focus": {
+                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                outlineOffset: "2px",
+                boxShadow: "none",
+              },
+              "&:focus-visible": {
+                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                outlineOffset: "2px",
+                boxShadow: "none",
+              },
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              setLoginDialogOpen(false);
+              navigate("/login");
+            }}
+            variant="contained"
+            sx={{
+              backgroundColor: (theme) => theme.palette.primary.main,
+              color: "#FFFFFF",
+              fontWeight: 100,
+              borderRadius: 2,
+              textTransform: "none",
+              "&:focus": {
+                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                outlineOffset: "2px",
+                boxShadow: "none",
+              },
+              "&:focus-visible": {
+                outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                outlineOffset: "2px",
+                boxShadow: "none",
+              },
+              "&:hover": {
+                backgroundColor: (theme) => theme.palette.primary.dark,
+              },
+            }}
+          >
+            Go to Login
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
 
 export default Cart;
+

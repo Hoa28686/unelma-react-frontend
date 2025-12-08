@@ -46,7 +46,10 @@ apiClient.interceptors.response.use(
         // Clear auth data and redirect to login using utility
         clearAuthData();
         // Components using AuthContext will automatically update when auth state changes
-        if (window.location.pathname !== "/user" && window.location.pathname !== "/login") {
+        if (
+          window.location.pathname !== "/user" &&
+          window.location.pathname !== "/login"
+        ) {
           window.location.href = "/login";
         }
       }
@@ -63,4 +66,3 @@ apiClient.interceptors.response.use(
 
 export default apiClient;
 export { API_BASE_URL };
-
