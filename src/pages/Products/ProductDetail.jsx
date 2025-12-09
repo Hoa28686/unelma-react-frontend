@@ -184,7 +184,7 @@ function ProductDetail() {
             sx={{ mb: { xs: 3, md: 4 } }}
           >
             {/* Product Image */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -220,7 +220,7 @@ function ProductDetail() {
             </Grid>
 
             {/* Product Info */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Box
                 sx={{
                   display: "flex",
@@ -302,7 +302,7 @@ function ProductDetail() {
           {/* Product Details Section */}
           <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
             {/* Product Information Card */}
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -387,7 +387,7 @@ function ProductDetail() {
             </Grid>
 
             {/* Highlights Card */}
-            <Grid item xs={12} md={8}>
+            <Grid size={{ xs: 12, md: 8 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -441,7 +441,7 @@ function ProductDetail() {
             </Grid>
 
             {/* Description Card */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Card
                 elevation={0}
                 sx={{
