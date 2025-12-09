@@ -102,3 +102,8 @@ export const selectItem = (
     clearSelectedItem();
   }
 };
+
+//handle category click for blogs
+export const handleCategoryClick = (category, navigate) => {
+  navigate(`/blogs/categories/${category}`);
+};

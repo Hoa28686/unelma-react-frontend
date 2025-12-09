@@ -3,6 +3,8 @@ import { lazy, Suspense } from "react";
 import Layout from "./Layout.jsx";
 import { CustomThemeProvider } from "./context/ThemeContext.jsx";
 import { CssBaseline, CircularProgress, Box } from "@mui/material";
+import BlogByCategory from "./pages/Blog/BlogByCategory.jsx";
+import BlogByTag from "./pages/Blog/BlogByTag.jsx";
 
 // Lazy load all pages for code splitting - only load what's needed
 const Home = lazy(() => import("./pages/Home.jsx"));
@@ -56,6 +58,11 @@ function App() {
                 />
                 <Route path="/blogs" element={<Blog />} />
                 <Route path="/blogs/:id/:slug" element={<BlogDetail />} />
+                <Route
+                  path="/blogs/categories/:category"
+                  element={<BlogByCategory />}
+                />
+                <Route path="/blogs/tags/:tag" element={<BlogByTag />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/about" element={<About />} />

@@ -10,6 +10,7 @@ import {
   Avatar,
   Box,
   Button,
+  Chip,
   Divider,
   MenuItem,
   Select,
@@ -19,14 +20,20 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { timeConversion, getImageUrl, selectItem } from "../../helpers/helpers";
+import {
+  timeConversion,
+  getImageUrl,
+  selectItem,
+  handleCategoryClick,
+} from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
 import { API } from "../../api";
 import { useAuth } from "../../context/AuthContext";
-import FavoriteButton from "../../components/FavoriteButton";
-import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
-import SuggestedBlog from "../../components/SuggestedBlog";
+
+import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
+import SuggestedBlog from "../../components/blog/SuggestedBlog";
+import useScrollToTop from "../../hooks/useScrollToTop";
 
 function BlogDetail() {
   const { id, slug } = useParams();
@@ -40,9 +47,7 @@ function BlogDetail() {
     (state) => state.blogs
   );
   // scroll to top when id changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [id]);
+  useScrollToTop([id]);
 
   // fetch blog data
   useEffect(() => {
@@ -79,6 +84,9 @@ function BlogDetail() {
     }
   }, [sortOrder, selectedBlog]);
 
+  const handleTagClick = (tag) => {
+    navigate(`/blogs/tags/${encodeURIComponent(tag)}`);
+  };
   const handlePostComment = async () => {
     const postCommentUrl = `${API.blogs}/${id}/comments`;
     try {
@@ -205,7 +213,11 @@ function BlogDetail() {
               sx={{
                 color: (theme) => theme.palette.text.secondary,
                 textTransform: "uppercase",
+                cursor: "pointer",
               }}
+              onClick={() =>
+                handleCategoryClick(selectedBlog.category, navigate)
+              }
             >
               {selectedBlog.category}
             </Typography>
@@ -290,6 +302,30 @@ function BlogDetail() {
             )}
           </Box>
 
+          {selectedBlog?.tags?.length > 0 && (
+            <>
+              <Stack
+                sx={{
+                  flexDirection: "row",
+                  gap: 1,
+                  flexWrap: "wrap",
+                  color: (theme) => theme.palette.text.primary,
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight={500}>
+                  Tags:{" "}
+                </Typography>
+                {selectedBlog.tags.map((tag, index) => (
+                  <Chip
+                    key={index}
+                    label={tag}
+                    variant="outlined"
+                    onClick={() => handleTagClick(tag)}
+                  />
+                ))}
+              </Stack>
+            </>
+          )}
           {/* Comment section */}
           <Box
             sx={{ width: "100%", textAlign: "left", alignSelf: "flex-start" }}

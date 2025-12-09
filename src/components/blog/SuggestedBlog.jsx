@@ -8,11 +8,12 @@ import { Box, Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 
 import {
   getImageUrl,
+  handleCategoryClick,
   handleItemClick,
   timeConversion,
-} from "../helpers/helpers";
+} from "../../helpers/helpers";
 import { useNavigate } from "react-router";
-import FavoriteButtonAndCount from "./FavoriteButtonAndCount";
+import FavoriteButtonAndCount from "../favorite/FavoriteButtonAndCount";
 
 function SuggestedBlog({ currentBlog, allBlogs }) {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
                 height: "13rem",
                 objectFit: "cover",
                 display: "block",
-                padding: 0,
+                p: 0,
                 cursor: "pointer",
                 backgroundColor: (theme) => theme.palette.background.paper,
               }}
@@ -106,9 +107,10 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
                   variant="subtitle1"
                   sx={{
                     color: (theme) => theme.palette.text.secondary,
-
                     textTransform: "uppercase",
+                    cursor: "pointer",
                   }}
+                  onClick={() => handleCategoryClick(blog.category, navigate)}
                 >
                   {blog.category}
                 </Typography>

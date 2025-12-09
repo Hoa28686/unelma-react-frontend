@@ -11,16 +11,17 @@ function NotFound() {
         alignItems: "center",
         flexDirection: "column",
         width: "100vw",
+        mt: 8,
       }}
     >
       <Typography variant="h2">404</Typography>
       <Typography variant="h6">Page not found</Typography>
-      <Button 
-        component={Link} 
-        to="/" 
-        color="primary" 
+      <Button
+        component={Link}
+        to="/"
+        color="primary"
         variant="contained"
-        sx={{ 
+        sx={{
           mt: 2,
           border: "1px solid transparent",
           transition: "all 0.3s ease",
