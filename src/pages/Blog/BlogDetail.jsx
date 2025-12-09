@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   clearSelectedBlog,
   fetchBlogs,
@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { timeConversion, getImageUrl } from "../../helpers/helpers";
+import { timeConversion, getImageUrl, slugify } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
 import { API } from "../../api";
@@ -29,39 +29,46 @@ import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 import SuggestedBlog from "../../components/SuggestedBlog";
 
 function BlogDetail() {
-  const { blogId } = useParams();
+  const { id, slug } = useParams();
   const { user, token } = useAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [newComment, setNewComment] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
   const [sortedComment, setSortedComment] = useState([]);
   const { selectedBlog, loading, error, blogs } = useSelector(
     (state) => state.blogs
   );
+  // scroll to top when id changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
 
   // fetch blog data
   useEffect(() => {
     if (blogs.length === 0) {
       dispatch(fetchBlogs());
     }
-  }, [blogs, dispatch]);
+  }, [dispatch, blogs.length]);
 
   // get selected blog
   useEffect(() => {
-    if (blogId && blogs.length > 0) {
-      const foundBlog = blogs.find((b) => b.id == blogId);
-      if (foundBlog) {
-        dispatch(setSelectedBlog(foundBlog));
-      } else {
-        dispatch(clearSelectedBlog());
-      }
-    }
-  }, [blogId, blogs, dispatch]);
+    if (blogs.length === 0) return;
 
-  // scroll to top when blogId changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    const foundBlog = blogs.find((b) => b.id === Number(id));
+
+    if (foundBlog) {
+      dispatch(setSelectedBlog(foundBlog));
+
+      const correctSlug = foundBlog.slug || slugify(foundBlog.title);
+
+      if (slug !== correctSlug) {
+        navigate(`/blogs/${id}/${correctSlug}`, { replace: true });
+      }
+    } else {
+      dispatch(clearSelectedBlog());
+    }
+  }, [id, slug, blogs, dispatch, navigate]);
 
   // sort comments based on sortOrder
   useEffect(() => {
@@ -79,7 +86,7 @@ function BlogDetail() {
   }, [sortOrder, selectedBlog]);
 
   const handlePostComment = async () => {
-    const postCommentUrl = `${API.blogs}/${blogId}/comments`;
+    const postCommentUrl = `${API.blogs}/${id}/comments`;
     try {
       await axios.post(
         postCommentUrl,
@@ -95,16 +102,13 @@ function BlogDetail() {
       );
 
       // Refetch blog with comments to get proper user objects
-      const res = await axios.get(`${API.blogs}/${blogId}`);
+      const res = await axios.get(`${API.blogs}/${id}`);
       dispatch(setSelectedBlog(res.data.data));
       setNewComment("");
     } catch (e) {
       console.error(e);
     }
   };
-  useEffect(() => {
-    console.log(user);
-  }, []);
 
   // custom style for TextField
   const textFieldStyles = {

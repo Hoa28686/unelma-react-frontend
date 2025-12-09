@@ -58,3 +58,12 @@ export const getImageUrl = (imageUrl) => {
  * Export placeholder logo for use in onError handlers
  */
 export { placeholderLogo };
+
+export const slugify = (string) => {
+  return string
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-") // only keep alphanumeric charater
+    .substring(0, 50) // Limit length to 50
+    .replace(/^-+|-+$/g, ""); // Remove extra hyphens
+};

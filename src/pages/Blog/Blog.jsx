@@ -26,7 +26,7 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link, useNavigate } from "react-router";
-import { timeConversion, getImageUrl } from "../../helpers/helpers";
+import { timeConversion, getImageUrl, slugify } from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -53,8 +53,8 @@ function Blog() {
     }
   }, [dispatch, blogs]);
 
-  const handleBlogClick = (blogId) => {
-    navigate(`/blogs/${blogId}`);
+  const handleBlogClick = (blog) => {
+    navigate(`/blogs/${blog.id}/${blog?.slug || slugify(blog.title)}`);
   };
 
   // Filter blogs based on search query and category
@@ -475,7 +475,7 @@ function Blog() {
             >
               <CardMedia
                 component="img"
-                onClick={() => handleBlogClick(blog.id)}
+                onClick={() => handleBlogClick(blog)}
                 src={getImageUrl(
                   blog.featured_image_local_url ||
                     blog.featured_image_url ||
@@ -515,7 +515,7 @@ function Blog() {
                 )}
 
                 <CardHeader
-                  onClick={() => handleBlogClick(blog.id)}
+                  onClick={() => handleBlogClick(blog)}
                   title={
                     <Typography
                       variant="h5"
