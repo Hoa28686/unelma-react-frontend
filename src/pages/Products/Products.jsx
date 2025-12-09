@@ -23,7 +23,11 @@ import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
-import { getImageUrl, placeholderLogo } from "../../helpers/helpers";
+import {
+  getImageUrl,
+  handleItemClick,
+  placeholderLogo,
+} from "../../helpers/helpers";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 
 const ITEMS_PER_PAGE = 9; // Show 9 products per page
@@ -41,8 +45,8 @@ function Products() {
     }
   }, [products, dispatch]);
 
-  const handleProductClick = (productId) => {
-    navigate(`/products/${productId}`);
+  const handleProductClick = (product) => {
+    handleItemClick(navigate, product, "products");
   };
 
   // Filter products based on search query
@@ -257,7 +261,7 @@ function Products() {
               >
                 <CardMedia
                   component="img"
-                  onClick={() => handleProductClick(p.id)}
+                  onClick={() => handleProductClick(p)}
                   src={getImageUrl(p.image_local_url || p.image_url || p.image)}
                   alt={p.name}
                   onError={(e) => {
@@ -273,7 +277,7 @@ function Products() {
                   }}
                 />
                 <CardHeader
-                  onClick={() => handleProductClick(p.id)}
+                  onClick={() => handleProductClick(p)}
                   title={
                     p.name.length > 50 ? (
                       <Typography variant="h6">{`${p.name.substring(

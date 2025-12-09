@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { timeConversion, getImageUrl, slugify } from "../../helpers/helpers";
+import { timeConversion, getImageUrl, selectItem } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
 import { API } from "../../api";
@@ -53,21 +53,15 @@ function BlogDetail() {
 
   // get selected blog
   useEffect(() => {
-    if (blogs.length === 0) return;
-
-    const foundBlog = blogs.find((b) => b.id === Number(id));
-
-    if (foundBlog) {
-      dispatch(setSelectedBlog(foundBlog));
-
-      const correctSlug = foundBlog.slug || slugify(foundBlog.title);
-
-      if (slug !== correctSlug) {
-        navigate(`/blogs/${id}/${correctSlug}`, { replace: true });
-      }
-    } else {
-      dispatch(clearSelectedBlog());
-    }
+    selectItem(
+      blogs,
+      id,
+      slug,
+      (blog) => dispatch(setSelectedBlog(blog)),
+      () => dispatch(clearSelectedBlog()),
+      navigate,
+      "blogs"
+    );
   }, [id, slug, blogs, dispatch, navigate]);
 
   // sort comments based on sortOrder

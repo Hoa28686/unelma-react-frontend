@@ -26,7 +26,11 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link, useNavigate } from "react-router";
-import { timeConversion, getImageUrl, slugify } from "../../helpers/helpers";
+import {
+  timeConversion,
+  getImageUrl,
+  handleItemClick,
+} from "../../helpers/helpers";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -54,7 +58,7 @@ function Blog() {
   }, [dispatch, blogs]);
 
   const handleBlogClick = (blog) => {
-    navigate(`/blogs/${blog.id}/${blog?.slug || slugify(blog.title)}`);
+    handleItemClick(navigate, blog, "blogs");
   };
 
   // Filter blogs based on search query and category

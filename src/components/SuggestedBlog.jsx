@@ -6,7 +6,11 @@ import {
 import React, { useMemo } from "react";
 import { Box, Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 
-import { getImageUrl, slugify, timeConversion } from "../helpers/helpers";
+import {
+  getImageUrl,
+  handleItemClick,
+  timeConversion,
+} from "../helpers/helpers";
 import { useNavigate } from "react-router";
 import FavoriteButtonAndCount from "./FavoriteButtonAndCount";
 
@@ -31,7 +35,7 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
   }
 
   const handleBlogClick = (blog) => {
-    navigate(`/blogs/${blog.id}/${blog?.slug || slugify(blog.title)}`);
+    handleItemClick(navigate, blog, "blogs");
   };
 
   if (suggestedBlogs.length === 0) {

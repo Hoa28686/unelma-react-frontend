@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   clearSelectedProduct,
   fetchProducts,
@@ -23,14 +23,19 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import { getImageUrl, placeholderLogo } from "../../helpers/helpers";
+import {
+  getImageUrl,
+  placeholderLogo,
+  selectItem,
+} from "../../helpers/helpers";
 import { useAuth } from "../../context/AuthContext";
 import { submitProductRating } from "../../lib/api/ratingService";
 
 function ProductDetail() {
-  const { productId } = useParams();
+  const { id, slug } = useParams();
   const dispatch = useDispatch();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const {
     products,
@@ -45,16 +50,18 @@ function ProductDetail() {
     }
   }, [products, dispatch]);
 
+  // set selected product
   useEffect(() => {
-    if (productId && products.length > 0) {
-      const foundProduct = products.find((p) => p.id == productId);
-      if (foundProduct) {
-        dispatch(setSelectedProduct(foundProduct));
-      } else {
-        dispatch(clearSelectedProduct());
-      }
-    }
-  }, [productId, products, dispatch]);
+    selectItem(
+      products,
+      id,
+      slug,
+      (product) => dispatch(setSelectedProduct(product)),
+      () => dispatch(clearSelectedProduct),
+      navigate,
+      "products"
+    );
+  }, [id, slug, products, dispatch, navigate]);
 
   const handleRatingChange = async (productId, newRating) => {
     try {
@@ -62,7 +69,7 @@ function ProductDetail() {
         productId,
         rating: newRating,
       });
-      
+
       if (result.success) {
         // Refresh products to get updated rating
         dispatch(fetchProducts());
@@ -88,7 +95,10 @@ function ProductDetail() {
           backgroundColor: (theme) => theme.palette.background.default,
         }}
       >
-        <Typography variant="h5" sx={{ color: (theme) => theme.palette.text.secondary }}>
+        <Typography
+          variant="h5"
+          sx={{ color: (theme) => theme.palette.text.secondary }}
+        >
           Loading product...
         </Typography>
       </Box>
@@ -129,7 +139,10 @@ function ProductDetail() {
           backgroundColor: (theme) => theme.palette.background.default,
         }}
       >
-        <Typography variant="h5" sx={{ color: (theme) => theme.palette.text.secondary }}>
+        <Typography
+          variant="h5"
+          sx={{ color: (theme) => theme.palette.text.secondary }}
+        >
           Product not found
         </Typography>
         <HandleBackButton content="Products" link="/products" />
@@ -165,7 +178,11 @@ function ProductDetail() {
           </Box>
 
           {/* Main Product Section */}
-          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} sx={{ mb: { xs: 3, md: 4 } }}>
+          <Grid
+            container
+            spacing={{ xs: 2, sm: 3, md: 4 }}
+            sx={{ mb: { xs: 3, md: 4 } }}
+          >
             {/* Product Image */}
             <Grid item xs={12} md={6}>
               <Card
@@ -189,7 +206,11 @@ function ProductDetail() {
                     display: "block",
                     backgroundColor: (theme) => theme.palette.background.paper,
                   }}
-                  src={getImageUrl(product?.image_local_url || product?.image_url || product?.image)}
+                  src={getImageUrl(
+                    product?.image_local_url ||
+                      product?.image_url ||
+                      product?.image
+                  )}
                   alt={product.name}
                   onError={(e) => {
                     e.target.src = placeholderLogo;
@@ -264,7 +285,10 @@ function ProductDetail() {
                     bottom: { xs: 0 },
                     width: { xs: "100%", md: "100%" },
                     zIndex: { xs: 100, md: "auto" },
-                    backgroundColor: { xs: (theme) => theme.palette.background.default, md: "transparent" },
+                    backgroundColor: {
+                      xs: (theme) => theme.palette.background.default,
+                      md: "transparent",
+                    },
                     pt: { xs: 2, md: 0 },
                     pb: { xs: 2, md: 0 },
                   }}
@@ -304,7 +328,9 @@ function ProductDetail() {
                     Product Information
                   </Typography>
                   <Divider sx={{ mb: 2 }} />
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                  >
                     <Box
                       sx={{
                         display: "flex",
@@ -399,13 +425,11 @@ function ProductDetail() {
                     }}
                   >
                     {product.highlights && product.highlights.includes("\n") ? (
-                      product.highlights
-                        .split("\n")
-                        .map((paragraph, index) => (
-                          <Typography key={index} component="p">
-                            {paragraph.trim()}
-                          </Typography>
-                        ))
+                      product.highlights.split("\n").map((paragraph, index) => (
+                        <Typography key={index} component="p">
+                          {paragraph.trim()}
+                        </Typography>
+                      ))
                     ) : (
                       <Typography component="p">
                         {product.highlights || "No highlights available."}
@@ -453,7 +477,8 @@ function ProductDetail() {
                       },
                     }}
                   >
-                    {product.description && product.description.includes("\n") ? (
+                    {product.description &&
+                    product.description.includes("\n") ? (
                       product.description
                         .split("\n")
                         .map((paragraph, index) => (
@@ -463,7 +488,8 @@ function ProductDetail() {
                         ))
                     ) : (
                       <Typography component="p">
-                        {product.description || "No additional details available."}
+                        {product.description ||
+                          "No additional details available."}
                       </Typography>
                     )}
                   </Box>
