@@ -25,6 +25,7 @@ import {
   getImageUrl,
   selectItem,
   handleCategoryClick,
+  textFieldStyles,
 } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
@@ -34,6 +35,7 @@ import { useAuth } from "../../context/AuthContext";
 import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
 import SuggestedBlog from "../../components/blog/SuggestedBlog";
 import useScrollToTop from "../../hooks/useScrollToTop";
+import ParagraphText from "../../components/blog/ParagraphText";
 
 function BlogDetail() {
   const { id, slug } = useParams();
@@ -110,22 +112,6 @@ function BlogDetail() {
     } catch (e) {
       console.error(e);
     }
-  };
-
-  // custom style for TextField
-  const textFieldStyles = {
-    color: (theme) => theme.palette.text.primary,
-    backgroundColor: (theme) => theme.palette.background.paper,
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: (theme) => `${theme.palette.text.secondary}40`,
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: (theme) => theme.palette.primary.main,
-    },
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: (theme) => theme.palette.primary.main,
-      borderWidth: "2px",
-    },
   };
 
   if (loading || blogs.length === 0) {
@@ -256,10 +242,7 @@ function BlogDetail() {
           <Typography
             variant="subtitle1"
             sx={{
-              color: (theme) =>
-                theme.palette.mode === "dark"
-                  ? "rgba(255, 255, 255, 0.7)"
-                  : "rgba(0, 0, 0, 0.6)",
+              color: (theme) => theme.palette.text.secondary,
               textAlign: "center",
               width: "100%",
               fontSize: { xs: "0.875rem", sm: "1rem" },
@@ -277,10 +260,7 @@ function BlogDetail() {
               "& p": {
                 fontSize: { xs: "1rem", sm: "1.125rem" },
                 fontWeight: 400,
-                color: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.95)"
-                    : "rgba(0, 0, 0, 0.87)",
+                color: (theme) => theme.palette.text.primary,
                 lineHeight: 1.8,
                 textAlign: "left",
                 marginBottom: "1.5rem",
@@ -291,15 +271,7 @@ function BlogDetail() {
               },
             }}
           >
-            {selectedBlog.content.includes("\n") ? (
-              selectedBlog.content
-                .split("\n")
-                .map((paragraph, index) => (
-                  <p key={index}>{paragraph.trim()}</p>
-                ))
-            ) : (
-              <p>{selectedBlog.content}</p>
-            )}
+            <ParagraphText text={selectedBlog?.content} />
           </Box>
 
           {selectedBlog?.tags?.length > 0 && (
@@ -332,7 +304,6 @@ function BlogDetail() {
           >
             <Typography
               variant="h6"
-              component="h2"
               sx={{
                 fontWeight: 600,
                 color: (theme) => theme.palette.text.primary,
@@ -351,10 +322,8 @@ function BlogDetail() {
             {user ? (
               <Box sx={{ mt: 2 }}>
                 <Typography
-                  variant="h6"
-                  component="h3"
+                  variant="subtitle1"
                   sx={{
-                    fontWeight: 600,
                     color: (theme) => theme.palette.text.primary,
                     mb: 2,
                     fontSize: { xs: "1.125rem", sm: "1.25rem" },
@@ -393,8 +362,7 @@ function BlogDetail() {
               </Box>
             ) : (
               <Typography
-                variant="subheading1"
-                component="h3"
+                variant="subtitle1"
                 sx={{
                   color: (theme) => theme.palette.text.primary,
                   my: 2,
@@ -452,50 +420,55 @@ function BlogDetail() {
                         flex: 1,
                       }}
                     >
-                      <Typography
-                        variant="body1"
+                      <Box
                         sx={{
-                          fontWeight: 600,
-                          color: (theme) => theme.palette.text.primary,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
                         }}
                       >
-                        {c.user.name}
-                        <Box
-                          component="span"
+                        <Typography
+                          variant="body1"
                           sx={{
-                            fontSize: "0.875rem",
-                            color: (theme) =>
-                              theme.palette.mode === "dark"
-                                ? "rgba(255, 255, 255, 0.7)"
-                                : "rgba(0, 0, 0, 0.6)",
-                            ml: 1,
-                            fontWeight: 400,
+                            fontWeight: 600,
+                            color: (theme) => theme.palette.text.primary,
+                          }}
+                        >
+                          {c.user.name}{" "}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: (theme) => theme.palette.text.secondary,
                           }}
                         >
                           {timeConversion(c.created_at)}
-                        </Box>
-                      </Typography>
+                        </Typography>
+                      </Box>
                       <Box
                         sx={{
                           "& p": {
                             fontSize: "0.9375rem",
-                            color: (theme) =>
-                              theme.palette.mode === "dark"
-                                ? "rgba(255, 255, 255, 0.9)"
-                                : "rgba(0, 0, 0, 0.87)",
+                            color: (theme) => theme.palette.text.primary,
                             lineHeight: 1.8,
                             margin: 0,
                           },
                         }}
                       >
                         {c.content.includes("\n") ? (
-                          c.content
-                            .split("\n")
-                            .map((paragraph, index) => (
-                              <p key={index}>{paragraph.trim()}</p>
-                            ))
+                          c.content.split("\n").map((paragraph, index) => (
+                            <Typography
+                              key={index}
+                              variant="body2"
+                              sx={{ mb: 1 }}
+                            >
+                              {paragraph.trim()}
+                            </Typography>
+                          ))
                         ) : (
-                          <p>{c.content}</p>
+                          <Typography variant="body2" sx={{ mb: 1 }}>
+                            {c.content}
+                          </Typography>
                         )}
                       </Box>
                     </Box>

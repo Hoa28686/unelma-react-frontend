@@ -49,6 +49,7 @@ function Blog() {
 
   // Filter blogs based on search query and category
   const filteredAndSortedBlogs = useMemo(() => {
+    if (blogs.length === 0) return [];
     let result = [...blogs];
 
     // category filter

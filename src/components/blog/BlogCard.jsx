@@ -1,6 +1,7 @@
 import React from "react";
 import {
   getImageUrl,
+  getShortContent,
   handleCategoryClick,
   handleItemClick,
   timeConversion,
@@ -24,12 +25,6 @@ function BlogCard({ blog }) {
     handleItemClick(navigate, blog, "blogs");
   };
 
-  const getShortContent = (content, limit) => {
-    if (!content) return "";
-    return content.length > limit
-      ? `${content.substring(0, limit)}...`
-      : content;
-  };
   return (
     <Card
       sx={{

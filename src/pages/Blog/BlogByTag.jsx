@@ -12,7 +12,7 @@ function BlogByTag() {
   const { blogs, loading, error } = useSelector((state) => state.blogs);
   const [foundBlogs, setFoundBlogs] = useState([]);
 
-  useScrollToTop([tag]);
+  useScrollToTop();
   // Fetch blogs data
   useEffect(() => {
     if (blogs.length === 0) {

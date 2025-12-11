@@ -107,3 +107,24 @@ export const selectItem = (
 export const handleCategoryClick = (category, navigate) => {
   navigate(`/blogs/categories/${category}`);
 };
+
+// custom style for TextField
+export const textFieldStyles = {
+  color: (theme) => theme.palette.text.primary,
+  backgroundColor: (theme) => theme.palette.background.paper,
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: (theme) => `${theme.palette.text.secondary}40`,
+  },
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: (theme) => theme.palette.primary.main,
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: (theme) => theme.palette.primary.main,
+    borderWidth: "2px",
+  },
+};
+
+export const getShortContent = (content, limit) => {
+  if (!content) return "";
+  return content.length > limit ? `${content.substring(0, limit)}...` : content;
+};
