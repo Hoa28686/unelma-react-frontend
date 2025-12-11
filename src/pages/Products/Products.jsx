@@ -23,12 +23,8 @@ import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
-import {
-  getImageUrl,
-  handleItemClick,
-  placeholderLogo,
-} from "../../helpers/helpers";
-import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
+import { getImageUrl, handleItemClick } from "../../helpers/helpers";
+import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
 
 const ITEMS_PER_PAGE = 9; // Show 9 products per page
 
@@ -264,9 +260,6 @@ function Products() {
                   onClick={() => handleProductClick(p)}
                   src={getImageUrl(p.image_local_url || p.image_url || p.image)}
                   alt={p.name}
-                  onError={(e) => {
-                    e.target.src = placeholderLogo;
-                  }}
                   sx={{
                     width: "100%",
                     height: { xs: 220, md: 250 },

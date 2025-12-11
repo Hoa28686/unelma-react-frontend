@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import {
@@ -13,29 +13,31 @@ import {
   Alert,
   Card,
   CardContent,
-  Chip,
-  Paper,
   Grid,
+  Select,
+  MenuItem,
+  Rating,
+  Stack,
 } from "@mui/material";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import CategoryIcon from "@mui/icons-material/Category";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import {
-  getImageUrl,
-  placeholderLogo,
-  selectItem,
-} from "../../helpers/helpers";
-import { useAuth } from "../../context/AuthContext";
-import { submitProductRating } from "../../lib/api/ratingService";
+import { getImageUrl, selectItem } from "../../helpers/helpers";
+import { fetchReviews } from "../../store/slices/products/reviewsSlice";
+import ReviewForm from "../../components/productReview/ReviewForm";
+import ReviewCard from "../../components/productReview/ReviewCard";
 
 function ProductDetail() {
   const { id, slug } = useParams();
   const dispatch = useDispatch();
-  const { user } = useAuth();
   const navigate = useNavigate();
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [starFilter, setStarFilter] = useState("all");
+  const { reviews, averageRating } = useSelector((state) => state.reviews);
 
   const {
     products,
@@ -44,6 +46,7 @@ function ProductDetail() {
     error,
   } = useSelector((state) => state.products);
 
+  //fetch products if not already loaded
   useEffect(() => {
     if (!products || products.length === 0) {
       dispatch(fetchProducts());
@@ -63,27 +66,42 @@ function ProductDetail() {
     );
   }, [id, slug, products, dispatch, navigate]);
 
-  const handleRatingChange = async (productId, newRating) => {
-    try {
-      const result = await submitProductRating({
-        productId,
-        rating: newRating,
-      });
-
-      if (result.success) {
-        // Refresh products to get updated rating
-        dispatch(fetchProducts());
-        // If the API returns updated product data, update the selected product
-        if (result.data?.product) {
-          dispatch(setSelectedProduct(result.data.product));
-        }
-      }
-    } catch (error) {
-      console.error("Failed to submit rating:", error);
-      throw error;
+  //fetch reviews for review section
+  useEffect(() => {
+    if (product) {
+      dispatch(fetchReviews(product.id));
     }
-  };
+  }, [product, dispatch]);
 
+  // filter and sort reviews
+  const filteredAndSortedReviews = useMemo(() => {
+    if (!reviews) return [];
+    let result = [...reviews];
+
+    // Filter reviews based on starFilter
+    if (starFilter !== "all") {
+      result = result.filter((review) => review.rating === starFilter);
+    }
+
+    // Sort reviews based on sortOrder, which is created_at
+    result.sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
+    return result;
+  }, [reviews, sortOrder, starFilter]);
+
+  // calculate rating count for each star level
+  const ratingCount = useMemo(() => {
+    if (!reviews) return [];
+    return [5, 4, 3, 2, 1].map((star) => ({
+      star,
+      count: reviews.filter((r) => Number(r.rating) === star).length,
+    }));
+  }, [reviews]);
+
+  // loading state
   if (loading || products.length === 0) {
     return (
       <Box
@@ -191,9 +209,7 @@ function ProductDetail() {
                   borderRadius: 3,
                   overflow: "hidden",
                   border: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "1px solid rgba(255, 255, 255, 0.1)"
-                      : "1px solid rgba(0, 0, 0, 0.1)",
+                    `1px solid ${theme.palette.text.primary}20`,
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               >
@@ -212,9 +228,6 @@ function ProductDetail() {
                       product?.image
                   )}
                   alt={product.name}
-                  onError={(e) => {
-                    e.target.src = placeholderLogo;
-                  }}
                 />
               </Card>
             </Grid>
@@ -248,19 +261,10 @@ function ProductDetail() {
                   sx={{
                     p: { xs: 1.5, md: 2 },
                     borderRadius: 2,
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.05)"
-                        : "rgba(0, 0, 0, 0.02)",
+                    backgroundColor: (theme) => `${theme.palette.divider}20`,
                   }}
                 >
-                  <RatingDisplay
-                    rating={product.rating}
-                    onRatingChange={
-                      user && user.email ? handleRatingChange : undefined
-                    }
-                    productId={product.id}
-                  />
+                  <RatingDisplay rating={averageRating} />
                 </Box>
 
                 {/* Price */}
@@ -268,10 +272,7 @@ function ProductDetail() {
                   sx={{
                     p: { xs: 1.5, md: 2 },
                     borderRadius: 2,
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.05)"
-                        : "rgba(0, 0, 0, 0.02)",
+                    backgroundColor: (theme) => `${theme.palette.divider}20`,
                   }}
                 >
                   <PriceDisplay price={product.price} />
@@ -309,9 +310,7 @@ function ProductDetail() {
                   height: "100%",
                   borderRadius: 3,
                   border: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "1px solid rgba(255, 255, 255, 0.1)"
-                      : "1px solid rgba(0, 0, 0, 0.1)",
+                    `1px solid ${theme.palette.text.primary}20`,
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               >
@@ -394,9 +393,7 @@ function ProductDetail() {
                   height: "100%",
                   borderRadius: 3,
                   border: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "1px solid rgba(255, 255, 255, 0.1)"
-                      : "1px solid rgba(0, 0, 0, 0.1)",
+                    `1px solid ${theme.palette.text.primary}20`,
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               >
@@ -447,9 +444,7 @@ function ProductDetail() {
                 sx={{
                   borderRadius: 3,
                   border: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "1px solid rgba(255, 255, 255, 0.1)"
-                      : "1px solid rgba(0, 0, 0, 0.1)",
+                    `1px solid ${theme.palette.text.primary}20`,
                   backgroundColor: (theme) => theme.palette.background.paper,
                 }}
               >
@@ -482,17 +477,94 @@ function ProductDetail() {
                       product.description
                         .split("\n")
                         .map((paragraph, index) => (
-                          <Typography key={index} component="p">
+                          <Typography key={index} variant="body1">
                             {paragraph.trim()}
                           </Typography>
                         ))
                     ) : (
-                      <Typography component="p">
+                      <Typography variant="body1">
                         {product.description ||
                           "No additional details available."}
                       </Typography>
                     )}
                   </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Review section */}
+            <Grid size={{ xs: 12 }}>
+              <Card
+                elevation={0}
+                sx={{
+                  borderRadius: 3,
+                  border: (theme) =>
+                    `1px solid ${theme.palette.text.primary}20`,
+                  backgroundColor: (theme) => theme.palette.background.paper,
+                }}
+              >
+                <CardContent
+                  sx={{
+                    width: "100%",
+                    textAlign: "left",
+                    alignSelf: "flex-start",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 600,
+                      mb: 2,
+                      fontSize: { xs: "1.1rem", md: "1.25rem" },
+                      color: (theme) => theme.palette.text.primary,
+                    }}
+                  >
+                    Reviews
+                  </Typography>
+                  <Divider sx={{ mb: 3 }} />
+                  <Typography variant="subtitle1" color="textSecondary" mb={2}>
+                    Note: each user can review once per product
+                  </Typography>
+                  {/* Review form for new review, UI when user haven't logged in */}
+                  <ReviewForm productId={product.id} reviews={reviews} />
+                  {reviews.length > 0 && (
+                    <Box sx={{ mt: 4 }}>
+                      <Stack direction="row" spacing={2} mb={3}>
+                        <Select
+                          value={sortOrder}
+                          onChange={(e) => setSortOrder(e.target.value)}
+                          sx={{ borderRadius: 3 }}
+                        >
+                          <MenuItem value="newest">Newest</MenuItem>
+                          <MenuItem value="oldest">Oldest</MenuItem>
+                        </Select>
+                        <Select
+                          value={starFilter}
+                          onChange={(e) => setStarFilter(e.target.value)}
+                          sx={{ borderRadius: 3 }}
+                        >
+                          <MenuItem value="all">All stars</MenuItem>
+                          {ratingCount.map(({ star, count }) => (
+                            <MenuItem value={star} key={star}>
+                              {star} <span style={{ color: "#f9af04" }}>★</span>{" "}
+                              ({count})
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Stack>
+                      {filteredAndSortedReviews.map((r) => (
+                        <ReviewCard key={r.id} review={r} />
+                      ))}
+                      {filteredAndSortedReviews.length === 0 && (
+                        <Typography
+                          variant="body1"
+                          sx={{ color: (theme) => theme.palette.text.primary }}
+                        >
+                          No reviews found matching the selected star
+                        </Typography>
+                      )}
+                    </Box>
+                  )}
                 </CardContent>
               </Card>
             </Grid>
