@@ -539,6 +539,7 @@ function ProductDetail() {
                           direction="row"
                           alignItems="flex-end"
                           spacing={1}
+                          pl={2}
                         >
                           <RatingDisplay rating={averageRating} />
                           <Typography variant="body2" color="textSecondary">
