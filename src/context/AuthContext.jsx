@@ -63,6 +63,20 @@ export function AuthProvider({ children }) {
     }
   }, [token]);
 
+  // Listen for token expiration events from axios interceptor
+  useEffect(() => {
+    const handleTokenExpired = () => {
+      setUser(null);
+      setToken(null);
+    };
+
+    window.addEventListener("auth:token-expired", handleTokenExpired);
+
+    return () => {
+      window.removeEventListener("auth:token-expired", handleTokenExpired);
+    };
+  }, []);
+
   const login = async ({ email, password, remember = false }) => {
     setLoading(true);
     setError(null);

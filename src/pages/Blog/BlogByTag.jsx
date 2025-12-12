@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs } from "../../store/slices/blogs/blogsSlice";
 import { useParams } from "react-router";
 import HandleBackButton from "../../components/HandleBackButton";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, CircularProgress } from "@mui/material";
 import BlogCard from "../../components/blog/BlogCard";
 import useScrollToTop from "../../hooks/useScrollToTop";
 function BlogByTag() {
@@ -38,11 +38,10 @@ function BlogByTag() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "50vh",
-          color: (theme) => theme.palette.text.primary,
+          minHeight: "400px",
         }}
       >
-        <Typography>Loading blogs ...</Typography>
+        <CircularProgress />
       </Box>
     );
   }

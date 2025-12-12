@@ -50,7 +50,7 @@ function User() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeTab, setActiveTab] = useState(0);
-  const [userProfileTab, setUserProfileTab] = useState(0); // Tab for authenticated user (Profile, Orders, Subscriptions, Settings)
+  const [userProfileTab, setUserProfileTab] = useState(0); // Tab for authenticated user (Profile, Purchases, Subscriptions, Settings)
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -75,46 +75,13 @@ function User() {
   const [itemToCancel, setItemToCancel] = useState(null);
   const [cancelType, setCancelType] = useState(null); // 'order' or 'subscription'
 
-  // Mock data for orders and subscriptions (replace with API calls)
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      orderNumber: "ORD-2024-001",
-      date: "2024-01-15",
-      items: ["UnelmaMail Pro", "UnelmaBrowser Premium"],
-      total: 299.99,
-      status: "completed",
-    },
-    {
-      id: 2,
-      orderNumber: "ORD-2024-002",
-      date: "2024-02-20",
-      items: ["Unelma-Code Translator"],
-      total: 149.99,
-      status: "pending",
-    },
-  ]);
-
-  const [subscriptions, setSubscriptions] = useState([
-    {
-      id: 1,
-      name: "UnelmaMail Pro",
-      plan: "Monthly",
-      price: 29.99,
-      status: "active",
-      nextBilling: "2024-03-15",
-      startDate: "2024-02-15",
-    },
-    {
-      id: 2,
-      name: "UnelmaBrowser Premium",
-      plan: "Annual",
-      price: 199.99,
-      status: "active",
-      nextBilling: "2025-02-15",
-      startDate: "2024-02-15",
-    },
-  ]);
+  // Purchases (one-time payments) and subscriptions state
+  const [purchases, setPurchases] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [purchasesLoading, setPurchasesLoading] = useState(false);
+  const [subscriptionsLoading, setSubscriptionsLoading] = useState(false);
+  const [purchasesError, setPurchasesError] = useState(null);
+  const [subscriptionsError, setSubscriptionsError] = useState(null);
 
   // Query form hook
   const {
@@ -127,7 +94,7 @@ function User() {
   } = useContactForm({ name: "", email: "", message: "" });
 
   const navigate = useNavigate();
-  const { user, loading, error, login, logout, clearError } = useAuth();
+  const { user, token, loading, error, login, logout, clearError } = useAuth();
 
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState(null);
@@ -159,6 +126,96 @@ function User() {
       });
     }
   }, [user]);
+
+  // Fetch purchases (one-time payments) when user is logged in
+  useEffect(() => {
+    const fetchPurchases = async () => {
+      if (user && token) {
+        setPurchasesLoading(true);
+        setPurchasesError(null);
+        try {
+          const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+          const res = await axios.get(`${baseUrl}/profile/purchases`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          });
+          // Handle different possible response structures
+          const purchasesData = res.data?.data || res.data?.purchases || res.data || [];
+          setPurchases(Array.isArray(purchasesData) ? purchasesData : []);
+        } catch (error) {
+          console.error("Error fetching purchases:", error);
+          // If 404, endpoint doesn't exist yet - use empty array
+          if (error.response?.status === 404) {
+            setPurchases([]);
+          } else {
+            setPurchasesError(error.response?.data?.message || "Failed to load purchases");
+            setPurchases([]);
+          }
+        } finally {
+          setPurchasesLoading(false);
+        }
+      } else {
+        setPurchases([]);
+      }
+    };
+
+    fetchPurchases();
+  }, [user, token]);
+
+  // Fetch subscriptions when user is logged in
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      if (user && token) {
+        setSubscriptionsLoading(true);
+        setSubscriptionsError(null);
+        try {
+          const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+          // Try profile/subscriptions first, fallback to subscriptions
+          let res;
+          try {
+            res = await axios.get(`${baseUrl}/profile/subscriptions`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+              },
+            });
+          } catch (profileError) {
+            // Fallback to /subscriptions if profile/subscriptions doesn't exist
+            if (profileError.response?.status === 404) {
+              res = await axios.get(`${baseUrl}/subscriptions`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  Accept: "application/json",
+                },
+              });
+            } else {
+              throw profileError;
+            }
+          }
+          // Handle different possible response structures
+          const subscriptionsData = res.data?.data || res.data?.subscriptions || res.data || [];
+          setSubscriptions(Array.isArray(subscriptionsData) ? subscriptionsData : []);
+        } catch (error) {
+          console.error("Error fetching subscriptions:", error);
+          // If 404, endpoint doesn't exist yet - use empty array
+          if (error.response?.status === 404) {
+            setSubscriptions([]);
+          } else {
+            setSubscriptionsError(error.response?.data?.message || "Failed to load subscriptions");
+            setSubscriptions([]);
+          }
+        } finally {
+          setSubscriptionsLoading(false);
+        }
+      } else {
+        setSubscriptions([]);
+      }
+    };
+
+    fetchSubscriptions();
+  }, [user, token]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -480,15 +537,14 @@ function User() {
     setProfileErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       // TODO: Make API call to update profile
-      console.log("Updating profile:", profileData);
       setEditMode(false);
       // Show success message
     }
   };
 
-  const handleCancelOrder = (orderId) => {
-    setItemToCancel(orderId);
-    setCancelType("order");
+  const handleCancelPurchase = (purchaseId) => {
+    setItemToCancel(purchaseId);
+    setCancelType("purchase");
     setCancelDialogOpen(true);
   };
 
@@ -498,19 +554,82 @@ function User() {
     setCancelDialogOpen(true);
   };
 
-  const confirmCancel = () => {
-    if (cancelType === "order") {
-      setOrders(orders.filter((order) => order.id !== itemToCancel));
-    } else if (cancelType === "subscription") {
-      setSubscriptions(
-        subscriptions.map((sub) =>
-          sub.id === itemToCancel ? { ...sub, status: "cancelled" } : sub
-        )
-      );
+  const confirmCancel = async () => {
+    if (!token) return;
+
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+      
+      if (cancelType === "purchase") {
+        // Cancel purchase via API (if cancellable)
+        try {
+          await axios.delete(`${baseUrl}/profile/purchases/${itemToCancel}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          });
+          // Remove from local state
+          setPurchases(purchases.filter((purchase) => purchase.id !== itemToCancel));
+        } catch (error) {
+          console.error("Error cancelling purchase:", error);
+          // If endpoint doesn't exist, still remove from UI
+          if (error.response?.status === 404) {
+            setPurchases(purchases.filter((purchase) => purchase.id !== itemToCancel));
+          } else {
+            alert(error.response?.data?.message || "Failed to cancel purchase");
+          }
+        }
+      } else if (cancelType === "subscription") {
+        // Cancel subscription via API
+        try {
+          // Try profile/subscriptions first, fallback to subscriptions
+          try {
+            await axios.delete(`${baseUrl}/profile/subscriptions/${itemToCancel}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+              },
+            });
+          } catch (profileError) {
+            if (profileError.response?.status === 404) {
+              await axios.delete(`${baseUrl}/subscriptions/${itemToCancel}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  Accept: "application/json",
+                },
+              });
+            } else {
+              throw profileError;
+            }
+          }
+          // Update local state
+          setSubscriptions(
+            subscriptions.map((sub) =>
+              sub.id === itemToCancel ? { ...sub, status: "cancelled" } : sub
+            )
+          );
+        } catch (error) {
+          console.error("Error cancelling subscription:", error);
+          // If endpoint doesn't exist, still update UI
+          if (error.response?.status === 404) {
+            setSubscriptions(
+              subscriptions.map((sub) =>
+                sub.id === itemToCancel ? { ...sub, status: "cancelled" } : sub
+              )
+            );
+          } else {
+            alert(error.response?.data?.message || "Failed to cancel subscription");
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error in confirmCancel:", error);
+    } finally {
+      setCancelDialogOpen(false);
+      setItemToCancel(null);
+      setCancelType(null);
     }
-    setCancelDialogOpen(false);
-    setItemToCancel(null);
-    setCancelType(null);
   };
 
   // Check if user is actually valid (has email or name, not just an empty object)
@@ -655,7 +774,7 @@ function User() {
                 <Tab
                   icon={<ShoppingBag />}
                   iconPosition="start"
-                  label="Orders"
+                  label="Purchases"
                 />
                 <Tab
                   icon={<CardMembership />}
@@ -853,19 +972,34 @@ function User() {
               {userProfileTab === 1 && (
                 <Box>
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
-                    My Orders
+                    My Purchases
                   </Typography>
-                  {orders.length === 0 ? (
+                  {purchasesLoading ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        minHeight: "200px",
+                      }}
+                    >
+                      <CircularProgress />
+                    </Box>
+                  ) : purchasesError ? (
+                    <Alert severity="error" sx={{ mb: 2 }}>
+                      {purchasesError}
+                    </Alert>
+                  ) : purchases.length === 0 ? (
                     <Typography
                       color="text.secondary"
                       sx={{ textAlign: "center", py: 4 }}
                     >
-                      No orders found
+                      No purchases found
                     </Typography>
                   ) : (
                     <List>
-                      {orders.map((order) => (
-                        <Card key={order.id} sx={{ mb: 2 }}>
+                      {purchases.map((purchase) => (
+                        <Card key={purchase.id} sx={{ mb: 2 }}>
                           <CardContent>
                             <Box
                               sx={{
@@ -876,36 +1010,98 @@ function User() {
                               }}
                             >
                               <Box>
-                                <Typography variant="h6">
-                                  {order.orderNumber}
-                                </Typography>
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5, flexWrap: "wrap" }}>
+                                  <Typography variant="h6">
+                                    {purchase.order_number || purchase.orderNumber || purchase.purchase_number || `Purchase #${purchase.id}`}
+                                  </Typography>
+                                  <Chip
+                                    label="One-time"
+                                    size="small"
+                                    color="primary"
+                                    sx={{ height: 20, fontSize: "0.7rem" }}
+                                  />
+                                  {(purchase.quantity || purchase.qty || purchase.total_quantity) && (
+                                    <Chip
+                                      label={`Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity}`}
+                                      size="small"
+                                      sx={{ 
+                                        height: 20, 
+                                        fontSize: "0.7rem",
+                                        backgroundColor: (theme) => theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.08)"
+                                      }}
+                                    />
+                                  )}
+                                </Box>
                                 <Typography
                                   variant="body2"
                                   color="text.secondary"
                                 >
-                                  {new Date(order.date).toLocaleDateString()}
+                                  {purchase.created_at || purchase.date || purchase.purchase_date
+                                    ? new Date(purchase.created_at || purchase.date || purchase.purchase_date).toLocaleDateString()
+                                    : "Date not available"}
                                 </Typography>
                               </Box>
                               <Chip
-                                label={order.status}
+                                label={purchase.status || "unknown"}
                                 color={
-                                  order.status === "completed"
+                                  purchase.status === "completed" || purchase.status === "paid"
                                     ? "success"
-                                    : "warning"
+                                    : purchase.status === "pending"
+                                    ? "warning"
+                                    : "default"
                                 }
                                 size="small"
                               />
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                              {order.items.map((item, idx) => (
-                                <Typography
-                                  key={idx}
-                                  variant="body2"
-                                  color="text.secondary"
-                                >
-                                  • {item}
-                                </Typography>
-                              ))}
+                              {/* Check if purchase has items array */}
+                              {(purchase.items || purchase.order_items || purchase.purchase_items || []).length > 0 ? (
+                                (purchase.items || purchase.order_items || purchase.purchase_items || []).map((item, idx) => {
+                                  const itemName = typeof item === "string" 
+                                    ? item 
+                                    : item.name || item.product_name || item.service_name || "Item";
+                                  const quantity = typeof item === "object" 
+                                    ? (item.quantity || item.qty || item.amount || 1)
+                                    : 1;
+                                  
+                                  return (
+                                    <Typography
+                                      key={idx}
+                                      variant="body2"
+                                      color="text.secondary"
+                                    >
+                                      • {itemName} {quantity > 1 ? `(Qty: ${quantity})` : ""}
+                                    </Typography>
+                                  );
+                                })
+                              ) : (
+                                /* If no items array, check for purchase-level quantity or item info */
+                                <>
+                                  {purchase.product_name || purchase.service_name || purchase.name ? (
+                                    <Typography
+                                      variant="body2"
+                                      color="text.secondary"
+                                    >
+                                      • {purchase.product_name || purchase.service_name || purchase.name}
+                                      {(purchase.quantity || purchase.qty || purchase.total_quantity) ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})` : ""}
+                                    </Typography>
+                                  ) : (purchase.quantity || purchase.qty || purchase.total_quantity) ? (
+                                    <Typography
+                                      variant="body2"
+                                      color="text.secondary"
+                                    >
+                                      Quantity: {purchase.quantity || purchase.qty || purchase.total_quantity}
+                                    </Typography>
+                                  ) : (
+                                    <Typography
+                                      variant="body2"
+                                      color="text.secondary"
+                                    >
+                                      No item details available
+                                    </Typography>
+                                  )}
+                                </>
+                              )}
                             </Box>
                             <Box
                               sx={{
@@ -915,17 +1111,17 @@ function User() {
                               }}
                             >
                               <Typography variant="h6">
-                                €{order.total.toFixed(2)}
+                                €{parseFloat(purchase.total || purchase.amount || 0).toFixed(2)}
                               </Typography>
-                              {order.status === "pending" && (
+                              {(purchase.status === "pending" || purchase.status === "processing") && (
                                 <Button
                                   startIcon={<Cancel />}
-                                  onClick={() => handleCancelOrder(order.id)}
+                                  onClick={() => handleCancelPurchase(purchase.id)}
                                   color="error"
                                   size="small"
                                   sx={{ textTransform: "none" }}
                                 >
-                                  Cancel Order
+                                  Cancel Purchase
                                 </Button>
                               )}
                             </Box>
@@ -942,7 +1138,22 @@ function User() {
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
                     My Subscriptions
                   </Typography>
-                  {subscriptions.length === 0 ? (
+                  {subscriptionsLoading ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        minHeight: "200px",
+                      }}
+                    >
+                      <CircularProgress />
+                    </Box>
+                  ) : subscriptionsError ? (
+                    <Alert severity="error" sx={{ mb: 2 }}>
+                      {subscriptionsError}
+                    </Alert>
+                  ) : subscriptions.length === 0 ? (
                     <Typography
                       color="text.secondary"
                       sx={{ textAlign: "center", py: 4 }}
@@ -963,22 +1174,36 @@ function User() {
                               }}
                             >
                               <Box>
-                                <Typography variant="h6">
-                                  {subscription.name}
-                                </Typography>
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+                                  <Typography variant="h6">
+                                    {subscription.name || subscription.subscription_name || subscription.service_name || "Subscription"}
+                                  </Typography>
+                                  <Chip
+                                    label="Subscription"
+                                    size="small"
+                                    sx={{ 
+                                      height: 20, 
+                                      fontSize: "0.7rem",
+                                      backgroundColor: "#E57A44",
+                                      color: "#FFFFFF"
+                                    }}
+                                  />
+                                </Box>
                                 <Typography
                                   variant="body2"
                                   color="text.secondary"
                                 >
-                                  {subscription.plan} Plan
+                                  {subscription.plan || subscription.plan_name || subscription.billing_period || "Plan"}
                                 </Typography>
                               </Box>
                               <Chip
-                                label={subscription.status}
+                                label={subscription.status || "unknown"}
                                 color={
                                   subscription.status === "active"
                                     ? "success"
-                                    : "default"
+                                    : subscription.status === "cancelled"
+                                    ? "default"
+                                    : "warning"
                                 }
                                 size="small"
                               />
@@ -988,28 +1213,44 @@ function User() {
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                Price: €{subscription.price.toFixed(2)}/
-                                {subscription.plan === "Monthly"
+                                Price: €{parseFloat(subscription.price || subscription.amount || 0).toFixed(2)}/
+                                {(subscription.plan || subscription.billing_period || "").toLowerCase().includes("month")
                                   ? "month"
-                                  : "year"}
+                                  : (subscription.plan || subscription.billing_period || "").toLowerCase().includes("year")
+                                  ? "year"
+                                  : "period"}
+                                {subscription.quantity && subscription.quantity > 1 && (
+                                  <span> × {subscription.quantity}</span>
+                                )}
                               </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                              >
-                                Started:{" "}
-                                {new Date(
-                                  subscription.startDate
-                                ).toLocaleDateString()}
-                              </Typography>
-                              {subscription.status === "active" && (
+                              {subscription.quantity && subscription.quantity > 1 && (
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  sx={{ mt: 0.5 }}
+                                >
+                                  Quantity: {subscription.quantity}
+                                </Typography>
+                              )}
+                              {(subscription.start_date || subscription.startDate || subscription.created_at) && (
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  Started:{" "}
+                                  {new Date(
+                                    subscription.start_date || subscription.startDate || subscription.created_at
+                                  ).toLocaleDateString()}
+                                </Typography>
+                              )}
+                              {subscription.status === "active" && (subscription.next_billing_date || subscription.nextBilling || subscription.next_billing) && (
                                 <Typography
                                   variant="body2"
                                   color="text.secondary"
                                 >
                                   Next billing:{" "}
                                   {new Date(
-                                    subscription.nextBilling
+                                    subscription.next_billing_date || subscription.nextBilling || subscription.next_billing
                                   ).toLocaleDateString()}
                                 </Typography>
                               )}
@@ -1050,7 +1291,7 @@ function User() {
                         <ListItem>
                           <ListItemText
                             primary="Email Notifications"
-                            secondary="Receive email updates about your orders and subscriptions"
+                            secondary="Receive email updates about your purchases and subscriptions"
                           />
                           <ListItemSecondaryAction>
                             <Button size="small" sx={{ textTransform: "none" }}>

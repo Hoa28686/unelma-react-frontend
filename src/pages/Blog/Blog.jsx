@@ -14,6 +14,7 @@ import {
   Checkbox,
   FormControlLabel,
   Stack,
+  CircularProgress,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -42,10 +43,10 @@ function Blog() {
 
   // Fetch blogs data
   useEffect(() => {
-    if (blogs.length === 0) {
+    if (blogs.length === 0 && !loading) {
       dispatch(fetchBlogs());
     }
-  }, [dispatch, blogs]);
+  }, [dispatch, blogs.length, loading]);
 
   // Filter blogs based on search query and category
   const filteredAndSortedBlogs = useMemo(() => {
@@ -167,56 +168,6 @@ function Blog() {
     setOnlyFavorites(e.target.checked);
   };
 
-  if (loading || blogs.length === 0) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "50vh",
-          color: (theme) => theme.palette.text.primary,
-        }}
-      >
-        <Typography>Loading blogs ...</Typography>
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "50vh",
-          gap: 2,
-          color: (theme) => theme.palette.text.primary,
-        }}
-      >
-        <Typography>Error loading blog: {error}</Typography>
-        <Button
-          variant="contained"
-          onClick={handleBack}
-          startIcon={<ArrowBackIosIcon />}
-          sx={{
-            backgroundColor: (theme) => theme.palette.primary.main,
-            color: "#FFFFFF",
-            border: "1px solid transparent",
-            transition: "all 0.3s ease",
-            "&:hover": {
-              backgroundColor: (theme) =>
-                theme.palette.primary.dark || "#2563EB",
-            },
-          }}
-        >
-          Back to Home Page
-        </Button>
-      </Box>
-    );
-  }
   // main component render
   return (
     <Box
@@ -240,19 +191,27 @@ function Blog() {
           padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
         }}
       >
-        <Typography
-          variant="h2"
-          component="h1"
+        <Box
           sx={{
-            fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-            fontWeight: 700,
-            color: (theme) => theme.palette.text.primary,
-            marginBottom: { xs: "2rem", sm: "3rem" },
-            textAlign: "center",
+            maxWidth: "1200px",
+            margin: "0 auto",
+            width: "100%",
           }}
         >
-          Our Blog
-        </Typography>
+          {/* Page Title */}
+          <Typography
+            variant="h2"
+            component="h1"
+            sx={{
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+              fontWeight: 700,
+              color: (theme) => theme.palette.text.primary,
+              marginBottom: { xs: "2rem", sm: "3rem" },
+              textAlign: "center",
+            }}
+          >
+            Our Blogs
+          </Typography>
 
         {/* Search Bar */}
         <Box
@@ -390,16 +349,105 @@ function Blog() {
             }}
           />
         </Stack>
-        <Box
-          sx={{
-            width: "100%",
-            // maxWidth: { xs: "100%", sm: "90%", md: "1200px" },
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: { xs: 3, sm: 4 },
-          }}
-        >
+
+        {/* Loading State */}
+        {loading && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "400px",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "400px",
+              gap: 3,
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                color: (theme) => theme.palette.error.main,
+                fontWeight: 600,
+                textAlign: "center",
+              }}
+            >
+              Unable to Load Blogs
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: (theme) => theme.palette.text.secondary,
+                textAlign: "center",
+                maxWidth: "500px",
+              }}
+            >
+              {error.includes("500") || error.includes("Internal Server Error")
+                ? "The server is currently experiencing issues. Please try again later or contact support if the problem persists."
+                : `Error: ${error}`}
+            </Typography>
+            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  dispatch(fetchBlogs());
+                }}
+                sx={{
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: "#FFFFFF",
+                  border: "1px solid transparent",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: (theme) =>
+                      theme.palette.primary.dark || "#2563EB",
+                  },
+                }}
+              >
+                Retry
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={handleBack}
+                startIcon={<ArrowBackIosIcon />}
+                sx={{
+                  borderColor: (theme) => theme.palette.primary.main,
+                  color: (theme) => theme.palette.primary.main,
+                  "&:hover": {
+                    borderColor: (theme) => theme.palette.primary.dark,
+                    backgroundColor: "rgba(229, 122, 68, 0.1)",
+                  },
+                }}
+              >
+                Back to Home
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        {/* Blog Content */}
+        {!loading && !error && (
+          <Box
+            sx={{
+              width: "100%",
+              // maxWidth: { xs: "100%", sm: "90%", md: "1200px" },
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: { xs: 3, sm: 4 },
+            }}
+          >
           {paginatedBlogs.length === 0 && onlyFavorites && user && (
             <Box
               sx={{
@@ -581,6 +629,8 @@ function Blog() {
               </IconButton>
             </Box>
           )}
+          </Box>
+        )}
         </Box>
       </Box>
     </Box>

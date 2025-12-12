@@ -13,11 +13,17 @@ const favoriteAPI = API.favorites;
 // fetch all favorites for logged-in user
 export const fetchFavorites = createAsyncThunk(
   "favorites/fetchFavorites",
-  async ({ token }) => {
-    const res = await axios.get(favoriteAPI, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return res.data.data;
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(favoriteAPI, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data.data;
+    } catch (error) {
+      // If 401/403, the global interceptor will handle auth cleanup
+      // Just reject with the error for the slice to handle
+      return rejectWithValue(error.response?.data || error.message);
+    }
   }
 );
 
@@ -69,7 +75,16 @@ const favoriteSlice = createSlice({
       })
       .addCase(fetchFavorites.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        // Don't set error for 401/403 - token expiration is handled globally
+        // Only set error for other types of failures
+        const errorStatus = action.payload?.status || action.error?.response?.status;
+        if (errorStatus !== 401 && errorStatus !== 403) {
+          state.error = action.payload || action.error?.message;
+        } else {
+          // Clear favorites on auth error
+          state.favorites = [];
+          state.error = null;
+        }
       })
 
       // add

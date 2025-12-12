@@ -17,6 +17,7 @@ import {
   Stack,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -51,25 +52,119 @@ function BlogDetail() {
   // scroll to top when id changes
   useScrollToTop([id]);
 
-  // fetch blog data
+  // fetch blog data (for list page, not detail)
   useEffect(() => {
     if (blogs.length === 0) {
       dispatch(fetchBlogs());
     }
   }, [dispatch, blogs.length]);
 
-  // get selected blog
+  // Fetch individual blog when detail page loads
   useEffect(() => {
-    selectItem(
-      blogs,
-      id,
-      slug,
-      (blog) => dispatch(setSelectedBlog(blog)),
-      () => dispatch(clearSelectedBlog()),
-      navigate,
-      "blogs"
-    );
-  }, [id, slug, blogs, dispatch, navigate]);
+    const fetchBlogAndComments = async () => {
+      if (id) {
+        try {
+          // Fetch the blog
+          const blogRes = await axios.get(`${API.blogs}/${id}`, {
+            headers: token ? {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            } : {
+              Accept: "application/json",
+            },
+          });
+          const blogData = blogRes.data?.data || blogRes.data;
+          
+          if (blogData) {
+            // Initialize comments array if not present
+            if (!blogData.comments) {
+              blogData.comments = [];
+            }
+            
+            // Fetch comments separately
+            try {
+              const commentsRes = await axios.get(`${API.blogs}/${id}/comments`, {
+                headers: token ? {
+                  Authorization: `Bearer ${token}`,
+                  Accept: "application/json",
+                } : {
+                  Accept: "application/json",
+                },
+              });
+              
+              // Extract comments from response
+              const commentsData = commentsRes.data?.data || 
+                                  commentsRes.data?.comments || 
+                                  commentsRes.data;
+              
+              if (Array.isArray(commentsData)) {
+                blogData.comments = commentsData;
+              } else if (commentsData && typeof commentsData === 'object') {
+                // If it's a single comment object, wrap it in an array
+                blogData.comments = [commentsData];
+              }
+            } catch (commentsError) {
+              // If comments endpoint fails, continue without comments
+              // Keep empty comments array
+            }
+            
+            dispatch(setSelectedBlog(blogData));
+            return;
+          }
+        } catch (error) {
+          console.error("Error fetching blog:", error);
+        }
+        
+        // Fallback: try to get blog from list if individual fetch fails
+        if (blogs.length > 0) {
+          selectItem(
+            blogs,
+            id,
+            slug,
+            async (blog) => {
+              // Initialize comments array if not present
+              if (!blog.comments) {
+                blog.comments = [];
+              }
+              
+              // Try to fetch comments for blog from list
+              try {
+                const commentsRes = await axios.get(`${API.blogs}/${id}/comments`, {
+                  headers: token ? {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                  } : {
+                    Accept: "application/json",
+                  },
+                });
+                
+                const commentsData = commentsRes.data?.data || 
+                                    commentsRes.data?.comments || 
+                                    commentsRes.data;
+                
+                if (Array.isArray(commentsData)) {
+                  blog.comments = commentsData;
+                } else if (commentsData && typeof commentsData === 'object') {
+                  blog.comments = [commentsData];
+                }
+              } catch (commentsError) {
+                // If comments endpoint fails, continue without comments
+              }
+              
+              dispatch(setSelectedBlog(blog));
+            },
+            () => dispatch(clearSelectedBlog()),
+            navigate,
+            "blogs"
+          );
+        }
+      }
+    };
+
+    // Fetch blog and comments when id changes
+    fetchBlogAndComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, token]);
 
   // sort comments based on sortOrder
   useEffect(() => {
@@ -83,6 +178,8 @@ function BlogDetail() {
           );
 
       setSortedComment(sorted);
+    } else {
+      setSortedComment([]);
     }
   }, [sortOrder, selectedBlog]);
 
@@ -92,7 +189,7 @@ function BlogDetail() {
   const handlePostComment = async () => {
     const postCommentUrl = `${API.blogs}/${id}/comments`;
     try {
-      await axios.post(
+      const postResponse = await axios.post(
         postCommentUrl,
         {
           content: newComment,
@@ -105,12 +202,56 @@ function BlogDetail() {
         }
       );
 
-      // Refetch blog with comments to get proper user objects
-      const res = await axios.get(`${API.blogs}/${id}`);
-      dispatch(setSelectedBlog(res.data.data));
-      setNewComment("");
+      // Extract comments from the POST response
+      // The backend POST response includes ALL comments (not just the new one)
+      const responseData = postResponse.data?.data || postResponse.data;
+      const responseComments = responseData?.comments || responseData;
+
+      if (selectedBlog && responseComments) {
+        let updatedComments;
+
+        // The POST response contains all comments, use them directly
+        if (Array.isArray(responseComments)) {
+          // Response is an array of all comments
+          updatedComments = responseComments;
+        } else if (typeof responseComments === 'object' && responseComments.id) {
+          // Response is a single comment object (unlikely but handle it)
+          // Append to existing comments
+          updatedComments = [...(selectedBlog.comments || []), responseComments];
+        } else {
+          // Unexpected structure
+          updatedComments = selectedBlog.comments || [];
+        }
+
+        // Create updated blog object with all comments from the response
+        const updatedBlog = {
+          ...selectedBlog,
+          comments: updatedComments
+        };
+        
+        // Update Redux state with all comments
+        dispatch(setSelectedBlog(updatedBlog));
+        setNewComment("");
+      } else {
+        // Fallback: refetch the blog if selectedBlog is missing
+        const res = await axios.get(`${API.blogs}/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
+        const blogData = res.data?.data || res.data;
+        if (blogData) {
+          // Initialize comments array
+          if (!blogData.comments) {
+            blogData.comments = [];
+          }
+          dispatch(setSelectedBlog(blogData));
+          setNewComment("");
+        }
+      }
     } catch (e) {
-      console.error(e);
+      console.error("Error posting comment:", e);
     }
   };
 
@@ -121,11 +262,10 @@ function BlogDetail() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "50vh",
-          color: (theme) => theme.palette.text.primary,
+          minHeight: "400px",
         }}
       >
-        <Typography>Loading blog ...</Typography>
+        <CircularProgress />
       </Box>
     );
   }
@@ -372,7 +512,7 @@ function BlogDetail() {
                 Log in to leave a comment.
               </Typography>
             )}
-            {selectedBlog?.comments?.length > 0 && (
+            {(selectedBlog?.comments?.length > 0 || sortedComment.length > 0) && (
               <Box sx={{ mt: 4 }}>
                 <Select
                   value={sortOrder}
@@ -382,7 +522,7 @@ function BlogDetail() {
                   <MenuItem value="newest">Newest</MenuItem>
                   <MenuItem value="oldest">Oldest</MenuItem>
                 </Select>
-                {sortedComment.map((c) => (
+                {(sortedComment.length > 0 ? sortedComment : selectedBlog?.comments || []).map((c) => (
                   <Box
                     key={c.id}
                     sx={{

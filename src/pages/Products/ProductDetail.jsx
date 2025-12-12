@@ -18,6 +18,8 @@ import {
   MenuItem,
   Rating,
   Stack,
+  CircularProgress,
+  Chip,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -26,7 +28,7 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import { getImageUrl, selectItem } from "../../helpers/helpers";
+import { getImageUrl, selectItem, placeholderLogo } from "../../helpers/helpers";
 import { fetchReviews } from "../../store/slices/products/reviewsSlice";
 import ReviewForm from "../../components/productReview/ReviewForm";
 import ReviewCard from "../../components/productReview/ReviewCard";
@@ -112,16 +114,10 @@ function ProductDetail() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "50vh",
-          backgroundColor: (theme) => theme.palette.background.default,
+          minHeight: "400px",
         }}
       >
-        <Typography
-          variant="h5"
-          sx={{ color: (theme) => theme.palette.text.secondary }}
-        >
-          Loading product...
-        </Typography>
+        <CircularProgress />
       </Box>
     );
   }
@@ -231,6 +227,9 @@ function ProductDetail() {
                       product?.image
                   )}
                   alt={product.name}
+                  onError={(e) => {
+                    e.target.src = placeholderLogo;
+                  }}
                 />
               </Card>
             </Grid>
@@ -246,18 +245,32 @@ function ProductDetail() {
                 }}
               >
                 {/* Product Name */}
-                <Typography
-                  variant="h3"
-                  component="h1"
-                  sx={{
-                    fontSize: { xs: "1.75rem", sm: "2.25rem", md: "2.5rem" },
-                    fontWeight: 700,
-                    color: (theme) => theme.palette.text.primary,
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {product.name}
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
+                  <Typography
+                    variant="h3"
+                    component="h1"
+                    sx={{
+                      fontSize: { xs: "1.75rem", sm: "2.25rem", md: "2.5rem" },
+                      fontWeight: 700,
+                      color: (theme) => theme.palette.text.primary,
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {product.name}
+                  </Typography>
+                  <Chip
+                    label={(product.payment_type === "subscription" || product.paymentType === "subscription") ? "Subscription" : "One-time"}
+                    color={(product.payment_type === "subscription" || product.paymentType === "subscription") ? undefined : "primary"}
+                    sx={{ 
+                      fontSize: "0.875rem", 
+                      height: 28,
+                      ...((product.payment_type === "subscription" || product.paymentType === "subscription") ? {
+                        backgroundColor: "#E57A44",
+                        color: "#FFFFFF"
+                      } : {})
+                    }}
+                  />
+                </Box>
 
                 {/* Rating */}
                 <Box

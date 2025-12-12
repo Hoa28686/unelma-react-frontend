@@ -13,6 +13,8 @@ import {
   InputAdornment,
   IconButton,
   Pagination,
+  CircularProgress,
+  Chip,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -23,7 +25,11 @@ import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
-import { getImageUrl, handleItemClick } from "../../helpers/helpers";
+import {
+  getImageUrl,
+  handleItemClick,
+  placeholderLogo,
+} from "../../helpers/helpers";
 import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
 
 const ITEMS_PER_PAGE = 9; // Show 9 products per page
@@ -97,36 +103,8 @@ function Products() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-  if (loading || products.length === 0) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h4">Loading products ...</Typography>
-      </Box>
-    );
-  }
 
-  if (error) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h4">Error loading blog: {error}</Typography>
-        <HandleBackButton content="Home" link="/" />
-      </Box>
-    );
-  }
   // main component render
-
   return (
     <Box
       sx={{
@@ -135,63 +113,83 @@ function Products() {
         padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
       }}
     >
-      {/* Search Bar */}
       <Box
         sx={{
           maxWidth: "1200px",
-          margin: "0 auto 3rem",
+          margin: "0 auto",
         }}
       >
-        <TextField
-          fullWidth
-          placeholder="Search products by name, category, or description..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          variant="outlined"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchOutlinedIcon
-                  sx={{
-                    color: (theme) => theme.palette.text.secondary,
-                  }}
-                />
-              </InputAdornment>
-            ),
-            endAdornment: searchQuery && (
-              <InputAdornment position="end">
-                <IconButton
-                  size="small"
-                  onClick={() => setSearchQuery("")}
-                  sx={{
-                    color: (theme) => theme.palette.text.secondary,
-                  }}
-                >
-                  <ClearOutlinedIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ),
-            sx: {
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? "#FFFFFF"
-                  : theme.palette.background.paper,
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.2)"
-                    : "rgba(0, 0, 0, 0.23)",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: (theme) => theme.palette.primary.main,
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: (theme) => theme.palette.primary.main,
-                borderWidth: "2px",
-              },
-            },
+        {/* Page Title */}
+        <Typography
+          variant="h2"
+          component="h1"
+          sx={{
+            fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+            fontWeight: 700,
+            color: (theme) => theme.palette.text.primary,
+            marginBottom: { xs: "2rem", sm: "3rem" },
+            textAlign: "center",
           }}
-        />
+        >
+          Our Products
+        </Typography>
+
+        {/* Search Bar */}
+        <Box
+          sx={{
+            marginBottom: { xs: "2rem", sm: "3rem" },
+          }}
+        >
+          <TextField
+            fullWidth
+            placeholder="Search products by name, category, or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchOutlinedIcon
+                    sx={{
+                      color: (theme) => theme.palette.text.secondary,
+                    }}
+                  />
+                </InputAdornment>
+              ),
+              endAdornment: searchQuery && (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    onClick={() => setSearchQuery("")}
+                    sx={{
+                      color: (theme) => theme.palette.text.secondary,
+                    }}
+                  >
+                    <ClearOutlinedIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              ),
+              sx: {
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "#FFFFFF"
+                    : theme.palette.background.paper,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "rgba(0, 0, 0, 0.23)",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) => theme.palette.primary.main,
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) => theme.palette.primary.main,
+                  borderWidth: "2px",
+                },
+              },
+            }}
+          />
         {searchQuery && (
           <Typography
             variant="body2"
@@ -205,29 +203,60 @@ function Products() {
               : `Found ${filteredProducts.length} product${filteredProducts.length !== 1 ? "s" : ""}`}
           </Typography>
         )}
-      </Box>
+        </Box>
 
-      {/* Products Grid */}
-      {filteredProducts.length === 0 && searchQuery ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "400px",
-          }}
-        >
-          <Typography
-            variant="h6"
+        {/* Loading State */}
+        {loading && (
+          <Box
             sx={{
-              color: (theme) => theme.palette.text.secondary,
-              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "400px",
             }}
           >
-            No products match your search "{searchQuery}"
-          </Typography>
-        </Box>
-      ) : (
+            <CircularProgress />
+          </Box>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "400px",
+            }}
+          >
+            <Typography variant="h4">Error loading products: {error}</Typography>
+            <HandleBackButton content="Home" link="/" />
+          </Box>
+        )}
+
+      {/* Products Grid */}
+      {!loading && !error && (
+        <>
+          {filteredProducts.length === 0 && searchQuery ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "400px",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  color: (theme) => theme.palette.text.secondary,
+                  textAlign: "center",
+                }}
+              >
+                No products match your search "{searchQuery}"
+              </Typography>
+            </Box>
+          ) : (
         <Box
           sx={{
             display: "flex",
@@ -260,6 +289,9 @@ function Products() {
                   onClick={() => handleProductClick(p)}
                   src={getImageUrl(p.image_local_url || p.image_url || p.image)}
                   alt={p.name}
+                  onError={(e) => {
+                    e.target.src = placeholderLogo;
+                  }}
                   sx={{
                     width: "100%",
                     height: { xs: 220, md: 250 },
@@ -272,14 +304,28 @@ function Products() {
                 <CardHeader
                   onClick={() => handleProductClick(p)}
                   title={
-                    p.name.length > 50 ? (
-                      <Typography variant="h6">{`${p.name.substring(
-                        0,
-                        50
-                      )}...`}</Typography>
-                    ) : (
-                      <Typography variant="h6">{p.name}</Typography>
-                    )
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                      <Typography variant="h6" sx={{ flex: 1 }}>
+                        {p.name.length > 50 ? (
+                          `${p.name.substring(0, 50)}...`
+                        ) : (
+                          p.name
+                        )}
+                      </Typography>
+                      <Chip
+                        label={(p.payment_type === "subscription" || p.paymentType === "subscription") ? "Subscription" : "One-time"}
+                        size="small"
+                        color={(p.payment_type === "subscription" || p.paymentType === "subscription") ? undefined : "primary"}
+                        sx={{ 
+                          height: 22, 
+                          fontSize: "0.7rem",
+                          ...((p.payment_type === "subscription" || p.paymentType === "subscription") ? {
+                            backgroundColor: "#E57A44",
+                            color: "#FFFFFF"
+                          } : {})
+                        }}
+                      />
+                    </Box>
                   }
                   subheader={p.category}
                   sx={{ cursor: "pointer" }}
@@ -438,7 +484,10 @@ function Products() {
             </Box>
           )}
         </Box>
+          )}
+        </>
       )}
+      </Box>
     </Box>
   );
 }

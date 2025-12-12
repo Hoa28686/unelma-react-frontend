@@ -34,13 +34,6 @@ export const createCheckoutSession = async (paymentData) => {
       plan_name: paymentData.planName || null,
     };
 
-    // Log the request for debugging (remove in production or use proper logging)
-    console.log("Creating checkout session with data:", {
-      price_id: requestData.price_id,
-      product_id: requestData.product_id,
-      subscription_name: requestData.subscription_name,
-    });
-
     const response = await apiClient.post(
       "/stripe/checkout/session",
       requestData
@@ -129,7 +122,6 @@ export const createCartCheckoutSession = async (cartItems) => {
       subscription_name: itemWithPriceId.name || "Product Purchase",
     };
 
-    console.log("Creating checkout session with data:", requestData);
 
     const response = await apiClient.post(
       "/stripe/checkout/session",

@@ -9,6 +9,7 @@ import {
   Paper,
   Stack,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { fetchBlogs } from "../store/slices/blogs/blogsSlice";
 import { fetchProducts } from "../store/slices/products/productsSlice";
@@ -101,9 +102,16 @@ function Favorites() {
 
   if (loading) {
     return (
-      <CenteredMessage>
-        <Typography variant="h4">Loading favorites ...</Typography>
-      </CenteredMessage>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "400px",
+        }}
+      >
+        <CircularProgress />
+      </Box>
     );
   }
 

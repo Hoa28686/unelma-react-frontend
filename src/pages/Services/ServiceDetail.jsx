@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Chip,
 } from "@mui/material";
 import { useContactForm } from "../../hooks/useContactForm";
 import StyledTextField from "../../components/StyledTextField";
@@ -148,7 +149,7 @@ function ServiceDetail() {
 
     try {
       // Check if Stripe Price ID is available (required)
-      if (!plan.stripePriceId) {
+      if (!plan.stripe_price_id) {
         setPaymentError(
           "This plan is not yet available for purchase. Please contact support."
         );
@@ -158,7 +159,7 @@ function ServiceDetail() {
 
       // Prepare comprehensive payment data with all metadata for order tracking
       const paymentData = {
-        stripePriceId: plan.stripePriceId,
+        stripe_price_id: plan.stripe_price_id,
         serviceId: serviceId,
         serviceName: service.name,
         planName: plan.name,
@@ -420,18 +421,32 @@ function ServiceDetail() {
                             },
                           }}
                         >
-                          <Typography
-                            variant="h4"
-                            component="h3"
-                            sx={{
-                              fontSize: { xs: "1.5rem", sm: "1.75rem" },
-                              fontWeight: 600,
-                              color: (theme) => theme.palette.text.primary,
-                              marginBottom: "1rem",
-                            }}
-                          >
-                            {plan.name}
-                          </Typography>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", mb: 1 }}>
+                            <Typography
+                              variant="h4"
+                              component="h3"
+                              sx={{
+                                fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                                fontWeight: 600,
+                                color: (theme) => theme.palette.text.primary,
+                              }}
+                            >
+                              {plan.name}
+                            </Typography>
+                            <Chip
+                              label={plan.payment_type === "subscription" ? "Subscription" : "One-time"}
+                              size="small"
+                              color={plan.payment_type === "subscription" ? undefined : "primary"}
+                              sx={{ 
+                                height: 24, 
+                                fontSize: "0.75rem",
+                                ...(plan.payment_type === "subscription" ? {
+                                  backgroundColor: "#E57A44",
+                                  color: "#FFFFFF"
+                                } : {})
+                              }}
+                            />
+                          </Box>
                           <Box
                             sx={{
                               display: "flex",
