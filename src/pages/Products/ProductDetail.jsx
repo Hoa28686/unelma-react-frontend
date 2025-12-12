@@ -37,7 +37,9 @@ function ProductDetail() {
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState("newest");
   const [starFilter, setStarFilter] = useState("all");
-  const { reviews, averageRating } = useSelector((state) => state.reviews);
+  const { reviews, averageRating, ratingCount } = useSelector(
+    (state) => state.reviews
+  );
 
   const {
     products,
@@ -93,7 +95,7 @@ function ProductDetail() {
   }, [reviews, sortOrder, starFilter]);
 
   // calculate rating count for each star level
-  const ratingCount = useMemo(() => {
+  const ratingCountPerStar = useMemo(() => {
     if (!reviews) return [];
     return [5, 4, 3, 2, 1].map((star) => ({
       star,
@@ -543,7 +545,7 @@ function ProductDetail() {
                         >
                           <RatingDisplay rating={averageRating} />
                           <Typography variant="body2" color="textSecondary">
-                            {product.rating_count} ratings
+                            {ratingCount} ratings
                           </Typography>
                         </Stack>
                         <Stack direction="row" spacing={2}>
@@ -569,7 +571,7 @@ function ProductDetail() {
                             }}
                           >
                             <MenuItem value="all">All stars</MenuItem>
-                            {ratingCount.map(({ star, count }) => (
+                            {ratingCountPerStar.map(({ star, count }) => (
                               <MenuItem value={star} key={star}>
                                 <Stack
                                   direction="row"
