@@ -529,28 +529,74 @@ function ProductDetail() {
                   <ReviewForm productId={product.id} reviews={reviews} />
                   {reviews.length > 0 && (
                     <Box sx={{ mt: 4 }}>
-                      <Stack direction="row" spacing={2} mb={3}>
-                        <Select
-                          value={sortOrder}
-                          onChange={(e) => setSortOrder(e.target.value)}
-                          sx={{ borderRadius: 3 }}
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        mb={2}
+                      >
+                        <Stack
+                          direction="row"
+                          alignItems="flex-end"
+                          spacing={1}
                         >
-                          <MenuItem value="newest">Newest</MenuItem>
-                          <MenuItem value="oldest">Oldest</MenuItem>
-                        </Select>
-                        <Select
-                          value={starFilter}
-                          onChange={(e) => setStarFilter(e.target.value)}
-                          sx={{ borderRadius: 3 }}
-                        >
-                          <MenuItem value="all">All stars</MenuItem>
-                          {ratingCount.map(({ star, count }) => (
-                            <MenuItem value={star} key={star}>
-                              {star} <span style={{ color: "#f9af04" }}>★</span>{" "}
-                              ({count})
-                            </MenuItem>
-                          ))}
-                        </Select>
+                          <RatingDisplay rating={averageRating} />
+                          <Typography variant="body2" color="textSecondary">
+                            {product.rating_count} ratings
+                          </Typography>
+                        </Stack>
+                        <Stack direction="row" spacing={2}>
+                          <Select
+                            value={sortOrder}
+                            onChange={(e) => setSortOrder(e.target.value)}
+                            sx={{
+                              "& .MuiOutlinedInput-notchedOutline": {
+                                border: "none",
+                              },
+                            }}
+                          >
+                            <MenuItem value="newest">Newest</MenuItem>
+                            <MenuItem value="oldest">Oldest</MenuItem>
+                          </Select>
+                          <Select
+                            value={starFilter}
+                            onChange={(e) => setStarFilter(e.target.value)}
+                            sx={{
+                              "& .MuiOutlinedInput-notchedOutline": {
+                                border: "none",
+                              },
+                            }}
+                          >
+                            <MenuItem value="all">All stars</MenuItem>
+                            {ratingCount.map(({ star, count }) => (
+                              <MenuItem value={star} key={star}>
+                                <Stack
+                                  direction="row"
+                                  alignItems="center"
+                                  spacing={1}
+                                >
+                                  <Typography variant="body2">
+                                    {star}
+                                  </Typography>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ color: "#f9af04" }}
+                                  >
+                                    ★
+                                  </Typography>
+                                  <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="span"
+                                  >
+                                    {" "}
+                                    ({count})
+                                  </Typography>
+                                </Stack>
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </Stack>
                       </Stack>
                       {filteredAndSortedReviews.map((r) => (
                         <ReviewCard key={r.id} review={r} />

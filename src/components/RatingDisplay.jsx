@@ -10,7 +10,10 @@ function RatingDisplay({ rating }) {
     <Stack spacing={1} direction="row" alignItems="center">
       <Typography
         variant="body1"
-        sx={{ color: (theme) => theme.palette.text.primary }}
+        sx={{
+          color: (theme) => theme.palette.text.primary,
+          fontWeight: 500,
+        }}
       >
         {displayRating}
       </Typography>

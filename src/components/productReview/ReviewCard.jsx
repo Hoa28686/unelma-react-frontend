@@ -132,7 +132,7 @@ function ReviewCard({ review }) {
         {/* Default review info */}
         {!isEditing && (
           <>
-            <RatingDisplay rating={review?.rating} />
+            <Rating value={review?.rating} readOnly />
             <ParagraphText text={review?.feedback} />
           </>
         )}
