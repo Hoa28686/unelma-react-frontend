@@ -122,7 +122,10 @@ function BlogCard({ blog }) {
         />
 
         <FavoriteButtonAndCount type="blog" item={blog} />
-        <CardContent sx={{ mb: 0, px: 0, pt: 1 }}>
+        <CardContent
+          sx={{ mb: 0, px: 0, pt: 1, cursor: "pointer" }}
+          onClick={() => handleBlogClick(blog)}
+        >
           <Typography
             variant="body1"
             sx={{
@@ -135,11 +138,7 @@ function BlogCard({ blog }) {
           >
             {getShortContent(blog.content, 150)}
             {blog.content.length > 150 && (
-              <MuiLink
-                component={Link}
-                to={`/blogs/${blog.id}`}
-                sx={{ textDecoration: "none" }}
-              >
+              <MuiLink component={Link} sx={{ textDecoration: "none" }}>
                 continue reading
               </MuiLink>
             )}

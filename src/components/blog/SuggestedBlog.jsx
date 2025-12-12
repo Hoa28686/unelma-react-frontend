@@ -145,7 +145,10 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
                 sx={{ pb: 1, px: 0, cursor: "pointer" }}
               />
               <FavoriteButtonAndCount type="blog" item={blog} />
-              <CardContent sx={{ mb: 0, px: 0, pt: 1 }}>
+              <CardContent
+                sx={{ mb: 0, px: 0, pt: 1, cursor: "pointer" }}
+                onClick={() => handleBlogClick(blog)}
+              >
                 <Typography
                   variant="body1"
                   sx={{
@@ -157,11 +160,9 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
                       {blog.content.substring(0, 150)}
                       <Box
                         component="span"
-                        onClick={() => handleBlogClick(blog)}
                         sx={{
                           textDecoration: "none",
                           color: (theme) => theme.palette.primary.main,
-                          cursor: "pointer",
                         }}
                       >
                         ...continue reading
