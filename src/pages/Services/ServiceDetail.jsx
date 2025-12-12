@@ -34,7 +34,7 @@ import ComputerIcon from "@mui/icons-material/Computer";
 import { commonButtonStyles } from "../../constants/styles";
 import { useAuth } from "../../context/AuthContext";
 import { createCheckoutSession } from "../../lib/api/paymentService";
-import FavoriteButtonAndCount from "../../components/FavoriteButtonAndCount";
+import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
 
 // Helper function to map service name to icon
 const getServiceIcon = (serviceName) => {
