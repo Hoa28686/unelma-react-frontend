@@ -30,6 +30,7 @@ import { getImageUrl, selectItem } from "../../helpers/helpers";
 import { fetchReviews } from "../../store/slices/products/reviewsSlice";
 import ReviewForm from "../../components/productReview/ReviewForm";
 import ReviewCard from "../../components/productReview/ReviewCard";
+import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
 
 function ProductDetail() {
   const { id, slug } = useParams();
@@ -278,6 +279,27 @@ function ProductDetail() {
                   }}
                 >
                   <PriceDisplay price={product.price} />
+                </Box>
+
+                {/* Favorite button */}
+                <Box
+                  sx={{
+                    p: { xs: 1.5, md: 2 },
+
+                    borderRadius: 2,
+                    backgroundColor: (theme) => `${theme.palette.divider}20`,
+                  }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={2} mb={1}>
+                    <FavoriteButtonAndCount type="product" item={product} />
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{ textDecoration: "underline" }}
+                    >
+                      Save product to your favorite list
+                    </Typography>
+                  </Stack>
                 </Box>
 
                 {/* Add to Cart */}

@@ -3,12 +3,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { IconButton } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useAuth } from "../../context/AuthContext";
 import {
   addFavorite,
   removeFavorite,
 } from "../../store/slices/favorites/favoritesSlice";
-import { useAuth } from "../../context/AuthContext";
 
 function FavoriteButton({ type, itemId }) {
   const dispatch = useDispatch();
