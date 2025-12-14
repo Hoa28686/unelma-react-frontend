@@ -16,7 +16,11 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { removeFromCart, updateQuantity, clearCart } from "../lib/features/cart/cartSlice";
+import {
+  removeFromCart,
+  updateQuantity,
+  clearCart,
+} from "../lib/features/cart/cartSlice";
 import PriceDisplay from "../components/PriceDisplay";
 import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 import { createCartCheckoutSession } from "../lib/api/paymentService";
@@ -27,7 +31,7 @@ function Cart() {
   const { items } = useSelector((state) => state.cart);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
-  
+
   const localStorageToken = getAuthToken();
   const isAuthenticated = !!localStorageToken;
 
@@ -71,7 +75,10 @@ function Cart() {
         // Redirect to Stripe Checkout page
         window.location.href = result.url;
       } else {
-        setCheckoutError(result.message || "Failed to create checkout session. Please try again.");
+        setCheckoutError(
+          result.message ||
+            "Failed to create checkout session. Please try again."
+        );
         setCheckoutLoading(false);
       }
     } catch (error) {
@@ -175,10 +182,11 @@ function Cart() {
                   <Card
                     key={item.id}
                     sx={{
-                      backgroundColor: (theme) => theme.palette.background.paper,
-                      border: (theme) => 
-                        theme.palette.mode === 'dark' 
-                          ? "1px solid rgba(255, 255, 255, 0.1)" 
+                      backgroundColor: (theme) =>
+                        theme.palette.background.paper,
+                      border: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "1px solid rgba(255, 255, 255, 0.1)"
                           : "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: 2,
                       transition: "all 0.3s ease",
@@ -200,7 +208,9 @@ function Cart() {
                         {/* Product Image */}
                         <CardMedia
                           component="img"
-                          src={getImageUrl(item.image_local_url || item.image_url || item.image)}
+                          src={getImageUrl(
+                            item.image_local_url || item.image_url || item.image
+                          )}
                           alt={item.name}
                           onError={(e) => {
                             e.target.src = placeholderLogo;
@@ -210,7 +220,8 @@ function Cart() {
                             height: { xs: "200px", md: "150px" },
                             objectFit: "cover",
                             borderRadius: 2,
-                            backgroundColor: (theme) => theme.palette.background.paper,
+                            backgroundColor: (theme) =>
+                              theme.palette.background.paper,
                           }}
                         />
 
@@ -339,8 +350,8 @@ function Cart() {
 
               {/* Checkout Error Alert */}
               {checkoutError && (
-                <Alert 
-                  severity="error" 
+                <Alert
+                  severity="error"
                   onClose={() => setCheckoutError(null)}
                   sx={{ mt: 2 }}
                 >
@@ -434,12 +445,14 @@ function Cart() {
                       color: (theme) => theme.palette.primary.main,
                       textTransform: "none",
                       "&:focus": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
                       "&:focus-visible": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
@@ -466,12 +479,14 @@ function Cart() {
                       border: "1px solid transparent",
                       transition: "all 0.3s ease",
                       "&:focus": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
                       "&:focus-visible": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
@@ -485,7 +500,9 @@ function Cart() {
                     }}
                   >
                     {checkoutLoading ? (
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
                         <CircularProgress size={20} sx={{ color: "#FFFFFF" }} />
                         Processing...
                       </Box>

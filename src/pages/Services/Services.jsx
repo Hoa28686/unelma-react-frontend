@@ -322,12 +322,14 @@ function Services() {
                 }}
               >
                 {paginatedServices.map((service) => {
+                  // console.log(service);
                   const ServiceIconComponent = getServiceIcon(service.name);
+                  const slug = getServiceSlug(service.name);
                   return (
                     <Card
                       key={service.id}
                       onClick={() => {
-                        navigate(`/services/${service.serviceId}`);
+                        navigate(`/services/${service.id}/${slug}`);
                       }}
                       sx={{
                         backgroundColor: (theme) =>

@@ -78,6 +78,7 @@ const getServiceSlug = (serviceName) => {
 
 function ServiceDetail() {
   const { serviceId } = useParams();
+  console.log("Service id is :", serviceId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -125,7 +126,8 @@ function ServiceDetail() {
         dispatch(setSelectedService(foundService));
         const serviceSlug = getServiceSlug(foundService.name);
         if (serviceId !== serviceSlug) {
-          navigate(`/services/${serviceSlug}`, { replace: true });
+          // navigate(`/services/${serviceSlug}`, { replace: true });
+          navigate(`/services/${serviceId}/${serviceSlug}`, { replace: true });
         }
       } else {
         dispatch(clearSelectedService());
@@ -139,6 +141,7 @@ function ServiceDetail() {
   // Handle order now - Stripe integration
   const handleOrderNow = async (plan) => {
     // Check if user is authenticated
+    console.log("service Id", serviceId);
     if (!user) {
       setLoginDialogOpen(true);
       return;
@@ -159,7 +162,7 @@ function ServiceDetail() {
 
       // Prepare comprehensive payment data with all metadata for order tracking
       const paymentData = {
-        stripe_price_id: plan.stripe_price_id,
+        stripePriceId: plan.stripe_price_id,
         serviceId: serviceId,
         serviceName: service.name,
         planName: plan.name,
@@ -421,7 +424,15 @@ function ServiceDetail() {
                             },
                           }}
                         >
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", mb: 1 }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              flexWrap: "wrap",
+                              mb: 1,
+                            }}
+                          >
                             <Typography
                               variant="h4"
                               component="h3"
@@ -434,16 +445,26 @@ function ServiceDetail() {
                               {plan.name}
                             </Typography>
                             <Chip
-                              label={plan.payment_type === "subscription" ? "Subscription" : "One-time"}
+                              label={
+                                plan.payment_type === "subscription"
+                                  ? "Subscription"
+                                  : "One-time"
+                              }
                               size="small"
-                              color={plan.payment_type === "subscription" ? undefined : "primary"}
-                              sx={{ 
-                                height: 24, 
+                              color={
+                                plan.payment_type === "subscription"
+                                  ? undefined
+                                  : "primary"
+                              }
+                              sx={{
+                                height: 24,
                                 fontSize: "0.75rem",
-                                ...(plan.payment_type === "subscription" ? {
-                                  backgroundColor: "#E57A44",
-                                  color: "#FFFFFF"
-                                } : {})
+                                ...(plan.payment_type === "subscription"
+                                  ? {
+                                      backgroundColor: "#E57A44",
+                                      color: "#FFFFFF",
+                                    }
+                                  : {}),
                               }}
                             />
                           </Box>
