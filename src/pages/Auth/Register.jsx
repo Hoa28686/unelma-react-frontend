@@ -65,7 +65,6 @@ function Register() {
       setLoading(false);
       setForm({ name: "", email: "", password: "", password_confirmation: "" });
     } catch (e) {
-      console.error(e);
       setError(e.response?.data?.message || "Registration failed");
       setLoading(false);
     }

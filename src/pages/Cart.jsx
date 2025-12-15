@@ -82,7 +82,6 @@ function Cart() {
         setCheckoutLoading(false);
       }
     } catch (error) {
-      console.error("Checkout error:", error);
       setCheckoutError("An unexpected error occurred. Please try again.");
       setCheckoutLoading(false);
     }

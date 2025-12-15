@@ -121,7 +121,6 @@ export function AuthProvider({ children }) {
       }
     } catch (e) {
       // Logout even if API call fails
-      console.error("Logout API error:", e);
     } finally {
       clearAuthData();
       setMessage("Logged out successfully");

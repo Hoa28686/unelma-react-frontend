@@ -78,7 +78,6 @@ const getServiceSlug = (serviceName) => {
 
 function ServiceDetail() {
   const { serviceId } = useParams();
-  console.log("Service id is :", serviceId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -141,7 +140,6 @@ function ServiceDetail() {
   // Handle order now - Stripe integration
   const handleOrderNow = async (plan) => {
     // Check if user is authenticated
-    console.log("service Id", serviceId);
     if (!user) {
       setLoginDialogOpen(true);
       return;
@@ -183,7 +181,6 @@ function ServiceDetail() {
         setPaymentLoading(null);
       }
     } catch (error) {
-      console.error("Payment error:", error);
       setPaymentError("An unexpected error occurred. Please try again.");
       setPaymentLoading(null);
     }

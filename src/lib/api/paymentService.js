@@ -46,7 +46,6 @@ export const createCheckoutSession = async (paymentData) => {
       message: response.data.message || "Checkout session created successfully",
     };
   } catch (error) {
-    console.error("Payment service error:", error);
 
     // Handle specific error cases
     let errorMessage = "Failed to create checkout session. Please try again.";
@@ -135,7 +134,6 @@ export const createCartCheckoutSession = async (cartItems) => {
       message: response.data.message || "Checkout session created successfully",
     };
   } catch (error) {
-    console.error("Cart checkout error:", error);
 
     let errorMessage = "Failed to create checkout session. Please try again.";
 

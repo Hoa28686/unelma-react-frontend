@@ -322,7 +322,6 @@ function Services() {
                 }}
               >
                 {paginatedServices.map((service) => {
-                  // console.log(service);
                   const ServiceIconComponent = getServiceIcon(service.name);
                   const slug = getServiceSlug(service.name);
                   return (

@@ -33,7 +33,10 @@ export const submitReview = createAsyncThunk(
       );
       return res.data.data.rating;
     } catch (err) {
-      return rejectWithValue(err.response?.data || err.message);
+      return rejectWithValue({
+        data: err.response?.data || err.message,
+        status: err.response?.status,
+      });
     }
   }
 );
@@ -97,6 +100,10 @@ const reviewsSlice = createSlice({
           (r) => r.user_id !== updatedReview.user_id
         );
         state.reviews.unshift(updatedReview);
+      })
+      .addCase(submitReview.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
 
       //delete a review

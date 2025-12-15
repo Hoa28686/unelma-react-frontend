@@ -53,7 +53,6 @@ function PaymentSuccess() {
           setError(response.data.message || "Payment verification failed.");
         }
       } catch (error) {
-        console.error("Payment verification error:", error);
         setError(
           error.response?.data?.message || 
           "Failed to verify payment. Please contact support if you were charged."

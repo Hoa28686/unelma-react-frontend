@@ -111,7 +111,7 @@ function BlogDetail() {
       dispatch(setSelectedBlog(res.data.data));
       setNewComment("");
     } catch (e) {
-      console.error(e);
+      // Error handled silently
     }
   };
 

@@ -145,7 +145,6 @@ function User() {
           const purchasesData = res.data?.data || res.data?.purchases || res.data || [];
           setPurchases(Array.isArray(purchasesData) ? purchasesData : []);
         } catch (error) {
-          console.error("Error fetching purchases:", error);
           // If 404, endpoint doesn't exist yet - use empty array
           if (error.response?.status === 404) {
             setPurchases([]);
@@ -198,7 +197,6 @@ function User() {
           const subscriptionsData = res.data?.data || res.data?.subscriptions || res.data || [];
           setSubscriptions(Array.isArray(subscriptionsData) ? subscriptionsData : []);
         } catch (error) {
-          console.error("Error fetching subscriptions:", error);
           // If 404, endpoint doesn't exist yet - use empty array
           if (error.response?.status === 404) {
             setSubscriptions([]);
@@ -572,7 +570,6 @@ function User() {
           // Remove from local state
           setPurchases(purchases.filter((purchase) => purchase.id !== itemToCancel));
         } catch (error) {
-          console.error("Error cancelling purchase:", error);
           // If endpoint doesn't exist, still remove from UI
           if (error.response?.status === 404) {
             setPurchases(purchases.filter((purchase) => purchase.id !== itemToCancel));
@@ -610,7 +607,6 @@ function User() {
             )
           );
         } catch (error) {
-          console.error("Error cancelling subscription:", error);
           // If endpoint doesn't exist, still update UI
           if (error.response?.status === 404) {
             setSubscriptions(
@@ -624,7 +620,7 @@ function User() {
         }
       }
     } catch (error) {
-      console.error("Error in confirmCancel:", error);
+      // Error handled silently
     } finally {
       setCancelDialogOpen(false);
       setItemToCancel(null);

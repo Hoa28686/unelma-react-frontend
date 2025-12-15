@@ -39,8 +39,6 @@ apiClient.interceptors.response.use(
     // Handle common errors here
     if (error.response) {
       // Server responded with error status
-      console.error("API Error:", error.response.data);
-
       // Handle unauthorized (401) or forbidden (403) errors
       if (error.response.status === 401 || error.response.status === 403) {
         // Clear auth data and redirect to login using utility
@@ -55,10 +53,8 @@ apiClient.interceptors.response.use(
       }
     } else if (error.request) {
       // Request was made but no response received
-      console.error("Network Error:", error.request);
     } else {
       // Something else happened
-      console.error("Error:", error.message);
     }
     return Promise.reject(error);
   }
