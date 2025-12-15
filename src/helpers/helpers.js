@@ -85,7 +85,7 @@ export const selectItem = (
   navigate,
   resourceName
 ) => {
-  if (!items | (items.length === 0)) return;
+  if (!items || items.length === 0) return;
 
   const foundItem = items.find((i) => i.id === Number(id));
 

@@ -17,13 +17,11 @@ import { fetchProducts } from "../store/slices/products/productsSlice";
 import CenteredMessage from "../components/CenteredMessage";
 import { fetchServices } from "../lib/features/services/servicesSlice";
 import HandleBackButton from "../components/HandleBackButton";
-import { Link, useNavigate } from "react-router";
-import { handleItemClick } from "../helpers/helpers";
+import { Link } from "react-router";
 
 function Favorites() {
   const { user, token } = useAuth();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { favorites, loading, error } = useSelector((state) => state.favorites);
   const blogs = useSelector((state) => state.blogs.blogs);
   const products = useSelector((state) => state.products.products);
@@ -58,40 +56,18 @@ function Favorites() {
             return (
               <Box key={fav.id}>
                 <FavoriteButton type={type} itemId={item.id} />
-                {type === "service" ? (
-                  <MuiLink
-                    component={Link}
-                    to={`/${type}s/${item.id}`}
-                    sx={{
-                      textDecoration: "none",
 
-                      color: (theme) =>
-                        darken(theme.palette.secondary.main, 0.1),
-                    }}
-                  >
-                    {item.title || item.name}
-                  </MuiLink>
-                ) : (
-                  <MuiLink
-                    component={Link}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleItemClick(navigate, item, type + "s");
-                    }}
-                    sx={{
-                      textDecoration: "none",
-                      color: (theme) =>
-                        darken(theme.palette.secondary.main, 0.1),
+                <MuiLink
+                  component={Link}
+                  to={`/${type}s/${item.id}`}
+                  sx={{
+                    textDecoration: "none",
 
-                      // remove outline
-                      outline: "none",
-                      "&:focus": { outline: "none" },
-                      "&:focus-visible": { outline: "none" },
-                    }}
-                  >
-                    {item.title || item.name}
-                  </MuiLink>
-                )}
+                    color: (theme) => darken(theme.palette.secondary.main, 0.1),
+                  }}
+                >
+                  {item.title || item.name}
+                </MuiLink>
               </Box>
             );
           })}
