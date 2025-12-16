@@ -1,4 +1,5 @@
-const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+const baseUrl =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
 
 export const API = {
   login: `${baseUrl}/login`,
@@ -8,4 +9,5 @@ export const API = {
   blogs: `${baseUrl}/blogs`,
   favorites: `${baseUrl}/favorites`,
   services: `${baseUrl}/services`,
+  careers: `${baseUrl}/vacancies`,
 };

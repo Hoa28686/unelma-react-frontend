@@ -28,7 +28,11 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import { getImageUrl, selectItem, placeholderLogo } from "../../helpers/helpers";
+import {
+  getImageUrl,
+  selectItem,
+  placeholderLogo,
+} from "../../helpers/helpers";
 import { fetchReviews } from "../../store/slices/products/reviewsSlice";
 import ReviewForm from "../../components/productReview/ReviewForm";
 import ReviewCard from "../../components/productReview/ReviewCard";
@@ -245,7 +249,14 @@ function ProductDetail() {
                 }}
               >
                 {/* Product Name */}
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    flexWrap: "wrap",
+                  }}
+                >
                   <Typography
                     variant="h3"
                     component="h1"
@@ -259,15 +270,28 @@ function ProductDetail() {
                     {product.name}
                   </Typography>
                   <Chip
-                    label={(product.payment_type === "subscription" || product.paymentType === "subscription") ? "Subscription" : "One-time"}
-                    color={(product.payment_type === "subscription" || product.paymentType === "subscription") ? undefined : "primary"}
-                    sx={{ 
-                      fontSize: "0.875rem", 
+                    label={
+                      product.payment_type === "subscription" ||
+                      product.paymentType === "subscription"
+                        ? "Subscription"
+                        : "One-time"
+                    }
+                    color={
+                      product.payment_type === "subscription" ||
+                      product.paymentType === "subscription"
+                        ? undefined
+                        : "primary"
+                    }
+                    sx={{
+                      fontSize: "0.875rem",
                       height: 28,
-                      ...((product.payment_type === "subscription" || product.paymentType === "subscription") ? {
-                        backgroundColor: "#E57A44",
-                        color: "#FFFFFF"
-                      } : {})
+                      ...(product.payment_type === "subscription" ||
+                      product.paymentType === "subscription"
+                        ? {
+                            backgroundColor: "#E57A44",
+                            color: "#FFFFFF",
+                          }
+                        : {}),
                     }}
                   />
                 </Box>

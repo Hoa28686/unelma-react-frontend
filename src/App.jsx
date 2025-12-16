@@ -27,6 +27,8 @@ const User = lazy(() => import("./pages/User.jsx"));
 const PaymentSuccess = lazy(() => import("./pages/Payment/PaymentSuccess.jsx"));
 const PaymentCancel = lazy(() => import("./pages/Payment/PaymentCancel.jsx"));
 const Favorites = lazy(() => import("./pages/Favorites.jsx"));
+const Career = lazy(() => import("./pages/Career/Career.jsx"));
+const CareerDetails = lazy(() => import("./pages/Career/CareerDetails.jsx"));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -78,6 +80,8 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment/success" element={<PaymentSuccess />} />
                 <Route path="/payment/cancel" element={<PaymentCancel />} />
+                <Route path="/career" element={<Career />} />
+                <Route path="/career/:id" element={<CareerDetails />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
