@@ -57,11 +57,11 @@ const CareerDetails = () => {
             <Typography variant="body1" color="white">
               {selectedJob.description}
             </Typography>
+
+            {/* //Job apply here */}
+            <JobApply career_id={selectedJob.id}></JobApply>
           </>
         )}
-
-        {/* //Job apply here */}
-        <JobApply></JobApply>
       </Box>
     </Box>
   );

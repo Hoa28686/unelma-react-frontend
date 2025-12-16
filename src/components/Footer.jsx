@@ -35,10 +35,10 @@ const usefulLinks = [
 
 const careerLinks = [
   { label: "Come work with us", href: "/career" },
-  { label: "Internship", href: "#" },
-  { label: "UI/ UX Designer", href: "#" },
-  { label: "Software Engineer", href: "#" },
-  { label: "Office Management", href: "#" },
+  { label: "Internship", href: "/career/" },
+  { label: "UI/ UX Designer", href: "/career/2" },
+  { label: "Software Engineer", href: "/career/1" },
+  { label: "Office Management", href: "/career/3" },
 ];
 
 const offices = [

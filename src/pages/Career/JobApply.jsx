@@ -24,7 +24,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-const JobApply = () => {
+const JobApply = ({ career_id }) => {
   const [personalDetails, setPersonalDetails] = useState({});
   const [isApplied, setIsApplied] = useState(false);
   function handleChange(e) {
@@ -43,6 +43,7 @@ const JobApply = () => {
     formData.append("name", personalDetails.name);
     formData.append("email", personalDetails.email);
     formData.append("cover_letter", personalDetails.cover_letter);
+    formData.append("career_id", career_id);
     try {
       const res = await axios.post(API.careers, formData, {
         headers: {
