@@ -54,6 +54,10 @@ const CareerDetails = () => {
             <Typography variant="h2" color="white">
               {selectedJob.name}
             </Typography>
+            <Box sx={{ display: "flex", gap: 3 }} color="white">
+              Location:
+              {selectedJob.location}
+            </Box>
             <Typography variant="body1" color="white">
               {selectedJob.description}
             </Typography>
