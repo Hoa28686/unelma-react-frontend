@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SignInPage } from "@toolpad/core";
 import { Box, Link as MuiLink, Button, Paper, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router";
@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 
 function Login() {
   const { user, login, logout, message, loading, error } = useAuth();
+
   const navigate = useNavigate();
 
   // Navigate to home on successful login
