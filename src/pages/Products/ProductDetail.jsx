@@ -18,6 +18,9 @@ import {
   MenuItem,
   Rating,
   Stack,
+  CircularProgress,
+  Chip,
+  Button,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -31,6 +34,9 @@ import { fetchReviews } from "../../store/slices/products/reviewsSlice";
 import ReviewForm from "../../components/productReview/ReviewForm";
 import ReviewCard from "../../components/productReview/ReviewCard";
 import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
+import SuggestedProducts from "../../components/product/SuggestedProducts";
+import { useContactForm } from "../../hooks/useContactForm";
+import StyledTextField from "../../components/StyledTextField";
 
 function ProductDetail() {
   const { id, slug } = useParams();
@@ -41,6 +47,16 @@ function ProductDetail() {
   const { reviews, averageRating, ratingCount } = useSelector(
     (state) => state.reviews
   );
+
+  // Contact form hook for query sidebar
+  const {
+    formData,
+    loading: queryLoading,
+    submitStatus,
+    fieldErrors,
+    handleChange: handleQueryChange,
+    handleSubmit: handleQuerySubmit,
+  } = useContactForm({ name: "", email: "", message: "" });
 
   const {
     products,
@@ -180,11 +196,56 @@ function ProductDetail() {
         backgroundColor: (theme) => theme.palette.background.default,
       }}
     >
+      {/* Hero Image Section */}
+      {(product?.image_local_url || product?.image_url || product?.image) && (
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            height: { xs: "300px", sm: "400px", md: "500px" },
+            overflow: "hidden",
+            backgroundColor: (theme) => theme.palette.background.default,
+          }}
+        >
+          <Box
+            component="img"
+            src={getImageUrl(
+              product?.image_local_url ||
+                product?.image_url ||
+                product?.image
+            )}
+            alt={product.name}
+            onError={(e) => {
+              e.target.src = placeholderLogo;
+            }}
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+          {/* Overlay gradient for better text readability */}
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: "50%",
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+            }}
+          />
+        </Box>
+      )}
+
+      {/* Content */}
       <Box
         sx={{
           position: "relative",
+          minHeight: "100vh",
           width: "100%",
-          padding: { xs: "1rem 1rem", sm: "2rem 2rem", md: "4rem 3rem" },
+          padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
         }}
       >
         <Box
@@ -198,71 +259,64 @@ function ProductDetail() {
             <HandleBackButton content="Products" link="/products" />
           </Box>
 
-          {/* Main Product Section */}
-          <Grid
-            container
-            spacing={{ xs: 2, sm: 3, md: 4 }}
-            sx={{ mb: { xs: 3, md: 4 } }}
+          {/* Product Header */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              marginBottom: { xs: "2rem", sm: "3rem" },
+              flexWrap: "wrap",
+            }}
           >
-            {/* Product Image */}
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Card
-                elevation={0}
+            <Typography
+              variant="h2"
+              component="h1"
+              sx={{
+                fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+                fontWeight: 700,
+                color: (theme) => theme.palette.text.primary,
+              }}
+            >
+              {product.name}
+            </Typography>
+            <Chip
+              label={(product.payment_type === "subscription" || product.paymentType === "subscription") ? "Subscription" : "One-time"}
+              color={(product.payment_type === "subscription" || product.paymentType === "subscription") ? undefined : "primary"}
+              sx={{ 
+                fontSize: "0.875rem", 
+                height: 28,
+                ...((product.payment_type === "subscription" || product.paymentType === "subscription") ? {
+                  backgroundColor: "#E57A44",
+                  color: "#FFFFFF"
+                } : {})
+              }}
+            />
+            <FavoriteButtonAndCount type="product" item={product} />
+          </Box>
+
+          {/* Main Content and Sidebar Layout */}
+          <Grid container spacing={4} sx={{ alignItems: "flex-start", mb: 4 }}>
+            {/* Left Side - Main Content */}
+            <Grid size={{ xs: 12, md: 8 }}>
+              {/* Product Description */}
+              <Typography
+                variant="body1"
                 sx={{
-                  borderRadius: 3,
-                  overflow: "hidden",
-                  border: (theme) =>
-                    `1px solid ${theme.palette.text.primary}20`,
-                  backgroundColor: (theme) => theme.palette.background.paper,
+                  fontSize: { xs: "1rem", sm: "1.125rem" },
+                  color: (theme) => theme.palette.text.secondary,
+                  lineHeight: 1.8,
+                  marginBottom: { xs: "2rem", sm: "3rem" },
                 }}
               >
-                <Box
-                  component="img"
-                  sx={{
-                    width: "100%",
-                    height: { xs: "auto", md: "500px" },
-                    objectFit: "cover",
-                    display: "block",
-                    backgroundColor: (theme) => theme.palette.background.paper,
-                  }}
-                  src={getImageUrl(
-                    product?.image_local_url ||
-                      product?.image_url ||
-                      product?.image
-                  )}
-                  alt={product.name}
-                />
-              </Card>
-            </Grid>
+                {product.description || product.highlights || "No description available."}
+              </Typography>
 
-            {/* Product Info */}
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: { xs: 2, sm: 2.5, md: 3 },
-                  height: "100%",
-                }}
-              >
-                {/* Product Name */}
-                <Typography
-                  variant="h3"
-                  component="h1"
-                  sx={{
-                    fontSize: { xs: "1.75rem", sm: "2.25rem", md: "2.5rem" },
-                    fontWeight: 700,
-                    color: (theme) => theme.palette.text.primary,
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {product.name}
-                </Typography>
-
-                {/* Rating */}
+              {/* Rating and Price */}
+              <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
                 <Box
                   sx={{
-                    p: { xs: 1.5, md: 2 },
+                    p: 2,
                     borderRadius: 2,
                     backgroundColor: (theme) => `${theme.palette.divider}20`,
                   }}
@@ -281,65 +335,26 @@ function ProductDetail() {
                     )}
                   </Stack>
                 </Box>
-
-                {/* Price */}
                 <Box
                   sx={{
-                    p: { xs: 1.5, md: 2 },
+                    p: 2,
                     borderRadius: 2,
                     backgroundColor: (theme) => `${theme.palette.divider}20`,
                   }}
                 >
                   <PriceDisplay price={product.price} />
                 </Box>
-
-                {/* Favorite button */}
-                <Box
-                  sx={{
-                    p: { xs: 1.5, md: 2 },
-
-                    borderRadius: 2,
-                    backgroundColor: (theme) => `${theme.palette.divider}20`,
-                  }}
-                >
-                  <Stack direction="row" alignItems="center" spacing={2} mb={1}>
-                    <FavoriteButtonAndCount type="product" item={product} />
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      sx={{ textDecoration: "underline" }}
-                    >
-                      Save product to your favorite list
-                    </Typography>
-                  </Stack>
-                </Box>
-
-                {/* Add to Cart */}
-                <Box
-                  sx={{
-                    mt: "auto",
-                    position: { xs: "sticky", md: "static" },
-                    bottom: { xs: 0 },
-                    width: { xs: "100%", md: "100%" },
-                    zIndex: { xs: 100, md: "auto" },
-                    backgroundColor: {
-                      xs: (theme) => theme.palette.background.default,
-                      md: "transparent",
-                    },
-                    pt: { xs: 2, md: 0 },
-                    pb: { xs: 2, md: 0 },
-                  }}
-                >
-                  <AddToCart product={product} />
-                </Box>
               </Box>
-            </Grid>
-          </Grid>
 
-          {/* Product Details Section */}
-          <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-            {/* Product Information Card */}
-            <Grid size={{ xs: 12, md: 4 }}>
+              {/* Add to Cart */}
+              <Box sx={{ mb: 4 }}>
+                <AddToCart product={product} />
+              </Box>
+
+              {/* Product Details Section */}
+              <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }} sx={{ mb: 4 }}>
+                {/* Product Information Card */}
+                <Grid size={{ xs: 12, md: 4 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -419,10 +434,10 @@ function ProductDetail() {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+                </Grid>
 
-            {/* Highlights Card */}
-            <Grid size={{ xs: 12, md: 8 }}>
+                {/* Highlights Card */}
+                <Grid size={{ xs: 12, md: 8 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -471,10 +486,10 @@ function ProductDetail() {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+                </Grid>
 
-            {/* Description Card */}
-            <Grid size={{ xs: 12 }}>
+                {/* Description Card */}
+                <Grid size={{ xs: 12 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -526,10 +541,10 @@ function ProductDetail() {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+                </Grid>
 
-            {/* Review section */}
-            <Grid size={{ xs: 12 }}>
+                {/* Review section */}
+                <Grid size={{ xs: 12 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -653,6 +668,128 @@ function ProductDetail() {
               </Card>
             </Grid>
           </Grid>
+            </Grid>
+
+            {/* Right Side - Contact Form Sidebar */}
+            <Grid size={{ xs: 12, md: 4 }}>
+              <Box
+                sx={{
+                  position: { md: "sticky" },
+                  top: { md: "2rem" },
+                }}
+              >
+                <Card
+                  sx={{
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "1px solid rgba(255, 255, 255, 0.1)"
+                        : "1px solid rgba(0, 0, 0, 0.1)",
+                    borderRadius: 2,
+                    padding: { xs: "2rem", sm: "2.5rem" },
+                  }}
+                >
+                  <Typography
+                    variant="h3"
+                    component="h2"
+                    sx={{
+                      fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
+                      fontWeight: 600,
+                      color: (theme) => theme.palette.text.primary,
+                      marginBottom: { xs: "1.5rem", sm: "2rem" },
+                    }}
+                  >
+                    Have Query?
+                  </Typography>
+                  <Box component="form" onSubmit={handleQuerySubmit}>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    >
+                      <StyledTextField
+                        name="name"
+                        label="Your Name"
+                        fullWidth
+                        required
+                        value={formData.name}
+                        onChange={handleQueryChange}
+                        error={!!fieldErrors.name}
+                        helperText={fieldErrors.name}
+                      />
+                      <StyledTextField
+                        name="email"
+                        label="Your Email"
+                        type="email"
+                        fullWidth
+                        required
+                        value={formData.email}
+                        onChange={handleQueryChange}
+                        error={!!fieldErrors.email}
+                        helperText={fieldErrors.email}
+                      />
+                      <StyledTextField
+                        name="message"
+                        label="Your Message"
+                        fullWidth
+                        required
+                        multiline
+                        rows={4}
+                        value={formData.message}
+                        onChange={handleQueryChange}
+                        error={!!fieldErrors.message}
+                        helperText={fieldErrors.message}
+                      />
+                      {submitStatus.success !== null && (
+                        <Alert
+                          severity={submitStatus.success ? "success" : "error"}
+                          sx={{
+                            mt: 1,
+                            "& .MuiAlert-message": {
+                              color: (theme) =>
+                                submitStatus.success
+                                  ? theme.palette.success.main
+                                  : theme.palette.error.main,
+                            },
+                          }}
+                        >
+                          {submitStatus.message}
+                        </Alert>
+                      )}
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        disabled={queryLoading}
+                        sx={{
+                          padding: { xs: "0.75rem", sm: "1rem" },
+                          "&:disabled": {
+                            opacity: 0.6,
+                          },
+                        }}
+                      >
+                        {queryLoading ? (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <CircularProgress size={20} color="inherit" />
+                            Sending...
+                          </Box>
+                        ) : (
+                          "Submit Request"
+                        )}
+                      </Button>
+                    </Box>
+                  </Box>
+                </Card>
+              </Box>
+            </Grid>
+          </Grid>
+
+          {/* Suggested Products */}
+          <SuggestedProducts currentProduct={product} allProducts={products} />
         </Box>
       </Box>
     </Box>
