@@ -267,7 +267,19 @@ function ProductDetail() {
                     backgroundColor: (theme) => `${theme.palette.divider}20`,
                   }}
                 >
-                  <RatingDisplay rating={averageRating} />
+                  <Stack
+                    direction="row"
+                    alignItems="flex-end"
+                    spacing={1}
+                    flexShrink={0}
+                  >
+                    <RatingDisplay rating={averageRating} />{" "}
+                    {ratingCount > 0 && (
+                      <Typography variant="body2" color="textSecondary">
+                        ({ratingCount})
+                      </Typography>
+                    )}
+                  </Stack>
                 </Box>
 
                 {/* Price */}
@@ -562,7 +574,7 @@ function ProductDetail() {
                       >
                         <Stack
                           direction="row"
-                          alignItems="center"
+                          alignItems="flex-end"
                           spacing={1}
                           flexShrink={0}
                         >

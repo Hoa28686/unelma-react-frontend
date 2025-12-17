@@ -363,7 +363,7 @@ function Products() {
                         <Stack direction="column" spacing={2}>
                           <Stack
                             direction="row"
-                            alignItems="center"
+                            alignItems="flex-end"
                             spacing={1}
                             flexShrink={0}
                           >
