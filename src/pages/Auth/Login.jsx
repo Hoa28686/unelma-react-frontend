@@ -204,7 +204,7 @@ function Login() {
         sx={{
           backgroundColor: (theme) => theme.palette.primary.main,
           color: "#FFFFFF",
-          fontWeight: 100,
+          fontWeight: 500,
           borderRadius: 2,
           boxShadow: "none",
           textTransform: "none",

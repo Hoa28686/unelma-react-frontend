@@ -10,7 +10,7 @@ const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#3B82F6", // Blue accent color matching logo
+      main: "#2563EB", // Blue accent color matching logo
     },
     secondary: {
       main: "#3B82F6", // Blue accent for consistency
@@ -118,7 +118,7 @@ const darkTheme = createTheme({
     mode: "dark",
 
     primary: {
-      main: "#3B82F6", // Blue accent color matching logo
+      main: "#2563EB", // Blue accent color matching logo
     },
     secondary: {
       main: "#3B82F6", // Blue accent for consistency
