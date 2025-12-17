@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { fetchCareers } from "../../store/slices/career/careerSlice";
 import JobApply from "./JobApply";
+import ParagraphText from "../../components/blog/ParagraphText";
 
 const CareerDetails = () => {
   let { id } = useParams();
@@ -75,10 +76,8 @@ const CareerDetails = () => {
               Location:
               {selectedJob.location}
             </Box>
-            <Typography variant="body1" color="white">
-              {selectedJob.description}
-            </Typography>
-
+            m: 0,
+            <ParagraphText text={selectedJob?.description} />
             {/* //Job apply here */}
             <JobApply career_id={selectedJob.id}></JobApply>
           </>
