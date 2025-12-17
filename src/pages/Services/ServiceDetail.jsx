@@ -5,7 +5,7 @@ import {
   fetchServices,
   setSelectedService,
   clearSelectedService,
-} from "../../lib/features/services/servicesSlice";
+} from "../../store/slices/services/servicesSlice";
 import {
   Box,
   Typography,
@@ -226,8 +226,8 @@ function ServiceDetail() {
     );
   }
 
-  const IconComponent = service.icon || getServiceIcon(service.name);
-
+  const IconComponent = getServiceIcon(service.name);
+  // const IconComponent = service.icon || getServiceIcon(service.name);
   return (
     <Box
       sx={{

@@ -15,7 +15,7 @@ function RatingDisplay({ rating }) {
           fontWeight: 500,
         }}
       >
-        {displayRating}
+        {!isNaN(displayRating) && displayRating > 0 ? displayRating : null}
       </Typography>
       <Rating
         name="half-rating"

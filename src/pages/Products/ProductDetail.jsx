@@ -29,11 +29,7 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import {
-  getImageUrl,
-  selectItem,
-  placeholderLogo,
-} from "../../helpers/helpers";
+import { getImageUrl, selectItem } from "../../helpers/helpers";
 import { fetchReviews } from "../../store/slices/products/reviewsSlice";
 import ReviewForm from "../../components/productReview/ReviewForm";
 import ReviewCard from "../../components/productReview/ReviewCard";
@@ -132,10 +128,16 @@ function ProductDetail() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "400px",
+          minHeight: "50vh",
+          backgroundColor: (theme) => theme.palette.background.default,
         }}
       >
-        <CircularProgress />
+        <Typography
+          variant="h5"
+          sx={{ color: (theme) => theme.palette.text.secondary }}
+        >
+          Loading product...
+        </Typography>
       </Box>
     );
   }
@@ -319,7 +321,19 @@ function ProductDetail() {
                     backgroundColor: (theme) => `${theme.palette.divider}20`,
                   }}
                 >
-                  <RatingDisplay rating={averageRating} />
+                  <Stack
+                    direction="row"
+                    alignItems="flex-end"
+                    spacing={1}
+                    flexShrink={0}
+                  >
+                    <RatingDisplay rating={averageRating} />{" "}
+                    {ratingCount > 0 && (
+                      <Typography variant="body2" color="textSecondary">
+                        ({ratingCount})
+                      </Typography>
+                    )}
+                  </Stack>
                 </Box>
                 <Box
                   sx={{
@@ -560,10 +574,11 @@ function ProductDetail() {
                   </Typography>
                   <Divider sx={{ mb: 3 }} />
                   <Typography variant="subtitle1" color="textSecondary" mb={2}>
-                    Note: each user can review once per product
+                    Note: The user must be logged in and have purchased this
+                    product to write a review.
                   </Typography>
                   {/* Review form for new review, UI when user haven't logged in */}
-                  <ReviewForm productId={product.id} reviews={reviews} />
+                  <ReviewForm product={product} reviews={reviews} />
                   {reviews.length > 0 && (
                     <Box sx={{ mt: 4 }}>
                       <Stack
@@ -576,14 +591,14 @@ function ProductDetail() {
                           direction="row"
                           alignItems="flex-end"
                           spacing={1}
-                          pl={2}
+                          flexShrink={0}
                         >
                           <RatingDisplay rating={averageRating} />
                           <Typography variant="body2" color="textSecondary">
                             {ratingCount} ratings
                           </Typography>
                         </Stack>
-                        <Stack direction="row" spacing={2}>
+                        <Stack direction="row">
                           <Select
                             value={sortOrder}
                             onChange={(e) => setSortOrder(e.target.value)}

@@ -171,11 +171,8 @@ export function AuthProvider({ children }) {
           } catch {
             clearAuthData();
           }
-        } else if (
-          error.response?.status === 401 ||
-          error.response?.status === 403
-        ) {
-          // Token is invalid (401/403), clear it
+        } else if (error.response?.status === 401) {
+          // Token is invalid (401), clear it
           clearAuthData();
           setUser(null);
           setToken(null);

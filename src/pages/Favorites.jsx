@@ -13,11 +13,10 @@ import {
 } from "@mui/material";
 import { fetchBlogs } from "../store/slices/blogs/blogsSlice";
 import { fetchProducts } from "../store/slices/products/productsSlice";
-
 import CenteredMessage from "../components/CenteredMessage";
-import { fetchServices } from "../lib/features/services/servicesSlice";
 import HandleBackButton from "../components/HandleBackButton";
 import { Link } from "react-router";
+import { fetchServices } from "../store/slices/services/servicesSlice";
 
 function Favorites() {
   const { user, token } = useAuth();

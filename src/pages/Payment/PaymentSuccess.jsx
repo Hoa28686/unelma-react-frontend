@@ -13,7 +13,7 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import apiClient from "../../lib/api/config";
 import { getAuthToken } from "../../utils/authUtils";
-import { clearCart } from "../../lib/features/cart/cartSlice";
+import { clearCart } from "../../store/slices/cart/cartSlice";
 
 function PaymentSuccess() {
   const navigate = useNavigate();
@@ -44,7 +44,9 @@ function PaymentSuccess() {
 
       try {
         // Call backend to verify and process session
-        const response = await apiClient.get(`/checkout/success?session_id=${sessionId}`);
+        const response = await apiClient.get(
+          `/checkout/success?session_id=${sessionId}`
+        );
 
         if (response.data.success) {
           setSuccess(true);
@@ -54,8 +56,8 @@ function PaymentSuccess() {
         }
       } catch (error) {
         setError(
-          error.response?.data?.message || 
-          "Failed to verify payment. Please contact support if you were charged."
+          error.response?.data?.message ||
+            "Failed to verify payment. Please contact support if you were charged."
         );
       } finally {
         setLoading(false);
@@ -98,7 +100,14 @@ function PaymentSuccess() {
         >
           <CardContent>
             {loading ? (
-              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
                 <CircularProgress />
                 <Typography variant="body1" sx={{ color: "text.secondary" }}>
                   Verifying payment...
@@ -125,7 +134,14 @@ function PaymentSuccess() {
                 <Alert severity="error" sx={{ mb: 2 }}>
                   {error}
                 </Alert>
-                <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                  }}
+                >
                   <Button
                     variant="contained"
                     onClick={() => navigate("/cart")}
@@ -157,18 +173,37 @@ function PaymentSuccess() {
                     mb: 2,
                   }}
                 />
-                <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+                <Typography
+                  variant="h4"
+                  component="h1"
+                  gutterBottom
+                  sx={{ fontWeight: 600 }}
+                >
                   Payment Successful!
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 3, color: "text.secondary" }}>
-                  Thank you for your purchase. Your payment has been processed successfully.
+                <Typography
+                  variant="body1"
+                  sx={{ mb: 3, color: "text.secondary" }}
+                >
+                  Thank you for your purchase. Your payment has been processed
+                  successfully.
                 </Typography>
                 {sessionId && (
-                  <Typography variant="body2" sx={{ mb: 2, color: "text.secondary", fontStyle: "italic" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ mb: 2, color: "text.secondary", fontStyle: "italic" }}
+                  >
                     Session ID: {sessionId.substring(0, 20)}...
                   </Typography>
                 )}
-                <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                  }}
+                >
                   <Button
                     variant="contained"
                     onClick={() => navigate("/services")}
@@ -176,12 +211,14 @@ function PaymentSuccess() {
                       backgroundColor: (theme) => theme.palette.primary.main,
                       color: "#FFFFFF",
                       "&:focus": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
                       "&:focus-visible": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
@@ -199,12 +236,14 @@ function PaymentSuccess() {
                       borderColor: (theme) => theme.palette.primary.main,
                       color: (theme) => theme.palette.primary.main,
                       "&:focus": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },
                       "&:focus-visible": {
-                        outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+                        outline: (theme) =>
+                          `2px solid ${theme.palette.primary.main}`,
                         outlineOffset: "2px",
                         boxShadow: "none",
                       },

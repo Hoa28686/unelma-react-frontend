@@ -1,10 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "../../../api";
-import {
-  addFavorite,
-  removeFavorite,
-} from "../../../store/slices/favorites/favoritesSlice";
+import { addFavorite, removeFavorite } from "../favorites/favoritesSlice";
 import { updateFavoriteCount } from "../../../helpers/helpers";
 
 const initialState = {
