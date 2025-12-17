@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchServices } from "../../lib/features/services/servicesSlice";
+import { fetchServices } from "../../store/slices/services/servicesSlice";
 import { getImageUrl, placeholderLogo } from "../../helpers/helpers";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -425,7 +425,15 @@ function Services() {
                               />
                             </Box>
                           )}
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", mb: 0.5 }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              flexWrap: "wrap",
+                              mb: 0.5,
+                            }}
+                          >
                             <Typography
                               variant="h5"
                               component="h3"
@@ -438,16 +446,26 @@ function Services() {
                               {service.name}
                             </Typography>
                             <Chip
-                              label={service.payment_type === "subscription" ? "Subscription" : "One-time"}
+                              label={
+                                service.payment_type === "subscription"
+                                  ? "Subscription"
+                                  : "One-time"
+                              }
                               size="small"
-                              color={service.payment_type === "subscription" ? undefined : "primary"}
-                              sx={{ 
-                                height: 22, 
+                              color={
+                                service.payment_type === "subscription"
+                                  ? undefined
+                                  : "primary"
+                              }
+                              sx={{
+                                height: 22,
                                 fontSize: "0.7rem",
-                                ...(service.payment_type === "subscription" ? {
-                                  backgroundColor: "#E57A44",
-                                  color: "#FFFFFF"
-                                } : {})
+                                ...(service.payment_type === "subscription"
+                                  ? {
+                                      backgroundColor: "#E57A44",
+                                      color: "#FFFFFF",
+                                    }
+                                  : {}),
                               }}
                             />
                           </Box>

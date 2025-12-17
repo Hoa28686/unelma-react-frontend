@@ -5,7 +5,7 @@ import {
   fetchServices,
   setSelectedService,
   clearSelectedService,
-} from "../../lib/features/services/servicesSlice";
+} from "../../store/slices/services/servicesSlice";
 import {
   Box,
   Typography,

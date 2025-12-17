@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router";
 import { handleItemClick } from "../../helpers/helpers";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchServices } from "../../lib/features/services/servicesSlice";
+import { fetchServices } from "../../store/slices/services/servicesSlice";
 
 function ServiceRedirect() {
   const { id } = useParams();

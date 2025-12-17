@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../lib/features/cart/cartSlice";
+import { addToCart } from "../store/slices/cart/cartSlice";
 
 function AddToCart({ product }) {
   const dispatch = useDispatch();
@@ -33,26 +33,26 @@ function AddToCart({ product }) {
         border: "1px solid transparent",
         color: "#FFFFFF",
         transition: "all 0.3s ease",
-        '&:hover': {
+        "&:hover": {
           borderColor: (theme) => theme.palette.primary.main,
           transform: "translateY(-4px)",
         },
-        '&:focus': {
+        "&:focus": {
           outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           outlineOffset: "2px",
           boxShadow: "none",
         },
-        '&:focus-visible': {
+        "&:focus-visible": {
           outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           outlineOffset: "2px",
           boxShadow: "none",
         },
-        '&:active': {
+        "&:active": {
           outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           outlineOffset: "2px",
           boxShadow: "none",
         },
-        '&:disabled': {
+        "&:disabled": {
           opacity: 0.6,
         },
       }}

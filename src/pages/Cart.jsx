@@ -20,7 +20,7 @@ import {
   removeFromCart,
   updateQuantity,
   clearCart,
-} from "../lib/features/cart/cartSlice";
+} from "../store/slices/cart/cartSlice";
 import PriceDisplay from "../components/PriceDisplay";
 import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 import { createCartCheckoutSession } from "../lib/api/paymentService";
