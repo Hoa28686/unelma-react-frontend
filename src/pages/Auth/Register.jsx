@@ -4,15 +4,23 @@ import {
   Paper,
   TextField,
   Typography,
+  Box,
+  IconButton,
 } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { API } from "../../api";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function Register() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirm: false,
+  });
   const [message, setMessage] = useState(null);
 
   const [form, setForm] = useState({
@@ -35,7 +43,7 @@ function Register() {
     setLoading(true);
     setError(null);
     setMessage(null);
-    
+
     // form validation
     if (
       !form.name ||
@@ -117,26 +125,77 @@ function Register() {
           value={form.email}
           onChange={handleChange}
         />
-        <TextField
-          required
+        <Box
           margin="normal"
-          fullWidth
-          type="password"
-          label="Password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <TextField
-          required
+          sx={{
+            height: "fit-content",
+            position: "relative",
+            "& button": {
+              position: "absolute",
+              right: "16px",
+              top: "50%",
+              transform: "translateY(-50%)",
+            },
+          }}
+        >
+          <TextField
+            required
+            margin="normal"
+            fullWidth
+            type={showPassword.password ? "text" : "password"}
+            label="Password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+          />
+          <IconButton
+            aria-label="see-hide"
+            onClick={() => {
+              // setShowPassword((prev) => !prev);
+              setShowPassword((prev) => ({
+                ...prev,
+                password: !prev.password,
+              }));
+            }}
+          >
+            {showPassword.password ? <VisibilityIcon /> : <VisibilityOffIcon />}
+          </IconButton>
+        </Box>
+        <Box
           margin="normal"
-          fullWidth
-          type="password"
-          label="Confirm Passsword"
-          name="password_confirmation"
-          value={form.password_confirmation}
-          onChange={handleChange}
-        />
+          sx={{
+            height: "fit-content",
+            position: "relative",
+            "& button": {
+              position: "absolute",
+              right: "16px",
+              top: "50%",
+              transform: "translateY(-50%)",
+            },
+          }}
+        >
+          <TextField
+            required
+            margin="normal"
+            fullWidth
+            type={showPassword.confirm ? "text" : "password"}
+            label="Confirm Passsword"
+            name="password_confirmation"
+            value={form.password_confirmation}
+            onChange={handleChange}
+          />
+          <IconButton
+            aria-label="see-hide"
+            onClick={() => {
+              setShowPassword((prev) => ({
+                ...prev,
+                confirm: !prev.confirm,
+              }));
+            }}
+          >
+            {showPassword.confirm ? <VisibilityIcon /> : <VisibilityOffIcon />}
+          </IconButton>
+        </Box>
         <Button
           type="submit"
           sx={{
