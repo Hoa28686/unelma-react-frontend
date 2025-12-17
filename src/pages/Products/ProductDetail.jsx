@@ -29,7 +29,11 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import { getImageUrl, selectItem } from "../../helpers/helpers";
+import {
+  getImageUrl,
+  placeholderLogo,
+  selectItem,
+} from "../../helpers/helpers";
 import { fetchReviews } from "../../store/slices/products/reviewsSlice";
 import ReviewForm from "../../components/productReview/ReviewForm";
 import ReviewCard from "../../components/productReview/ReviewCard";
@@ -210,9 +214,7 @@ function ProductDetail() {
           <Box
             component="img"
             src={getImageUrl(
-              product?.image_local_url ||
-                product?.image_url ||
-                product?.image
+              product?.image_local_url || product?.image_url || product?.image
             )}
             alt={product.name}
             onError={(e) => {
@@ -281,15 +283,28 @@ function ProductDetail() {
               {product.name}
             </Typography>
             <Chip
-              label={(product.payment_type === "subscription" || product.paymentType === "subscription") ? "Subscription" : "One-time"}
-              color={(product.payment_type === "subscription" || product.paymentType === "subscription") ? undefined : "primary"}
-              sx={{ 
-                fontSize: "0.875rem", 
+              label={
+                product.payment_type === "subscription" ||
+                product.paymentType === "subscription"
+                  ? "Subscription"
+                  : "One-time"
+              }
+              color={
+                product.payment_type === "subscription" ||
+                product.paymentType === "subscription"
+                  ? undefined
+                  : "primary"
+              }
+              sx={{
+                fontSize: "0.875rem",
                 height: 28,
-                ...((product.payment_type === "subscription" || product.paymentType === "subscription") ? {
-                  backgroundColor: "#E57A44",
-                  color: "#FFFFFF"
-                } : {})
+                ...(product.payment_type === "subscription" ||
+                product.paymentType === "subscription"
+                  ? {
+                      backgroundColor: "#E57A44",
+                      color: "#FFFFFF",
+                    }
+                  : {}),
               }}
             />
             <FavoriteButtonAndCount type="product" item={product} />
@@ -299,19 +314,6 @@ function ProductDetail() {
           <Grid container spacing={4} sx={{ alignItems: "flex-start", mb: 4 }}>
             {/* Left Side - Main Content */}
             <Grid size={{ xs: 12, md: 8 }}>
-              {/* Product Description */}
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: { xs: "1rem", sm: "1.125rem" },
-                  color: (theme) => theme.palette.text.secondary,
-                  lineHeight: 1.8,
-                  marginBottom: { xs: "2rem", sm: "3rem" },
-                }}
-              >
-                {product.description || product.highlights || "No description available."}
-              </Typography>
-
               {/* Rating and Price */}
               <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
                 <Box
@@ -352,322 +354,349 @@ function ProductDetail() {
               </Box>
 
               {/* Product Details Section */}
-              <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }} sx={{ mb: 4 }}>
+              <Grid
+                container
+                spacing={{ xs: 2, sm: 2.5, md: 3 }}
+                sx={{ mb: 4 }}
+              >
                 {/* Product Information Card */}
                 <Grid size={{ xs: 12, md: 4 }}>
-              <Card
-                elevation={0}
-                sx={{
-                  height: "100%",
-                  borderRadius: 3,
-                  border: (theme) =>
-                    `1px solid ${theme.palette.text.primary}20`,
-                  backgroundColor: (theme) => theme.palette.background.paper,
-                }}
-              >
-                <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
-                  <Typography
-                    variant="h6"
+                  <Card
+                    elevation={0}
                     sx={{
-                      fontWeight: 600,
-                      mb: 2,
-                      fontSize: { xs: "1.1rem", md: "1.25rem" },
-                      color: (theme) => theme.palette.text.primary,
+                      height: "100%",
+                      borderRadius: 3,
+                      border: (theme) =>
+                        `1px solid ${theme.palette.text.primary}20`,
+                      backgroundColor: (theme) =>
+                        theme.palette.background.paper,
                     }}
                   >
-                    Product Information
-                  </Typography>
-                  <Divider sx={{ mb: 2 }} />
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                      }}
-                    >
-                      <CategoryIcon
+                    <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
+                      <Typography
+                        variant="h6"
                         sx={{
-                          color: (theme) => theme.palette.primary.main,
-                          fontSize: "1.2rem",
+                          fontWeight: 600,
+                          mb: 2,
+                          fontSize: { xs: "1.1rem", md: "1.25rem" },
+                          color: (theme) => theme.palette.text.primary,
                         }}
-                      />
-                      <Box>
-                        <Typography
-                          variant="caption"
-                          sx={{ color: "text.secondary", display: "block" }}
-                        >
-                          Category
-                        </Typography>
-                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                          {product.category}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                      }}
-                    >
-                      <InventoryIcon
+                      >
+                        Product Information
+                      </Typography>
+                      <Divider sx={{ mb: 2 }} />
+                      <Box
                         sx={{
-                          color: (theme) => theme.palette.primary.main,
-                          fontSize: "1.2rem",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 2,
                         }}
-                      />
-                      <Box>
-                        <Typography
-                          variant="caption"
-                          sx={{ color: "text.secondary", display: "block" }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
                         >
-                          SKU
-                        </Typography>
-                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                          {product.sku}
-                        </Typography>
+                          <CategoryIcon
+                            sx={{
+                              color: (theme) => theme.palette.primary.main,
+                              fontSize: "1.2rem",
+                            }}
+                          />
+                          <Box>
+                            <Typography
+                              variant="caption"
+                              sx={{ color: "text.secondary", display: "block" }}
+                            >
+                              Category
+                            </Typography>
+                            <Typography
+                              variant="body1"
+                              sx={{ fontWeight: 500 }}
+                            >
+                              {product.category}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <InventoryIcon
+                            sx={{
+                              color: (theme) => theme.palette.primary.main,
+                              fontSize: "1.2rem",
+                            }}
+                          />
+                          <Box>
+                            <Typography
+                              variant="caption"
+                              sx={{ color: "text.secondary", display: "block" }}
+                            >
+                              SKU
+                            </Typography>
+                            <Typography
+                              variant="body1"
+                              sx={{ fontWeight: 500 }}
+                            >
+                              {product.sku}
+                            </Typography>
+                          </Box>
+                        </Box>
                       </Box>
-                    </Box>
-                  </Box>
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
                 </Grid>
 
                 {/* Highlights Card */}
                 <Grid size={{ xs: 12, md: 8 }}>
-              <Card
-                elevation={0}
-                sx={{
-                  height: "100%",
-                  borderRadius: 3,
-                  border: (theme) =>
-                    `1px solid ${theme.palette.text.primary}20`,
-                  backgroundColor: (theme) => theme.palette.background.paper,
-                }}
-              >
-                <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
-                  <Typography
-                    variant="h6"
+                  <Card
+                    elevation={0}
                     sx={{
-                      fontWeight: 600,
-                      mb: 2,
-                      fontSize: { xs: "1.1rem", md: "1.25rem" },
-                      color: (theme) => theme.palette.text.primary,
+                      height: "100%",
+                      borderRadius: 3,
+                      border: (theme) =>
+                        `1px solid ${theme.palette.text.primary}20`,
+                      backgroundColor: (theme) =>
+                        theme.palette.background.paper,
                     }}
                   >
-                    Highlights
-                  </Typography>
-                  <Divider sx={{ mb: 3 }} />
-                  <Box
-                    sx={{
-                      "& p": {
-                        fontSize: "1rem",
-                        lineHeight: 1.8,
-                        color: (theme) => theme.palette.text.primary,
-                        mb: 2,
-                        "&:last-child": { mb: 0 },
-                      },
-                    }}
-                  >
-                    {product.highlights && product.highlights.includes("\n") ? (
-                      product.highlights.split("\n").map((paragraph, index) => (
-                        <Typography key={index} component="p">
-                          {paragraph.trim()}
-                        </Typography>
-                      ))
-                    ) : (
-                      <Typography component="p">
-                        {product.highlights || "No highlights available."}
+                    <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 600,
+                          mb: 2,
+                          fontSize: { xs: "1.1rem", md: "1.25rem" },
+                          color: (theme) => theme.palette.text.primary,
+                        }}
+                      >
+                        Highlights
                       </Typography>
-                    )}
-                  </Box>
-                </CardContent>
-              </Card>
+                      <Divider sx={{ mb: 3 }} />
+                      <Box
+                        sx={{
+                          "& p": {
+                            fontSize: "1rem",
+                            lineHeight: 1.8,
+                            color: (theme) => theme.palette.text.primary,
+                            mb: 2,
+                            "&:last-child": { mb: 0 },
+                          },
+                        }}
+                      >
+                        {product?.highlights &&
+                        product?.highlights?.includes("\n") ? (
+                          product.highlights
+                            .split("\n")
+                            .map((paragraph, index) => (
+                              <Typography key={index} component="p">
+                                {paragraph.trim()}
+                              </Typography>
+                            ))
+                        ) : (
+                          <Typography component="p">
+                            {product?.highlights || "No highlights available."}
+                          </Typography>
+                        )}
+                      </Box>
+                    </CardContent>
+                  </Card>
                 </Grid>
 
                 {/* Description Card */}
                 <Grid size={{ xs: 12 }}>
-              <Card
-                elevation={0}
-                sx={{
-                  borderRadius: 3,
-                  border: (theme) =>
-                    `1px solid ${theme.palette.text.primary}20`,
-                  backgroundColor: (theme) => theme.palette.background.paper,
-                }}
-              >
-                <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
-                  <Typography
-                    variant="h6"
+                  <Card
+                    elevation={0}
                     sx={{
-                      fontWeight: 600,
-                      mb: 2,
-                      fontSize: { xs: "1.1rem", md: "1.25rem" },
-                      color: (theme) => theme.palette.text.primary,
+                      borderRadius: 3,
+                      border: (theme) =>
+                        `1px solid ${theme.palette.text.primary}20`,
+                      backgroundColor: (theme) =>
+                        theme.palette.background.paper,
                     }}
                   >
-                    Additional Details
-                  </Typography>
-                  <Divider sx={{ mb: 3 }} />
-                  <Box
-                    sx={{
-                      "& p": {
-                        fontSize: "1rem",
-                        lineHeight: 1.8,
-                        color: (theme) => theme.palette.text.primary,
-                        mb: 2,
-                        "&:last-child": { mb: 0 },
-                      },
-                    }}
-                  >
-                    {product.description &&
-                    product.description.includes("\n") ? (
-                      product.description
-                        .split("\n")
-                        .map((paragraph, index) => (
-                          <Typography key={index} variant="body1">
-                            {paragraph.trim()}
-                          </Typography>
-                        ))
-                    ) : (
-                      <Typography variant="body1">
-                        {product.description ||
-                          "No additional details available."}
+                    <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 600,
+                          mb: 2,
+                          fontSize: { xs: "1.1rem", md: "1.25rem" },
+                          color: (theme) => theme.palette.text.primary,
+                        }}
+                      >
+                        Additional Details
                       </Typography>
-                    )}
-                  </Box>
-                </CardContent>
-              </Card>
+                      <Divider sx={{ mb: 3 }} />
+                      <Box
+                        sx={{
+                          "& p": {
+                            fontSize: "1rem",
+                            lineHeight: 1.8,
+                            color: (theme) => theme.palette.text.primary,
+                            mb: 2,
+                            "&:last-child": { mb: 0 },
+                          },
+                        }}
+                      >
+                        {product?.description &&
+                        product?.description.includes("\n") ? (
+                          product.description
+                            .split("\n")
+                            .map((paragraph, index) => (
+                              <Typography key={index} variant="body1">
+                                {paragraph.trim()}
+                              </Typography>
+                            ))
+                        ) : (
+                          <Typography variant="body1">
+                            {product.description ||
+                              "No additional details available."}
+                          </Typography>
+                        )}
+                      </Box>
+                    </CardContent>
+                  </Card>
                 </Grid>
 
                 {/* Review section */}
                 <Grid size={{ xs: 12 }}>
-              <Card
-                elevation={0}
-                sx={{
-                  borderRadius: 3,
-                  border: (theme) =>
-                    `1px solid ${theme.palette.text.primary}20`,
-                  backgroundColor: (theme) => theme.palette.background.paper,
-                }}
-              >
-                <CardContent
-                  sx={{
-                    width: "100%",
-                    textAlign: "left",
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  <Typography
-                    variant="h6"
+                  <Card
+                    elevation={0}
                     sx={{
-                      fontWeight: 600,
-                      mb: 2,
-                      fontSize: { xs: "1.1rem", md: "1.25rem" },
-                      color: (theme) => theme.palette.text.primary,
+                      borderRadius: 3,
+                      border: (theme) =>
+                        `1px solid ${theme.palette.text.primary}20`,
+                      backgroundColor: (theme) =>
+                        theme.palette.background.paper,
                     }}
                   >
-                    Reviews
-                  </Typography>
-                  <Divider sx={{ mb: 3 }} />
-                  <Typography variant="subtitle1" color="textSecondary" mb={2}>
-                    Note: The user must be logged in and have purchased this
-                    product to write a review.
-                  </Typography>
-                  {/* Review form for new review, UI when user haven't logged in */}
-                  <ReviewForm product={product} reviews={reviews} />
-                  {reviews.length > 0 && (
-                    <Box sx={{ mt: 4 }}>
-                      <Stack
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
+                    <CardContent
+                      sx={{
+                        width: "100%",
+                        textAlign: "left",
+                        alignSelf: "flex-start",
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 600,
+                          mb: 2,
+                          fontSize: { xs: "1.1rem", md: "1.25rem" },
+                          color: (theme) => theme.palette.text.primary,
+                        }}
+                      >
+                        Reviews
+                      </Typography>
+                      <Divider sx={{ mb: 3 }} />
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
                         mb={2}
                       >
-                        <Stack
-                          direction="row"
-                          alignItems="flex-end"
-                          spacing={1}
-                          flexShrink={0}
-                        >
-                          <RatingDisplay rating={averageRating} />
-                          <Typography variant="body2" color="textSecondary">
-                            {ratingCount} ratings
-                          </Typography>
-                        </Stack>
-                        <Stack direction="row">
-                          <Select
-                            value={sortOrder}
-                            onChange={(e) => setSortOrder(e.target.value)}
-                            sx={{
-                              "& .MuiOutlinedInput-notchedOutline": {
-                                border: "none",
-                              },
-                            }}
+                        Note: The user must be logged in and have purchased this
+                        product to write a review.
+                      </Typography>
+                      {/* Review form for new review, UI when user haven't logged in */}
+                      <ReviewForm product={product} reviews={reviews} />
+                      {reviews.length > 0 && (
+                        <Box sx={{ mt: 4 }}>
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            mb={2}
                           >
-                            <MenuItem value="newest">Newest</MenuItem>
-                            <MenuItem value="oldest">Oldest</MenuItem>
-                          </Select>
-                          <Select
-                            value={starFilter}
-                            onChange={(e) => setStarFilter(e.target.value)}
-                            sx={{
-                              "& .MuiOutlinedInput-notchedOutline": {
-                                border: "none",
-                              },
-                            }}
-                          >
-                            <MenuItem value="all">All stars</MenuItem>
-                            {ratingCountPerStar.map(({ star, count }) => (
-                              <MenuItem value={star} key={star}>
-                                <Stack
-                                  direction="row"
-                                  alignItems="center"
-                                  spacing={1}
-                                >
-                                  <Typography variant="body2">
-                                    {star}
-                                  </Typography>
-                                  <Typography
-                                    variant="body2"
-                                    sx={{ color: "#f9af04" }}
-                                  >
-                                    ★
-                                  </Typography>
-                                  <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                    component="span"
-                                  >
-                                    {" "}
-                                    ({count})
-                                  </Typography>
-                                </Stack>
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </Stack>
-                      </Stack>
-                      {filteredAndSortedReviews.map((r) => (
-                        <ReviewCard key={r.id} review={r} />
-                      ))}
-                      {filteredAndSortedReviews.length === 0 && (
-                        <Typography
-                          variant="body1"
-                          sx={{ color: (theme) => theme.palette.text.primary }}
-                        >
-                          No reviews found matching the selected star
-                        </Typography>
+                            <Stack
+                              direction="row"
+                              alignItems="flex-end"
+                              spacing={1}
+                              flexShrink={0}
+                            >
+                              <RatingDisplay rating={averageRating} />
+                              <Typography variant="body2" color="textSecondary">
+                                {ratingCount} ratings
+                              </Typography>
+                            </Stack>
+                            <Stack direction="row">
+                              <Select
+                                value={sortOrder}
+                                onChange={(e) => setSortOrder(e.target.value)}
+                                sx={{
+                                  "& .MuiOutlinedInput-notchedOutline": {
+                                    border: "none",
+                                  },
+                                }}
+                              >
+                                <MenuItem value="newest">Newest</MenuItem>
+                                <MenuItem value="oldest">Oldest</MenuItem>
+                              </Select>
+                              <Select
+                                value={starFilter}
+                                onChange={(e) => setStarFilter(e.target.value)}
+                                sx={{
+                                  "& .MuiOutlinedInput-notchedOutline": {
+                                    border: "none",
+                                  },
+                                }}
+                              >
+                                <MenuItem value="all">All stars</MenuItem>
+                                {ratingCountPerStar.map(({ star, count }) => (
+                                  <MenuItem value={star} key={star}>
+                                    <Stack
+                                      direction="row"
+                                      alignItems="center"
+                                      spacing={1}
+                                    >
+                                      <Typography variant="body2">
+                                        {star}
+                                      </Typography>
+                                      <Typography
+                                        variant="body2"
+                                        sx={{ color: "#f9af04" }}
+                                      >
+                                        ★
+                                      </Typography>
+                                      <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                        component="span"
+                                      >
+                                        {" "}
+                                        ({count})
+                                      </Typography>
+                                    </Stack>
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </Stack>
+                          </Stack>
+                          {filteredAndSortedReviews.map((r) => (
+                            <ReviewCard key={r.id} review={r} />
+                          ))}
+                          {filteredAndSortedReviews.length === 0 && (
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                color: (theme) => theme.palette.text.primary,
+                              }}
+                            >
+                              No reviews found matching the selected star
+                            </Typography>
+                          )}
+                        </Box>
                       )}
-                    </Box>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
             </Grid>
 
             {/* Right Side - Contact Form Sidebar */}
