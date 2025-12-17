@@ -34,8 +34,6 @@ A full-stack web application for blogs, products, and services with authenticati
 - [Backend Overview](#backend-overview)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
-- [Folder Structure](#folder-structure)
-- [Notes](#notes)
 - [Assets & Credits](#assets--credits)
 
 ## Features
