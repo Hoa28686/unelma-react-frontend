@@ -15,10 +15,10 @@ export const fetchFavorites = createAsyncThunk(
   "favorites/fetchFavorites",
   async ({ token }, { rejectWithValue }) => {
     try {
-      const res = await axios.get(favoriteAPI, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.data.data;
+    const res = await axios.get(favoriteAPI, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data.data;
     } catch (error) {
       // If 401/403, the global interceptor will handle auth cleanup
       // Just reject with the error for the slice to handle

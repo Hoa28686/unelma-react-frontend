@@ -17,6 +17,11 @@ import {
   Stack,
   TextField,
   Typography,
+  Grid,
+  Card,
+  CardContent,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -26,6 +31,7 @@ import {
   selectItem,
   handleCategoryClick,
   textFieldStyles,
+  placeholderLogo,
 } from "../../helpers/helpers";
 import HandleBackButton from "../../components/HandleBackButton";
 import axios from "axios";
@@ -36,6 +42,8 @@ import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndC
 import SuggestedBlog from "../../components/blog/SuggestedBlog";
 import useScrollToTop from "../../hooks/useScrollToTop";
 import ParagraphText from "../../components/blog/ParagraphText";
+import { useContactForm } from "../../hooks/useContactForm";
+import StyledTextField from "../../components/StyledTextField";
 
 function BlogDetail() {
   const { id, slug } = useParams();
@@ -48,6 +56,17 @@ function BlogDetail() {
   const { selectedBlog, loading, error, blogs } = useSelector(
     (state) => state.blogs
   );
+
+  // Contact form hook for query sidebar
+  const {
+    formData,
+    loading: queryLoading,
+    submitStatus,
+    fieldErrors,
+    handleChange: handleQueryChange,
+    handleSubmit: handleQuerySubmit,
+  } = useContactForm({ name: "", email: "", message: "" });
+
   // scroll to top when id changes
   useScrollToTop([id]);
 
@@ -171,44 +190,29 @@ function BlogDetail() {
 
   // main component render
   return (
-    <>
-      <HandleBackButton content="Blog List" link="/blogs" />
-      <Box
-        sx={{
-          position: "relative",
-          width: "100%",
-          minHeight: "100vh",
-          py: { xs: 3, sm: 4, md: 5 },
-          gap: 3,
-          backgroundColor: (theme) => theme.palette.background.default,
-        }}
-      >
-        {/* Content */}
-
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: (theme) => theme.palette.background.default,
+      }}
+    >
+      {/* Hero Image Section */}
+      {(selectedBlog?.featured_image_local_url ||
+        selectedBlog?.featured_image_url ||
+        selectedBlog?.featured_image ||
+        selectedBlog?.image_local_url ||
+        selectedBlog?.image_url) && (
         <Box
           sx={{
-            width: { xs: "95%", sm: "90%", md: "80%", lg: "60%" },
-            margin: "auto",
-            display: "flex",
-            flexDirection: "column",
-            gap: 3,
+            position: "relative",
+            width: "100%",
+            height: { xs: "300px", sm: "400px", md: "500px" },
+            overflow: "hidden",
+            backgroundColor: (theme) => theme.palette.background.default,
           }}
         >
-          {selectedBlog.category && (
-            <Typography
-              variant="subtitle1"
-              sx={{
-                color: (theme) => theme.palette.text.secondary,
-                textTransform: "uppercase",
-                cursor: "pointer",
-              }}
-              onClick={() =>
-                handleCategoryClick(selectedBlog.category, navigate)
-              }
-            >
-              {selectedBlog.category}
-            </Typography>
-          )}
           <Box
             component="img"
             src={getImageUrl(
@@ -219,42 +223,106 @@ function BlogDetail() {
                 selectedBlog?.image_url
             )}
             alt={selectedBlog.title}
+            onError={(e) => {
+              e.target.src = placeholderLogo;
+            }}
             sx={{
               width: "100%",
-              borderRadius: 2,
+              height: "100%",
               objectFit: "cover",
-              maxHeight: "500px",
-              backgroundColor: (theme) => theme.palette.background.paper,
             }}
           />
-          <Typography
-            variant="h4"
-            component="h1"
+          {/* Overlay gradient for better text readability */}
+          <Box
             sx={{
-              fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
-              fontWeight: 700,
-              color: (theme) => theme.palette.text.primary,
-              textAlign: "center",
-              width: "100%",
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: "50%",
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+            }}
+          />
+        </Box>
+      )}
+
+      {/* Content */}
+      <Box
+        sx={{
+          position: "relative",
+          minHeight: "100vh",
+          width: "100%",
+          padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
+        }}
+      >
+        <Box
+          sx={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          {/* Back Button */}
+          <Box sx={{ mb: { xs: 2, sm: 3 } }}>
+            <HandleBackButton content="Blog List" link="/blogs" />
+          </Box>
+
+          {/* Blog Header */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              marginBottom: { xs: "2rem", sm: "3rem" },
+              flexWrap: "wrap",
             }}
           >
-            {selectedBlog.title}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              color: (theme) => theme.palette.text.secondary,
-              textAlign: "center",
-              width: "100%",
-              fontSize: { xs: "0.875rem", sm: "1rem" },
-            }}
-          >
-            {selectedBlog.author_name} •{" "}
-            {timeConversion(selectedBlog.created_at)}
-          </Typography>
-          <Box sx={{ alignSelf: "center" }}>
+            {selectedBlog.category && (
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  color: (theme) => theme.palette.text.secondary,
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                }}
+                onClick={() =>
+                  handleCategoryClick(selectedBlog.category, navigate)
+                }
+              >
+                {selectedBlog.category}
+              </Typography>
+            )}
+            <Typography
+              variant="h2"
+              component="h1"
+              sx={{
+                fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+                fontWeight: 700,
+                color: (theme) => theme.palette.text.primary,
+                flex: 1,
+              }}
+            >
+              {selectedBlog.title}
+            </Typography>
             <FavoriteButtonAndCount type="blog" item={selectedBlog} />
           </Box>
+
+          {/* Main Content and Sidebar Layout */}
+          <Grid container spacing={4} sx={{ alignItems: "flex-start", mb: 4 }}>
+            {/* Left Side - Main Content */}
+            <Grid size={{ xs: 12, md: 8 }}>
+              {/* Author and Date */}
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  color: (theme) => theme.palette.text.secondary,
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                  mb: 2,
+                }}
+              >
+                {selectedBlog.author_name} •{" "}
+                {timeConversion(selectedBlog.created_at)}
+              </Typography>
           <Box
             sx={{
               width: "100%",
@@ -478,11 +546,131 @@ function BlogDetail() {
               </Box>
             )}
           </Box>
+            </Grid>
+
+            {/* Right Side - Contact Form Sidebar */}
+            <Grid size={{ xs: 12, md: 4 }}>
+              <Box
+                sx={{
+                  position: { md: "sticky" },
+                  top: { md: "2rem" },
+                }}
+              >
+                <Card
+                  sx={{
+                    backgroundColor: (theme) => theme.palette.background.paper,
+                    border: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "1px solid rgba(255, 255, 255, 0.1)"
+                        : "1px solid rgba(0, 0, 0, 0.1)",
+                    borderRadius: 2,
+                    padding: { xs: "2rem", sm: "2.5rem" },
+                  }}
+                >
+                  <Typography
+                    variant="h3"
+                    component="h2"
+                    sx={{
+                      fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
+                      fontWeight: 600,
+                      color: (theme) => theme.palette.text.primary,
+                      marginBottom: { xs: "1.5rem", sm: "2rem" },
+                    }}
+                  >
+                    Have Query?
+                  </Typography>
+                  <Box component="form" onSubmit={handleQuerySubmit}>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    >
+                      <StyledTextField
+                        name="name"
+                        label="Your Name"
+                        fullWidth
+                        required
+                        value={formData.name}
+                        onChange={handleQueryChange}
+                        error={!!fieldErrors.name}
+                        helperText={fieldErrors.name}
+                      />
+                      <StyledTextField
+                        name="email"
+                        label="Your Email"
+                        type="email"
+                        fullWidth
+                        required
+                        value={formData.email}
+                        onChange={handleQueryChange}
+                        error={!!fieldErrors.email}
+                        helperText={fieldErrors.email}
+                      />
+                      <StyledTextField
+                        name="message"
+                        label="Your Message"
+                        fullWidth
+                        required
+                        multiline
+                        rows={4}
+                        value={formData.message}
+                        onChange={handleQueryChange}
+                        error={!!fieldErrors.message}
+                        helperText={fieldErrors.message}
+                      />
+                      {submitStatus.success !== null && (
+                        <Alert
+                          severity={submitStatus.success ? "success" : "error"}
+                          sx={{
+                            mt: 1,
+                            "& .MuiAlert-message": {
+                              color: (theme) =>
+                                submitStatus.success
+                                  ? theme.palette.success.main
+                                  : theme.palette.error.main,
+                            },
+                          }}
+                        >
+                          {submitStatus.message}
+                        </Alert>
+                      )}
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        disabled={queryLoading}
+                        sx={{
+                          padding: { xs: "0.75rem", sm: "1rem" },
+                          "&:disabled": {
+                            opacity: 0.6,
+                          },
+                        }}
+                      >
+                        {queryLoading ? (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <CircularProgress size={20} color="inherit" />
+                            Sending...
+                          </Box>
+                        ) : (
+                          "Submit Request"
+                        )}
+                      </Button>
+                    </Box>
+                  </Box>
+                </Card>
+              </Box>
+            </Grid>
+          </Grid>
+
+          {/* Suggested Blogs */}
+          <SuggestedBlog currentBlog={selectedBlog} allBlogs={blogs} />
         </Box>
-        {/* Suggested Blogs */}
-        <SuggestedBlog currentBlog={selectedBlog} allBlogs={blogs} />
       </Box>
-    </>
+    </Box>
   );
 }
 

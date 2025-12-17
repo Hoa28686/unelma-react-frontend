@@ -1,12 +1,18 @@
 import React, { useState, useRef } from "react";
-import { Box, Typography, Grid, IconButton } from "@mui/material";
+import { Box, Typography, Grid, IconButton, Card, CardContent, Chip, Avatar, Link } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ComputerIcon from "@mui/icons-material/Computer";
 import SecurityIcon from "@mui/icons-material/Security";
 import PeopleIcon from "@mui/icons-material/People";
 import PublicIcon from "@mui/icons-material/Public";
+import CodeIcon from "@mui/icons-material/Code";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import DesignServicesIcon from "@mui/icons-material/DesignServices";
+import StorageIcon from "@mui/icons-material/Storage";
+import EmailIcon from "@mui/icons-material/Email";
 import globalMapImage from "../assets/global_office_presence.png";
 import heroVideo from "../assets/hero_video.mp4?url";
+import { placeholderLogo } from "../helpers/helpers";
 
 function About() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -513,6 +519,210 @@ function About() {
                 </Box>
               </Box>
             </Box>
+          </Box>
+
+          {/* Team/Contributors Section */}
+          <Box
+            sx={{
+              marginTop: { xs: "4rem", sm: "5rem", md: "6rem" },
+            }}
+          >
+            <Typography
+              variant="h2"
+              component="h2"
+              sx={{
+                fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+                fontWeight: 700,
+                color: (theme) =>
+                  theme.palette.mode === "light"
+                    ? theme.palette.text.primary
+                    : "#FFFFFF",
+                marginBottom: { xs: "2rem", sm: "3rem" },
+                textAlign: "center",
+              }}
+            >
+              Our Team
+            </Typography>
+            <Grid container spacing={4} justifyContent="center">
+              {[
+                {
+                  name: "Binyam Angamo",
+                  roles: ["UI Design", "Style Guide", "Frontend Contributions", "Backend Contributions"],
+                  icon: DesignServicesIcon,
+                  profilePicture: null, // Set to profile picture URL when available
+                  linkedinUrl: "https://www.linkedin.com/in/binyam-angamo-0611172b9",
+                },
+                {
+                  name: "Lu Hoa",
+                  roles: ["Frontend Lead", "Backend Contributions"],
+                  icon: CodeIcon,
+                  profilePicture: null,
+                  linkedinUrl: null, // Add LinkedIn URL when available
+                },
+                {
+                  name: "Elias Bekele",
+                  roles: ["Backend Lead", "Authentication", "Payment System", "API Integration"],
+                  icon: VpnKeyIcon,
+                  profilePicture: null,
+                  linkedinUrl: null, // Add LinkedIn URL when available
+                },
+                {
+                  name: "Basudev Pokharel",
+                  roles: ["Backend Lead", "DB Integration"],
+                  icon: StorageIcon,
+                  profilePicture: null,
+                  linkedinUrl: null, // Add LinkedIn URL when available
+                },
+                {
+                  name: "Shihab Mahfuz",
+                  roles: ["Common Email", "Footer Content"],
+                  icon: EmailIcon,
+                  profilePicture: null,
+                  linkedinUrl: null, // Add LinkedIn URL when available
+                },
+              ].map((member, index) => {
+                const IconComponent = member.icon;
+                return (
+                  <Grid size={{ xs: 12 }} key={index}>
+                    <Card
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === "light"
+                            ? theme.palette.background.paper
+                            : "transparent",
+                        border: (theme) =>
+                          theme.palette.mode === "light"
+                            ? "1px solid rgba(0, 0, 0, 0.1)"
+                            : "1px solid rgba(255, 255, 255, 0.1)",
+                        borderRadius: 2,
+                        padding: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
+                        overflow: "visible",
+                        position: "relative",
+                        transition: "all 0.3s ease",
+                        minHeight: { xs: 120, sm: 140, md: 160 },
+                        "&:hover": {
+                          transform: "translateY(-4px)",
+                          borderColor: (theme) => theme.palette.primary.main,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          left: { xs: -40, sm: -50, md: -60 },
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          zIndex: 1,
+                        }}
+                      >
+                        <Link
+                          href={member.linkedinUrl || undefined}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            if (!member.linkedinUrl) {
+                              e.preventDefault();
+                            }
+                          }}
+                          sx={{
+                            textDecoration: "none",
+                            cursor: member.linkedinUrl ? "pointer" : "default",
+                            display: "block",
+                          }}
+                        >
+                          <Avatar
+                            src={member.profilePicture || undefined}
+                            alt={member.name}
+                            sx={{
+                              width: { xs: 80, sm: 100, md: 120 },
+                              height: { xs: 80, sm: 100, md: 120 },
+                              border: (theme) =>
+                                theme.palette.mode === "light"
+                                  ? `3px solid ${theme.palette.primary.main}`
+                                  : `3px solid ${theme.palette.primary.light}`,
+                              boxShadow: (theme) =>
+                                theme.palette.mode === "light"
+                                  ? `0 4px 12px ${theme.palette.primary.main}30`
+                                  : `0 4px 12px ${theme.palette.primary.light}30`,
+                              backgroundColor: (theme) => theme.palette.primary.main,
+                              color: "#FFFFFF",
+                              transition: "all 0.3s ease",
+                              "&:hover": member.linkedinUrl
+                                ? {
+                                    transform: "scale(1.05)",
+                                    boxShadow: (theme) =>
+                                      theme.palette.mode === "light"
+                                        ? `0 6px 16px ${theme.palette.primary.main}50`
+                                        : `0 6px 16px ${theme.palette.primary.light}50`,
+                                  }
+                                : {},
+                            }}
+                          >
+                            <IconComponent sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />
+                          </Avatar>
+                        </Link>
+                      </Box>
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          flex: 1,
+                          p: 0,
+                          paddingLeft: { xs: 4, sm: 5, md: 6 },
+                        }}
+                      >
+                        <Typography
+                          variant="h5"
+                          component="h3"
+                          sx={{
+                            fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
+                            fontWeight: 600,
+                            color: (theme) => theme.palette.text.primary,
+                            marginBottom: 2,
+                            textAlign: "left",
+                          }}
+                        >
+                          {member.name}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            gap: 1,
+                            width: "100%",
+                          }}
+                        >
+                          {member.roles.map((role, roleIndex) => (
+                            <Chip
+                              key={roleIndex}
+                              label={role}
+                              size="small"
+                              sx={{
+                                fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                                height: { xs: 24, sm: 28 },
+                                backgroundColor: (theme) =>
+                                  theme.palette.mode === "light"
+                                    ? `${theme.palette.primary.main}15`
+                                    : `${theme.palette.primary.main}25`,
+                                color: (theme) => theme.palette.text.primary,
+                                border: (theme) =>
+                                  theme.palette.mode === "light"
+                                    ? `1px solid ${theme.palette.primary.main}30`
+                                    : `1px solid ${theme.palette.primary.main}40`,
+                              }}
+                            />
+                          ))}
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                );
+              })}
+            </Grid>
           </Box>
         </Box>
       </Box>
