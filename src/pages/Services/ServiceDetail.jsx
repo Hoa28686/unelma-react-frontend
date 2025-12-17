@@ -36,6 +36,7 @@ import { commonButtonStyles } from "../../constants/styles";
 import { useAuth } from "../../context/AuthContext";
 import { createCheckoutSession } from "../../lib/api/paymentService";
 import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
+import SuggestedServices from "../../components/service/SuggestedServices";
 
 // Helper function to map service name to icon
 const getServiceIcon = (serviceName) => {
@@ -700,6 +701,9 @@ function ServiceDetail() {
           </Grid>
         </Box>
       </Box>
+
+      {/* Suggested Services */}
+      <SuggestedServices currentService={selectedService} allServices={services} />
 
       {/* Payment Error Alert */}
       {paymentError && (

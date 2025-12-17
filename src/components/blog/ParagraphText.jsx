@@ -4,7 +4,9 @@ import React from "react";
 function ParagraphText({ text, variant = "body1" }) {
   if (!text) return null;
 
-  return text.split("\n").map((paragraph, index) => (
+  const normalizedText = text.replace(/\\n/g, "\n");
+
+  return normalizedText.split("\n").map((paragraph, index) => (
     <Typography
       variant={variant}
       key={index}

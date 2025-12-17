@@ -13,9 +13,9 @@ import {
 } from "../../helpers/helpers";
 import { useNavigate } from "react-router";
 import FavoriteButtonAndCount from "../favorite/FavoriteButtonAndCount";
-import RatingDisplay from "../RatingDisplay";
-import PriceDisplay from "../PriceDisplay";
 import Chip from "@mui/material/Chip";
+import RatingDisplay from "../productReview/RatingDisplay";
+import PriceDisplay from "./PriceDisplay";
 
 function SuggestedProducts({ currentProduct, allProducts }) {
   const navigate = useNavigate();
@@ -107,7 +107,15 @@ function SuggestedProducts({ currentProduct, allProducts }) {
                 backgroundColor: (theme) => theme.palette.background.paper,
               }}
             />
-            <Box sx={{ p: 2, width: "100%", flex: 1, display: "flex", flexDirection: "column" }}>
+            <Box
+              sx={{
+                p: 2,
+                width: "100%",
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               {product.category && (
                 <Typography
                   variant="subtitle1"
@@ -123,7 +131,15 @@ function SuggestedProducts({ currentProduct, allProducts }) {
               <CardHeader
                 onClick={() => handleProductClick(product)}
                 title={
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", mb: 0.5 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      flexWrap: "wrap",
+                      mb: 0.5,
+                    }}
+                  >
                     <Typography
                       variant="h6"
                       component="h2"
@@ -136,7 +152,8 @@ function SuggestedProducts({ currentProduct, allProducts }) {
                     >
                       {product.name}
                     </Typography>
-                    {(product.payment_type === "subscription" || product.paymentType === "subscription") && (
+                    {(product.payment_type === "subscription" ||
+                      product.paymentType === "subscription") && (
                       <Chip
                         label="Subscription"
                         size="small"
@@ -144,7 +161,7 @@ function SuggestedProducts({ currentProduct, allProducts }) {
                           height: 20,
                           fontSize: "0.7rem",
                           backgroundColor: "#E57A44",
-                          color: "#FFFFFF"
+                          color: "#FFFFFF",
                         }}
                       />
                     )}
@@ -189,4 +206,3 @@ function SuggestedProducts({ currentProduct, allProducts }) {
 }
 
 export default SuggestedProducts;
-

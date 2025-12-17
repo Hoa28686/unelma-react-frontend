@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../store/slices/cart/cartSlice";
+import { addToCart } from "../../store/slices/cart/cartSlice";
 
 function AddToCart({ product }) {
   const dispatch = useDispatch();

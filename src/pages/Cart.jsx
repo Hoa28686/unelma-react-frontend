@@ -21,10 +21,10 @@ import {
   updateQuantity,
   clearCart,
 } from "../store/slices/cart/cartSlice";
-import PriceDisplay from "../components/PriceDisplay";
 import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 import { createCartCheckoutSession } from "../lib/api/paymentService";
 import { getAuthToken } from "../utils/authUtils";
+import PriceDisplay from "../components/product/PriceDisplay";
 
 function Cart() {
   const dispatch = useDispatch();

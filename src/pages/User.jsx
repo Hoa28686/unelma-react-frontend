@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
   Box,
@@ -45,10 +46,15 @@ import { useContactForm } from "../hooks/useContactForm";
 import { useAuth } from "../context/AuthContext";
 import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 import { API } from "../api";
+import { fetchProducts } from "../store/slices/products/productsSlice";
 
 function User() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, token } = useAuth();
+  const products = useSelector((state) => state.products.products);
   const [activeTab, setActiveTab] = useState(0);
   const [userProfileTab, setUserProfileTab] = useState(0); // Tab for authenticated user (Profile, Purchases, Subscriptions, Settings)
   const [showPassword, setShowPassword] = useState(false);
@@ -93,8 +99,7 @@ function User() {
     handleSubmit: handleQuerySubmit,
   } = useContactForm({ name: "", email: "", message: "" });
 
-  const navigate = useNavigate();
-  const { user, token, loading, error, login, logout, clearError } = useAuth();
+  const { loading, error, login, logout, clearError } = useAuth();
 
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerError, setRegisterError] = useState(null);
@@ -126,6 +131,22 @@ function User() {
       });
     }
   }, [user]);
+
+  // Fetch products to get product names for purchases (fallback if item_name is not available)
+  useEffect(() => {
+    if (!products || products.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [products, dispatch]);
+
+  // Helper function to get product name by product_id (fallback if item_name is not available)
+  const getProductName = (productId) => {
+    if (!productId || !products || products.length === 0) return null;
+    const product = products.find((p) => {
+      return p.id === Number(productId) || p.id === productId || String(p.id) === String(productId);
+    });
+    return product?.name || product?.title || null;
+  };
 
   // Fetch purchases (one-time payments) when user is logged in
   useEffect(() => {
@@ -776,6 +797,29 @@ function User() {
                     "&.Mui-selected": {
                       color: (theme) => theme.palette.primary.main,
                     },
+                    "&:focus": {
+                      outline: "none",
+                    },
+                    "&:focus-visible": {
+                      outline: "none",
+                    },
+                    "&:active": {
+                      outline: "none",
+                    },
+                    "& .MuiTouchRipple-root": {
+                      display: "none",
+                    },
+                  },
+                  "& .MuiButtonBase-root": {
+                    "&:focus": {
+                      outline: "none",
+                    },
+                    "&:focus-visible": {
+                      outline: "none",
+                    },
+                    "&:active": {
+                      outline: "none",
+                    },
                   },
                   "& .MuiTabs-indicator": {
                     backgroundColor: (theme) => theme.palette.primary.main,
@@ -1094,33 +1138,23 @@ function User() {
                             </Box>
                             <Box sx={{ mb: 2 }}>
                               {/* Check if purchase has items array */}
-                              {(
-                                purchase.items ||
-                                purchase.order_items ||
-                                purchase.purchase_items ||
-                                []
-                              ).length > 0 ? (
-                                (
-                                  purchase.items ||
-                                  purchase.order_items ||
-                                  purchase.purchase_items ||
-                                  []
-                                ).map((item, idx) => {
-                                  const itemName =
-                                    typeof item === "string"
-                                      ? item
-                                      : item.name ||
-                                        item.product_name ||
-                                        item.service_name ||
-                                        "Item";
-                                  const quantity =
-                                    typeof item === "object"
-                                      ? item.quantity ||
-                                        item.qty ||
-                                        item.amount ||
-                                        1
-                                      : 1;
-
+                              {(purchase.items || purchase.order_items || purchase.purchase_items || []).length > 0 ? (
+                                (purchase.items || purchase.order_items || purchase.purchase_items || []).map((item, idx) => {
+                                  // Try to get product name from products array using product_id
+                                  const productId = typeof item === "object" 
+                                    ? (item.product_id || item.productId || item.id)
+                                    : null;
+                                  const productName = productId ? getProductName(productId) : null;
+                                  
+                                  // Fallback to item name if product not found in products array
+                                  const itemName = productName || 
+                                    (typeof item === "string" 
+                                      ? item 
+                                      : item.name || item.product_name || item.service_name || "Item");
+                                  const quantity = typeof item === "object" 
+                                    ? (item.quantity || item.qty || item.amount || 1)
+                                    : 1;
+                                  
                                   return (
                                     <Typography
                                       key={idx}
@@ -1135,43 +1169,47 @@ function User() {
                               ) : (
                                 /* If no items array, check for purchase-level quantity or item info */
                                 <>
-                                  {purchase.product_name ||
-                                  purchase.service_name ||
-                                  purchase.name ? (
-                                    <Typography
-                                      variant="body2"
-                                      color="text.secondary"
-                                    >
-                                      •{" "}
-                                      {purchase.product_name ||
-                                        purchase.service_name ||
-                                        purchase.name}
-                                      {purchase.quantity ||
-                                      purchase.qty ||
-                                      purchase.total_quantity
-                                        ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})`
-                                        : ""}
-                                    </Typography>
-                                  ) : purchase.quantity ||
-                                    purchase.qty ||
-                                    purchase.total_quantity ? (
-                                    <Typography
-                                      variant="body2"
-                                      color="text.secondary"
-                                    >
-                                      Quantity:{" "}
-                                      {purchase.quantity ||
-                                        purchase.qty ||
-                                        purchase.total_quantity}
-                                    </Typography>
-                                  ) : (
-                                    <Typography
-                                      variant="body2"
-                                      color="text.secondary"
-                                    >
-                                      No item details available
-                                    </Typography>
-                                  )}
+                                  {(() => {
+                                    // Try to get product name from products array using product_id
+                                    const productId = purchase.product_id || purchase.productId;
+                                    const productName = productId ? getProductName(productId) : null;
+                                    
+                                    // Use item_name from backend (primary), or fallback to product lookup or other fields
+                                    // Check if item_name exists and is not empty/null
+                                    const itemName = purchase.item_name && purchase.item_name.trim() !== "" 
+                                      ? purchase.item_name 
+                                      : null;
+                                    
+                                    const displayName = itemName ||  // Primary: Backend provides item_name
+                                      productName ||  // Fallback: Lookup from products array
+                                      purchase.product_name || 
+                                      purchase.service_name || 
+                                      purchase.name;
+                                    
+                                    // Display product name if available, otherwise show generic "Product" for old purchases
+                                    if (displayName) {
+                                      return (
+                                        <Typography
+                                          variant="body2"
+                                          color="text.secondary"
+                                        >
+                                          • {displayName}
+                                          {(purchase.quantity || purchase.qty || purchase.total_quantity) ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})` : ""}
+                                        </Typography>
+                                      );
+                                    } else {
+                                      // Fallback for old purchases without item_name populated
+                                      return (
+                                        <Typography
+                                          variant="body2"
+                                          color="text.secondary"
+                                        >
+                                          • Product
+                                          {(purchase.quantity || purchase.qty || purchase.total_quantity) ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})` : ""}
+                                        </Typography>
+                                      );
+                                    }
+                                  })()}
                                 </>
                               )}
                             </Box>
@@ -1261,7 +1299,8 @@ function User() {
                                   }}
                                 >
                                   <Typography variant="h6">
-                                    {subscription.name ||
+                                    {subscription.item_name ||
+                                      subscription.name ||
                                       subscription.subscription_name ||
                                       subscription.service_name ||
                                       "Subscription"}

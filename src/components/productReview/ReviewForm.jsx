@@ -23,7 +23,6 @@ import { fetchPurchases } from "../../store/slices/products/purchasesSlice";
 
 function ReviewForm({ product, reviews }) {
   const [open, setOpen] = useState(false);
-  const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false);
   const { user, token } = useAuth();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.reviews.loading);
@@ -67,7 +66,7 @@ function ReviewForm({ product, reviews }) {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!newReview.feedback && newReview.rating === 0) return;
     if (newReview.rating === 0) {
@@ -76,7 +75,7 @@ function ReviewForm({ product, reviews }) {
     }
 
     try {
-      const result = await dispatch(
+      dispatch(
         submitReview({
           productId: product.id,
           rating: newReview.rating,
@@ -84,19 +83,6 @@ function ReviewForm({ product, reviews }) {
           token,
         })
       );
-
-      // Handle 403 purchase-required response
-      if (submitReview.rejected.match(result)) {
-        const error = result.payload;
-        console.log(error);
-
-        if (error?.status === 403) {
-          setPurchaseDialogOpen(true);
-          return;
-        }
-        alert(error?.message || "Failed to submit review");
-        return;
-      }
 
       // Success
       setNewReview({ rating: 0, feedback: "" });
@@ -202,28 +188,6 @@ function ReviewForm({ product, reviews }) {
           </Stack>
         </form>
       </Paper>
-
-      <Dialog
-        open={purchaseDialogOpen}
-        onClose={() => setPurchaseDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Purchase Required</DialogTitle>
-        <DialogContent>
-          <Typography>
-            You must purchase this product before you can rate or review it.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setPurchaseDialogOpen(false)}
-            variant="contained"
-          >
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
