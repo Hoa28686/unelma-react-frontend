@@ -20,7 +20,7 @@ export const fetchFavorites = createAsyncThunk(
       });
       return res.data.data;
     } catch (error) {
-      // If 401/403, the global interceptor will handle auth cleanup
+      // If 401, the global interceptor will handle auth cleanup
       // Just reject with the error for the slice to handle
       return rejectWithValue(error.response?.data || error.message);
     }
@@ -77,7 +77,8 @@ const favoriteSlice = createSlice({
         state.loading = false;
         // Don't set error for 401/403 - token expiration is handled globally
         // Only set error for other types of failures
-        const errorStatus = action.payload?.status || action.error?.response?.status;
+        const errorStatus =
+          action.payload?.status || action.error?.response?.status;
         if (errorStatus !== 401 && errorStatus !== 403) {
           state.error = action.payload || action.error?.message;
         } else {

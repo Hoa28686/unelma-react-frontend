@@ -225,8 +225,8 @@ function ServiceDetail() {
     );
   }
 
-  const IconComponent = service.icon || getServiceIcon(service.name);
-
+  const IconComponent = getServiceIcon(service.name);
+  // const IconComponent = service.icon || getServiceIcon(service.name);
   return (
     <Box
       sx={{

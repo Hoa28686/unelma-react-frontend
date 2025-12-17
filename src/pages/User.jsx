@@ -134,7 +134,8 @@ function User() {
         setPurchasesLoading(true);
         setPurchasesError(null);
         try {
-          const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+          const baseUrl =
+            import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
           const res = await axios.get(`${baseUrl}/profile/purchases`, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -142,14 +143,17 @@ function User() {
             },
           });
           // Handle different possible response structures
-          const purchasesData = res.data?.data || res.data?.purchases || res.data || [];
+          const purchasesData =
+            res.data?.data || res.data?.purchases || res.data || [];
           setPurchases(Array.isArray(purchasesData) ? purchasesData : []);
         } catch (error) {
           // If 404, endpoint doesn't exist yet - use empty array
           if (error.response?.status === 404) {
             setPurchases([]);
           } else {
-            setPurchasesError(error.response?.data?.message || "Failed to load purchases");
+            setPurchasesError(
+              error.response?.data?.message || "Failed to load purchases"
+            );
             setPurchases([]);
           }
         } finally {
@@ -170,7 +174,8 @@ function User() {
         setSubscriptionsLoading(true);
         setSubscriptionsError(null);
         try {
-          const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+          const baseUrl =
+            import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
           // Try profile/subscriptions first, fallback to subscriptions
           let res;
           try {
@@ -194,14 +199,19 @@ function User() {
             }
           }
           // Handle different possible response structures
-          const subscriptionsData = res.data?.data || res.data?.subscriptions || res.data || [];
-          setSubscriptions(Array.isArray(subscriptionsData) ? subscriptionsData : []);
+          const subscriptionsData =
+            res.data?.data || res.data?.subscriptions || res.data || [];
+          setSubscriptions(
+            Array.isArray(subscriptionsData) ? subscriptionsData : []
+          );
         } catch (error) {
           // If 404, endpoint doesn't exist yet - use empty array
           if (error.response?.status === 404) {
             setSubscriptions([]);
           } else {
-            setSubscriptionsError(error.response?.data?.message || "Failed to load subscriptions");
+            setSubscriptionsError(
+              error.response?.data?.message || "Failed to load subscriptions"
+            );
             setSubscriptions([]);
           }
         } finally {
@@ -556,8 +566,9 @@ function User() {
     if (!token) return;
 
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
-      
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+
       if (cancelType === "purchase") {
         // Cancel purchase via API (if cancellable)
         try {
@@ -568,11 +579,15 @@ function User() {
             },
           });
           // Remove from local state
-          setPurchases(purchases.filter((purchase) => purchase.id !== itemToCancel));
+          setPurchases(
+            purchases.filter((purchase) => purchase.id !== itemToCancel)
+          );
         } catch (error) {
           // If endpoint doesn't exist, still remove from UI
           if (error.response?.status === 404) {
-            setPurchases(purchases.filter((purchase) => purchase.id !== itemToCancel));
+            setPurchases(
+              purchases.filter((purchase) => purchase.id !== itemToCancel)
+            );
           } else {
             alert(error.response?.data?.message || "Failed to cancel purchase");
           }
@@ -582,12 +597,15 @@ function User() {
         try {
           // Try profile/subscriptions first, fallback to subscriptions
           try {
-            await axios.delete(`${baseUrl}/profile/subscriptions/${itemToCancel}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/json",
-              },
-            });
+            await axios.delete(
+              `${baseUrl}/profile/subscriptions/${itemToCancel}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  Accept: "application/json",
+                },
+              }
+            );
           } catch (profileError) {
             if (profileError.response?.status === 404) {
               await axios.delete(`${baseUrl}/subscriptions/${itemToCancel}`, {
@@ -615,7 +633,9 @@ function User() {
               )
             );
           } else {
-            alert(error.response?.data?.message || "Failed to cancel subscription");
+            alert(
+              error.response?.data?.message || "Failed to cancel subscription"
+            );
           }
         }
       }
@@ -1006,9 +1026,20 @@ function User() {
                               }}
                             >
                               <Box>
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5, flexWrap: "wrap" }}>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                    mb: 0.5,
+                                    flexWrap: "wrap",
+                                  }}
+                                >
                                   <Typography variant="h6">
-                                    {purchase.order_number || purchase.orderNumber || purchase.purchase_number || `Purchase #${purchase.id}`}
+                                    {purchase.order_number ||
+                                      purchase.orderNumber ||
+                                      purchase.purchase_number ||
+                                      `Purchase #${purchase.id}`}
                                   </Typography>
                                   <Chip
                                     label="One-time"
@@ -1016,14 +1047,19 @@ function User() {
                                     color="primary"
                                     sx={{ height: 20, fontSize: "0.7rem" }}
                                   />
-                                  {(purchase.quantity || purchase.qty || purchase.total_quantity) && (
+                                  {(purchase.quantity ||
+                                    purchase.qty ||
+                                    purchase.total_quantity) && (
                                     <Chip
                                       label={`Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity}`}
                                       size="small"
-                                      sx={{ 
-                                        height: 20, 
+                                      sx={{
+                                        height: 20,
                                         fontSize: "0.7rem",
-                                        backgroundColor: (theme) => theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.08)"
+                                        backgroundColor: (theme) =>
+                                          theme.palette.mode === "dark"
+                                            ? "rgba(255, 255, 255, 0.1)"
+                                            : "rgba(0, 0, 0, 0.08)",
                                       }}
                                     />
                                   )}
@@ -1032,61 +1068,101 @@ function User() {
                                   variant="body2"
                                   color="text.secondary"
                                 >
-                                  {purchase.created_at || purchase.date || purchase.purchase_date
-                                    ? new Date(purchase.created_at || purchase.date || purchase.purchase_date).toLocaleDateString()
+                                  {purchase.created_at ||
+                                  purchase.date ||
+                                  purchase.purchase_date
+                                    ? new Date(
+                                        purchase.created_at ||
+                                          purchase.date ||
+                                          purchase.purchase_date
+                                      ).toLocaleDateString()
                                     : "Date not available"}
                                 </Typography>
                               </Box>
                               <Chip
                                 label={purchase.status || "unknown"}
                                 color={
-                                  purchase.status === "completed" || purchase.status === "paid"
+                                  purchase.status === "completed" ||
+                                  purchase.status === "paid"
                                     ? "success"
                                     : purchase.status === "pending"
-                                    ? "warning"
-                                    : "default"
+                                      ? "warning"
+                                      : "default"
                                 }
                                 size="small"
                               />
                             </Box>
                             <Box sx={{ mb: 2 }}>
                               {/* Check if purchase has items array */}
-                              {(purchase.items || purchase.order_items || purchase.purchase_items || []).length > 0 ? (
-                                (purchase.items || purchase.order_items || purchase.purchase_items || []).map((item, idx) => {
-                                  const itemName = typeof item === "string" 
-                                    ? item 
-                                    : item.name || item.product_name || item.service_name || "Item";
-                                  const quantity = typeof item === "object" 
-                                    ? (item.quantity || item.qty || item.amount || 1)
-                                    : 1;
-                                  
+                              {(
+                                purchase.items ||
+                                purchase.order_items ||
+                                purchase.purchase_items ||
+                                []
+                              ).length > 0 ? (
+                                (
+                                  purchase.items ||
+                                  purchase.order_items ||
+                                  purchase.purchase_items ||
+                                  []
+                                ).map((item, idx) => {
+                                  const itemName =
+                                    typeof item === "string"
+                                      ? item
+                                      : item.name ||
+                                        item.product_name ||
+                                        item.service_name ||
+                                        "Item";
+                                  const quantity =
+                                    typeof item === "object"
+                                      ? item.quantity ||
+                                        item.qty ||
+                                        item.amount ||
+                                        1
+                                      : 1;
+
                                   return (
                                     <Typography
                                       key={idx}
                                       variant="body2"
                                       color="text.secondary"
                                     >
-                                      • {itemName} {quantity > 1 ? `(Qty: ${quantity})` : ""}
+                                      • {itemName}{" "}
+                                      {quantity > 1 ? `(Qty: ${quantity})` : ""}
                                     </Typography>
                                   );
                                 })
                               ) : (
                                 /* If no items array, check for purchase-level quantity or item info */
                                 <>
-                                  {purchase.product_name || purchase.service_name || purchase.name ? (
+                                  {purchase.product_name ||
+                                  purchase.service_name ||
+                                  purchase.name ? (
                                     <Typography
                                       variant="body2"
                                       color="text.secondary"
                                     >
-                                      • {purchase.product_name || purchase.service_name || purchase.name}
-                                      {(purchase.quantity || purchase.qty || purchase.total_quantity) ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})` : ""}
+                                      •{" "}
+                                      {purchase.product_name ||
+                                        purchase.service_name ||
+                                        purchase.name}
+                                      {purchase.quantity ||
+                                      purchase.qty ||
+                                      purchase.total_quantity
+                                        ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})`
+                                        : ""}
                                     </Typography>
-                                  ) : (purchase.quantity || purchase.qty || purchase.total_quantity) ? (
+                                  ) : purchase.quantity ||
+                                    purchase.qty ||
+                                    purchase.total_quantity ? (
                                     <Typography
                                       variant="body2"
                                       color="text.secondary"
                                     >
-                                      Quantity: {purchase.quantity || purchase.qty || purchase.total_quantity}
+                                      Quantity:{" "}
+                                      {purchase.quantity ||
+                                        purchase.qty ||
+                                        purchase.total_quantity}
                                     </Typography>
                                   ) : (
                                     <Typography
@@ -1107,12 +1183,18 @@ function User() {
                               }}
                             >
                               <Typography variant="h6">
-                                €{parseFloat(purchase.total || purchase.amount || 0).toFixed(2)}
+                                €
+                                {parseFloat(
+                                  purchase.total || purchase.amount || 0
+                                ).toFixed(2)}
                               </Typography>
-                              {(purchase.status === "pending" || purchase.status === "processing") && (
+                              {(purchase.status === "pending" ||
+                                purchase.status === "processing") && (
                                 <Button
                                   startIcon={<Cancel />}
-                                  onClick={() => handleCancelPurchase(purchase.id)}
+                                  onClick={() =>
+                                    handleCancelPurchase(purchase.id)
+                                  }
                                   color="error"
                                   size="small"
                                   sx={{ textTransform: "none" }}
@@ -1170,18 +1252,28 @@ function User() {
                               }}
                             >
                               <Box>
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                    mb: 0.5,
+                                  }}
+                                >
                                   <Typography variant="h6">
-                                    {subscription.name || subscription.subscription_name || subscription.service_name || "Subscription"}
+                                    {subscription.name ||
+                                      subscription.subscription_name ||
+                                      subscription.service_name ||
+                                      "Subscription"}
                                   </Typography>
                                   <Chip
                                     label="Subscription"
                                     size="small"
-                                    sx={{ 
-                                      height: 20, 
+                                    sx={{
+                                      height: 20,
                                       fontSize: "0.7rem",
                                       backgroundColor: "#E57A44",
-                                      color: "#FFFFFF"
+                                      color: "#FFFFFF",
                                     }}
                                   />
                                 </Box>
@@ -1189,7 +1281,10 @@ function User() {
                                   variant="body2"
                                   color="text.secondary"
                                 >
-                                  {subscription.plan || subscription.plan_name || subscription.billing_period || "Plan"}
+                                  {subscription.plan ||
+                                    subscription.plan_name ||
+                                    subscription.billing_period ||
+                                    "Plan"}
                                 </Typography>
                               </Box>
                               <Chip
@@ -1198,8 +1293,8 @@ function User() {
                                   subscription.status === "active"
                                     ? "success"
                                     : subscription.status === "cancelled"
-                                    ? "default"
-                                    : "warning"
+                                      ? "default"
+                                      : "warning"
                                 }
                                 size="small"
                               />
@@ -1209,47 +1304,74 @@ function User() {
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                Price: €{parseFloat(subscription.price || subscription.amount || 0).toFixed(2)}/
-                                {(subscription.plan || subscription.billing_period || "").toLowerCase().includes("month")
+                                Price: €
+                                {parseFloat(
+                                  subscription.price || subscription.amount || 0
+                                ).toFixed(2)}
+                                /
+                                {(
+                                  subscription.plan ||
+                                  subscription.billing_period ||
+                                  ""
+                                )
+                                  .toLowerCase()
+                                  .includes("month")
                                   ? "month"
-                                  : (subscription.plan || subscription.billing_period || "").toLowerCase().includes("year")
-                                  ? "year"
-                                  : "period"}
-                                {subscription.quantity && subscription.quantity > 1 && (
-                                  <span> × {subscription.quantity}</span>
-                                )}
+                                  : (
+                                        subscription.plan ||
+                                        subscription.billing_period ||
+                                        ""
+                                      )
+                                        .toLowerCase()
+                                        .includes("year")
+                                    ? "year"
+                                    : "period"}
+                                {subscription.quantity &&
+                                  subscription.quantity > 1 && (
+                                    <span> × {subscription.quantity}</span>
+                                  )}
                               </Typography>
-                              {subscription.quantity && subscription.quantity > 1 && (
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  sx={{ mt: 0.5 }}
-                                >
-                                  Quantity: {subscription.quantity}
-                                </Typography>
-                              )}
-                              {(subscription.start_date || subscription.startDate || subscription.created_at) && (
+                              {subscription.quantity &&
+                                subscription.quantity > 1 && (
+                                  <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                    sx={{ mt: 0.5 }}
+                                  >
+                                    Quantity: {subscription.quantity}
+                                  </Typography>
+                                )}
+                              {(subscription.start_date ||
+                                subscription.startDate ||
+                                subscription.created_at) && (
                                 <Typography
                                   variant="body2"
                                   color="text.secondary"
                                 >
                                   Started:{" "}
                                   {new Date(
-                                    subscription.start_date || subscription.startDate || subscription.created_at
+                                    subscription.start_date ||
+                                      subscription.startDate ||
+                                      subscription.created_at
                                   ).toLocaleDateString()}
                                 </Typography>
                               )}
-                              {subscription.status === "active" && (subscription.next_billing_date || subscription.nextBilling || subscription.next_billing) && (
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                >
-                                  Next billing:{" "}
-                                  {new Date(
-                                    subscription.next_billing_date || subscription.nextBilling || subscription.next_billing
-                                  ).toLocaleDateString()}
-                                </Typography>
-                              )}
+                              {subscription.status === "active" &&
+                                (subscription.next_billing_date ||
+                                  subscription.nextBilling ||
+                                  subscription.next_billing) && (
+                                  <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                  >
+                                    Next billing:{" "}
+                                    {new Date(
+                                      subscription.next_billing_date ||
+                                        subscription.nextBilling ||
+                                        subscription.next_billing
+                                    ).toLocaleDateString()}
+                                  </Typography>
+                                )}
                             </Box>
                             {subscription.status === "active" && (
                               <Button

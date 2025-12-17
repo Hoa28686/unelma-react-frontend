@@ -18,8 +18,6 @@ import {
   MenuItem,
   Rating,
   Stack,
-  CircularProgress,
-  Chip,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -28,11 +26,7 @@ import HandleBackButton from "../../components/HandleBackButton";
 import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
-import {
-  getImageUrl,
-  selectItem,
-  placeholderLogo,
-} from "../../helpers/helpers";
+import { getImageUrl, selectItem } from "../../helpers/helpers";
 import { fetchReviews } from "../../store/slices/products/reviewsSlice";
 import ReviewForm from "../../components/productReview/ReviewForm";
 import ReviewCard from "../../components/productReview/ReviewCard";
@@ -118,10 +112,16 @@ function ProductDetail() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "400px",
+          minHeight: "50vh",
+          backgroundColor: (theme) => theme.palette.background.default,
         }}
       >
-        <CircularProgress />
+        <Typography
+          variant="h5"
+          sx={{ color: (theme) => theme.palette.text.secondary }}
+        >
+          Loading product...
+        </Typography>
       </Box>
     );
   }
@@ -231,9 +231,6 @@ function ProductDetail() {
                       product?.image
                   )}
                   alt={product.name}
-                  onError={(e) => {
-                    e.target.src = placeholderLogo;
-                  }}
                 />
               </Card>
             </Grid>
@@ -249,52 +246,18 @@ function ProductDetail() {
                 }}
               >
                 {/* Product Name */}
-                <Box
+                <Typography
+                  variant="h3"
+                  component="h1"
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 2,
-                    flexWrap: "wrap",
+                    fontSize: { xs: "1.75rem", sm: "2.25rem", md: "2.5rem" },
+                    fontWeight: 700,
+                    color: (theme) => theme.palette.text.primary,
+                    lineHeight: 1.2,
                   }}
                 >
-                  <Typography
-                    variant="h3"
-                    component="h1"
-                    sx={{
-                      fontSize: { xs: "1.75rem", sm: "2.25rem", md: "2.5rem" },
-                      fontWeight: 700,
-                      color: (theme) => theme.palette.text.primary,
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {product.name}
-                  </Typography>
-                  <Chip
-                    label={
-                      product.payment_type === "subscription" ||
-                      product.paymentType === "subscription"
-                        ? "Subscription"
-                        : "One-time"
-                    }
-                    color={
-                      product.payment_type === "subscription" ||
-                      product.paymentType === "subscription"
-                        ? undefined
-                        : "primary"
-                    }
-                    sx={{
-                      fontSize: "0.875rem",
-                      height: 28,
-                      ...(product.payment_type === "subscription" ||
-                      product.paymentType === "subscription"
-                        ? {
-                            backgroundColor: "#E57A44",
-                            color: "#FFFFFF",
-                          }
-                        : {}),
-                    }}
-                  />
-                </Box>
+                  {product.name}
+                </Typography>
 
                 {/* Rating */}
                 <Box
@@ -584,10 +547,11 @@ function ProductDetail() {
                   </Typography>
                   <Divider sx={{ mb: 3 }} />
                   <Typography variant="subtitle1" color="textSecondary" mb={2}>
-                    Note: each user can review once per product
+                    Note: The user must be logged in and have purchased this
+                    product to write a review.
                   </Typography>
                   {/* Review form for new review, UI when user haven't logged in */}
-                  <ReviewForm productId={product.id} reviews={reviews} />
+                  <ReviewForm product={product} reviews={reviews} />
                   {reviews.length > 0 && (
                     <Box sx={{ mt: 4 }}>
                       <Stack
@@ -598,16 +562,16 @@ function ProductDetail() {
                       >
                         <Stack
                           direction="row"
-                          alignItems="flex-end"
+                          alignItems="center"
                           spacing={1}
-                          pl={2}
+                          flexShrink={0}
                         >
                           <RatingDisplay rating={averageRating} />
                           <Typography variant="body2" color="textSecondary">
                             {ratingCount} ratings
                           </Typography>
                         </Stack>
-                        <Stack direction="row" spacing={2}>
+                        <Stack direction="row">
                           <Select
                             value={sortOrder}
                             onChange={(e) => setSortOrder(e.target.value)}

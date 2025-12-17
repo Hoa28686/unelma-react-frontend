@@ -17,7 +17,7 @@ const submitReviewAPI = `${productAPI}/rate`;
 export const fetchReviews = createAsyncThunk(
   "reviews/fetchReviews",
   async (productId) => {
-    const res = await axios(`${productAPI}/${productId}/ratings`);
+    const res = await axios.get(`${productAPI}/${productId}/ratings`);
     return res.data.data;
   }
 );
@@ -34,33 +34,18 @@ export const submitReview = createAsyncThunk(
       return res.data.data.rating;
     } catch (err) {
       return rejectWithValue({
-        data: err.response?.data || err.message,
+        message: err.response?.data?.message || err.message,
         status: err.response?.status,
       });
     }
   }
 );
 
-//   "reviews/editReview",
-//   async ({ reviewId, rating, feedback, token }, { rejectWithValue }) => {
-//     try {
-//       const res = await axios.post(
-//         submitReviewAPI,
-//         { reviewId, rating, feedback },
-//         { headers: { Authorization: `Bearer ${token}` } }
-//       );
-//       return res.data.data.rating;
-//     } catch (err) {
-//       return rejectWithValue(err.response?.data || err.message);
-//     }
-//   }
-// );
-
 export const deleteReview = createAsyncThunk(
   "reviews/deleteReview",
   async ({ review, token }, { rejectWithValue }) => {
     try {
-      await axios.delete(`${productAPI}/${review.product_id}/my-rating`, {
+      await axios.delete(`${productAPI}/${review.product_id}/ratings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return review.id;
@@ -71,7 +56,7 @@ export const deleteReview = createAsyncThunk(
 );
 
 const reviewsSlice = createSlice({
-  name: "ratings",
+  name: "reviews",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -82,7 +67,7 @@ const reviewsSlice = createSlice({
       })
       .addCase(fetchReviews.fulfilled, (state, action) => {
         state.reviews = action.payload.ratings;
-        state.averageRating = action.payload.rating;
+        state.averageRating = action.payload.average_rating;
         state.ratingCount = action.payload.rating_count;
         state.loading = false;
       })

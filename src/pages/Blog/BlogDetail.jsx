@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   Divider,
   MenuItem,
   Select,
@@ -111,7 +112,7 @@ function BlogDetail() {
       dispatch(setSelectedBlog(res.data.data));
       setNewComment("");
     } catch (e) {
-      // Error handled silently
+      console.error(e);
     }
   };
 
@@ -122,11 +123,11 @@ function BlogDetail() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "50vh",
+          minHeight: "400px",
           color: (theme) => theme.palette.text.primary,
         }}
       >
-        <Typography>Loading blog ...</Typography>
+        <CircularProgress />
       </Box>
     );
   }

@@ -10,4 +10,5 @@ export const API = {
   favorites: `${baseUrl}/favorites`,
   services: `${baseUrl}/services`,
   careers: `${baseUrl}/vacancies`,
+  purchases: `${baseUrl}/profile/purchases`,
 };
