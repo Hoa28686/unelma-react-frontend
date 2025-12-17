@@ -27,7 +27,7 @@ function Careers() {
   useEffect(() => {
     if (jobs.length === 0) {
       dispatch(fetchCareers());
-      console.log(jobs);
+      // console.log(jobs);
     }
   }, [jobs, dispatch]);
 

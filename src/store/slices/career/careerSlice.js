@@ -9,13 +9,13 @@ const initialState = {
   error: null,
 };
 
-const carrerApi = API.careers;
+const careerApi = API.careers;
 
 export const fetchCareers = createAsyncThunk(
   "careers/fetchCareers",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get(carrerApi);
+      const res = await axios.get(careerApi);
       return res.data.data;
     } catch (error) {
       return rejectWithValue(
