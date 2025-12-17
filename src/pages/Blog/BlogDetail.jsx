@@ -20,9 +20,7 @@ import {
   Typography,
   Grid,
   Card,
-  CardContent,
   Alert,
-  CircularProgress,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -324,229 +322,235 @@ function BlogDetail() {
                 {selectedBlog.author_name} •{" "}
                 {timeConversion(selectedBlog.created_at)}
               </Typography>
-          <Box
-            sx={{
-              width: "100%",
-              "& p": {
-                fontSize: { xs: "1rem", sm: "1.125rem" },
-                fontWeight: 400,
-                color: (theme) => theme.palette.text.primary,
-                lineHeight: 1.8,
-                textAlign: "left",
-                marginBottom: "1.5rem",
-                marginTop: 0,
-                "&:last-child": {
-                  marginBottom: 0,
-                },
-              },
-            }}
-          >
-            <ParagraphText text={selectedBlog?.content} />
-          </Box>
-
-          {selectedBlog?.tags?.length > 0 && (
-            <>
-              <Stack
+              <Box
                 sx={{
-                  flexDirection: "row",
-                  gap: 1,
-                  flexWrap: "wrap",
-                  color: (theme) => theme.palette.text.primary,
+                  width: "100%",
+                  "& p": {
+                    fontSize: { xs: "1rem", sm: "1.125rem" },
+                    fontWeight: 400,
+                    color: (theme) => theme.palette.text.primary,
+                    lineHeight: 1.8,
+                    textAlign: "left",
+                    marginBottom: "1.5rem",
+                    marginTop: 0,
+                    "&:last-child": {
+                      marginBottom: 0,
+                    },
+                  },
                 }}
               >
-                <Typography variant="subtitle1" fontWeight={500}>
-                  Tags:{" "}
-                </Typography>
-                {selectedBlog.tags.map((tag, index) => (
-                  <Chip
-                    key={index}
-                    label={tag}
-                    variant="outlined"
-                    onClick={() => handleTagClick(tag)}
-                  />
-                ))}
-              </Stack>
-            </>
-          )}
-          {/* Comment section */}
-          <Box
-            sx={{ width: "100%", textAlign: "left", alignSelf: "flex-start" }}
-          >
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 600,
-                color: (theme) => theme.palette.text.primary,
-                mb: 2,
-                fontSize: { xs: "1.25rem", sm: "1.5rem" },
-              }}
-            >
-              Comments
-            </Typography>
-            <Divider
-              sx={{
-                borderColor: (theme) => theme.palette.text.secondary + "40",
-                mb: 3,
-              }}
-            />
-            {user ? (
-              <Box sx={{ mt: 2 }}>
+                <ParagraphText text={selectedBlog?.content} />
+              </Box>
+
+              {selectedBlog?.tags?.length > 0 && (
+                <>
+                  <Stack
+                    sx={{
+                      flexDirection: "row",
+                      gap: 1,
+                      flexWrap: "wrap",
+                      color: (theme) => theme.palette.text.primary,
+                    }}
+                  >
+                    <Typography variant="subtitle1" fontWeight={500}>
+                      Tags:{" "}
+                    </Typography>
+                    {selectedBlog.tags.map((tag, index) => (
+                      <Chip
+                        key={index}
+                        label={tag}
+                        variant="outlined"
+                        onClick={() => handleTagClick(tag)}
+                      />
+                    ))}
+                  </Stack>
+                </>
+              )}
+              {/* Comment section */}
+              <Box
+                sx={{
+                  width: "100%",
+                  textAlign: "left",
+                  alignSelf: "flex-start",
+                }}
+              >
                 <Typography
-                  variant="subtitle1"
+                  variant="h6"
                   sx={{
+                    fontWeight: 600,
                     color: (theme) => theme.palette.text.primary,
                     mb: 2,
-                    fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                    fontSize: { xs: "1.25rem", sm: "1.5rem" },
                   }}
                 >
-                  Leave a comment
+                  Comments
                 </Typography>
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Avatar
-                    alt={user.name}
-                    src={user.profile_picture || "/logo.webp"}
-                    sx={{
-                      width: { xs: 32, sm: 40 },
-                      height: { xs: 32, sm: 40 },
-                    }}
-                  />
-
-                  <TextField
-                    multiline
-                    minRows={1}
-                    fullWidth
-                    sx={textFieldStyles}
-                    placeholder="💭 Add a comment..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                  />
-                  <Button
-                    type="button"
-                    onClick={handlePostComment}
-                    aria-label="Post comment"
-                    disabled={newComment.trim() === ""}
-                  >
-                    <SendIcon />
-                  </Button>
-                </Stack>
-              </Box>
-            ) : (
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  color: (theme) => theme.palette.text.primary,
-                  my: 2,
-                  fontSize: { xs: "1.125rem", sm: "1.25rem" },
-                }}
-              >
-                Log in to leave a comment.
-              </Typography>
-            )}
-            {selectedBlog?.comments?.length > 0 && (
-              <Box sx={{ mt: 4 }}>
-                <Select
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value)}
-                  sx={{ borderRadius: 3, p: 0 }}
-                >
-                  <MenuItem value="newest">Newest</MenuItem>
-                  <MenuItem value="oldest">Oldest</MenuItem>
-                </Select>
-                {sortedComment.map((c) => (
-                  <Box
-                    key={c.id}
-                    sx={{
-                      display: "flex",
-                      gap: 2,
-                      my: 3,
-                      padding: 2,
-                    }}
-                  >
-                    <Avatar
-                      src={
-                        c.user.profile_picture
-                          ? getImageUrl(c.user.profile_picture)
-                          : `/logo.webp`
-                      }
-                      alt="user avatar"
+                <Divider
+                  sx={{
+                    borderColor: (theme) => theme.palette.text.secondary + "40",
+                    mb: 3,
+                  }}
+                />
+                {user ? (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography
+                      variant="subtitle1"
                       sx={{
-                        width: { xs: 32, sm: 40 },
-                        height: { xs: 32, sm: 40 },
-                        flexShrink: 0,
-                        border: (theme) =>
-                          `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
+                        color: (theme) => theme.palette.text.primary,
+                        mb: 2,
+                        fontSize: { xs: "1.125rem", sm: "1.25rem" },
                       }}
                     >
-                      {!c.user.profile_picture && (
-                        <AccountCircle sx={{ fontSize: { xs: 32, sm: 40 } }} />
-                      )}
-                    </Avatar>
+                      Leave a comment
+                    </Typography>
+                    <Stack direction="row" spacing={2} alignItems="center">
+                      <Avatar
+                        alt={user.name}
+                        src={user.profile_picture || "/logo.webp"}
+                        sx={{
+                          width: { xs: 32, sm: 40 },
+                          height: { xs: 32, sm: 40 },
+                        }}
+                      />
 
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        flex: 1,
-                      }}
+                      <TextField
+                        multiline
+                        minRows={1}
+                        fullWidth
+                        sx={textFieldStyles}
+                        placeholder="💭 Add a comment..."
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        onClick={handlePostComment}
+                        aria-label="Post comment"
+                        disabled={newComment.trim() === ""}
+                      >
+                        <SendIcon />
+                      </Button>
+                    </Stack>
+                  </Box>
+                ) : (
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      color: (theme) => theme.palette.text.primary,
+                      my: 2,
+                      fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                    }}
+                  >
+                    Log in to leave a comment.
+                  </Typography>
+                )}
+                {selectedBlog?.comments?.length > 0 && (
+                  <Box sx={{ mt: 4 }}>
+                    <Select
+                      value={sortOrder}
+                      onChange={(e) => setSortOrder(e.target.value)}
+                      sx={{ borderRadius: 3, p: 0 }}
                     >
+                      <MenuItem value="newest">Newest</MenuItem>
+                      <MenuItem value="oldest">Oldest</MenuItem>
+                    </Select>
+                    {sortedComment.map((c) => (
                       <Box
+                        key={c.id}
                         sx={{
                           display: "flex",
-                          alignItems: "center",
                           gap: 2,
+                          my: 3,
+                          padding: 2,
                         }}
                       >
-                        <Typography
-                          variant="body1"
+                        <Avatar
+                          src={
+                            c.user.profile_picture
+                              ? getImageUrl(c.user.profile_picture)
+                              : `/logo.webp`
+                          }
+                          alt="user avatar"
                           sx={{
-                            fontWeight: 600,
-                            color: (theme) => theme.palette.text.primary,
+                            width: { xs: 32, sm: 40 },
+                            height: { xs: 32, sm: 40 },
+                            flexShrink: 0,
+                            border: (theme) =>
+                              `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
                           }}
                         >
-                          {c.user.name}{" "}
-                        </Typography>
-                        <Typography
-                          variant="body2"
+                          {!c.user.profile_picture && (
+                            <AccountCircle
+                              sx={{ fontSize: { xs: 32, sm: 40 } }}
+                            />
+                          )}
+                        </Avatar>
+
+                        <Box
                           sx={{
-                            color: (theme) => theme.palette.text.secondary,
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                            flex: 1,
                           }}
                         >
-                          {timeConversion(c.created_at)}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          "& p": {
-                            fontSize: "0.9375rem",
-                            color: (theme) => theme.palette.text.primary,
-                            lineHeight: 1.8,
-                            margin: 0,
-                          },
-                        }}
-                      >
-                        {c.content.includes("\n") ? (
-                          c.content.split("\n").map((paragraph, index) => (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 2,
+                            }}
+                          >
                             <Typography
-                              key={index}
-                              variant="body2"
-                              sx={{ mb: 1 }}
+                              variant="body1"
+                              sx={{
+                                fontWeight: 600,
+                                color: (theme) => theme.palette.text.primary,
+                              }}
                             >
-                              {paragraph.trim()}
+                              {c.user.name}{" "}
                             </Typography>
-                          ))
-                        ) : (
-                          <Typography variant="body2" sx={{ mb: 1 }}>
-                            {c.content}
-                          </Typography>
-                        )}
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: (theme) => theme.palette.text.secondary,
+                              }}
+                            >
+                              {timeConversion(c.created_at)}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              "& p": {
+                                fontSize: "0.9375rem",
+                                color: (theme) => theme.palette.text.primary,
+                                lineHeight: 1.8,
+                                margin: 0,
+                              },
+                            }}
+                          >
+                            {c.content.includes("\n") ? (
+                              c.content.split("\n").map((paragraph, index) => (
+                                <Typography
+                                  key={index}
+                                  variant="body2"
+                                  sx={{ mb: 1 }}
+                                >
+                                  {paragraph.trim()}
+                                </Typography>
+                              ))
+                            ) : (
+                              <Typography variant="body2" sx={{ mb: 1 }}>
+                                {c.content}
+                              </Typography>
+                            )}
+                          </Box>
+                        </Box>
                       </Box>
-                    </Box>
+                    ))}
                   </Box>
-                ))}
+                )}
               </Box>
-            )}
-          </Box>
             </Grid>
 
             {/* Right Side - Contact Form Sidebar */}

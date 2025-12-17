@@ -21,24 +21,8 @@ export const fetchCareers = createAsyncThunk(
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
-          "Failed to fetch blogs"
+          "Failed to fetch careers"
       );
-    }
-  }
-);
-
-export const applyJob = createAsyncThunk(
-  "apply/applyJob",
-  async ({ type, itemId, token }, { rejectWithValue }) => {
-    try {
-      const res = await axios.post(
-        favoriteAPI,
-        { favorite_type: type, item_id: itemId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return res.data.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
