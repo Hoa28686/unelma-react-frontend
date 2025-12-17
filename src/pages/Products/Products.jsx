@@ -4,7 +4,6 @@ import { fetchProducts } from "../../store/slices/products/productsSlice";
 import {
   Box,
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
@@ -22,9 +21,7 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useNavigate } from "react-router";
-import PriceDisplay from "../../components/PriceDisplay";
-import RatingDisplay from "../../components/RatingDisplay";
-import AddToCart from "../../components/AddToCart";
+import AddToCart from "../../components/product/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
 import {
   getImageUrl,
@@ -32,6 +29,8 @@ import {
   placeholderLogo,
 } from "../../helpers/helpers";
 import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
+import RatingDisplay from "../../components/productReview/RatingDisplay";
+import PriceDisplay from "../../components/product/PriceDisplay";
 
 const ITEMS_PER_PAGE = 9; // Show 9 products per page
 

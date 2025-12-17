@@ -26,9 +26,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import CategoryIcon from "@mui/icons-material/Category";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import HandleBackButton from "../../components/HandleBackButton";
-import PriceDisplay from "../../components/PriceDisplay";
-import RatingDisplay from "../../components/RatingDisplay";
-import AddToCart from "../../components/AddToCart";
+import AddToCart from "../../components/product/AddToCart";
 import {
   getImageUrl,
   placeholderLogo,
@@ -41,6 +39,8 @@ import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndC
 import SuggestedProducts from "../../components/product/SuggestedProducts";
 import { useContactForm } from "../../hooks/useContactForm";
 import StyledTextField from "../../components/StyledTextField";
+import RatingDisplay from "../../components/productReview/RatingDisplay";
+import PriceDisplay from "../../components/product/PriceDisplay";
 
 function ProductDetail() {
   const { id, slug } = useParams();

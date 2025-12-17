@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { SignInPage } from "@toolpad/core";
-import { Box, Link as MuiLink, Button, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Link as MuiLink,
+  Button,
+  Paper,
+  Typography,
+  IconButton,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useAuth } from "../../context/AuthContext";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function Login() {
   const { user, login, logout, message, loading, error } = useAuth();
@@ -96,12 +107,50 @@ function Login() {
     </Typography>
   );
 
+  const EmailField = (props) => (
+    <TextField
+      {...props}
+      name="email"
+      type="email"
+      required
+      label="Email"
+      fullWidth
+    />
+  );
+
+  const PasswordField = (props) => {
+    const [showPassword, setShowPassword] = useState(false);
+    return (
+      <Box sx={{ position: "relative" }}>
+        <TextField
+          {...props}
+          name="password"
+          type={showPassword ? "text" : "password"}
+          required
+          label="Password"
+          fullWidth
+        />
+        <IconButton
+          aria-label={showPassword ? "Hide password" : "Show password"}
+          onClick={() => setShowPassword((prev) => !prev)}
+          sx={{
+            position: "absolute",
+            top: "50%",
+            right: 8,
+            transform: "translateY(-50%)",
+          }}
+        >
+          {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+        </IconButton>
+      </Box>
+    );
+  };
+
   const RememberMe = (props) => (
     <Box
       component="label"
       sx={{
         fontSize: "0.9rem",
-        marginBlock: ".6rem .5rem",
         color: (theme) => theme.palette.text.secondary,
         display: "flex",
         alignItems: "center",
@@ -232,6 +281,8 @@ function Login() {
           slots={{
             title: Title,
             subtitle: Subtitle,
+            emailField: EmailField,
+            passwordField: PasswordField,
             rememberMe: RememberMe,
             signUpLink: SignUpLink,
             submitButton: SubmitButton,

@@ -132,7 +132,7 @@ function Register() {
             position: "relative",
             "& button": {
               position: "absolute",
-              right: "16px",
+              right: 10,
               top: "50%",
               transform: "translateY(-50%)",
             },
@@ -151,7 +151,6 @@ function Register() {
           <IconButton
             aria-label="see-hide"
             onClick={() => {
-              // setShowPassword((prev) => !prev);
               setShowPassword((prev) => ({
                 ...prev,
                 password: !prev.password,

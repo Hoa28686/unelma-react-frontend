@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import RatingDisplay from "../RatingDisplay";
+
 import { useAuth } from "../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import {
