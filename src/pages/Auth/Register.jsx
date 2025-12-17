@@ -133,8 +133,9 @@ function Register() {
             "& button": {
               position: "absolute",
               right: 10,
-              top: "50%",
+              top: "55%",
               transform: "translateY(-50%)",
+              p: "6px",
             },
           }}
         >
@@ -167,9 +168,10 @@ function Register() {
             position: "relative",
             "& button": {
               position: "absolute",
-              right: "16px",
-              top: "50%",
+              right: 10,
+              top: "55%",
               transform: "translateY(-50%)",
+              p: "6px",
             },
           }}
         >
