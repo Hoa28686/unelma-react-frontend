@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import Chip from "@mui/material/Chip";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { fetchCareers } from "../../store/slices/career/careerSlice";
@@ -30,7 +31,22 @@ const CareerDetails = () => {
   }, [jobs]);
 
   //   console.log(jobs);
-  //   console.log("single job is:", selectedJob);
+  // console.log("single job is:", selectedJob);
+  function getProperDate(date) {
+    let dates = new Date(date);
+    console.log(new Date().getMonth());
+    if (dates.getFullYear() - new Date().getFullYear() == 0) {
+      if (dates.getMonth() - (new Date().getMonth() + 1) == 0) {
+        if (dates.getDay() - new Date().getDay() < 30) {
+          return `${dates.getDay() - new Date().getDay()} Days ago`;
+        }
+      } else {
+        return `${dates.getMonth() - (new Date().getMonth() + 1)} Months ago`;
+      }
+    } else {
+      return `${Number(dates.getFullYear() - new Date().getFullYear())} Years ago`;
+    }
+  }
   return (
     <Box
       sx={{
@@ -54,6 +70,7 @@ const CareerDetails = () => {
             <Typography variant="h2" color="white">
               {selectedJob.name}
             </Typography>
+            <Chip label={getProperDate(selectedJob.created_at)} />
             <Box sx={{ display: "flex", gap: 3 }} color="white">
               Location:
               {selectedJob.location}
