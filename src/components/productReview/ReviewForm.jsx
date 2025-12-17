@@ -23,7 +23,6 @@ import { fetchPurchases } from "../../store/slices/products/purchasesSlice";
 
 function ReviewForm({ product, reviews }) {
   const [open, setOpen] = useState(false);
-  const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false);
   const { user, token } = useAuth();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.reviews.loading);
@@ -76,7 +75,7 @@ function ReviewForm({ product, reviews }) {
     }
 
     try {
-      const result = dispatch(
+      dispatch(
         submitReview({
           productId: product.id,
           rating: newReview.rating,
