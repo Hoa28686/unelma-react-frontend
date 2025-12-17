@@ -5,6 +5,9 @@ import { CustomThemeProvider } from "./context/ThemeContext.jsx";
 import { CssBaseline, CircularProgress, Box } from "@mui/material";
 import BlogByCategory from "./pages/Blog/BlogByCategory.jsx";
 import BlogByTag from "./pages/Blog/BlogByTag.jsx";
+import ProductRedirect from "./pages/Products/ProductRedirect.jsx";
+import ServiceRedirect from "./pages/Services/ServiceRedirect.jsx";
+import BlogRedirect from "./pages/Blog/BlogRedirect.jsx";
 
 // Lazy load all pages for code splitting - only load what's needed
 const Home = lazy(() => import("./pages/Home.jsx"));
@@ -24,6 +27,8 @@ const User = lazy(() => import("./pages/User.jsx"));
 const PaymentSuccess = lazy(() => import("./pages/Payment/PaymentSuccess.jsx"));
 const PaymentCancel = lazy(() => import("./pages/Payment/PaymentCancel.jsx"));
 const Favorites = lazy(() => import("./pages/Favorites.jsx"));
+const Career = lazy(() => import("./pages/Career/Career.jsx"));
+const CareerDetails = lazy(() => import("./pages/Career/CareerDetails.jsx"));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -51,13 +56,16 @@ function App() {
                 <Route index element={<Home />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:id/:slug" element={<ProductDetail />} />
+                <Route path="/products/:id" element={<ProductRedirect />} />
                 <Route path="/services" element={<Services />} />
                 <Route
-                  path="/services/:serviceId"
+                  path="/services/:serviceId/:slug"
                   element={<ServiceDetail />}
                 />
+                <Route path="/services/:id" element={<ServiceRedirect />} />
                 <Route path="/blogs" element={<Blog />} />
                 <Route path="/blogs/:id/:slug" element={<BlogDetail />} />
+                <Route path="/blogs/:id" element={<BlogRedirect />} />
                 <Route
                   path="/blogs/categories/:category"
                   element={<BlogByCategory />}
@@ -72,6 +80,8 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment/success" element={<PaymentSuccess />} />
                 <Route path="/payment/cancel" element={<PaymentCancel />} />
+                <Route path="/career" element={<Career />} />
+                <Route path="/career/:id" element={<CareerDetails />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

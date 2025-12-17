@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   Divider,
   MenuItem,
   Select,
@@ -73,17 +74,18 @@ function BlogDetail() {
 
   // sort comments based on sortOrder
   useEffect(() => {
-    if (selectedBlog?.comments?.length > 0) {
-      const sorted = [...selectedBlog.comments];
-
-      sortOrder === "newest"
-        ? sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        : sorted.sort(
-            (a, b) => new Date(a.created_at) - new Date(b.created_at)
-          );
-
-      setSortedComment(sorted);
+    if (!selectedBlog?.comments?.length) {
+      setSortedComment([]);
+      return;
     }
+
+    const sorted = [...selectedBlog.comments];
+
+    sortOrder === "newest"
+      ? sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      : sorted.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    setSortedComment(sorted);
   }, [sortOrder, selectedBlog]);
 
   const handleTagClick = (tag) => {
@@ -114,18 +116,18 @@ function BlogDetail() {
     }
   };
 
-  if (loading || blogs.length === 0) {
+  if (loading) {
     return (
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "50vh",
+          minHeight: "400px",
           color: (theme) => theme.palette.text.primary,
         }}
       >
-        <Typography>Loading blog ...</Typography>
+        <CircularProgress />
       </Box>
     );
   }

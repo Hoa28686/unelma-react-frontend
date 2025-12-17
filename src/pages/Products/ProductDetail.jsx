@@ -547,10 +547,11 @@ function ProductDetail() {
                   </Typography>
                   <Divider sx={{ mb: 3 }} />
                   <Typography variant="subtitle1" color="textSecondary" mb={2}>
-                    Note: each user can review once per product
+                    Note: The user must be logged in and have purchased this
+                    product to write a review.
                   </Typography>
                   {/* Review form for new review, UI when user haven't logged in */}
-                  <ReviewForm productId={product.id} reviews={reviews} />
+                  <ReviewForm product={product} reviews={reviews} />
                   {reviews.length > 0 && (
                     <Box sx={{ mt: 4 }}>
                       <Stack
@@ -561,16 +562,16 @@ function ProductDetail() {
                       >
                         <Stack
                           direction="row"
-                          alignItems="flex-end"
+                          alignItems="center"
                           spacing={1}
-                          pl={2}
+                          flexShrink={0}
                         >
                           <RatingDisplay rating={averageRating} />
                           <Typography variant="body2" color="textSecondary">
                             {ratingCount} ratings
                           </Typography>
                         </Stack>
-                        <Stack direction="row" spacing={2}>
+                        <Stack direction="row">
                           <Select
                             value={sortOrder}
                             onChange={(e) => setSortOrder(e.target.value)}

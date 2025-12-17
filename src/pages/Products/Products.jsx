@@ -13,6 +13,9 @@ import {
   InputAdornment,
   IconButton,
   Pagination,
+  CircularProgress,
+  Chip,
+  Stack,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -23,7 +26,11 @@ import PriceDisplay from "../../components/PriceDisplay";
 import RatingDisplay from "../../components/RatingDisplay";
 import AddToCart from "../../components/AddToCart";
 import HandleBackButton from "../../components/HandleBackButton";
-import { getImageUrl, handleItemClick } from "../../helpers/helpers";
+import {
+  getImageUrl,
+  handleItemClick,
+  placeholderLogo,
+} from "../../helpers/helpers";
 import FavoriteButtonAndCount from "../../components/favorite/FavoriteButtonAndCount";
 
 const ITEMS_PER_PAGE = 9; // Show 9 products per page
@@ -32,6 +39,7 @@ function Products() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products, loading, error } = useSelector((state) => state.products);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -97,36 +105,8 @@ function Products() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-  if (loading || products.length === 0) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h4">Loading products ...</Typography>
-      </Box>
-    );
-  }
 
-  if (error) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h4">Error loading blog: {error}</Typography>
-        <HandleBackButton content="Home" link="/" />
-      </Box>
-    );
-  }
   // main component render
-
   return (
     <Box
       sx={{
@@ -135,310 +115,426 @@ function Products() {
         padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
       }}
     >
-      {/* Search Bar */}
       <Box
         sx={{
           maxWidth: "1200px",
-          margin: "0 auto 3rem",
+          margin: "0 auto",
         }}
       >
-        <TextField
-          fullWidth
-          placeholder="Search products by name, category, or description..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          variant="outlined"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchOutlinedIcon
-                  sx={{
-                    color: (theme) => theme.palette.text.secondary,
-                  }}
-                />
-              </InputAdornment>
-            ),
-            endAdornment: searchQuery && (
-              <InputAdornment position="end">
-                <IconButton
-                  size="small"
-                  onClick={() => setSearchQuery("")}
-                  sx={{
-                    color: (theme) => theme.palette.text.secondary,
-                  }}
-                >
-                  <ClearOutlinedIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ),
-            sx: {
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? "#FFFFFF"
-                  : theme.palette.background.paper,
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.2)"
-                    : "rgba(0, 0, 0, 0.23)",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: (theme) => theme.palette.primary.main,
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: (theme) => theme.palette.primary.main,
-                borderWidth: "2px",
-              },
-            },
-          }}
-        />
-        {searchQuery && (
-          <Typography
-            variant="body2"
-            sx={{
-              mt: 1,
-              color: (theme) => theme.palette.text.secondary,
-            }}
-          >
-            {filteredProducts.length === 0
-              ? "No products found"
-              : `Found ${filteredProducts.length} product${filteredProducts.length !== 1 ? "s" : ""}`}
-          </Typography>
-        )}
-      </Box>
-
-      {/* Products Grid */}
-      {filteredProducts.length === 0 && searchQuery ? (
-        <Box
+        {/* Page Title */}
+        <Typography
+          variant="h2"
+          component="h1"
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "400px",
+            fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+            fontWeight: 700,
+            color: (theme) => theme.palette.text.primary,
+            marginBottom: { xs: "2rem", sm: "3rem" },
+            textAlign: "center",
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              color: (theme) => theme.palette.text.secondary,
-              textAlign: "center",
-            }}
-          >
-            No products match your search "{searchQuery}"
-          </Typography>
-        </Box>
-      ) : (
+          Our Products
+        </Typography>
+
+        {/* Search Bar */}
         <Box
           sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "center",
-            maxWidth: "1200px",
-            margin: "0 auto",
+            marginBottom: { xs: "2rem", sm: "3rem" },
           }}
         >
-          {paginatedProducts.map((p) => (
-            <Card
-              key={p.id}
+          <TextField
+            fullWidth
+            placeholder="Search products by name, category, or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchOutlinedIcon
+                    sx={{
+                      color: (theme) => theme.palette.text.secondary,
+                    }}
+                  />
+                </InputAdornment>
+              ),
+              endAdornment: searchQuery && (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    onClick={() => setSearchQuery("")}
+                    sx={{
+                      color: (theme) => theme.palette.text.secondary,
+                    }}
+                  >
+                    <ClearOutlinedIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              ),
+              sx: {
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "#FFFFFF"
+                    : theme.palette.background.paper,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "rgba(0, 0, 0, 0.23)",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) => theme.palette.primary.main,
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: (theme) => theme.palette.primary.main,
+                  borderWidth: "2px",
+                },
+              },
+            }}
+          />
+          {searchQuery && (
+            <Typography
+              variant="body2"
               sx={{
-                width: 350,
-                height: 500,
-                m: 2,
-                position: "relative",
+                mt: 1,
+                color: (theme) => theme.palette.text.secondary,
               }}
             >
-              <Box
-                sx={{
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  p: 0,
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  onClick={() => handleProductClick(p)}
-                  src={getImageUrl(p.image_local_url || p.image_url || p.image)}
-                  alt={p.name}
-                  sx={{
-                    width: "100%",
-                    height: { xs: 220, md: 250 },
-                    objectFit: "cover",
-                    cursor: "point",
-                    objectPosition: "center",
-                    backgroundColor: (theme) => theme.palette.background.paper,
-                  }}
-                />
-                <CardHeader
-                  onClick={() => handleProductClick(p)}
-                  title={
-                    p.name.length > 50 ? (
-                      <Typography variant="h6">{`${p.name.substring(
-                        0,
-                        50
-                      )}...`}</Typography>
-                    ) : (
-                      <Typography variant="h6">{p.name}</Typography>
-                    )
-                  }
-                  subheader={p.category}
-                  sx={{ cursor: "pointer" }}
-                />
-                <FavoriteButtonAndCount type="product" item={p} />
-                <CardContent sx={{ pt: 0 }}>
-                  <RatingDisplay rating={p.rating} />
-                  <PriceDisplay price={p.price} />
-                </CardContent>
-                <Box
-                  sx={{
-                    position: "absolute",
-                    bottom: 20,
-                    right: 15,
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <AddToCart product={p} />
-                </Box>
-              </Box>
-            </Card>
-          ))}
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 2,
-                marginTop: { xs: "2rem", sm: "3rem" },
-                flexWrap: "wrap",
-                width: "100%",
-              }}
-            >
-              {/* Previous Arrow */}
-              <IconButton
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-                sx={{
-                  color: (theme) => theme.palette.text.primary,
-                  border: "1px solid transparent",
-                  transition: "all 0.3s ease",
-                  "&:focus": {
-                    outline: (theme) =>
-                      `2px solid ${theme.palette.primary.main}`,
-                    outlineOffset: "2px",
-                  },
-                  "&:focus-visible": {
-                    outline: (theme) =>
-                      `2px solid ${theme.palette.primary.main}`,
-                    outlineOffset: "2px",
-                  },
-                  "&:hover": {
-                    borderColor: (theme) => theme.palette.primary.main,
-                    transform: "translateY(-4px)",
-                    backgroundColor: "transparent",
-                  },
-                  "&:disabled": {
-                    opacity: 0.5,
-                  },
-                }}
-              >
-                <NavigateBeforeIcon />
-              </IconButton>
-
-              {/* Page Numbers */}
-              <Pagination
-                count={totalPages}
-                page={currentPage}
-                onChange={handlePageChange}
-                sx={{
-                  "& .MuiPaginationItem-root": {
-                    color: (theme) => theme.palette.text.primary,
-                    border: "1px solid transparent",
-                    boxShadow: "none !important",
-                    "&.Mui-selected": {
-                      backgroundColor: (theme) => theme.palette.primary.main,
-                      color: "#FFFFFF",
-                      border: (theme) =>
-                        `1px solid ${theme.palette.primary.main}`,
-                      boxShadow: "none !important",
-                      "&:hover": {
-                        backgroundColor: "#C85A2E",
-                      },
-                      "&:focus": {
-                        outline: (theme) =>
-                          `2px solid ${theme.palette.primary.main} !important`,
-                        outlineOffset: "2px",
-                        boxShadow: "none !important",
-                      },
-                      "&:focus-visible": {
-                        outline: (theme) =>
-                          `2px solid ${theme.palette.primary.main} !important`,
-                        outlineOffset: "2px",
-                        boxShadow: "none !important",
-                      },
-                    },
-                    "&:focus": {
-                      outline: (theme) =>
-                        `2px solid ${theme.palette.primary.main} !important`,
-                      outlineOffset: "2px",
-                      boxShadow: "none !important",
-                      border: "1px solid transparent",
-                    },
-                    "&:focus-visible": {
-                      outline: (theme) =>
-                        `2px solid ${theme.palette.primary.main} !important`,
-                      outlineOffset: "2px",
-                      boxShadow: "none !important",
-                      border: "1px solid transparent",
-                    },
-                    "&:hover": {
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "rgba(229, 122, 68, 0.1)"
-                          : "rgba(229, 122, 68, 0.2)",
-                      border: "1px solid transparent",
-                      boxShadow: "none !important",
-                    },
-                  },
-                }}
-              />
-
-              {/* Next Arrow */}
-              <IconButton
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                sx={{
-                  color: (theme) => theme.palette.text.primary,
-                  border: "1px solid transparent",
-                  transition: "all 0.3s ease",
-                  "&:focus": {
-                    outline: (theme) =>
-                      `2px solid ${theme.palette.primary.main}`,
-                    outlineOffset: "2px",
-                  },
-                  "&:focus-visible": {
-                    outline: (theme) =>
-                      `2px solid ${theme.palette.primary.main}`,
-                    outlineOffset: "2px",
-                  },
-                  "&:hover": {
-                    borderColor: (theme) => theme.palette.primary.main,
-                    transform: "translateY(-4px)",
-                    backgroundColor: "transparent",
-                  },
-                  "&:disabled": {
-                    opacity: 0.5,
-                  },
-                }}
-              >
-                <NavigateNextIcon />
-              </IconButton>
-            </Box>
+              {filteredProducts.length === 0
+                ? "No products found"
+                : `Found ${filteredProducts.length} product${filteredProducts.length !== 1 ? "s" : ""}`}
+            </Typography>
           )}
         </Box>
-      )}
+
+        {/* Loading State */}
+        {loading && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "400px",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "400px",
+            }}
+          >
+            <Typography variant="h4">
+              Error loading products: {error}
+            </Typography>
+            <HandleBackButton content="Home" link="/" />
+          </Box>
+        )}
+
+        {/* Products Grid */}
+        {!loading && !error && (
+          <>
+            {filteredProducts.length === 0 && searchQuery ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  minHeight: "400px",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: (theme) => theme.palette.text.secondary,
+                    textAlign: "center",
+                  }}
+                >
+                  No products match your search "{searchQuery}"
+                </Typography>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  maxWidth: "1200px",
+                  margin: "0 auto",
+                }}
+              >
+                {paginatedProducts.map((p) => (
+                  <Card
+                    key={p.id}
+                    sx={{
+                      width: 350,
+                      height: 500,
+                      m: 2,
+                      position: "relative",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        p: 0,
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        onClick={() => handleProductClick(p)}
+                        src={getImageUrl(
+                          p.image_local_url || p.image_url || p.image
+                        )}
+                        alt={p.name}
+                        onError={(e) => {
+                          e.target.src = placeholderLogo;
+                        }}
+                        sx={{
+                          width: "100%",
+                          height: { xs: 220, md: 250 },
+                          objectFit: "cover",
+                          cursor: "pointer",
+                          objectPosition: "center",
+                          backgroundColor: (theme) =>
+                            theme.palette.background.paper,
+                        }}
+                      />
+                      <CardHeader
+                        onClick={() => handleProductClick(p)}
+                        title={
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              flexWrap: "wrap",
+                            }}
+                          >
+                            <Typography variant="h6" sx={{ flex: 1 }}>
+                              {p.name.length > 50
+                                ? `${p.name.substring(0, 50)}...`
+                                : p.name}
+                            </Typography>
+                            <Chip
+                              label={
+                                p.payment_type === "subscription" ||
+                                p.paymentType === "subscription"
+                                  ? "Subscription"
+                                  : "One-time"
+                              }
+                              size="small"
+                              color={
+                                p.payment_type === "subscription" ||
+                                p.paymentType === "subscription"
+                                  ? undefined
+                                  : "primary"
+                              }
+                              sx={{
+                                height: 22,
+                                fontSize: "0.7rem",
+                                ...(p.payment_type === "subscription" ||
+                                p.paymentType === "subscription"
+                                  ? {
+                                      backgroundColor: "#E57A44",
+                                      color: "#FFFFFF",
+                                    }
+                                  : {}),
+                              }}
+                            />
+                          </Box>
+                        }
+                        subheader={p.category}
+                        sx={{ cursor: "pointer" }}
+                      />
+                      <CardContent
+                        sx={{
+                          pt: 0,
+                        }}
+                      >
+                        <Stack direction="column" spacing={2}>
+                          <Stack
+                            direction="row"
+                            alignItems="center"
+                            spacing={1}
+                            flexShrink={0}
+                          >
+                            <RatingDisplay rating={p.rating} />
+                            {p.rating_count > 0 && (
+                              <Typography variant="body2" color="textSecondary">
+                                ({p.rating_count})
+                              </Typography>
+                            )}
+                          </Stack>
+
+                          <PriceDisplay price={p.price} />
+                        </Stack>
+                      </CardContent>
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          bottom: 20,
+                          right: 15,
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Stack direction="row" spacing={2}>
+                          <FavoriteButtonAndCount type="product" item={p} />
+                          <AddToCart product={p} />
+                        </Stack>
+                      </Box>
+                    </Box>
+                  </Card>
+                ))}
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 2,
+                      marginTop: { xs: "2rem", sm: "3rem" },
+                      flexWrap: "wrap",
+                      width: "100%",
+                    }}
+                  >
+                    {/* Previous Arrow */}
+                    <IconButton
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                      sx={{
+                        color: (theme) => theme.palette.text.primary,
+                        border: "1px solid transparent",
+                        transition: "all 0.3s ease",
+                        "&:focus": {
+                          outline: (theme) =>
+                            `2px solid ${theme.palette.primary.main}`,
+                          outlineOffset: "2px",
+                        },
+                        "&:focus-visible": {
+                          outline: (theme) =>
+                            `2px solid ${theme.palette.primary.main}`,
+                          outlineOffset: "2px",
+                        },
+                        "&:hover": {
+                          borderColor: (theme) => theme.palette.primary.main,
+                          transform: "translateY(-4px)",
+                          backgroundColor: "transparent",
+                        },
+                        "&:disabled": {
+                          opacity: 0.5,
+                        },
+                      }}
+                    >
+                      <NavigateBeforeIcon />
+                    </IconButton>
+
+                    {/* Page Numbers */}
+                    <Pagination
+                      count={totalPages}
+                      page={currentPage}
+                      onChange={handlePageChange}
+                      sx={{
+                        "& .MuiPaginationItem-root": {
+                          color: (theme) => theme.palette.text.primary,
+                          border: "1px solid transparent",
+                          boxShadow: "none !important",
+                          "&.Mui-selected": {
+                            backgroundColor: (theme) =>
+                              theme.palette.primary.main,
+                            color: "#FFFFFF",
+                            border: (theme) =>
+                              `1px solid ${theme.palette.primary.main}`,
+                            boxShadow: "none !important",
+                            "&:hover": {
+                              backgroundColor: "#C85A2E",
+                            },
+                            "&:focus": {
+                              outline: (theme) =>
+                                `2px solid ${theme.palette.primary.main} !important`,
+                              outlineOffset: "2px",
+                              boxShadow: "none !important",
+                            },
+                            "&:focus-visible": {
+                              outline: (theme) =>
+                                `2px solid ${theme.palette.primary.main} !important`,
+                              outlineOffset: "2px",
+                              boxShadow: "none !important",
+                            },
+                          },
+                          "&:focus": {
+                            outline: (theme) =>
+                              `2px solid ${theme.palette.primary.main} !important`,
+                            outlineOffset: "2px",
+                            boxShadow: "none !important",
+                            border: "1px solid transparent",
+                          },
+                          "&:focus-visible": {
+                            outline: (theme) =>
+                              `2px solid ${theme.palette.primary.main} !important`,
+                            outlineOffset: "2px",
+                            boxShadow: "none !important",
+                            border: "1px solid transparent",
+                          },
+                          "&:hover": {
+                            backgroundColor: (theme) =>
+                              theme.palette.mode === "light"
+                                ? "rgba(229, 122, 68, 0.1)"
+                                : "rgba(229, 122, 68, 0.2)",
+                            border: "1px solid transparent",
+                            boxShadow: "none !important",
+                          },
+                        },
+                      }}
+                    />
+
+                    {/* Next Arrow */}
+                    <IconButton
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages}
+                      sx={{
+                        color: (theme) => theme.palette.text.primary,
+                        border: "1px solid transparent",
+                        transition: "all 0.3s ease",
+                        "&:focus": {
+                          outline: (theme) =>
+                            `2px solid ${theme.palette.primary.main}`,
+                          outlineOffset: "2px",
+                        },
+                        "&:focus-visible": {
+                          outline: (theme) =>
+                            `2px solid ${theme.palette.primary.main}`,
+                          outlineOffset: "2px",
+                        },
+                        "&:hover": {
+                          borderColor: (theme) => theme.palette.primary.main,
+                          transform: "translateY(-4px)",
+                          backgroundColor: "transparent",
+                        },
+                        "&:disabled": {
+                          opacity: 0.5,
+                        },
+                      }}
+                    >
+                      <NavigateNextIcon />
+                    </IconButton>
+                  </Box>
+                )}
+              </Box>
+            )}
+          </>
+        )}
+      </Box>
     </Box>
   );
 }

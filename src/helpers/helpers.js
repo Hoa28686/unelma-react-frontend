@@ -1,4 +1,5 @@
-import placeholderLogo from "../assets/placeholder_logo.webp";
+// Use the glossy logo from public folder as placeholder
+const placeholderLogo = "/unelma_glossy_logo.webp";
 
 export const timeConversion = (time) => {
   return new Date(time).toLocaleDateString("en-US", {
@@ -84,7 +85,7 @@ export const selectItem = (
   navigate,
   resourceName
 ) => {
-  if (!items | (items.length === 0)) return;
+  if (!items || items.length === 0) return;
 
   const foundItem = items.find((i) => i.id === Number(id));
 

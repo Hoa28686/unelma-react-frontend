@@ -8,6 +8,10 @@ import {
   Stack,
   TextField,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,12 +19,16 @@ import {
   fetchReviews,
   submitReview,
 } from "../../store/slices/products/reviewsSlice";
+import { fetchPurchases } from "../../store/slices/products/purchasesSlice";
 
-function ReviewForm({ productId, reviews }) {
+function ReviewForm({ product, reviews }) {
   const [open, setOpen] = useState(false);
+  const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false);
   const { user, token } = useAuth();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.reviews.loading);
+  const purchasedProducts = useSelector((state) => state.purchases.items);
+  const purchasesLoading = useSelector((state) => state.purchases.loading);
   const [newReview, setNewReview] = useState({
     rating: 0,
     feedback: "",
@@ -33,6 +41,17 @@ function ReviewForm({ productId, reviews }) {
       setOpen(false);
     }
   }, [reviewedUsers, user]);
+
+  useEffect(() => {
+    if (purchasedProducts.length === 0) {
+      dispatch(fetchPurchases(token));
+    }
+  }, [token, purchasedProducts, dispatch]);
+
+  const hasPurchased = purchasedProducts?.some(
+    (p) => p.stripe_price_id === product.stripe_price_id
+  );
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewReview((prevReview) => ({
@@ -41,140 +60,171 @@ function ReviewForm({ productId, reviews }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleRatingChange = (event, newValue) => {
+    setNewReview((prevReview) => ({
+      ...prevReview,
+      rating: newValue || 0,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newReview.feedback && newReview.rating === 0) return;
     if (newReview.rating === 0) {
       alert("Please provide a rating before submitting your review.");
       return;
     }
-    dispatch(
-      submitReview({
-        productId,
-        rating: newReview.rating,
-        feedback: newReview.feedback,
-        token,
-      })
-    ).then(() => {
-      dispatch(fetchReviews(productId));
-    });
 
-    setNewReview({ rating: 0, feedback: "" });
-    dispatch(fetchReviews(productId));
+    try {
+      const result = await dispatch(
+        submitReview({
+          productId: product.id,
+          rating: newReview.rating,
+          feedback: newReview.feedback,
+          token,
+        })
+      );
+
+      // Handle 403 purchase-required response
+      if (submitReview.rejected.match(result)) {
+        const error = result.payload;
+        console.log(error);
+
+        if (error?.status === 403) {
+          setPurchaseDialogOpen(true);
+          return;
+        }
+        alert(error?.message || "Failed to submit review");
+        return;
+      }
+
+      // Success
+      setNewReview({ rating: 0, feedback: "" });
+      dispatch(fetchReviews(product.id));
+    } catch {
+      alert("An unexpected error occurred. Please try again.");
+    }
   };
 
-  //if already reviewed, do not show the form
+  // Already reviewed -> hide form
   if (reviewedUsers.includes(user?.id)) return null;
 
-  // if not logged in, prompt to log in
+  // Not logged in
   if (!user)
     return (
-      <Typography
-        variant="subtitle1"
-        sx={{
-          color: (theme) => theme.palette.text.primary,
-          my: 2,
-          fontSize: { xs: "1.125rem", sm: "1.25rem" },
-        }}
-      >
+      <Typography variant="subtitle1" sx={{ color: "text.primary", my: 2 }}>
         Log in to write a review
       </Typography>
     );
+  if (user && !hasPurchased) return null;
 
-  if (user && !open)
+  // Show chip to open form
+
+  if (user && !open && hasPurchased)
     return (
       <Chip
-        label="Write a review ✍🏻"
+        label={purchasesLoading ? "Checking purchases..." : "Write a review ✍🏻"}
         variant="outlined"
         sx={{ fontSize: "1rem" }}
         onClick={() => setOpen(true)}
       />
     );
 
-  // when open is true, render the review form
   return (
-    <Paper
-      sx={{
-        p: 2,
-        mb: 4,
-        width: { xs: "100%", md: "80%" },
-        mx: "auto",
-        position: "relative",
-      }}
-      elevation={3}
-    >
-      <Button
+    <>
+      <Paper
         sx={{
-          textTransform: "none",
-          position: "absolute",
-          top: 8,
-          right: 8,
-          color: (theme) => theme.palette.text.secondary,
+          p: 2,
+          mb: 4,
+          width: { xs: "100%", md: "80%" },
+          mx: "auto",
+          position: "relative",
         }}
-        onClick={() => setOpen(false)}
+        elevation={3}
       >
-        Cancel ❌
-      </Button>
-      <form onSubmit={handleSubmit}>
-        <Stack direction="row" spacing={2} alignItems="center" mb={2}>
-          <Avatar
-            alt={user.name}
-            src={user.profile_picture || "/logo.webp"}
-            sx={{
-              width: { xs: 32, sm: 40 },
-              height: { xs: 32, sm: 40 },
-            }}
-          />
-          <Typography variant="body1" sx={{ fontWeight: 600 }}>
-            {user.name}
-          </Typography>
-        </Stack>
-        <Stack direction="column" spacing={2} sx={{ flex: 1 }}>
-          <Stack
-            direction="row"
-            sx={{ justifyContent: "space-between", alignItems: "center" }}
-          >
-            <Typography
-              variant="body2"
-              sx={{ color: (theme) => theme.palette.text.secondary }}
-            >
-              Item rating<span style={{ color: "red" }}>*</span>
-            </Typography>
+        <Button
+          sx={{ textTransform: "none", position: "absolute", top: 8, right: 8 }}
+          onClick={() => setOpen(false)}
+        >
+          Cancel ❌
+        </Button>
 
-            <Rating
-              name="rating"
-              value={newReview.rating}
-              precision={1}
+        <form onSubmit={handleSubmit}>
+          <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+            <Avatar
+              alt={user.name}
+              src={user.profile_picture || "/logo.webp"}
+              sx={{ width: { xs: 32, sm: 40 }, height: { xs: 32, sm: 40 } }}
+            />
+            <Typography variant="body1" sx={{ fontWeight: 600 }}>
+              {user.name}
+            </Typography>
+          </Stack>
+
+          <Stack direction="column" spacing={2} sx={{ flex: 1 }}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Item rating<span style={{ color: "red" }}>*</span>
+              </Typography>
+              <Rating
+                name="rating"
+                value={newReview.rating}
+                precision={1}
+                onChange={handleRatingChange}
+              />
+            </Stack>
+
+            <TextField
+              multiline
+              minRows={2}
+              fullWidth
+              name="feedback"
+              placeholder="Add feedback..."
+              value={newReview.feedback}
               onChange={handleChange}
             />
-          </Stack>
-          <TextField
-            multiline
-            minRows={2}
-            fullWidth
-            name="feedback"
-            placeholder="Add feedback..."
-            value={newReview.feedback}
-            onChange={handleChange}
-          />
 
+            <Button
+              type="submit"
+              disabled={
+                loading ||
+                (newReview.feedback.trim() === "" && newReview.rating === 0)
+              }
+              variant="contained"
+              sx={{ textTransform: "none" }}
+            >
+              Submit review
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+
+      <Dialog
+        open={purchaseDialogOpen}
+        onClose={() => setPurchaseDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Purchase Required</DialogTitle>
+        <DialogContent>
+          <Typography>
+            You must purchase this product before you can rate or review it.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
           <Button
-            type="submit"
-            aria-label="Send"
-            disabled={
-              loading ||
-              (newReview.feedback?.trim() === "" && newReview.rating === 0)
-            }
+            onClick={() => setPurchaseDialogOpen(false)}
             variant="contained"
-            sx={{
-              textTransform: "none",
-            }}
           >
-            Submit review
+            OK
           </Button>
-        </Stack>
-      </form>
-    </Paper>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 

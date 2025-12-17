@@ -34,13 +34,6 @@ export const createCheckoutSession = async (paymentData) => {
       plan_name: paymentData.planName || null,
     };
 
-    // Log the request for debugging (remove in production or use proper logging)
-    console.log("Creating checkout session with data:", {
-      price_id: requestData.price_id,
-      product_id: requestData.product_id,
-      subscription_name: requestData.subscription_name,
-    });
-
     const response = await apiClient.post(
       "/stripe/checkout/session",
       requestData
@@ -53,7 +46,6 @@ export const createCheckoutSession = async (paymentData) => {
       message: response.data.message || "Checkout session created successfully",
     };
   } catch (error) {
-    console.error("Payment service error:", error);
 
     // Handle specific error cases
     let errorMessage = "Failed to create checkout session. Please try again.";
@@ -129,7 +121,6 @@ export const createCartCheckoutSession = async (cartItems) => {
       subscription_name: itemWithPriceId.name || "Product Purchase",
     };
 
-    console.log("Creating checkout session with data:", requestData);
 
     const response = await apiClient.post(
       "/stripe/checkout/session",
@@ -143,7 +134,6 @@ export const createCartCheckoutSession = async (cartItems) => {
       message: response.data.message || "Checkout session created successfully",
     };
   } catch (error) {
-    console.error("Cart checkout error:", error);
 
     let errorMessage = "Failed to create checkout session. Please try again.";
 

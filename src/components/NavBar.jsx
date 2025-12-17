@@ -31,19 +31,6 @@ import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 
 function NavBar() {
   const { user, logout } = useAuth();
-  // Debug: Log user data to check profile_picture
-  // React.useEffect(() => {
-  //   if (user) {
-  //     console.log("NavBar - User data:", user);
-  //     console.log("NavBar - Profile picture:", user.profile_picture);
-  //     console.log(
-  //       "NavBar - Image URL:",
-  //       user.profile_picture
-  //         ? getImageUrl(user.profile_picture)
-  //         : "No profile picture"
-  //     );
-  //   }
-  // }, [user]);
 
   const mobileMenuWidth = 240;
   const location = useLocation();

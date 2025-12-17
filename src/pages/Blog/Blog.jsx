@@ -14,6 +14,8 @@ import {
   Checkbox,
   FormControlLabel,
   Stack,
+  CircularProgress,
+  darken,
 } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -42,10 +44,10 @@ function Blog() {
 
   // Fetch blogs data
   useEffect(() => {
-    if (blogs.length === 0) {
+    if (blogs.length === 0 && !loading) {
       dispatch(fetchBlogs());
     }
-  }, [dispatch, blogs]);
+  }, [dispatch, blogs, loading]);
 
   // Filter blogs based on search query and category
   const filteredAndSortedBlogs = useMemo(() => {
@@ -167,18 +169,18 @@ function Blog() {
     setOnlyFavorites(e.target.checked);
   };
 
-  if (loading || blogs.length === 0) {
+  if (loading) {
     return (
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "50vh",
+          minHeight: "400px",
           color: (theme) => theme.palette.text.primary,
         }}
       >
-        <Typography>Loading blogs ...</Typography>
+        <CircularProgress />
       </Box>
     );
   }
@@ -191,32 +193,79 @@ function Blog() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "50vh",
-          gap: 2,
-          color: (theme) => theme.palette.text.primary,
+          minHeight: "400px",
+          gap: 3,
         }}
       >
-        <Typography>Error loading blog: {error}</Typography>
-        <Button
-          variant="contained"
-          onClick={handleBack}
-          startIcon={<ArrowBackIosIcon />}
+        <Typography
+          variant="h5"
           sx={{
-            backgroundColor: (theme) => theme.palette.primary.main,
-            color: "#FFFFFF",
-            border: "1px solid transparent",
-            transition: "all 0.3s ease",
-            "&:hover": {
-              backgroundColor: (theme) =>
-                theme.palette.primary.dark || "#2563EB",
-            },
+            color: (theme) => theme.palette.error.main,
+            fontWeight: 600,
+            textAlign: "center",
           }}
         >
-          Back to Home Page
-        </Button>
+          Unable to Load Blogs
+        </Typography>
+
+        <Typography
+          variant="body1"
+          sx={{
+            color: (theme) => theme.palette.text.secondary,
+            textAlign: "center",
+            maxWidth: "500px",
+          }}
+        >
+          {error.includes("500") || error.includes("Internal Server Error")
+            ? "The server is currently experiencing issues. Please try again later or contact support if the problem persists."
+            : `Error: ${error}`}
+        </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={() => dispatch(fetchBlogs())}
+            sx={{
+              backgroundColor: (theme) => theme.palette.primary.main,
+              color: "#FFFFFF",
+              border: "1px solid transparent",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                backgroundColor: (theme) =>
+                  darken(theme.palette.primary.main, 0.2),
+              },
+            }}
+          >
+            Retry
+          </Button>
+
+          <Button
+            variant="outlined"
+            onClick={handleBack}
+            startIcon={<ArrowBackIosIcon />}
+            sx={{
+              borderColor: (theme) => theme.palette.primary.main,
+              color: (theme) => theme.palette.primary.main,
+              "&:hover": {
+                borderColor: (theme) => darken(theme.palette.primary.main, 0.2),
+                backgroundColor: "rgba(229, 122, 68, 0.1)",
+              },
+            }}
+          >
+            Back to Home
+          </Button>
+        </Box>
       </Box>
     );
   }
+
   // main component render
   return (
     <Box

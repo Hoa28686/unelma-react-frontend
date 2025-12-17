@@ -5,7 +5,7 @@ import {
   fetchServices,
   setSelectedService,
   clearSelectedService,
-} from "../../lib/features/services/servicesSlice";
+} from "../../store/slices/services/servicesSlice";
 import {
   Box,
   Typography,
@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Chip,
 } from "@mui/material";
 import { useContactForm } from "../../hooks/useContactForm";
 import StyledTextField from "../../components/StyledTextField";
@@ -124,7 +125,8 @@ function ServiceDetail() {
         dispatch(setSelectedService(foundService));
         const serviceSlug = getServiceSlug(foundService.name);
         if (serviceId !== serviceSlug) {
-          navigate(`/services/${serviceSlug}`, { replace: true });
+          // navigate(`/services/${serviceSlug}`, { replace: true });
+          navigate(`/services/${serviceId}/${serviceSlug}`, { replace: true });
         }
       } else {
         dispatch(clearSelectedService());
@@ -148,7 +150,7 @@ function ServiceDetail() {
 
     try {
       // Check if Stripe Price ID is available (required)
-      if (!plan.stripePriceId) {
+      if (!plan.stripe_price_id) {
         setPaymentError(
           "This plan is not yet available for purchase. Please contact support."
         );
@@ -158,7 +160,7 @@ function ServiceDetail() {
 
       // Prepare comprehensive payment data with all metadata for order tracking
       const paymentData = {
-        stripePriceId: plan.stripePriceId,
+        stripePriceId: plan.stripe_price_id,
         serviceId: serviceId,
         serviceName: service.name,
         planName: plan.name,
@@ -179,7 +181,6 @@ function ServiceDetail() {
         setPaymentLoading(null);
       }
     } catch (error) {
-      console.error("Payment error:", error);
       setPaymentError("An unexpected error occurred. Please try again.");
       setPaymentLoading(null);
     }
@@ -224,8 +225,8 @@ function ServiceDetail() {
     );
   }
 
-  const IconComponent = service.icon || getServiceIcon(service.name);
-
+  const IconComponent = getServiceIcon(service.name);
+  // const IconComponent = service.icon || getServiceIcon(service.name);
   return (
     <Box
       sx={{
@@ -420,18 +421,50 @@ function ServiceDetail() {
                             },
                           }}
                         >
-                          <Typography
-                            variant="h4"
-                            component="h3"
+                          <Box
                             sx={{
-                              fontSize: { xs: "1.5rem", sm: "1.75rem" },
-                              fontWeight: 600,
-                              color: (theme) => theme.palette.text.primary,
-                              marginBottom: "1rem",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              flexWrap: "wrap",
+                              mb: 1,
                             }}
                           >
-                            {plan.name}
-                          </Typography>
+                            <Typography
+                              variant="h4"
+                              component="h3"
+                              sx={{
+                                fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                                fontWeight: 600,
+                                color: (theme) => theme.palette.text.primary,
+                              }}
+                            >
+                              {plan.name}
+                            </Typography>
+                            <Chip
+                              label={
+                                plan.payment_type === "subscription"
+                                  ? "Subscription"
+                                  : "One-time"
+                              }
+                              size="small"
+                              color={
+                                plan.payment_type === "subscription"
+                                  ? undefined
+                                  : "primary"
+                              }
+                              sx={{
+                                height: 24,
+                                fontSize: "0.75rem",
+                                ...(plan.payment_type === "subscription"
+                                  ? {
+                                      backgroundColor: "#E57A44",
+                                      color: "#FFFFFF",
+                                    }
+                                  : {}),
+                              }}
+                            />
+                          </Box>
                           <Box
                             sx={{
                               display: "flex",
