@@ -137,7 +137,7 @@ const Footer = () => {
           >
             <Typography
               variant="h6"
-              component="h3"
+              component="h2"
               sx={{
                 fontWeight: 700,
                 textAlign: "center",
@@ -217,7 +217,7 @@ const Footer = () => {
             <Grid size={{ xs: 12, md: 4 }}>
               <Typography
                 variant="h6"
-                component="h3"
+                component="h2"
                 sx={{
                   fontWeight: 600,
                   mb: 2,
@@ -264,7 +264,7 @@ const Footer = () => {
             <Grid size={{ xs: 12, md: 4 }}>
               <Typography
                 variant="h6"
-                component="h3"
+                component="h2"
                 sx={{
                   fontWeight: 600,
                   mb: 2,
@@ -311,7 +311,7 @@ const Footer = () => {
             <Grid size={{ xs: 12, md: 4 }}>
               <Typography
                 variant="h6"
-                component="h3"
+                component="h2"
                 sx={{
                   fontWeight: 600,
                   mb: 2,
@@ -383,7 +383,7 @@ const Footer = () => {
             <Grid size={{ xs: 12 }}>
               <Typography
                 variant="h6"
-                component="h3"
+                component="h2"
                 sx={{
                   fontWeight: 600,
                   mb: 3,
@@ -417,9 +417,10 @@ const Footer = () => {
                   >
                     <Typography
                       variant="subtitle2"
+                      component="p"
                       sx={{
                         fontWeight: 600,
-                        color: (theme) => theme.palette.primary.main,
+                        color: (theme) => theme.palette.secondary.main,
                         mb: 0.5,
                         fontSize: "0.875rem",
                       }}
@@ -473,7 +474,7 @@ const Footer = () => {
                       underline="none"
                       sx={{
                         fontSize: "0.75rem",
-                        color: (theme) => theme.palette.primary.main,
+                        color: (theme) => theme.palette.secondary.main,
                         transition: "color 200ms",
                         "&:hover": { color: COLORS.textDark },
                       }}

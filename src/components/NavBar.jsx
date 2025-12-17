@@ -117,6 +117,7 @@ function NavBar() {
             </Button>
           ) : (
             <Button
+              aria-label="Login/register"
               component={Link}
               to="/login"
               sx={{
@@ -144,6 +145,7 @@ function NavBar() {
           )}
         </Box>
         <IconButton
+          aria-label="Close"
           sx={{
             color: (theme) => theme.palette.text.primary,
             "&:hover": {
@@ -336,6 +338,7 @@ function NavBar() {
               }}
             >
               <IconButton
+                aria-label="Search"
                 sx={{
                   color: (theme) =>
                     theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
@@ -382,6 +385,7 @@ function NavBar() {
               }}
             >
               <IconButton
+                aria-label="Favorite"
                 sx={{
                   color: (theme) =>
                     theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
@@ -423,6 +427,7 @@ function NavBar() {
               }}
             >
               <IconButton
+                aria-label="Cart"
                 sx={{
                   color: (theme) =>
                     theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
@@ -476,6 +481,7 @@ function NavBar() {
               }}
             >
               <IconButton
+                aria-label="Auth"
                 sx={{
                   color: (theme) =>
                     theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
