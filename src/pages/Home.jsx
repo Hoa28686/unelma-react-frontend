@@ -69,8 +69,7 @@ const hardcodedServices = [
   {
     id: 6,
     name: "Web and Mobile Development",
-    description:
-      "We know this shit! Request a quote; you will not be disappointed.",
+    description: "Request a quote; you will not be disappointed.",
     icon: ComputerIcon,
     serviceId: "web-mobile-development",
   },
@@ -112,14 +111,15 @@ function Home() {
           width: "100%",
         }}
       >
-        {/* Hero Content */}
+        {" "}
+        {/* Content overlay */}
         <Box
           sx={{
             position: "relative",
             width: "100%",
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end",
+            justifyContent: { xs: "center", md: "flex-end" },
             minHeight: { xs: "auto", md: "auto" },
             paddingBottom: { xs: "2rem", sm: "3rem", md: "4rem" },
           }}
@@ -128,7 +128,7 @@ function Home() {
           <Box
             sx={{
               width: "100%",
-              maxWidth: { xs: "90%", sm: "95%", md: "100%" },
+              maxWidth: { xs: "100%", sm: "95%", md: "100%" },
               padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
               opacity: isLoaded ? 1 : 0,
               transform: isLoaded ? "translateY(0)" : "translateY(20px)",

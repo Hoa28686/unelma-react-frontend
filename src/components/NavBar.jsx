@@ -245,11 +245,10 @@ function NavBar() {
           sx={{
             minHeight: { xs: "80px", sm: "88px" },
             height: { xs: "80px", sm: "88px" },
-            px: { xs: 1, sm: 2, md: 4, lg: 6 },
+            px: { xs: 1, sm: 2, md: 3, lg: 6 },
             backgroundColor: "transparent",
             display: "flex",
             justifyContent: "space-between",
-            position: "relative",
             zIndex: 1301, // Even higher z-index for toolbar contents
           }}
         >
@@ -259,11 +258,10 @@ function NavBar() {
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
-              gap: { md: "0.5rem", lg: "1rem" },
+              gap: 1,
               alignItems: "center",
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
+              flexShrink: 0,
+              margin: "auto",
             }}
           >
             {navItems.map((item) => (
@@ -275,7 +273,6 @@ function NavBar() {
                   fontSize: "1rem",
                   fontWeight: 400,
                   position: "relative",
-                  padding: "0.75rem 1rem",
                   borderRadius: 0,
                   "&:hover": {
                     backgroundColor: "transparent",
@@ -316,8 +313,6 @@ function NavBar() {
           <Box
             component="div"
             sx={{
-              marginLeft: "auto",
-              marginRight: { xs: "48px", sm: "48px" },
               display: "flex",
               alignItems: "center",
             }}
@@ -499,29 +494,29 @@ function NavBar() {
                   }
                 }}
               >
-              {user ? (
-                user?.profile_picture ? (
-                  <Avatar
-                    src={getImageUrl(user.profile_picture)}
-                    alt="User avatar"
-                    onError={(e) => {
-                      e.target.src = placeholderLogo;
-                    }}
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      border: (theme) => `1px solid ${theme.palette.divider}`,
-                    }}
-                  >
-                    {/* Fallback icon if image fails to load */}
-                    <AccountCircleOutlinedIcon sx={{ fontSize: 20 }} />
-                  </Avatar>
+                {user ? (
+                  user?.profile_picture ? (
+                    <Avatar
+                      src={getImageUrl(user.profile_picture)}
+                      alt="User avatar"
+                      onError={(e) => {
+                        e.target.src = placeholderLogo;
+                      }}
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        border: (theme) => `1px solid ${theme.palette.divider}`,
+                      }}
+                    >
+                      {/* Fallback icon if image fails to load */}
+                      <AccountCircleOutlinedIcon sx={{ fontSize: 20 }} />
+                    </Avatar>
+                  ) : (
+                    <AccountCircleOutlinedIcon />
+                  )
                 ) : (
                   <AccountCircleOutlinedIcon />
-                )
-              ) : (
-                <AccountCircleOutlinedIcon />
-              )}
+                )}
               </IconButton>
             </Box>
             <ThemeSwitch />

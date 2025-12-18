@@ -11,17 +11,15 @@ function Logo() {
         display: "flex",
         alignItems: "center",
         gap: { xs: 1, sm: 1.5 },
-        marginLeft: { xs: "48px", sm: "48px" },
-        mr: { xs: 1, sm: 2 },
         flexShrink: 0,
         textDecoration: "none",
       }}
     >
       <Box
         sx={{
-          height: { xs: "56px", sm: "64px" },
-          width: { xs: "56px", sm: "64px" },
+          width: "3.2rem",
           display: "flex",
+          pl: 0,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -30,44 +28,43 @@ function Logo() {
           src="/unelma_logo.webp"
           alt="unelma-logo"
           style={{
-            height: "100%",
-            width: "auto",
+            height: "auto",
+            width: "100%",
             maxWidth: "100%",
             objectFit: "contain",
             objectPosition: "center center",
           }}
         />
       </Box>
-      <Typography
-        variant="h6"
+      <Box
         component="div"
         sx={{
-          display: "flex",
+          display: { xs: "none", lg: "flex" },
           flexDirection: "column",
           lineHeight: 1.2,
           color: (theme) => theme.palette.text.primary,
           fontSize: { xs: "0.875rem", sm: "1rem", md: "1.125rem" },
         }}
       >
-        <Box
-          component="span"
+        <Typography
+          variant="h6"
           sx={{
             fontWeight: 700,
             letterSpacing: "0.1em",
           }}
         >
           UNELMA
-        </Box>
-        <Box
-          component="span"
+        </Typography>
+        <Typography
+          variant="h6"
           sx={{
             fontWeight: 300,
             letterSpacing: "0.1em",
           }}
         >
           PLATFORMS
-        </Box>
-      </Typography>
+        </Typography>
+      </Box>
     </Box>
   );
 }
