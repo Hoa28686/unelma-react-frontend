@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, Button, IconButton } from "@mui/material";
+import { darken } from "@mui/material/styles";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 function HeroSection({ isLoaded, onRequestQuote, onOpenModal }) {
@@ -76,25 +77,18 @@ function HeroSection({ isLoaded, onRequestQuote, onOpenModal }) {
                 whiteSpace: "nowrap",
                 width: { xs: "auto", md: "fit-content" },
                 border: (theme) => `1px solid ${theme.palette.primary.main}`,
-                backgroundColor: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "rgba(0, 0, 0, 0.03)"
-                    : "transparent",
-                color: (theme) => theme.palette.text.primary,
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
+                backgroundColor: (theme) => theme.palette.primary.main,
+                color: "#FFFFFF",
                 boxShadow: (theme) =>
                   theme.palette.mode === "light"
                     ? "0 2px 8px rgba(0, 0, 0, 0.05)"
-                    : "none",
+                    : "0 4px 12px rgba(0, 0, 0, 0.3)",
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  backgroundColor: (theme) => theme.palette.primary.main,
+                  backgroundColor: (theme) => darken(theme.palette.primary.main, 0.2),
                   color: "#FFFFFF",
-                  borderColor: (theme) => theme.palette.primary.main,
+                  borderColor: (theme) => darken(theme.palette.primary.main, 0.2),
                   transform: "translate3d(0, -4px, 0)",
-                  backdropFilter: "none",
-                  WebkitBackdropFilter: "none",
                   boxShadow: (theme) =>
                     theme.palette.mode === "light"
                       ? "0 4px 12px rgba(0, 0, 0, 0.1)"
@@ -156,6 +150,22 @@ function HeroSection({ isLoaded, onRequestQuote, onOpenModal }) {
                 alignItems: "center",
                 gap: 2,
                 flexWrap: "wrap",
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "rgba(0, 0, 0, 0.15)"
+                    : "rgba(0, 0, 0, 0.3)",
+                border: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "1px solid rgba(255, 255, 255, 0.1)"
+                    : "1px solid rgba(0, 0, 0, 0.1)",
+                borderRadius: 2,
+                padding: { xs: 2, sm: 2.5, md: 3 },
+                boxShadow: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                    : "none",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
               }}
             >
               <Typography
