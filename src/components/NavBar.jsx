@@ -24,15 +24,18 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import Logo from "./Logo.jsx";
 import ThemeSwitch from "./ThemeSwitch";
-import SearchBar from "./SearchBar";
+import { lazy, Suspense } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+
+// Lazy load SearchBar to reduce initial bundle size
+const SearchBar = lazy(() => import("./SearchBar"));
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 
 function NavBar() {
   const { user, logout } = useAuth();
 
-  const mobileMenuWidth = 240;
+  const mobileMenuWidth = 320;
   const location = useLocation();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
@@ -227,11 +230,12 @@ function NavBar() {
         position="static"
         elevation={0}
         sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "dark" ? "#F5F5F5" : "#000000",
+          backgroundColor: "transparent",
           boxShadow: "none",
           borderBottom: "none",
           backgroundImage: "none",
+          zIndex: 1300, // High z-index to ensure navbar is on top
+          position: "relative",
           "&::before": {
             display: "none",
           },
@@ -239,30 +243,34 @@ function NavBar() {
       >
         <Toolbar
           sx={{
-            minHeight: { xs: "56px", sm: "64px" },
+            minHeight: { xs: "80px", sm: "88px" },
+            height: { xs: "80px", sm: "88px" },
             px: { xs: 1, sm: 2, md: 4, lg: 6 },
-            backgroundColor: (theme) =>
-              theme.palette.mode === "dark" ? "#F5F5F5" : "#000000",
+            backgroundColor: "transparent",
             display: "flex",
             justifyContent: "space-between",
+            position: "relative",
+            zIndex: 1301, // Even higher z-index for toolbar contents
           }}
         >
           {/* logo */}
           <Logo />
-          {/* Desktop Nav Items */}
+          {/* Desktop Nav Items - Centered */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
               gap: { md: "0.5rem", lg: "1rem" },
               alignItems: "center",
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
             }}
           >
             {navItems.map((item) => (
               <Button
                 key={item.label}
                 sx={{
-                  color: (theme) =>
-                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                  color: (theme) => theme.palette.text.primary,
                   textTransform: "none",
                   fontSize: "1rem",
                   fontWeight: 400,
@@ -271,8 +279,7 @@ function NavBar() {
                   borderRadius: 0,
                   "&:hover": {
                     backgroundColor: "transparent",
-                    color: (theme) =>
-                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                    color: (theme) => theme.palette.text.primary,
                     "& span::after": {
                       backgroundColor: (theme) => theme.palette.primary.main,
                     },
@@ -310,6 +317,7 @@ function NavBar() {
             component="div"
             sx={{
               marginLeft: "auto",
+              marginRight: { xs: "48px", sm: "48px" },
               display: "flex",
               alignItems: "center",
             }}
@@ -340,11 +348,9 @@ function NavBar() {
               <IconButton
                 aria-label="Search"
                 sx={{
-                  color: (theme) =>
-                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                  color: (theme) => theme.palette.text.primary,
                   "&:hover": {
-                    color: (theme) =>
-                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                    color: (theme) => theme.palette.text.primary,
                     backgroundColor: "transparent",
                   },
                   "&:focus": {
@@ -387,12 +393,10 @@ function NavBar() {
               <IconButton
                 aria-label="Favorite"
                 sx={{
-                  color: (theme) =>
-                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                  color: (theme) => theme.palette.text.primary,
                   position: "relative",
                   "&:hover": {
-                    color: (theme) =>
-                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                    color: (theme) => theme.palette.text.primary,
                     backgroundColor: "transparent",
                   },
                 }}
@@ -429,12 +433,10 @@ function NavBar() {
               <IconButton
                 aria-label="Cart"
                 sx={{
-                  color: (theme) =>
-                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                  color: (theme) => theme.palette.text.primary,
                   position: "relative",
                   "&:hover": {
-                    color: (theme) =>
-                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                    color: (theme) => theme.palette.text.primary,
                     backgroundColor: "transparent",
                   },
                 }}
@@ -483,11 +485,9 @@ function NavBar() {
               <IconButton
                 aria-label="Auth"
                 sx={{
-                  color: (theme) =>
-                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                  color: (theme) => theme.palette.text.primary,
                   "&:hover": {
-                    color: (theme) =>
-                      theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                    color: (theme) => theme.palette.text.primary,
                     backgroundColor: "transparent",
                   },
                 }}
@@ -499,29 +499,29 @@ function NavBar() {
                   }
                 }}
               >
-                {user ? (
-                  user?.profile_picture ? (
-                    <Avatar
-                      src={getImageUrl(user.profile_picture)}
-                      alt="User avatar"
-                      onError={(e) => {
-                        e.target.src = placeholderLogo;
-                      }}
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        border: (theme) => `1px solid ${theme.palette.divider}`,
-                      }}
-                    >
-                      {/* Fallback icon if image fails to load */}
-                      <AccountCircleOutlinedIcon sx={{ fontSize: 20 }} />
-                    </Avatar>
-                  ) : (
-                    <AccountCircleOutlinedIcon />
-                  )
+              {user ? (
+                user?.profile_picture ? (
+                  <Avatar
+                    src={getImageUrl(user.profile_picture)}
+                    alt="User avatar"
+                    onError={(e) => {
+                      e.target.src = placeholderLogo;
+                    }}
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      border: (theme) => `1px solid ${theme.palette.divider}`,
+                    }}
+                  >
+                    {/* Fallback icon if image fails to load */}
+                    <AccountCircleOutlinedIcon sx={{ fontSize: 20 }} />
+                  </Avatar>
                 ) : (
                   <AccountCircleOutlinedIcon />
-                )}
+                )
+              ) : (
+                <AccountCircleOutlinedIcon />
+              )}
               </IconButton>
             </Box>
             <ThemeSwitch />
@@ -529,12 +529,10 @@ function NavBar() {
             {/* Mobile Menu Button */}
             <IconButton
               sx={{
-                color: (theme) =>
-                  theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                color: (theme) => theme.palette.text.primary,
                 display: { xs: "flex", md: "none" },
                 "&:hover": {
-                  color: (theme) =>
-                    theme.palette.mode === "dark" ? "#000000" : "#FFFFFF",
+                  color: (theme) => theme.palette.text.primary,
                   backgroundColor: "transparent",
                 },
                 "&:focus": {
@@ -562,14 +560,45 @@ function NavBar() {
           variant="temporary"
           open={mobile}
           onClose={handleNavToggle}
-          ModalProps={{ keepMounted: true }}
+          ModalProps={{
+            keepMounted: true,
+            sx: {
+              zIndex: 1400, // Higher than navbar (1301) to appear on top
+            },
+          }}
           sx={{
             display: { md: "block", lg: "none" },
+            "& .MuiBackdrop-root": {
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(0, 0, 0, 0.75)"
+                  : "rgba(0, 0, 0, 0.5)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              willChange: "backdrop-filter",
+              transition: "backdrop-filter 0.3s ease",
+            },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: mobileMenuWidth,
-              backgroundColor: (theme) => theme.palette.background.default,
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(21, 27, 46, 0.95)"
+                  : "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "1px solid rgba(255, 255, 255, 0.1)"
+                  : "1px solid rgba(255, 255, 255, 0.8)",
+              boxShadow: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)"
+                  : "0 20px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05)",
               color: (theme) => theme.palette.text.primary,
+              willChange: "transform, opacity",
+              transform: "translateZ(0)",
+              contain: "layout style paint",
             },
           }}
         >
@@ -578,7 +607,9 @@ function NavBar() {
       </Box>
 
       {/* Search Bar Modal */}
-      <SearchBar open={searchActive} onClose={() => setSearchActive(false)} />
+      <Suspense fallback={null}>
+        <SearchBar open={searchActive} onClose={() => setSearchActive(false)} />
+      </Suspense>
     </Box>
   );
 }

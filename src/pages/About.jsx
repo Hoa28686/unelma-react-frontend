@@ -10,7 +10,8 @@ import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import StorageIcon from "@mui/icons-material/Storage";
 import EmailIcon from "@mui/icons-material/Email";
-import globalMapImage from "../assets/global_office_presence.png";
+// Using image from public folder
+const globalMapImage = "/global_office_presence.webp";
 import heroVideo from "../assets/hero_video.mp4?url";
 import { placeholderLogo } from "../helpers/helpers";
 
@@ -49,18 +50,19 @@ function About() {
       >
         <Box
           sx={{
-            maxWidth: { xs: "90%", sm: "85%", md: "1200px" },
+            maxWidth: { xs: "90%", sm: "85%", md: "1280px" },
             margin: "0 auto",
             padding: { xs: "3rem 1rem", sm: "4rem 2rem", md: "5rem 3rem" },
+            width: "100%",
           }}
         >
           {/* Main Title */}
           <Box
             sx={{
-              backgroundColor: (theme) => theme.palette.mode === 'light' ? theme.palette.background.paper : "transparent",
-              border: (theme) => theme.palette.mode === 'light' ? "1px solid rgba(0, 0, 0, 0.1)" : "none",
-              borderRadius: (theme) => theme.palette.mode === 'light' ? 2 : 0,
-              padding: (theme) => theme.palette.mode === 'light' ? { xs: "2rem", sm: "2.5rem", md: "3rem" } : 0,
+              backgroundColor: "transparent",
+              border: "none",
+              borderRadius: 0,
+              padding: 0,
               marginBottom: { xs: "2rem", sm: "3rem" },
             }}
           >
@@ -120,115 +122,130 @@ function About() {
               So come with us on this exciting journey and allow us to empower you. Welcome to Unelma Platforms. Embrace the power of technology to transform your world.
             </p>
             </Box>
-          </Box>
 
-          {/* Welcome Message */}
-          <Box
-            sx={(theme) => ({
-              mb: 5,
-              p: { xs: 3, sm: 4 },
-              marginBottom: { xs: "3rem", sm: "4rem" },
-              backgroundColor: theme.palette.mode === 'light' ? theme.palette.background.paper : "transparent",
-              border: theme.palette.mode === 'light' ? "1px solid rgba(0, 0, 0, 0.1)" : "none",
-              borderRadius: theme.palette.mode === 'light' ? 2 : 0,
-              transition: theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
-              ...(theme.palette.mode === 'light' ? {
-                "&:hover": {
-                  borderColor: theme.palette.primary.main,
-                  transform: "translateY(-4px)",
-                }
-              } : {}),
-            })}
-          >
-            <Typography
-              variant="h3"
-              component="h2"
+            {/* Welcome Message */}
+            <Box
               sx={{
-                fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
-                fontWeight: 600,
-                color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
-                textAlign: "left",
-                letterSpacing: "0.05em",
+                mb: 5,
+                p: 0,
+                marginTop: { xs: "2rem", sm: "3rem" },
+                marginBottom: { xs: "3rem", sm: "4rem" },
+                backgroundColor: "transparent",
+                border: "none",
+                borderRadius: 0,
               }}
             >
-              Welcome to Unelma Platforms, where our mission is to "empower people."
-            </Typography>
-          </Box>
+              <Typography
+                variant="h3"
+                component="h2"
+                sx={{
+                  fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
+                  fontWeight: 600,
+                  color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
+                  textAlign: "left",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                Welcome to Unelma Platforms, where our mission is to "empower people."
+              </Typography>
+            </Box>
 
-          {/* Features Section */}
-          <Grid container spacing={3} justifyContent="center">
-            {[
-              {
-                icon: <ComputerIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
-                title: "Provide all kind of IT service",
-              },
-              {
-                icon: <SecurityIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
-                title: "Solutions for all security",
-              },
-              {
-                icon: <PeopleIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
-                title: "Most expert peoples",
-              },
-              {
-                icon: <PublicIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
-                title: "Global support for all",
-              },
-            ].map((feature, index) => (
-              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index} sx={{ display: "flex", justifyContent: "center" }}>
-                <Box
-                  sx={{
-                    padding: { xs: "2rem 1.5rem", sm: "2.5rem 2rem", md: "3rem 2rem" },
-                    textAlign: "center",
-                    transition: "all 0.3s ease",
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    maxWidth: { xs: "100%", sm: "280px", md: "220px" },
-                    width: "100%",
-                    "&:hover": {
-                      transform: "translateY(-4px)",
-                    },
-                  }}
-                >
+            {/* Features Section */}
+            <Grid container spacing={3} justifyContent="center">
+              {[
+                {
+                  icon: <ComputerIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
+                  title: "Comprehensive IT Services",
+                },
+                {
+                  icon: <SecurityIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
+                  title: "Enterprise-Grade Security Solutions",
+                },
+                {
+                  icon: <PeopleIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
+                  title: "Expert Professional Team",
+                },
+                {
+                  icon: <PublicIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
+                  title: "Worldwide Global Support",
+                },
+              ].map((feature, index) => (
+                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index} sx={{ display: "flex", justifyContent: "center" }}>
                   <Box
                     sx={{
-                      color: (theme) => theme.palette.primary.main,
-                      marginBottom: "1.5rem",
+                      padding: { xs: "2rem 1.5rem", sm: "2.5rem 2rem", md: "3rem 2rem" },
+                      textAlign: "center",
+                      transition: "all 0.3s ease",
+                      height: "100%",
                       display: "flex",
+                      flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      transition: "transform 0.3s ease",
+                      maxWidth: { xs: "100%", sm: "280px", md: "220px" },
+                      width: "100%",
                       "&:hover": {
-                        transform: "scale(1.1)",
+                        transform: "translateY(-4px)",
                       },
                     }}
                   >
-                    {feature.icon}
+                    <Box
+                      sx={{
+                        color: (theme) => theme.palette.primary.main,
+                        marginBottom: "1.5rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        transition: "transform 0.3s ease",
+                        "&:hover": {
+                          transform: "scale(1.1)",
+                        },
+                      }}
+                    >
+                      {feature.icon}
+                    </Box>
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      sx={{
+                        fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                        fontWeight: 400,
+                        color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
+                        textAlign: "center",
+                        lineHeight: 1.4,
+                        minHeight: { xs: "2.8em", sm: "2.8em", md: "2.8em" },
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {feature.title}
+                    </Typography>
                   </Box>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{
-                      fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                      fontWeight: 400,
-                      color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
-                      textAlign: "center",
-                      lineHeight: 1.4,
-                      minHeight: { xs: "2.8em", sm: "2.8em", md: "2.8em" },
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {feature.title}
-                  </Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+
+          {/* Global Office Presence Image */}
+          <Box
+            sx={{
+              marginTop: { xs: "2rem", sm: "3rem" },
+              marginBottom: { xs: "3rem", sm: "4rem" },
+              width: "100%",
+            }}
+          >
+            <Box
+              component="img"
+              src={globalMapImage}
+              alt="Global office presence map"
+              sx={{
+                width: "100%",
+                height: "auto",
+                objectFit: "contain",
+                borderRadius: 3,
+              }}
+            />
+          </Box>
 
           {/* Global Presence Section */}
           <Box
@@ -238,87 +255,48 @@ function About() {
           >
             <Box
               sx={{
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                gap: { xs: 3, md: 4 },
-                alignItems: { xs: "stretch", md: "center" },
+                "& p": {
+                  fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                  fontWeight: 400,
+                  color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "rgba(255, 255, 255, 0.95)",
+                  lineHeight: 1.8,
+                  textAlign: "left",
+                  marginBottom: "1.5rem",
+                  marginTop: 0,
+                  "&:last-child": {
+                    marginBottom: 0,
+                  },
+                },
               }}
             >
-              {/* Text Content - Left Side */}
               <Box
                 sx={{
-                  flex: { xs: "1 1 100%", md: "1 1 50%" },
-                  width: { xs: "100%", md: "50%" },
-                  "& p": {
-                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                    fontWeight: 400,
-                    color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "rgba(255, 255, 255, 0.95)",
-                    lineHeight: 1.8,
-                    textAlign: "left",
-                    marginBottom: "1.5rem",
-                    marginTop: 0,
-                    "&:last-child": {
-                      marginBottom: 0,
-                    },
-                  },
+                  backgroundColor: "transparent",
+                  border: "none",
+                  borderRadius: 0,
+                  padding: 0,
                 }}
               >
-                <Box
-                  sx={(theme) => ({
-                    backgroundColor: theme.palette.mode === 'light' ? theme.palette.background.paper : "transparent",
-                    border: theme.palette.mode === 'light' ? "1px solid rgba(0, 0, 0, 0.1)" : "none",
-                    borderRadius: theme.palette.mode === 'light' ? 2 : 0,
-                    padding: theme.palette.mode === 'light' ? { xs: "2rem", sm: "2.5rem", md: "3rem" } : 0,
-                    transition: theme.palette.mode === 'light' ? "all 0.3s ease" : "none",
-                    ...(theme.palette.mode === 'light' ? {
-                      "&:hover": {
-                        borderColor: theme.palette.primary.main,
-                        transform: "translateY(-4px)",
-                      }
-                    } : {}),
-                  })}
-                >
-                  <Typography
-                    variant="h2"
-                    component="h2"
-                    sx={{
-                      fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-                      fontWeight: 700,
-                      color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
-                      marginBottom: { xs: "1.5rem", sm: "2rem" },
-                      lineHeight: 1.2,
-                      textAlign: "left",
-                    }}
-                  >
-                    Global Presence
-                  </Typography>
-                  <p>
-                    Our services reach clients across the globe, from major metropolitan areas to emerging markets. We have successfully delivered IT solutions to businesses in North America, Europe, Asia, and beyond, helping organizations transform their digital infrastructure regardless of their location.
-                  </p>
-                  <p>
-                    With our global network and expertise, we are equipped to serve clients worldwide, providing tailored solutions that meet local requirements while maintaining international standards of excellence.
-                  </p>
-                </Box>
-              </Box>
-
-              {/* World Map - Right Side */}
-              <Box
-                sx={{
-                  flex: { xs: "1 1 100%", md: "1 1 50%" },
-                  width: { xs: "100%", md: "50%" },
-                }}
-              >
-                <Box
-                  component="img"
-                  src={globalMapImage}
-                  alt="Global office presence map"
+                <Typography
+                  variant="h2"
+                  component="h2"
                   sx={{
-                    width: "100%",
-                    height: "auto",
-                    objectFit: "contain",
-                    borderRadius: 3,
+                    fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+                    fontWeight: 700,
+                    color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
+                    marginBottom: { xs: "1.5rem", sm: "2rem" },
+                    lineHeight: 1.2,
+                    textAlign: "left",
                   }}
-                />
+                >
+                  Global Presence
+                </Typography>
+                <p>
+                  Our services reach clients across the globe, from major metropolitan areas to emerging markets. We have successfully delivered IT solutions to businesses in North America, Europe, Asia, and beyond, helping organizations transform their digital infrastructure regardless of their location.
+                </p>
+                <p>
+                  With our global network and expertise, we are equipped to serve clients worldwide, providing tailored solutions that meet local requirements while maintaining international standards of excellence.
+                </p>
               </Box>
             </Box>
           </Box>
@@ -333,8 +311,8 @@ function About() {
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
-                gap: { xs: 3, md: 4 },
-                alignItems: { xs: "stretch", md: "stretch" },
+                gap: { xs: 3, md: 5 },
+                alignItems: { xs: "stretch", md: "center" },
               }}
             >
               {/* Video - Left Side */}
@@ -343,23 +321,28 @@ function About() {
                   flex: { xs: "1 1 100%", md: "1 1 50%" },
                   width: { xs: "100%", md: "50%" },
                   display: "flex",
+                  order: { xs: 1, md: 1 },
                 }}
               >
                 <Box
                   sx={{
                     width: "100%",
-                    aspectRatio: "9/16",
+                    aspectRatio: { xs: "16/9", md: "9/16" },
                     backgroundColor: (theme) => theme.palette.background.paper,
                     border: (theme) => 
                       theme.palette.mode === 'dark' 
                         ? "1px solid rgba(255, 255, 255, 0.1)" 
                         : "1px solid rgba(0, 0, 0, 0.1)",
-                    borderRadius: 2,
+                    borderRadius: { xs: 2, md: 3 },
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     overflow: "hidden",
                     position: "relative",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                        : "0 8px 32px rgba(0, 0, 0, 0.1)",
                   }}
                 >
                   <Box
@@ -429,6 +412,7 @@ function About() {
                   flex: { xs: "1 1 100%", md: "1 1 50%" },
                   width: { xs: "100%", md: "50%" },
                   display: "flex",
+                  order: { xs: 2, md: 2 },
                   "& p": {
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                     fontWeight: 400,
@@ -437,7 +421,7 @@ function About() {
                         ? theme.palette.text.primary
                         : "rgba(255, 255, 255, 0.95)",
                     lineHeight: 1.8,
-                    textAlign: "right",
+                    textAlign: "left",
                     marginBottom: "1.5rem",
                     marginTop: 0,
                     "&:last-child": {
@@ -447,36 +431,17 @@ function About() {
                 }}
               >
                 <Box
-                  sx={(theme) => ({
+                  sx={{
                     width: "100%",
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    backgroundColor:
-                      theme.palette.mode === "light"
-                        ? theme.palette.background.paper
-                        : "transparent",
-                    border:
-                      theme.palette.mode === "light"
-                        ? "1px solid rgba(0, 0, 0, 0.1)"
-                        : "none",
-                    borderRadius: theme.palette.mode === "light" ? 2 : 0,
-                    padding:
-                      theme.palette.mode === "light"
-                        ? { xs: "2rem", sm: "2.5rem", md: "3rem" }
-                        : 0,
-                    transition:
-                      theme.palette.mode === "light" ? "all 0.3s ease" : "none",
-                    ...(theme.palette.mode === "light"
-                      ? {
-                          "&:hover": {
-                            borderColor: theme.palette.primary.main,
-                            transform: "translateY(-4px)",
-                          },
-                        }
-                      : {}),
-                  })}
+                    backgroundColor: "transparent",
+                    border: "none",
+                    borderRadius: 0,
+                    padding: 0,
+                  }}
                 >
                   <Typography
                     variant="h2"
@@ -490,31 +455,31 @@ function About() {
                           : "#FFFFFF",
                       marginBottom: { xs: "1.5rem", sm: "2rem" },
                       lineHeight: 1.2,
-                      textAlign: "right",
+                      textAlign: "left",
                     }}
                   >
-                    We Have 15 Years Of Experience Of Tech
+                    15 Years of Technology Excellence
                   </Typography>
                   <p>
-                    For more than 15 years, Unelma Platforms has been at the
+                    For over 15 years, Unelma Platforms has been at the
                     forefront of helping businesses harness the power of
-                    technology to drive success. Our broad range of innovative
-                    and user-friendly software solutions have enabled businesses
-                    to operate more efficiently, reach their customers
+                    technology to drive success. Our comprehensive range of
+                    innovative and user-friendly software solutions enables
+                    businesses to operate more efficiently, reach their customers
                     effectively, and ultimately, boost their bottom line.
                   </p>
                   <p>
-                    With a rich experience spanning over a decade, Unelma
-                    Platforms stands as a reliable partner in the journey of
-                    businesses toward growth and success. Our goal has, and
-                    always will be, to empower businesses with the best tech
-                    tools and services.
+                    With a rich experience spanning more than a decade, Unelma
+                    Platforms stands as a reliable partner in your journey toward
+                    growth and success. Our goal has been, and always will be,
+                    to empower businesses with the best technology tools and
+                    services available.
                   </p>
                   <p>
-                    Our broad range of innovative and user-friendly software
-                    solutions have enabled businesses to operate more efficiently,
-                    reach their customers effectively, and ultimately, boost
-                    their bottom line.
+                    From custom software development to cloud solutions and
+                    cybersecurity, we provide end-to-end IT services that
+                    transform how businesses operate and compete in today's
+                    digital landscape.
                   </p>
                 </Box>
               </Box>
@@ -590,7 +555,7 @@ function About() {
                         flexDirection: "row",
                         backgroundColor: (theme) =>
                           theme.palette.mode === "light"
-                            ? theme.palette.background.paper
+                            ? "rgba(0, 0, 0, 0.03)"
                             : "transparent",
                         border: (theme) =>
                           theme.palette.mode === "light"
@@ -602,9 +567,17 @@ function About() {
                         position: "relative",
                         transition: "all 0.3s ease",
                         minHeight: { xs: 120, sm: 140, md: 160 },
+                        boxShadow: (theme) =>
+                          theme.palette.mode === "light"
+                            ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                            : "none",
                         "&:hover": {
                           transform: "translateY(-4px)",
                           borderColor: (theme) => theme.palette.primary.main,
+                          boxShadow: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                              : "none",
                         },
                       }}
                     >

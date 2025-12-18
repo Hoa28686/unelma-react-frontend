@@ -703,14 +703,22 @@ function User() {
         >
           <Container maxWidth="lg" sx={{ width: "100%" }}>
             <Paper
-              elevation={3}
+              elevation={0}
               sx={{
                 p: 4,
                 borderRadius: 2,
                 backgroundColor: (theme) =>
                   theme.palette.mode === "light"
-                    ? theme.palette.background.paper
-                    : theme.palette.background.paper,
+                    ? "rgba(0, 0, 0, 0.03)"
+                    : "transparent",
+                border: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "1px solid rgba(255, 255, 255, 0.1)"
+                    : "1px solid rgba(0, 0, 0, 0.1)",
+                boxShadow: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                    : "none",
               }}
             >
               {/* User Header */}
@@ -1059,7 +1067,21 @@ function User() {
                   ) : (
                     <List>
                       {purchases.map((purchase) => (
-                        <Card key={purchase.id} sx={{ mb: 2 }}>
+                        <Card key={purchase.id} sx={{ 
+                          mb: 2,
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "rgba(0, 0, 0, 0.03)"
+                              : "transparent",
+                          border: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "1px solid rgba(255, 255, 255, 0.1)"
+                              : "1px solid rgba(0, 0, 0, 0.1)",
+                          boxShadow: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                              : "none",
+                        }}>
                           <CardContent>
                             <Box
                               sx={{
@@ -1279,7 +1301,21 @@ function User() {
                   ) : (
                     <List>
                       {subscriptions.map((subscription) => (
-                        <Card key={subscription.id} sx={{ mb: 2 }}>
+                        <Card key={subscription.id} sx={{ 
+                          mb: 2,
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "rgba(0, 0, 0, 0.03)"
+                              : "transparent",
+                          border: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "1px solid rgba(255, 255, 255, 0.1)"
+                              : "1px solid rgba(0, 0, 0, 0.1)",
+                          boxShadow: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                              : "none",
+                        }}>
                           <CardContent>
                             <Box
                               sx={{

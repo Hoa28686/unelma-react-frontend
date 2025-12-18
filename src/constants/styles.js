@@ -59,7 +59,7 @@ export const getPrimaryColor = (theme) => theme.palette.primary.main;
 export const getCommonButtonStyles = (theme) => ({
   backgroundColor: theme.palette.primary.main,
   color: "#FFFFFF",
-  fontWeight: 100,
+  fontWeight: 400,
   borderRadius: 2,
   boxShadow: "none",
   textTransform: "none",
@@ -70,7 +70,7 @@ export const getCommonButtonStyles = (theme) => ({
 export const commonButtonStyles = {
   backgroundColor: (theme) => theme.palette.primary.main,
   color: "#FFFFFF",
-  fontWeight: 100,
+  fontWeight: 400,
   borderRadius: 2,
   boxShadow: "none",
   textTransform: "none",

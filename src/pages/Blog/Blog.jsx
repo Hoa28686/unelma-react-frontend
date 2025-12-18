@@ -289,28 +289,38 @@ function Blog() {
           padding: { xs: "2rem 1rem", sm: "3rem 2rem", md: "4rem 3rem" },
         }}
       >
-        <Typography
-          variant="h2"
-          component="h1"
-          sx={{
-            fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-            fontWeight: 700,
-            color: (theme) => theme.palette.text.primary,
-            marginBottom: { xs: "2rem", sm: "3rem" },
-            textAlign: "center",
-          }}
-        >
-          Our Blog
-        </Typography>
-
-        {/* Search Bar */}
+        {/* Content Wrapper - matches Footer width */}
         <Box
           sx={{
+            maxWidth: { xs: "90%", sm: "85%", md: "1280px" },
+            margin: "0 auto",
             width: "100%",
-            maxWidth: { xs: "100%", sm: "90%", md: "1200px" },
-            marginBottom: { xs: "2rem", sm: "3rem" },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
+          <Typography
+            variant="h2"
+            component="h1"
+            sx={{
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+              fontWeight: 700,
+              color: (theme) => theme.palette.text.primary,
+              marginBottom: { xs: "2rem", sm: "3rem" },
+              textAlign: "center",
+            }}
+          >
+            Our Blog
+          </Typography>
+
+          {/* Search Bar */}
+          <Box
+            sx={{
+              width: "100%",
+              marginBottom: { xs: "2rem", sm: "3rem" },
+            }}
+          >
           <TextField
             fullWidth
             placeholder="Search blogs by title, content, author, or category..."
@@ -374,14 +384,14 @@ function Blog() {
                 : `Found ${filteredAndSortedBlogs.length} blog${filteredAndSortedBlogs.length !== 1 ? "s" : ""}`}
             </Typography>
           )}
-        </Box>
+          </Box>
 
-        {/* Sort and filter */}
-        <Stack
-          spacing={2}
-          direction={{ xs: "column", sm: "row" }}
-          sx={{ mb: 5 }}
-        >
+          {/* Sort and filter */}
+          <Stack
+            spacing={2}
+            direction={{ xs: "column", sm: "row" }}
+            sx={{ mb: 5, width: "100%" }}
+          >
           {/* Category Filter */}
           <Select
             value={selectedCategory}
@@ -438,17 +448,16 @@ function Blog() {
               color: (theme) => theme.palette.text.primary,
             }}
           />
-        </Stack>
-        <Box
-          sx={{
-            width: "100%",
-            // maxWidth: { xs: "100%", sm: "90%", md: "1200px" },
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: { xs: 3, sm: 4 },
-          }}
-        >
+          </Stack>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: { xs: 3, sm: 4 },
+            }}
+          >
           {paginatedBlogs.length === 0 && onlyFavorites && user && (
             <Box
               sx={{
@@ -630,6 +639,7 @@ function Blog() {
               </IconButton>
             </Box>
           )}
+          </Box>
         </Box>
       </Box>
     </Box>
