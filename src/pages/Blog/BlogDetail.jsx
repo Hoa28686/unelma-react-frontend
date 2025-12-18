@@ -346,6 +346,7 @@ function BlogDetail() {
                 <>
                   <Stack
                     sx={{
+                      my: 8,
                       flexDirection: "row",
                       gap: 1,
                       flexWrap: "wrap",

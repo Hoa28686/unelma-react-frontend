@@ -94,6 +94,7 @@ function BlogByCategory() {
         minHeight: "100vh",
         backgroundColor: (theme) => theme.palette.background.default,
         mt: 8,
+        px: { xs: 2, md: 10, lg: 15 },
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
