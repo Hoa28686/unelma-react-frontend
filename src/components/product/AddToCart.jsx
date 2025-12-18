@@ -25,7 +25,7 @@ function AddToCart({ product }) {
       sx={{
         width: "100%",
         height: 50,
-        fontWeight: 100,
+        fontWeight: 400,
         borderRadius: 2,
         boxShadow: "none",
         textTransform: "none",

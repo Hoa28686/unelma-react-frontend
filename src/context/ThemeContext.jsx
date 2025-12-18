@@ -28,8 +28,8 @@ const lightTheme = createTheme({
       main: "#3B82F6", // Blue accent
     },
     background: {
-      default: "#F0F4F8", // Faint blue background (kept from recent change)
-      paper: "#F5F5F5", // Slightly darker for cards/surfaces
+      default: "transparent", // Gradient applied in Layout
+      paper: "rgba(255, 255, 255, 0.9)", // Semi-transparent white for cards/surfaces
     },
     text: {
       primary: "#000000", // Pure black text
@@ -137,8 +137,8 @@ const darkTheme = createTheme({
     },
 
     background: {
-      default: "#0A0F1C", // Darker blue background
-      paper: "#151B2E", // Slightly lighter dark blue for cards/surfaces
+      default: "transparent", // Gradient applied in Layout
+      paper: "rgba(21, 27, 46, 0.8)", // Semi-transparent dark blue for cards/surfaces
     },
 
     text: {

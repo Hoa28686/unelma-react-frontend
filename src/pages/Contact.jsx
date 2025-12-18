@@ -74,16 +74,27 @@ function Contact() {
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                   <Card
                   sx={{
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) => 
                       theme.palette.mode === 'dark' 
                         ? "1px solid rgba(255, 255, 255, 0.1)" 
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     transition: "all 0.3s ease",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                     "&:hover": {
                       borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                          : "none",
                     },
                   }}
                 >
@@ -128,16 +139,27 @@ function Contact() {
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                   <Card
                   sx={{
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) => 
                       theme.palette.mode === 'dark' 
                         ? "1px solid rgba(255, 255, 255, 0.1)" 
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     transition: "all 0.3s ease",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                     "&:hover": {
                       borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                          : "none",
                     },
                   }}
                 >
@@ -206,16 +228,27 @@ function Contact() {
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                   <Card
                   sx={{
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) => 
                       theme.palette.mode === 'dark' 
                         ? "1px solid rgba(255, 255, 255, 0.1)" 
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     transition: "all 0.3s ease",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                     "&:hover": {
                       borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                          : "none",
                     },
                   }}
                 >
@@ -268,16 +301,27 @@ function Contact() {
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                   <Card
                   sx={{
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) => 
                       theme.palette.mode === 'dark' 
                         ? "1px solid rgba(255, 255, 255, 0.1)" 
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     transition: "all 0.3s ease",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                     "&:hover": {
                       borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                          : "none",
                     },
                   }}
                 >
@@ -354,23 +398,34 @@ function Contact() {
 
             {/* Bottom Row - Contact Form and Google Maps */}
             <Grid size={{ xs: 12 }}>
-              <Grid container spacing={4}>
+              <Box
+                sx={{
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "rgba(0, 0, 0, 0.03)"
+                      : "transparent",
+                  border: (theme) => 
+                    theme.palette.mode === 'dark' 
+                      ? "1px solid rgba(255, 255, 255, 0.1)" 
+                      : "1px solid rgba(0, 0, 0, 0.1)",
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: { xs: "column", lg: "row" },
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                      : "none",
+                }}
+              >
                 {/* Contact Form */}
-                <Grid size={{ xs: 12, lg: 6 }}>
-                  <Card
-                    sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? theme.palette.background.paper
-                          : theme.palette.background.paper,
-                      border: (theme) => 
-                      theme.palette.mode === 'dark' 
-                        ? "1px solid rgba(255, 255, 255, 0.1)" 
-                        : "1px solid rgba(0, 0, 0, 0.1)",
-                      borderRadius: 2,
-                      padding: { xs: 2, sm: 3 },
-                    }}
-                  >
+                <Box
+                  sx={{
+                    flex: { xs: "1 1 100%", lg: "1 1 50%" },
+                    width: { xs: "100%", lg: "50%" },
+                    padding: { xs: 2, sm: 3 },
+                  }}
+                >
                     <Typography
                       variant="h5"
                       component="h2"
@@ -408,6 +463,20 @@ function Contact() {
                         onChange={handleChange}
                         error={!!fieldErrors.name}
                         helperText={fieldErrors.name}
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            backgroundColor: "transparent",
+                            "& input:-webkit-autofill": {
+                              WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                            },
+                            "& input:-webkit-autofill:hover": {
+                              WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                            },
+                            "& input:-webkit-autofill:focus": {
+                              WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                            },
+                          },
+                        }}
                       />
                       <StyledTextField
                         name="email"
@@ -419,6 +488,20 @@ function Contact() {
                         onChange={handleChange}
                         error={!!fieldErrors.email}
                         helperText={fieldErrors.email}
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            backgroundColor: "transparent",
+                            "& input:-webkit-autofill": {
+                              WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                            },
+                            "& input:-webkit-autofill:hover": {
+                              WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                            },
+                            "& input:-webkit-autofill:focus": {
+                              WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                            },
+                          },
+                        }}
                       />
                       <StyledTextField
                         name="message"
@@ -431,6 +514,14 @@ function Contact() {
                         onChange={handleChange}
                         error={!!fieldErrors.message}
                         helperText={fieldErrors.message}
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            backgroundColor: "transparent",
+                            "& textarea:-webkit-autofill": {
+                              WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                            },
+                          },
+                        }}
                       />
                       <Button
                         type="submit"
@@ -452,47 +543,35 @@ function Contact() {
                         )}
                       </Button>
                     </Box>
-                  </Card>
-                </Grid>
+                  </Box>
 
                 {/* Google Maps */}
-                <Grid size={{ xs: 12, lg: 6 }}>
-                  <Card
-                    sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? theme.palette.background.paper
-                          : theme.palette.background.paper,
-                      border: (theme) => 
-                      theme.palette.mode === 'dark' 
+                <Box
+                  sx={{
+                    flex: { xs: "1 1 100%", lg: "1 1 50%" },
+                    width: { xs: "100%", lg: "50%" },
+                    height: { xs: "400px", lg: "auto" },
+                    minHeight: { xs: "400px", lg: "100%" },
+                    borderLeft: (theme) => ({
+                      xs: "none",
+                      lg: theme.palette.mode === 'dark' 
                         ? "1px solid rgba(255, 255, 255, 0.1)" 
                         : "1px solid rgba(0, 0, 0, 0.1)",
-                      borderRadius: 2,
-                      overflow: "hidden",
-                      height: "100%",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: { xs: "400px", lg: "100%" },
-                        minHeight: "400px",
-                      }}
-                    >
-                      <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2028.5!2d24.7536!3d59.4370!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4692935b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sViru%20v%C3%A4ljak%2C%2010111%20Tallinn%2C%20Estonia!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen=""
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title="Head Office - Viru väljak, 10111 Tallinn, Estonia"
-                      />
-                    </Box>
-                  </Card>
-                </Grid>
-              </Grid>
+                    }),
+                  }}
+                >
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2028.5!2d24.7536!3d59.4370!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4692935b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sViru%20v%C3%A4ljak%2C%2010111%20Tallinn%2C%20Estonia!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0, display: "block" }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Head Office - Viru väljak, 10111 Tallinn, Estonia"
+                  />
+                </Box>
+              </Box>
             </Grid>
           </Grid>
         </Box>

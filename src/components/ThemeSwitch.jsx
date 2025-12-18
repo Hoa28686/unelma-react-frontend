@@ -11,9 +11,9 @@ const ThemeSwitch = () => {
         aria-label="Toggle theme"
         onClick={toggleTheme}
         sx={{
-          color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+          color: (theme) => theme.palette.text.primary,
           "&:hover": {
-            color: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+            color: (theme) => theme.palette.text.primary,
             backgroundColor: "transparent",
           },
           "&:focus": {
