@@ -7,25 +7,25 @@ const portfolioProjects = [
     id: 1,
     name: "E-Commerce Platform",
     category: "Web development",
-    image: placeholderLogo,
+    image: "/e_commerce.png",
   },
   {
     id: 2,
     name: "Corporate Website Redesign",
     category: "Website Design",
-    image: placeholderLogo,
+    image: "/web_design.png",
   },
   {
     id: 3,
     name: "Healthcare Mobile App",
     category: "Mobile Development",
-    image: placeholderLogo,
+    image: "/mobile_app.png",
   },
   {
     id: 4,
     name: "Enterprise Security Suite",
     category: "Cyber Support",
-    image: placeholderLogo,
+    image: "/security.png",
   },
   {
     id: 5,
@@ -37,25 +37,25 @@ const portfolioProjects = [
     id: 6,
     name: "Brand Identity Website",
     category: "Website Design",
-    image: placeholderLogo,
+    image: "/brand_identity.png",
   },
   {
     id: 7,
     name: "Fitness Tracking App",
     category: "Mobile Development",
-    image: placeholderLogo,
+    image: "/app.png",
   },
   {
     id: 8,
     name: "Network Security Audit",
     category: "Cyber Support",
-    image: placeholderLogo,
+    image: "/network_security.png",
   },
   {
     id: 9,
     name: "API Integration Platform",
     category: "Web development",
-    image: placeholderLogo,
+    image: "/api.png",
   },
 ];
 
@@ -194,14 +194,13 @@ function Portfolio() {
                 transform: "translateY(-4px)",
                 borderColor: (theme) => theme.palette.primary.main,
                 boxShadow: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "0 8px 24px rgba(0, 0, 0, 0.3)"
-                    : "0 8px 24px rgba(0, 0, 0, 0.1)",
-                "& .project-overlay": {
-                  opacity: 1,
-                },
-                "& .project-name": {
-                  transform: "translateY(0)",
+                  theme.palette.mode === "light"
+                    ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                    : "0 8px 32px rgba(0, 0, 0, 0.3)",
+                "& .portfolio-overlay": {
+                  backdropFilter: "blur(0px)",
+                  WebkitBackdropFilter: "blur(0px)",
+                  opacity: 0,
                 },
               },
             }}
@@ -210,66 +209,48 @@ function Portfolio() {
               component="img"
               src={project.image}
               alt={project.name}
+              onError={(e) => {
+                e.target.src = placeholderLogo;
+              }}
               sx={{
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-              }}
-            />
-            {/* Overlay with project name */}
-            <Box
-              className="project-overlay"
-              sx={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                background: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent)"
-                    : "linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)",
-                padding: { xs: "1.5rem", sm: "2rem" },
-                opacity: 0,
                 transition: "opacity 0.3s ease",
               }}
-            >
-              <Typography
-                className="project-name"
-                variant="h6"
-                sx={{
-                  fontSize: { xs: "1rem", sm: "1.125rem" },
-                  fontWeight: 600,
-                  color: "#FFFFFF",
-                  transform: "translateY(10px)",
-                  transition: "transform 0.3s ease",
-                }}
-              >
-                {project.name}
-              </Typography>
-              <Chip
-                label={project.category}
-                size="small"
-                sx={{
-                  mt: 1,
-                  fontSize: "0.75rem",
-                  backgroundColor: (theme) => theme.palette.primary.main,
-                  color: "#FFFFFF",
-                  height: 24,
-                }}
-              />
-            </Box>
-            {/* Always visible project name at bottom */}
+            />
+            {/* Blur overlay to mute image by default - fades on hover to reveal image */}
+            <Box
+              className="portfolio-overlay"
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "rgba(0, 0, 0, 0.03)"
+                    : "rgba(10, 15, 28, 0.85)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                pointerEvents: "none",
+                zIndex: 1,
+                transition: "backdrop-filter 0.3s ease, opacity 0.3s ease, background-color 0.3s ease",
+              }}
+            />
+            {/* Always visible project name and chip at bottom */}
             <Box
               sx={{
                 position: "absolute",
                 bottom: 0,
                 left: 0,
                 right: 0,
-                background: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent)"
-                    : "linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent)",
                 padding: { xs: "1rem", sm: "1.25rem" },
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.75,
+                zIndex: 2,
               }}
             >
               <Typography
@@ -278,10 +259,23 @@ function Portfolio() {
                   fontSize: { xs: "0.9375rem", sm: "1rem" },
                   fontWeight: 600,
                   color: "#FFFFFF",
+                  lineHeight: 1.2,
                 }}
               >
                 {project.name}
               </Typography>
+              <Chip
+                label={project.category}
+                size="small"
+                sx={{
+                  fontSize: "0.75rem",
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: "#FFFFFF",
+                  height: 24,
+                  width: "fit-content",
+                  alignSelf: "flex-start",
+                }}
+              />
             </Box>
           </Card>
         ))}

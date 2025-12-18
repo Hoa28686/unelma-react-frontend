@@ -26,27 +26,39 @@ function BlogCard({ blog }) {
   };
 
   return (
-    <Card
-      sx={{
-        borderRadius: 2,
-        width: { xs: "24rem", md: "100%" },
-        height: { xs: "44rem", md: "320px" },
-        flexDirection: { xs: "column", md: "row" },
-        p: 0,
-        backgroundColor: (theme) => theme.palette.background.paper,
-        display: "flex",
-
-        alignItems: "center",
-        flexShrink: 0,
-        transition: "all 0.3s ease",
-        border: (theme) =>
-          `1px solid ${theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
-        "&:hover": {
-          borderColor: (theme) => theme.palette.primary.main,
-          transform: "translateY(-4px)",
-        },
-      }}
-    >
+      <Card
+        sx={{
+          borderRadius: 2,
+          width: { xs: "24rem", md: "100%" },
+          height: { xs: "44rem", md: "320px" },
+          flexDirection: { xs: "column", md: "row" },
+          p: 0,
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? "rgba(0, 0, 0, 0.03)"
+              : "transparent",
+          display: "flex",
+          alignItems: "center",
+          flexShrink: 0,
+          transition: "all 0.3s ease",
+          border: (theme) =>
+            theme.palette.mode === "dark"
+              ? "1px solid rgba(255, 255, 255, 0.1)"
+              : "1px solid rgba(0, 0, 0, 0.1)",
+          boxShadow: (theme) =>
+            theme.palette.mode === "light"
+              ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+              : "none",
+          "&:hover": {
+            borderColor: (theme) => theme.palette.primary.main,
+            transform: "translateY(-4px)",
+            boxShadow: (theme) =>
+              theme.palette.mode === "light"
+                ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                : "0 8px 32px rgba(0, 0, 0, 0.3)",
+          },
+        }}
+      >
       <CardMedia
         component="img"
         onClick={() => handleBlogClick(blog)}

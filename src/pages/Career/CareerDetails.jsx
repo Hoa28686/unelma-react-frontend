@@ -243,14 +243,18 @@ const CareerDetails = () => {
                 elevation={0}
                 sx={{
                   backgroundColor: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "transparent"
-                      : theme.palette.background.paper,
+                    theme.palette.mode === "light"
+                      ? "rgba(0, 0, 0, 0.03)"
+                      : "transparent",
                   border: (theme) =>
                     theme.palette.mode === "dark"
                       ? "1px solid rgba(255, 255, 255, 0.1)"
                       : "1px solid rgba(0, 0, 0, 0.1)",
                   borderRadius: 3,
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                      : "none",
                 }}
               >
                 <CardContent sx={{ p: { xs: 3, sm: 4 } }}>

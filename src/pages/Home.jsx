@@ -292,8 +292,27 @@ function Home() {
         fullWidth
         PaperProps={{
           sx: {
-            borderRadius: 2,
-            backgroundColor: (theme) => theme.palette.background.paper,
+            borderRadius: { xs: 3, sm: 4 },
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? "rgba(0, 0, 0, 0.03)"
+                : "transparent",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: (theme) =>
+              theme.palette.mode === "dark"
+                ? "1px solid rgba(255, 255, 255, 0.1)"
+                : "1px solid rgba(0, 0, 0, 0.1)",
+            boxShadow: (theme) =>
+              theme.palette.mode === "light"
+                ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                : "none",
+            overflow: "hidden",
+            willChange: "transform, opacity",
+            transform: "translateZ(0)",
+            contain: "layout style paint",
+            // Prevent layout thrashing
+            position: "relative",
           },
         }}
       >
@@ -317,21 +336,32 @@ function Home() {
             sx={{
               fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
               fontWeight: 700,
-              color: (theme) => theme.palette.text.primary,
+              color: (theme) =>
+                theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
               flex: 1,
             }}
           >
-            We are Software Platform Development Company
+            Empowering Growth with{" "}
+            <Box
+              component="span"
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === "light" ? "#000000" : theme.palette.primary.main,
+              }}
+            >
+              Innovative Software Platforms
+            </Box>
           </Typography>
           <IconButton
             onClick={handleCloseModal}
             sx={{
-              color: (theme) => theme.palette.text.secondary,
+              color: (theme) =>
+                theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
               "&:hover": {
                 backgroundColor: (theme) =>
                   theme.palette.mode === "dark"
                     ? "rgba(255, 255, 255, 0.1)"
-                    : "rgba(0, 0, 0, 0.05)",
+                    : "rgba(255, 255, 255, 0.1)",
               },
             }}
             aria-label="close"
@@ -345,7 +375,8 @@ function Home() {
             "& p": {
               fontSize: { xs: "1rem", sm: "1.125rem" },
               fontWeight: 400,
-              color: (theme) => theme.palette.text.primary,
+              color: (theme) =>
+                theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
               lineHeight: 1.8,
               marginBottom: "1.5rem",
               "&:last-child": {

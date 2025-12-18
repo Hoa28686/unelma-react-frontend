@@ -8,6 +8,10 @@ function HeroSection({ isLoaded, onRequestQuote, onOpenModal }) {
       sx={{
         position: "relative",
         width: "100%",
+        backgroundImage: "url(/unelma_hero.webp)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {/* Hero Content */}
@@ -72,14 +76,29 @@ function HeroSection({ isLoaded, onRequestQuote, onOpenModal }) {
                 whiteSpace: "nowrap",
                 width: { xs: "auto", md: "fit-content" },
                 border: (theme) => `1px solid ${theme.palette.primary.main}`,
-                backgroundColor: "transparent",
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "rgba(0, 0, 0, 0.03)"
+                    : "transparent",
                 color: (theme) => theme.palette.text.primary,
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                boxShadow: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                    : "none",
                 transition: "all 0.3s ease",
                 "&:hover": {
                   backgroundColor: (theme) => theme.palette.primary.main,
                   color: "#FFFFFF",
                   borderColor: (theme) => theme.palette.primary.main,
                   transform: "translate3d(0, -4px, 0)",
+                  backdropFilter: "none",
+                  WebkitBackdropFilter: "none",
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                      : "0 8px 32px rgba(0, 0, 0, 0.3)",
                 },
                 "&:focus": {
                   outline: (theme) => `2px solid ${theme.palette.primary.main}`,
@@ -109,6 +128,7 @@ function HeroSection({ isLoaded, onRequestQuote, onOpenModal }) {
               width: { xs: "100%", md: "50%" },
               order: { xs: 1, md: 2 },
               padding: { xs: 2, sm: 3, md: 4 },
+              paddingLeft: { xs: 2, sm: 3, md: 12 },
               "& p": {
                 fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                 fontWeight: 400,

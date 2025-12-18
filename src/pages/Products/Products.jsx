@@ -171,10 +171,16 @@ function Products() {
                 </InputAdornment>
               ),
               sx: {
-                backgroundColor: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "#FFFFFF"
-                    : theme.palette.background.paper,
+                backgroundColor: "transparent",
+                "& input:-webkit-autofill": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
+                "& input:-webkit-autofill:hover": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
+                "& input:-webkit-autofill:focus": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: (theme) =>
                     theme.palette.mode === "dark"
@@ -278,6 +284,27 @@ function Products() {
                       height: 500,
                       m: 2,
                       position: "relative",
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "rgba(0, 0, 0, 0.03)"
+                          : "transparent",
+                      border: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "1px solid rgba(255, 255, 255, 0.1)"
+                          : "1px solid rgba(0, 0, 0, 0.1)",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                          : "none",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        borderColor: (theme) => theme.palette.primary.main,
+                        transform: "translateY(-4px)",
+                        boxShadow: (theme) =>
+                          theme.palette.mode === "light"
+                            ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                            : "0 8px 32px rgba(0, 0, 0, 0.3)",
+                      },
                     }}
                   >
                     <Box

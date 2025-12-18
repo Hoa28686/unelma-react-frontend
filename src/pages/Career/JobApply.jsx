@@ -21,7 +21,7 @@ const JobApply = ({ career_id, jobName }) => {
   const [personalDetails, setPersonalDetails] = useState({
     name: "",
     email: "",
-    cover_letter: "",
+    cover_letter: null,
     CV: null,
   });
   const [isApplied, setIsApplied] = useState(false);
@@ -43,9 +43,9 @@ const JobApply = ({ career_id, jobName }) => {
 
     const formData = new FormData();
     formData.append("CV", personalDetails.CV);
+    formData.append("cover_letter", personalDetails.cover_letter);
     formData.append("name", personalDetails.name);
     formData.append("email", personalDetails.email);
-    formData.append("cover_letter", personalDetails.cover_letter);
     formData.append("career_id", career_id);
 
     try {
@@ -60,7 +60,7 @@ const JobApply = ({ career_id, jobName }) => {
       setPersonalDetails({
         name: "",
         email: "",
-        cover_letter: "",
+        cover_letter: null,
         CV: null,
       });
     } catch (err) {
@@ -88,14 +88,18 @@ const JobApply = ({ career_id, jobName }) => {
       elevation={0}
       sx={{
         backgroundColor: (theme) =>
-          theme.palette.mode === "dark"
-            ? "transparent"
-            : theme.palette.background.paper,
+          theme.palette.mode === "light"
+            ? "rgba(0, 0, 0, 0.03)"
+            : "transparent",
         border: (theme) =>
           theme.palette.mode === "dark"
             ? "1px solid rgba(255, 255, 255, 0.1)"
             : "1px solid rgba(0, 0, 0, 0.1)",
         borderRadius: 3,
+        boxShadow: (theme) =>
+          theme.palette.mode === "light"
+            ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+            : "none",
       }}
     >
       <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
@@ -141,6 +145,20 @@ const JobApply = ({ career_id, jobName }) => {
             onChange={handleChange}
             required
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "transparent",
+                "& input:-webkit-autofill": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
+                "& input:-webkit-autofill:hover": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
+                "& input:-webkit-autofill:focus": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
+              },
+            }}
           />
 
           <StyledTextField
@@ -151,19 +169,90 @@ const JobApply = ({ career_id, jobName }) => {
             onChange={handleChange}
             required
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "transparent",
+                "& input:-webkit-autofill": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
+                "& input:-webkit-autofill:hover": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
+                "& input:-webkit-autofill:focus": {
+                  WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                },
+              },
+            }}
           />
 
-          <StyledTextField
-            label="Cover Letter"
-            name="cover_letter"
-            value={personalDetails.cover_letter}
-            onChange={handleChange}
-            multiline
-            rows={6}
-            required
-            fullWidth
-            placeholder="Tell us why you're interested in this position and what makes you a great fit..."
-          />
+          {/* Cover Letter Upload */}
+          <Box>
+            <Typography
+              variant="body2"
+              sx={{
+                color: (theme) => theme.palette.text.secondary,
+                mb: 1,
+              }}
+            >
+              Cover Letter (PDF or Word) *
+            </Typography>
+            <Button
+              component="label"
+              variant="outlined"
+              fullWidth
+              startIcon={
+                personalDetails.cover_letter ? (
+                  <InsertDriveFileIcon />
+                ) : (
+                  <CloudUploadIcon />
+                )
+              }
+              sx={{
+                py: 2,
+                borderStyle: "dashed",
+                borderColor: (theme) =>
+                  personalDetails.cover_letter
+                    ? theme.palette.success.main
+                    : theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.2)"
+                    : "rgba(0, 0, 0, 0.23)",
+                backgroundColor: (theme) =>
+                  personalDetails.cover_letter
+                    ? theme.palette.mode === "dark"
+                      ? "rgba(46, 125, 50, 0.1)"
+                      : "rgba(46, 125, 50, 0.05)"
+                    : "transparent",
+                color: (theme) =>
+                  personalDetails.cover_letter
+                    ? theme.palette.success.main
+                    : theme.palette.text.secondary,
+                textTransform: "none",
+                "&:hover": {
+                  borderColor: (theme) => theme.palette.primary.main,
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.05)"
+                      : "rgba(0, 0, 0, 0.02)",
+                },
+              }}
+            >
+              {personalDetails.cover_letter
+                ? personalDetails.cover_letter.name
+                : "Click to upload your Cover Letter"}
+              <input
+                type="file"
+                name="cover_letter"
+                accept="application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                hidden
+                onChange={(e) => {
+                  setPersonalDetails((prev) => ({
+                    ...prev,
+                    cover_letter: e.target.files[0],
+                  }));
+                }}
+              />
+            </Button>
+          </Box>
 
           {/* CV Upload */}
           <Box>
