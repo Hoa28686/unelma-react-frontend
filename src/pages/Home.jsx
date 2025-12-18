@@ -62,7 +62,7 @@ function Home() {
         maxWidth: "100%",
         overflowX: "hidden",
       }}
-    >
+      >
       {/* Hero Section */}
       <HeroSection
         isLoaded={isLoaded}

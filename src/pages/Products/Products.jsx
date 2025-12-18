@@ -290,7 +290,7 @@ function Products() {
                       <CardMedia
                         component="img"
                         loading="eager"
-                        fetchpriority="high"
+                        fetchPriority="high"
                         onClick={() => handleProductClick(p)}
                         src={getImageUrl(
                           p.image_local_url || p.image_url || p.image

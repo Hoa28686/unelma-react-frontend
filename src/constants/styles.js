@@ -46,9 +46,9 @@ export const buttonHoverStyles = {
 
 // Card background color - use theme instead
 // Deprecated: Use theme.palette.background.paper or theme.palette.background.default
-export const cardBackgroundLight = (theme) => 
-  theme.palette.mode === "light" 
-    ? theme.palette.background.paper 
+export const cardBackgroundLight = (theme) =>
+  theme.palette.mode === "light"
+    ? theme.palette.background.paper
     : theme.palette.background.default;
 
 // Primary accent color - use theme instead
@@ -76,4 +76,3 @@ export const commonButtonStyles = {
   textTransform: "none",
   ...buttonHoverStyles,
 };
-

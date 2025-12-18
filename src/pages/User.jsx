@@ -143,7 +143,11 @@ function User() {
   const getProductName = (productId) => {
     if (!productId || !products || products.length === 0) return null;
     const product = products.find((p) => {
-      return p.id === Number(productId) || p.id === productId || String(p.id) === String(productId);
+      return (
+        p.id === Number(productId) ||
+        p.id === productId ||
+        String(p.id) === String(productId)
+      );
     });
     return product?.name || product?.title || null;
   };
@@ -475,7 +479,7 @@ function User() {
           sx={{
             backgroundColor: (theme) => theme.palette.primary.main,
             color: "#FFFFFF",
-            fontWeight: 100,
+            fontWeight: 400,
             borderRadius: 2,
             py: 1.5,
             textTransform: "none",
@@ -1160,23 +1164,46 @@ function User() {
                             </Box>
                             <Box sx={{ mb: 2 }}>
                               {/* Check if purchase has items array */}
-                              {(purchase.items || purchase.order_items || purchase.purchase_items || []).length > 0 ? (
-                                (purchase.items || purchase.order_items || purchase.purchase_items || []).map((item, idx) => {
+                              {(
+                                purchase.items ||
+                                purchase.order_items ||
+                                purchase.purchase_items ||
+                                []
+                              ).length > 0 ? (
+                                (
+                                  purchase.items ||
+                                  purchase.order_items ||
+                                  purchase.purchase_items ||
+                                  []
+                                ).map((item, idx) => {
                                   // Try to get product name from products array using product_id
-                                  const productId = typeof item === "object" 
-                                    ? (item.product_id || item.productId || item.id)
+                                  const productId =
+                                    typeof item === "object"
+                                      ? item.product_id ||
+                                        item.productId ||
+                                        item.id
+                                      : null;
+                                  const productName = productId
+                                    ? getProductName(productId)
                                     : null;
-                                  const productName = productId ? getProductName(productId) : null;
-                                  
+
                                   // Fallback to item name if product not found in products array
-                                  const itemName = productName || 
-                                    (typeof item === "string" 
-                                      ? item 
-                                      : item.name || item.product_name || item.service_name || "Item");
-                                  const quantity = typeof item === "object" 
-                                    ? (item.quantity || item.qty || item.amount || 1)
-                                    : 1;
-                                  
+                                  const itemName =
+                                    productName ||
+                                    (typeof item === "string"
+                                      ? item
+                                      : item.name ||
+                                        item.product_name ||
+                                        item.service_name ||
+                                        "Item");
+                                  const quantity =
+                                    typeof item === "object"
+                                      ? item.quantity ||
+                                        item.qty ||
+                                        item.amount ||
+                                        1
+                                      : 1;
+
                                   return (
                                     <Typography
                                       key={idx}
@@ -1193,21 +1220,27 @@ function User() {
                                 <>
                                   {(() => {
                                     // Try to get product name from products array using product_id
-                                    const productId = purchase.product_id || purchase.productId;
-                                    const productName = productId ? getProductName(productId) : null;
-                                    
+                                    const productId =
+                                      purchase.product_id || purchase.productId;
+                                    const productName = productId
+                                      ? getProductName(productId)
+                                      : null;
+
                                     // Use item_name from backend (primary), or fallback to product lookup or other fields
                                     // Check if item_name exists and is not empty/null
-                                    const itemName = purchase.item_name && purchase.item_name.trim() !== "" 
-                                      ? purchase.item_name 
-                                      : null;
-                                    
-                                    const displayName = itemName ||  // Primary: Backend provides item_name
-                                      productName ||  // Fallback: Lookup from products array
-                                      purchase.product_name || 
-                                      purchase.service_name || 
+                                    const itemName =
+                                      purchase.item_name &&
+                                      purchase.item_name.trim() !== ""
+                                        ? purchase.item_name
+                                        : null;
+
+                                    const displayName =
+                                      itemName || // Primary: Backend provides item_name
+                                      productName || // Fallback: Lookup from products array
+                                      purchase.product_name ||
+                                      purchase.service_name ||
                                       purchase.name;
-                                    
+
                                     // Display product name if available, otherwise show generic "Product" for old purchases
                                     if (displayName) {
                                       return (
@@ -1216,7 +1249,11 @@ function User() {
                                           color="text.secondary"
                                         >
                                           • {displayName}
-                                          {(purchase.quantity || purchase.qty || purchase.total_quantity) ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})` : ""}
+                                          {purchase.quantity ||
+                                          purchase.qty ||
+                                          purchase.total_quantity
+                                            ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})`
+                                            : ""}
                                         </Typography>
                                       );
                                     } else {
@@ -1227,7 +1264,11 @@ function User() {
                                           color="text.secondary"
                                         >
                                           • Product
-                                          {(purchase.quantity || purchase.qty || purchase.total_quantity) ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})` : ""}
+                                          {purchase.quantity ||
+                                          purchase.qty ||
+                                          purchase.total_quantity
+                                            ? ` (Qty: ${purchase.quantity || purchase.qty || purchase.total_quantity})`
+                                            : ""}
                                         </Typography>
                                       );
                                     }
@@ -1770,7 +1811,7 @@ function User() {
                 sx={{
                   backgroundColor: (theme) => theme.palette.primary.main,
                   color: "#FFFFFF",
-                  fontWeight: 100,
+                  fontWeight: 400,
                   borderRadius: 2,
                   py: 1.5,
                   textTransform: "none",

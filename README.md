@@ -96,9 +96,10 @@ A full-stack web application for blogs, products, and services with authenticati
 
 ### Unelma mail subscription
 
-- Users can subscribe to Unelma emails from the header or footer
-- Confirmation email is sent after subscribing
-- Backend access: _Manage/Newsletter Subscribers_
+- Users can subscribe to the Unelma newsletter from the website footer
+- A confirmation email is sent after successful subscription
+- Duplicate email subscriptions are prevented
+- Admins can manage subscribers in _Manage / Newsletter Subscribers_
 
 ## Backend Overview
 
