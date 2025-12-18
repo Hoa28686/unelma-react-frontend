@@ -57,9 +57,10 @@ function Testimonials() {
         padding: { xs: "4rem 1rem", sm: "5rem 2rem", md: "6rem 3rem" },
         boxSizing: "border-box",
       }}
-    >
-      {/* Section Title */}
-      <Typography
+      >
+        <Box sx={{ maxWidth: "1200px", margin: "0 auto" }}>
+          {/* Section Title */}
+          <Typography
         variant="h2"
         component="h2"
         sx={{
@@ -211,6 +212,7 @@ function Testimonials() {
           </Card>
         ))}
       </Box>
+        </Box>
     </Box>
   );
 }

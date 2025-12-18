@@ -24,6 +24,9 @@ import StorageIcon from "@mui/icons-material/Storage";
 import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import Portfolio from "../components/home/Portfolio";
+import Testimonials from "../components/home/Testimonials";
+import Stats from "../components/home/Stats";
 
 // Hardcoded services for Home page
 const hardcodedServices = [
@@ -109,6 +112,10 @@ function Home() {
         sx={{
           position: "relative",
           width: "100%",
+          backgroundImage: "url(/unelma_hero.webp)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         {" "}
@@ -151,7 +158,7 @@ function Home() {
               }}
             >
               <Button
-                variant="contained"
+                variant="text"
                 color="primary"
                 size="large"
                 onClick={handleRequestQuote}
@@ -165,11 +172,30 @@ function Home() {
                   textTransform: "none",
                   whiteSpace: "nowrap",
                   width: { xs: "auto", md: "fit-content" },
-                  border: "1px solid transparent",
+                  border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "rgba(0, 0, 0, 0.03)"
+                      : "transparent",
+                  color: (theme) => theme.palette.text.primary,
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                      : "none",
                   transition: "all 0.3s ease",
                   "&:hover": {
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    color: "#FFFFFF",
                     borderColor: (theme) => theme.palette.primary.main,
-                    transform: "translateY(-4px)",
+                    transform: "translate3d(0, -4px, 0)",
+                    backdropFilter: "none",
+                    WebkitBackdropFilter: "none",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                        : "0 8px 32px rgba(0, 0, 0, 0.3)",
                   },
                   "&:focus": {
                     outline: (theme) =>
@@ -201,6 +227,8 @@ function Home() {
               sx={{
                 width: { xs: "100%", md: "50%" },
                 order: { xs: 1, md: 2 },
+                padding: { xs: 2, sm: 3, md: 4 },
+                paddingLeft: { xs: 2, sm: 3, md: 12 },
                 "& p": {
                   fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   fontWeight: 400,
@@ -453,7 +481,10 @@ function Home() {
                     },
                     minWidth: { xs: "100%", sm: "280px", md: "300px" },
                     maxWidth: { xs: "100%", sm: "none", md: "400px" },
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) =>
                       theme.palette.mode === "dark"
                         ? "1px solid rgba(255, 255, 255, 0.1)"
@@ -464,13 +495,17 @@ function Home() {
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                     "&:hover": {
                       borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
                       boxShadow: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? "0 8px 16px rgba(0, 0, 0, 0.3)"
-                          : "0 8px 16px rgba(0, 0, 0, 0.1)",
+                        theme.palette.mode === "light"
+                          ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                          : "0 8px 32px rgba(0, 0, 0, 0.3)",
                     },
                   }}
                 >
@@ -742,6 +777,15 @@ function Home() {
           </Box>
         </Box>
       </Box>
+
+      {/* Portfolio Section */}
+      <Portfolio />
+
+      {/* Stats Section */}
+      <Stats />
+
+      {/* Testimonials Section */}
+      <Testimonials />
     </Box>
   );
 }
