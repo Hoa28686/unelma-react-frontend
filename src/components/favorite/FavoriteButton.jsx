@@ -29,6 +29,7 @@ function FavoriteButton({ type, itemId }) {
   };
   return (
     <IconButton
+      aria-label="favorite"
       onClick={handleToggleFavorite}
       sx={{
         color: "#ED310C",

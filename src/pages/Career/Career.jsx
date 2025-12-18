@@ -131,8 +131,7 @@ function Careers() {
                         ? "rgba(255, 255, 255, 0.05)"
                         : "rgba(0, 0, 0, 0.02)",
                     borderRadius: 3,
-                    border: (theme) =>
-                      `1px dashed ${theme.palette.divider}`,
+                    border: (theme) => `1px dashed ${theme.palette.divider}`,
                   }}
                 >
                   <WorkIcon

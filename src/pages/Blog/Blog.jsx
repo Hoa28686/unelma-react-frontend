@@ -292,7 +292,7 @@ function Blog() {
         {/* Content Wrapper - matches Footer width */}
         <Box
           sx={{
-            maxWidth: { xs: "90%", sm: "85%", md: "1280px" },
+            maxWidth: { xs: "90%", sm: "85%", md: "80%" },
             margin: "0 auto",
             width: "100%",
             display: "flex",
@@ -321,133 +321,133 @@ function Blog() {
               marginBottom: { xs: "2rem", sm: "3rem" },
             }}
           >
-          <TextField
-            fullWidth
-            placeholder="Search blogs by title, content, author, or category..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            variant="outlined"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchOutlinedIcon
-                    sx={{
-                      color: (theme) => theme.palette.text.secondary,
-                    }}
-                  />
-                </InputAdornment>
-              ),
-              endAdornment: searchQuery && (
-                <InputAdornment position="end">
-                  <IconButton
-                    size="small"
-                    onClick={() => setSearchQuery("")}
-                    sx={{
-                      color: (theme) => theme.palette.text.secondary,
-                    }}
-                  >
-                    <ClearOutlinedIcon fontSize="small" />
-                  </IconButton>
-                </InputAdornment>
-              ),
-              sx: {
-                backgroundColor: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "#FFFFFF"
-                    : theme.palette.background.paper,
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.2)"
-                      : "rgba(0, 0, 0, 0.23)",
+            <TextField
+              fullWidth
+              placeholder="Search blogs by title, content, author, or category..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchOutlinedIcon
+                      sx={{
+                        color: (theme) => theme.palette.text.secondary,
+                      }}
+                    />
+                  </InputAdornment>
+                ),
+                endAdornment: searchQuery && (
+                  <InputAdornment position="end">
+                    <IconButton
+                      size="small"
+                      onClick={() => setSearchQuery("")}
+                      sx={{
+                        color: (theme) => theme.palette.text.secondary,
+                      }}
+                    >
+                      <ClearOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                sx: {
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "#FFFFFF"
+                      : theme.palette.background.paper,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(255, 255, 255, 0.2)"
+                        : "rgba(0, 0, 0, 0.23)",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                    borderWidth: "2px",
+                  },
                 },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: (theme) => theme.palette.primary.main,
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: (theme) => theme.palette.primary.main,
-                  borderWidth: "2px",
-                },
-              },
-            }}
-          />
-          {searchQuery && (
-            <Typography
-              variant="body2"
-              sx={{
-                mt: 1,
-                color: (theme) => theme.palette.text.secondary,
               }}
-            >
-              {filteredAndSortedBlogs.length === 0
-                ? "No blogs found"
-                : `Found ${filteredAndSortedBlogs.length} blog${filteredAndSortedBlogs.length !== 1 ? "s" : ""}`}
-            </Typography>
-          )}
+            />
+            {searchQuery && (
+              <Typography
+                variant="body2"
+                sx={{
+                  mt: 1,
+                  color: (theme) => theme.palette.text.secondary,
+                }}
+              >
+                {filteredAndSortedBlogs.length === 0
+                  ? "No blogs found"
+                  : `Found ${filteredAndSortedBlogs.length} blog${filteredAndSortedBlogs.length !== 1 ? "s" : ""}`}
+              </Typography>
+            )}
           </Box>
 
           {/* Sort and filter */}
           <Stack
             spacing={2}
             direction={{ xs: "column", sm: "row" }}
-            sx={{ mb: 5, width: "100%" }}
+            sx={{ mb: 5 }}
           >
-          {/* Category Filter */}
-          <Select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            sx={{
-              minWidth: 180,
-              borderRadius: 3,
-              p: 0,
-              mb: 2,
-              textTransform: "capitalize",
-            }}
-          >
-            <MenuItem value="all">All categories</MenuItem>
-            {categories
-              .filter((cat) => cat !== "others")
-              .map((cat, index) => (
-                <MenuItem
-                  key={index}
-                  value={cat}
-                  sx={{ textTransform: "capitalize" }}
-                >
-                  {cat}
-                </MenuItem>
-              ))}
-            <MenuItem value="others">Others</MenuItem>
-          </Select>
+            {/* Category Filter */}
+            <Select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              sx={{
+                minWidth: 180,
+                borderRadius: 3,
+                p: 0,
+                mb: 2,
+                textTransform: "capitalize",
+              }}
+            >
+              <MenuItem value="all">All categories</MenuItem>
+              {categories
+                .filter((cat) => cat !== "others")
+                .map((cat, index) => (
+                  <MenuItem
+                    key={index}
+                    value={cat}
+                    sx={{ textTransform: "capitalize" }}
+                  >
+                    {cat}
+                  </MenuItem>
+                ))}
+              <MenuItem value="others">Others</MenuItem>
+            </Select>
 
-          {/* Sort by created time, most favorites */}
-          <Select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-            sx={{ borderRadius: 3, p: 0 }}
-          >
-            <Typography component="span" sx={{ pl: 1 }}>
-              Sort by:{" "}
-            </Typography>
-            <MenuItem value="newest">Newest</MenuItem>
-            <MenuItem value="oldest">Oldest</MenuItem>
-            <MenuItem value="mostFav">Most Favorited</MenuItem>
-          </Select>
-          {/* Favorite Filter */}
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={onlyFavorites}
-                onChange={handleFavoriteFilter}
-                icon={<FavoriteBorderIcon sx={{ color: "#ED310C" }} />}
-                checkedIcon={<FavoriteIcon sx={{ color: "#ED310C" }} />}
-              />
-            }
-            label="Only show my favorites"
-            sx={{
-              mb: 5,
-              color: (theme) => theme.palette.text.primary,
-            }}
-          />
+            {/* Sort by created time, most favorites */}
+            <Select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              sx={{ borderRadius: 3, p: 0 }}
+            >
+              <Typography component="span" sx={{ pl: 1 }}>
+                Sort by:{" "}
+              </Typography>
+              <MenuItem value="newest">Newest</MenuItem>
+              <MenuItem value="oldest">Oldest</MenuItem>
+              <MenuItem value="mostFav">Most Favorited</MenuItem>
+            </Select>
+            {/* Favorite Filter */}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={onlyFavorites}
+                  onChange={handleFavoriteFilter}
+                  icon={<FavoriteBorderIcon sx={{ color: "#ED310C" }} />}
+                  checkedIcon={<FavoriteIcon sx={{ color: "#ED310C" }} />}
+                />
+              }
+              label="Only show my favorites"
+              sx={{
+                mb: 5,
+                color: (theme) => theme.palette.text.primary,
+              }}
+            />
           </Stack>
           <Box
             sx={{
@@ -458,187 +458,189 @@ function Blog() {
               gap: { xs: 3, sm: 4 },
             }}
           >
-          {paginatedBlogs.length === 0 && onlyFavorites && user && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "300px",
-                gap: 2,
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{ color: (theme) => theme.palette.text.secondary }}
-              >
-                No favorite blogs found
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: (theme) => theme.palette.text.secondary }}
-              >
-                Start favoriting blogs to see them here!
-              </Typography>
-            </Box>
-          )}
-          {paginatedBlogs.length === 0 && !onlyFavorites && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "300px",
-                gap: 2,
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{ color: (theme) => theme.palette.text.secondary }}
-              >
-                No blogs found
-              </Typography>
-            </Box>
-          )}
-          {paginatedBlogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
-          ))}
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 2,
-                marginTop: { xs: "2rem", sm: "3rem" },
-                flexWrap: "wrap",
-              }}
-            >
-              {/* Previous Arrow */}
-              <IconButton
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
+            {paginatedBlogs.length === 0 && onlyFavorites && user && (
+              <Box
                 sx={{
-                  color: (theme) => theme.palette.text.primary,
-                  border: "1px solid transparent",
-                  transition: "all 0.3s ease",
-                  "&:focus": {
-                    outline: (theme) =>
-                      `2px solid ${theme.palette.primary.main}`,
-                    outlineOffset: "2px",
-                  },
-                  "&:focus-visible": {
-                    outline: (theme) =>
-                      `2px solid ${theme.palette.primary.main}`,
-                    outlineOffset: "2px",
-                  },
-                  "&:hover": {
-                    borderColor: (theme) => theme.palette.primary.main,
-                    transform: "translateY(-4px)",
-                    backgroundColor: "transparent",
-                  },
-                  "&:disabled": {
-                    opacity: 0.5,
-                  },
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: "300px",
+                  gap: 2,
                 }}
               >
-                <NavigateBeforeIcon />
-              </IconButton>
-
-              {/* Page Numbers */}
-              <Pagination
-                count={totalPages}
-                page={currentPage}
-                onChange={handlePageChange}
+                <Typography
+                  variant="h6"
+                  sx={{ color: (theme) => theme.palette.text.secondary }}
+                >
+                  No favorite blogs found
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: (theme) => theme.palette.text.secondary }}
+                >
+                  Start favoriting blogs to see them here!
+                </Typography>
+              </Box>
+            )}
+            {paginatedBlogs.length === 0 && !onlyFavorites && (
+              <Box
                 sx={{
-                  "& .MuiPaginationItem-root": {
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: "300px",
+                  gap: 2,
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{ color: (theme) => theme.palette.text.secondary }}
+                >
+                  No blogs found
+                </Typography>
+              </Box>
+            )}
+            {paginatedBlogs.map((blog) => (
+              <BlogCard key={blog.id} blog={blog} />
+            ))}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 2,
+                  marginTop: { xs: "2rem", sm: "3rem" },
+                  flexWrap: "wrap",
+                }}
+              >
+                {/* Previous Arrow */}
+                <IconButton
+                  aria-label="Previous"
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                  sx={{
                     color: (theme) => theme.palette.text.primary,
                     border: "1px solid transparent",
-                    boxShadow: "none !important",
-                    "&.Mui-selected": {
-                      backgroundColor: (theme) => theme.palette.primary.main,
-                      color: "#FFFFFF",
-                      border: (theme) =>
-                        `1px solid ${theme.palette.primary.main}`,
+                    transition: "all 0.3s ease",
+                    "&:focus": {
+                      outline: (theme) =>
+                        `2px solid ${theme.palette.primary.main}`,
+                      outlineOffset: "2px",
+                    },
+                    "&:focus-visible": {
+                      outline: (theme) =>
+                        `2px solid ${theme.palette.primary.main}`,
+                      outlineOffset: "2px",
+                    },
+                    "&:hover": {
+                      borderColor: (theme) => theme.palette.primary.main,
+                      transform: "translateY(-4px)",
+                      backgroundColor: "transparent",
+                    },
+                    "&:disabled": {
+                      opacity: 0.5,
+                    },
+                  }}
+                >
+                  <NavigateBeforeIcon />
+                </IconButton>
+
+                {/* Page Numbers */}
+                <Pagination
+                  count={totalPages}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  sx={{
+                    "& .MuiPaginationItem-root": {
+                      color: (theme) => theme.palette.text.primary,
+                      border: "1px solid transparent",
                       boxShadow: "none !important",
-                      "&:hover": {
-                        backgroundColor: "#C85A2E",
+                      "&.Mui-selected": {
+                        backgroundColor: (theme) => theme.palette.primary.main,
+                        color: "#FFFFFF",
+                        border: (theme) =>
+                          `1px solid ${theme.palette.primary.main}`,
+                        boxShadow: "none !important",
+                        "&:hover": {
+                          backgroundColor: "#C85A2E",
+                        },
+                        "&:focus": {
+                          outline: (theme) =>
+                            `2px solid ${theme.palette.primary.main} !important`,
+                          outlineOffset: "2px",
+                          boxShadow: "none !important",
+                        },
+                        "&:focus-visible": {
+                          outline: (theme) =>
+                            `2px solid ${theme.palette.primary.main} !important`,
+                          outlineOffset: "2px",
+                          boxShadow: "none !important",
+                        },
                       },
                       "&:focus": {
                         outline: (theme) =>
                           `2px solid ${theme.palette.primary.main} !important`,
                         outlineOffset: "2px",
                         boxShadow: "none !important",
+                        border: "1px solid transparent",
                       },
                       "&:focus-visible": {
                         outline: (theme) =>
                           `2px solid ${theme.palette.primary.main} !important`,
                         outlineOffset: "2px",
                         boxShadow: "none !important",
+                        border: "1px solid transparent",
+                      },
+                      "&:hover": {
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === "light"
+                            ? "rgba(229, 122, 68, 0.1)"
+                            : "rgba(229, 122, 68, 0.2)",
+                        border: "1px solid transparent",
+                        boxShadow: "none !important",
                       },
                     },
+                  }}
+                />
+
+                {/* Next Arrow */}
+                <IconButton
+                  aria-label="Next"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  sx={{
+                    color: (theme) => theme.palette.text.primary,
+                    border: "1px solid transparent",
+                    transition: "all 0.3s ease",
                     "&:focus": {
                       outline: (theme) =>
-                        `2px solid ${theme.palette.primary.main} !important`,
+                        `2px solid ${theme.palette.primary.main}`,
                       outlineOffset: "2px",
-                      boxShadow: "none !important",
-                      border: "1px solid transparent",
                     },
                     "&:focus-visible": {
                       outline: (theme) =>
-                        `2px solid ${theme.palette.primary.main} !important`,
+                        `2px solid ${theme.palette.primary.main}`,
                       outlineOffset: "2px",
-                      boxShadow: "none !important",
-                      border: "1px solid transparent",
                     },
                     "&:hover": {
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "rgba(229, 122, 68, 0.1)"
-                          : "rgba(229, 122, 68, 0.2)",
-                      border: "1px solid transparent",
-                      boxShadow: "none !important",
+                      borderColor: (theme) => theme.palette.primary.main,
+                      transform: "translateY(-4px)",
+                      backgroundColor: "transparent",
                     },
-                  },
-                }}
-              />
-
-              {/* Next Arrow */}
-              <IconButton
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                sx={{
-                  color: (theme) => theme.palette.text.primary,
-                  border: "1px solid transparent",
-                  transition: "all 0.3s ease",
-                  "&:focus": {
-                    outline: (theme) =>
-                      `2px solid ${theme.palette.primary.main}`,
-                    outlineOffset: "2px",
-                  },
-                  "&:focus-visible": {
-                    outline: (theme) =>
-                      `2px solid ${theme.palette.primary.main}`,
-                    outlineOffset: "2px",
-                  },
-                  "&:hover": {
-                    borderColor: (theme) => theme.palette.primary.main,
-                    transform: "translateY(-4px)",
-                    backgroundColor: "transparent",
-                  },
-                  "&:disabled": {
-                    opacity: 0.5,
-                  },
-                }}
-              >
-                <NavigateNextIcon />
-              </IconButton>
-            </Box>
-          )}
+                    "&:disabled": {
+                      opacity: 0.5,
+                    },
+                  }}
+                >
+                  <NavigateNextIcon />
+                </IconButton>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
