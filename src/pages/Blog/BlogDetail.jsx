@@ -564,13 +564,20 @@ function BlogDetail() {
               >
                 <Card
                   sx={{
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) =>
                       theme.palette.mode === "dark"
                         ? "1px solid rgba(255, 255, 255, 0.1)"
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     padding: { xs: "2rem", sm: "2.5rem" },
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                   }}
                 >
                   <Typography

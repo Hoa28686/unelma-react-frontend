@@ -403,8 +403,8 @@ function ServiceDetail() {
                           sx={{
                             backgroundColor: (theme) =>
                               theme.palette.mode === "light"
-                                ? theme.palette.background.paper
-                                : theme.palette.background.paper,
+                                ? "rgba(0, 0, 0, 0.03)"
+                                : "transparent",
                             border: (theme) =>
                               theme.palette.mode === "dark"
                                 ? "1px solid rgba(255, 255, 255, 0.1)"
@@ -415,10 +415,18 @@ function ServiceDetail() {
                             display: "flex",
                             flexDirection: "column",
                             transition: "all 0.3s ease",
+                            boxShadow: (theme) =>
+                              theme.palette.mode === "light"
+                                ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                                : "none",
                             "&:hover": {
                               borderColor: (theme) =>
                                 theme.palette.primary.main,
                               transform: "translateY(-4px)",
+                              boxShadow: (theme) =>
+                                theme.palette.mode === "light"
+                                  ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                                  : "0 8px 32px rgba(0, 0, 0, 0.3)",
                             },
                           }}
                         >
@@ -591,13 +599,20 @@ function ServiceDetail() {
               >
                 <Card
                   sx={{
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) =>
                       theme.palette.mode === "dark"
                         ? "1px solid rgba(255, 255, 255, 0.1)"
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     padding: { xs: "2rem", sm: "2.5rem" },
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                   }}
                 >
                   <Typography

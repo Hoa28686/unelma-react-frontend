@@ -166,7 +166,7 @@ function HeroSection({ isLoaded, onRequestQuote, onOpenModal }) {
                   fontWeight: 700,
                   color: (theme) =>
                     theme.palette.mode === "dark"
-                      ? "#FFFFFF"
+                      ? "#000000"
                       : theme.palette.text.primary,
                   marginBottom: 0,
                   lineHeight: 1.2,

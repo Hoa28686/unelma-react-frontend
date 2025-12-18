@@ -320,7 +320,18 @@ function ProductDetail() {
                   sx={{
                     p: 2,
                     borderRadius: 2,
-                    backgroundColor: (theme) => `${theme.palette.divider}20`,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
+                    border: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "1px solid rgba(255, 255, 255, 0.1)"
+                        : "1px solid rgba(0, 0, 0, 0.1)",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                   }}
                 >
                   <Stack
@@ -341,7 +352,18 @@ function ProductDetail() {
                   sx={{
                     p: 2,
                     borderRadius: 2,
-                    backgroundColor: (theme) => `${theme.palette.divider}20`,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
+                    border: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "1px solid rgba(255, 255, 255, 0.1)"
+                        : "1px solid rgba(0, 0, 0, 0.1)",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                   }}
                 >
                   <PriceDisplay price={product.price} />
@@ -367,9 +389,17 @@ function ProductDetail() {
                       height: "100%",
                       borderRadius: 3,
                       border: (theme) =>
-                        `1px solid ${theme.palette.text.primary}20`,
+                        theme.palette.mode === "dark"
+                          ? "1px solid rgba(255, 255, 255, 0.1)"
+                          : "1px solid rgba(0, 0, 0, 0.1)",
                       backgroundColor: (theme) =>
-                        theme.palette.background.paper,
+                        theme.palette.mode === "light"
+                          ? "rgba(0, 0, 0, 0.03)"
+                          : "transparent",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                          : "none",
                     }}
                   >
                     <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
@@ -461,9 +491,17 @@ function ProductDetail() {
                       height: "100%",
                       borderRadius: 3,
                       border: (theme) =>
-                        `1px solid ${theme.palette.text.primary}20`,
+                        theme.palette.mode === "dark"
+                          ? "1px solid rgba(255, 255, 255, 0.1)"
+                          : "1px solid rgba(0, 0, 0, 0.1)",
                       backgroundColor: (theme) =>
-                        theme.palette.background.paper,
+                        theme.palette.mode === "light"
+                          ? "rgba(0, 0, 0, 0.03)"
+                          : "transparent",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                          : "none",
                     }}
                   >
                     <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
@@ -516,9 +554,17 @@ function ProductDetail() {
                     sx={{
                       borderRadius: 3,
                       border: (theme) =>
-                        `1px solid ${theme.palette.text.primary}20`,
+                        theme.palette.mode === "dark"
+                          ? "1px solid rgba(255, 255, 255, 0.1)"
+                          : "1px solid rgba(0, 0, 0, 0.1)",
                       backgroundColor: (theme) =>
-                        theme.palette.background.paper,
+                        theme.palette.mode === "light"
+                          ? "rgba(0, 0, 0, 0.03)"
+                          : "transparent",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                          : "none",
                     }}
                   >
                     <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
@@ -572,9 +618,17 @@ function ProductDetail() {
                     sx={{
                       borderRadius: 3,
                       border: (theme) =>
-                        `1px solid ${theme.palette.text.primary}20`,
+                        theme.palette.mode === "dark"
+                          ? "1px solid rgba(255, 255, 255, 0.1)"
+                          : "1px solid rgba(0, 0, 0, 0.1)",
                       backgroundColor: (theme) =>
-                        theme.palette.background.paper,
+                        theme.palette.mode === "light"
+                          ? "rgba(0, 0, 0, 0.03)"
+                          : "transparent",
+                      boxShadow: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                          : "none",
                     }}
                   >
                     <CardContent
@@ -709,13 +763,20 @@ function ProductDetail() {
               >
                 <Card
                   sx={{
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) =>
                       theme.palette.mode === "dark"
                         ? "1px solid rgba(255, 255, 255, 0.1)"
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     padding: { xs: "2rem", sm: "2.5rem" },
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                   }}
                 >
                   <Typography

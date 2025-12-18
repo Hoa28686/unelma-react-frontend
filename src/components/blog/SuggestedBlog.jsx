@@ -58,8 +58,7 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
           justifyContent: "center",
           gap: 2,
           py: 1,
-          width: { xs: "90%", sm: "85%", md: "80%" },
-          margin: "0 auto",
+          width: "100%",
         }}
       >
         {suggestedBlogs.map((blog) => (
@@ -71,15 +70,29 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
               height: "37rem",
               p: 0,
               flexShrink: 0,
-              backgroundColor: (theme) => theme.palette.background.paper,
-              border: (theme) => `1px solid ${theme.palette.text.secondary}20`,
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? "rgba(0, 0, 0, 0.03)"
+                  : "transparent",
+              border: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "1px solid rgba(255, 255, 255, 0.1)"
+                  : "1px solid rgba(0, 0, 0, 0.1)",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               transition: "all 0.3s ease",
+              boxShadow: (theme) =>
+                theme.palette.mode === "light"
+                  ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                  : "none",
               "&:hover": {
                 borderColor: (theme) => theme.palette.primary.main,
                 transform: "translateY(-4px)",
+                boxShadow: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                    : "0 8px 32px rgba(0, 0, 0, 0.3)",
               },
             }}
           >

@@ -278,7 +278,15 @@ function Home() {
                     minWidth: { xs: "100%", sm: "auto" },
                   }}
                 >
-                  We are Software Platform Development Company
+                  Empowering Growth with{" "}
+                  <Box
+                    component="span"
+                    sx={{
+                      color: (theme) => theme.palette.primary.main,
+                    }}
+                  >
+                    Innovative Software Platforms
+                  </Box>
                 </Typography>
 
                 {/* Arrow Icon Button */}
