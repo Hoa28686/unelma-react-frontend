@@ -1,5 +1,15 @@
 import React, { useState, useRef } from "react";
-import { Box, Typography, Grid, IconButton, Card, CardContent, Chip, Avatar, Link } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid,
+  IconButton,
+  Card,
+  CardContent,
+  Chip,
+  Avatar,
+  Link,
+} from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ComputerIcon from "@mui/icons-material/Computer";
 import SecurityIcon from "@mui/icons-material/Security";
@@ -70,9 +80,17 @@ function About() {
               variant="h1"
               component="h1"
               sx={{
-                fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem", lg: "4rem" },
+                fontSize: {
+                  xs: "2rem",
+                  sm: "2.5rem",
+                  md: "3.5rem",
+                  lg: "4rem",
+                },
                 fontWeight: 700,
-                color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
+                color: (theme) =>
+                  theme.palette.mode === "light"
+                    ? theme.palette.text.primary
+                    : "#FFFFFF",
                 marginBottom: { xs: "2rem", sm: "3rem" },
                 lineHeight: 1.2,
                 textAlign: "left",
@@ -87,7 +105,10 @@ function About() {
                 "& p": {
                   fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   fontWeight: 400,
-                  color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "rgba(255, 255, 255, 0.95)",
+                  color: (theme) =>
+                    theme.palette.mode === "light"
+                      ? theme.palette.text.primary
+                      : "rgba(255, 255, 255, 0.95)",
                   lineHeight: 1.8,
                   textAlign: "left",
                   marginBottom: "1.5rem",
@@ -98,29 +119,55 @@ function About() {
                 },
               }}
             >
-            <p>
-              Welcome to Unelma Platforms, where our mission is to "empower people." Funny thing is nobody were talking about "empowering people" in IT industry some 15 years ago and when we started a slogan of "empower people" with our business many big corporate giants and other consulting companies started copying our slogan and now almost everybody is talking about how to help and empower clients.
-            </p>
+              <p>
+                Welcome to Unelma Platforms, where our mission is to "empower
+                people." Funny thing is nobody were talking about "empowering
+                people" in IT industry some 15 years ago and when we started a
+                slogan of "empower people" with our business many big corporate
+                giants and other consulting companies started copying our slogan
+                and now almost everybody is talking about how to help and
+                empower clients.
+              </p>
 
-            <p>
-              With over 15 years of experience in the tech landscape, Unelma Platforms has grown into a household name heralding the digital revolution. We proudly strut a rich legacy that intersects innovation, user experience, and transformative power, borne out of our unwavering commitment to empower the lives of people through technology.
-            </p>
+              <p>
+                With over 15 years of experience in the tech landscape, Unelma
+                Platforms has grown into a household name heralding the digital
+                revolution. We proudly strut a rich legacy that intersects
+                innovation, user experience, and transformative power, borne out
+                of our unwavering commitment to empower the lives of people
+                through technology.
+              </p>
 
-            <p>
-              We believe in the profound potential technology holds to create positive change, and we channel this belief into creating platforms and software that are user-friendly, efficient, and groundbreaking. Our team comprises seasoned professionals who are passionate about harnessing the power of technology to optimize processes, solve complex problems, and ultimately, transform lives.
-            </p>
+              <p>
+                We believe in the profound potential technology holds to create
+                positive change, and we channel this belief into creating
+                platforms and software that are user-friendly, efficient, and
+                groundbreaking. Our team comprises seasoned professionals who
+                are passionate about harnessing the power of technology to
+                optimize processes, solve complex problems, and ultimately,
+                transform lives.
+              </p>
 
-            <p>
-              Our product portfolio - including UnelmaMail, UnelmaBrowser, and Unelma-Code Translator - is a testament to our motivation to build technology that makes a difference. Each of our cutting-edge products comes with full support, maintenance, and security provisions to ensure a seamless user experience.
-            </p>
+              <p>
+                Our product portfolio - including UnelmaMail, UnelmaBrowser, and
+                Unelma-Code Translator - is a testament to our motivation to
+                build technology that makes a difference. Each of our
+                cutting-edge products comes with full support, maintenance, and
+                security provisions to ensure a seamless user experience.
+              </p>
 
-            <p>
-              At Unelma Platforms, our journey is always about more than just developing technology. It is about empowering people, fostering growth, and pushing boundaries. We don't just create platforms; we create opportunities where none existed before.
-            </p>
+              <p>
+                At Unelma Platforms, our journey is always about more than just
+                developing technology. It is about empowering people, fostering
+                growth, and pushing boundaries. We don't just create platforms;
+                we create opportunities where none existed before.
+              </p>
 
-            <p>
-              So come with us on this exciting journey and allow us to empower you. Welcome to Unelma Platforms. Embrace the power of technology to transform your world.
-            </p>
+              <p>
+                So come with us on this exciting journey and allow us to empower
+                you. Welcome to Unelma Platforms. Embrace the power of
+                technology to transform your world.
+              </p>
             </Box>
 
             {/* Welcome Message */}
@@ -141,12 +188,16 @@ function About() {
                 sx={{
                   fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
                   fontWeight: 600,
-                  color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
+                  color: (theme) =>
+                    theme.palette.mode === "light"
+                      ? theme.palette.text.primary
+                      : "#FFFFFF",
                   textAlign: "left",
                   letterSpacing: "0.05em",
                 }}
               >
-                Welcome to Unelma Platforms, where our mission is to "empower people."
+                Welcome to Unelma Platforms, where our mission is to "empower
+                people."
               </Typography>
             </Box>
 
@@ -154,26 +205,58 @@ function About() {
             <Grid container spacing={3} justifyContent="center">
               {[
                 {
-                  icon: <ComputerIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
+                  icon: (
+                    <ComputerIcon
+                      sx={{
+                        fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
+                      }}
+                    />
+                  ),
                   title: "Comprehensive IT Services",
                 },
                 {
-                  icon: <SecurityIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
+                  icon: (
+                    <SecurityIcon
+                      sx={{
+                        fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
+                      }}
+                    />
+                  ),
                   title: "Enterprise-Grade Security Solutions",
                 },
                 {
-                  icon: <PeopleIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
+                  icon: (
+                    <PeopleIcon
+                      sx={{
+                        fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
+                      }}
+                    />
+                  ),
                   title: "Expert Professional Team",
                 },
                 {
-                  icon: <PublicIcon sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />,
+                  icon: (
+                    <PublicIcon
+                      sx={{
+                        fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
+                      }}
+                    />
+                  ),
                   title: "Worldwide Global Support",
                 },
               ].map((feature, index) => (
-                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index} sx={{ display: "flex", justifyContent: "center" }}>
+                <Grid
+                  size={{ xs: 12, sm: 6, md: 3 }}
+                  key={index}
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
                   <Box
                     sx={{
-                      padding: { xs: "2rem 1.5rem", sm: "2.5rem 2rem", md: "3rem 2rem" },
+                      padding: {
+                        xs: "2rem 1.5rem",
+                        sm: "2.5rem 2rem",
+                        md: "3rem 2rem",
+                      },
                       textAlign: "center",
                       transition: "all 0.3s ease",
                       height: "100%",
@@ -209,7 +292,10 @@ function About() {
                       sx={{
                         fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                         fontWeight: 400,
-                        color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
+                        color: (theme) =>
+                          theme.palette.mode === "light"
+                            ? theme.palette.text.primary
+                            : "#FFFFFF",
                         textAlign: "center",
                         lineHeight: 1.4,
                         minHeight: { xs: "2.8em", sm: "2.8em", md: "2.8em" },
@@ -258,7 +344,10 @@ function About() {
                 "& p": {
                   fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   fontWeight: 400,
-                  color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "rgba(255, 255, 255, 0.95)",
+                  color: (theme) =>
+                    theme.palette.mode === "light"
+                      ? theme.palette.text.primary
+                      : "rgba(255, 255, 255, 0.95)",
                   lineHeight: 1.8,
                   textAlign: "left",
                   marginBottom: "1.5rem",
@@ -283,7 +372,10 @@ function About() {
                   sx={{
                     fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
                     fontWeight: 700,
-                    color: (theme) => theme.palette.mode === 'light' ? theme.palette.text.primary : "#FFFFFF",
+                    color: (theme) =>
+                      theme.palette.mode === "light"
+                        ? theme.palette.text.primary
+                        : "#FFFFFF",
                     marginBottom: { xs: "1.5rem", sm: "2rem" },
                     lineHeight: 1.2,
                     textAlign: "left",
@@ -292,10 +384,17 @@ function About() {
                   Global Presence
                 </Typography>
                 <p>
-                  Our services reach clients across the globe, from major metropolitan areas to emerging markets. We have successfully delivered IT solutions to businesses in North America, Europe, Asia, and beyond, helping organizations transform their digital infrastructure regardless of their location.
+                  Our services reach clients across the globe, from major
+                  metropolitan areas to emerging markets. We have successfully
+                  delivered IT solutions to businesses in North America, Europe,
+                  Asia, and beyond, helping organizations transform their
+                  digital infrastructure regardless of their location.
                 </p>
                 <p>
-                  With our global network and expertise, we are equipped to serve clients worldwide, providing tailored solutions that meet local requirements while maintaining international standards of excellence.
+                  With our global network and expertise, we are equipped to
+                  serve clients worldwide, providing tailored solutions that
+                  meet local requirements while maintaining international
+                  standards of excellence.
                 </p>
               </Box>
             </Box>
@@ -329,9 +428,9 @@ function About() {
                     width: "100%",
                     aspectRatio: { xs: "16/9", md: "9/16" },
                     backgroundColor: (theme) => theme.palette.background.paper,
-                    border: (theme) => 
-                      theme.palette.mode === 'dark' 
-                        ? "1px solid rgba(255, 255, 255, 0.1)" 
+                    border: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "1px solid rgba(255, 255, 255, 0.1)"
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: { xs: 2, md: 3 },
                     display: "flex",
@@ -384,10 +483,13 @@ function About() {
                         sx={{
                           width: { xs: "64px", sm: "80px", md: "96px" },
                           height: { xs: "64px", sm: "80px", md: "96px" },
-                          backgroundColor: (theme) => theme.palette.primary.main,
+                          backgroundColor: (theme) =>
+                            theme.palette.primary.main,
                           color: "#FFFFFF",
                           "&:hover": {
-                            backgroundColor: (theme) => theme.palette.primary.dark || theme.palette.primary.main,
+                            backgroundColor: (theme) =>
+                              theme.palette.primary.dark ||
+                              theme.palette.primary.main,
                             transform: "scale(1.1)",
                           },
                           transition: "all 0.3s ease",
@@ -465,15 +567,16 @@ function About() {
                     forefront of helping businesses harness the power of
                     technology to drive success. Our comprehensive range of
                     innovative and user-friendly software solutions enables
-                    businesses to operate more efficiently, reach their customers
-                    effectively, and ultimately, boost their bottom line.
+                    businesses to operate more efficiently, reach their
+                    customers effectively, and ultimately, boost their bottom
+                    line.
                   </p>
                   <p>
                     With a rich experience spanning more than a decade, Unelma
-                    Platforms stands as a reliable partner in your journey toward
-                    growth and success. Our goal has been, and always will be,
-                    to empower businesses with the best technology tools and
-                    services available.
+                    Platforms stands as a reliable partner in your journey
+                    toward growth and success. Our goal has been, and always
+                    will be, to empower businesses with the best technology
+                    tools and services available.
                   </p>
                   <p>
                     From custom software development to cloud solutions and
@@ -512,21 +615,37 @@ function About() {
               {[
                 {
                   name: "Binyam Angamo",
-                  roles: ["UI Design", "Style Guide", "Frontend Contributions", "Backend Contributions"],
+                  roles: [
+                    "UI Design",
+                    "Style Guide",
+                    "Frontend Contributions",
+                    "Backend Contributions",
+                  ],
                   icon: DesignServicesIcon,
                   profilePicture: null, // Set to profile picture URL when available
-                  linkedinUrl: "https://www.linkedin.com/in/binyam-angamo-0611172b9",
+                  linkedinUrl:
+                    "https://www.linkedin.com/in/binyam-angamo-0611172b9",
                 },
                 {
                   name: "Lu Hoa",
-                  roles: ["Frontend Lead", "Backend Contributions"],
+                  roles: [
+                    "Frontend Lead",
+                    "UI",
+                    "Mobile Responsiveness",
+                    "Backend Contributions",
+                  ],
                   icon: CodeIcon,
                   profilePicture: null,
                   linkedinUrl: null, // Add LinkedIn URL when available
                 },
                 {
                   name: "Elias Bekele",
-                  roles: ["Backend Lead", "Authentication", "Payment System", "API Integration"],
+                  roles: [
+                    "Backend Lead",
+                    "Authentication",
+                    "Payment System",
+                    "API Integration",
+                  ],
                   icon: VpnKeyIcon,
                   profilePicture: null,
                   linkedinUrl: null, // Add LinkedIn URL when available
@@ -619,7 +738,8 @@ function About() {
                                 theme.palette.mode === "light"
                                   ? `0 4px 12px ${theme.palette.primary.main}30`
                                   : `0 4px 12px ${theme.palette.primary.light}30`,
-                              backgroundColor: (theme) => theme.palette.primary.main,
+                              backgroundColor: (theme) =>
+                                theme.palette.primary.main,
                               color: "#FFFFFF",
                               transition: "all 0.3s ease",
                               "&:hover": member.linkedinUrl
@@ -633,7 +753,15 @@ function About() {
                                 : {},
                             }}
                           >
-                            <IconComponent sx={{ fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" } }} />
+                            <IconComponent
+                              sx={{
+                                fontSize: {
+                                  xs: "2.5rem",
+                                  sm: "3rem",
+                                  md: "3.5rem",
+                                },
+                              }}
+                            />
                           </Avatar>
                         </Link>
                       </Box>
@@ -651,7 +779,11 @@ function About() {
                           variant="h5"
                           component="h3"
                           sx={{
-                            fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
+                            fontSize: {
+                              xs: "1.25rem",
+                              sm: "1.5rem",
+                              md: "1.75rem",
+                            },
                             fontWeight: 600,
                             color: (theme) => theme.palette.text.primary,
                             marginBottom: 2,

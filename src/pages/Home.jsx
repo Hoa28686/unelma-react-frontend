@@ -222,7 +222,6 @@ function Home() {
               sx={{
                 width: { xs: "100%", md: "50%" },
                 order: { xs: 1, md: 2 },
-                padding: { xs: 2, sm: 3, md: 3 },
               }}
             >
               {/* Title */}
@@ -242,7 +241,7 @@ function Home() {
                       ? "1px solid rgba(255, 255, 255, 0.1)"
                       : "1px solid rgba(0, 0, 0, 0.1)",
                   borderRadius: 2,
-                  padding: { xs: 2, sm: 2.5, md: 3 },
+                  padding: { xs: 2, sm: 2.5, md: 3.5 },
                   boxShadow: (theme) =>
                     theme.palette.mode === "light"
                       ? "0 2px 8px rgba(0, 0, 0, 0.05)"
@@ -255,10 +254,9 @@ function Home() {
                   sx={{
                     minWidth: 0,
                     fontSize: {
-                      xs: "2rem",
-                      sm: "2rem",
-                      md: "3rem",
-                      lg: "4rem",
+                      sm: "1.75rem",
+                      md: "2.25rem",
+                      lg: "3.25rem",
                     },
                     fontWeight: 700,
                     color: (theme) =>
@@ -476,7 +474,7 @@ function Home() {
               return (
                 <Card
                   key={service.id}
-                  onClick={() => navigate(`/services/${service.serviceId}`)}
+                  onClick={() => navigate(`/services/${service.id}`)}
                   sx={{
                     flex: {
                       xs: "1 1 100%",
