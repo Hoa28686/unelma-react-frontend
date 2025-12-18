@@ -88,6 +88,7 @@ function BlogByTag() {
     <Box
       sx={{
         width: "100%",
+        px: { xs: 2, md: 10, lg: 15 },
         minHeight: "100vh",
         backgroundColor: (theme) => theme.palette.background.default,
         mt: 8,
