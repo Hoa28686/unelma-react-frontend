@@ -30,6 +30,7 @@ const lightTheme = createTheme({
     background: {
       default: "transparent", // Gradient applied in Layout
       paper: "rgba(255, 255, 255, 0.9)", // Semi-transparent white for cards/surfaces
+      overlay: "#4b4b4b",
     },
     text: {
       primary: "#000000", // Pure black text
@@ -139,6 +140,7 @@ const darkTheme = createTheme({
     background: {
       default: "transparent", // Gradient applied in Layout
       paper: "rgba(21, 27, 46, 0.8)", // Semi-transparent dark blue for cards/surfaces
+      overlay: "#020202",
     },
 
     text: {

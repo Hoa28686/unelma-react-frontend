@@ -169,7 +169,6 @@ function Home() {
                   fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   fontWeight: 400,
                   borderRadius: 2,
-                  boxShadow: "none",
                   textTransform: "none",
                   whiteSpace: "nowrap",
                   width: { xs: "auto", md: "fit-content" },
@@ -182,9 +181,11 @@ function Home() {
                       : "0 4px 12px rgba(0, 0, 0, 0.3)",
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    backgroundColor: (theme) => darken(theme.palette.primary.main, 0.2),
+                    backgroundColor: (theme) =>
+                      darken(theme.palette.primary.main, 0.2),
                     color: "#FFFFFF",
-                    borderColor: (theme) => darken(theme.palette.primary.main, 0.2),
+                    borderColor: (theme) =>
+                      darken(theme.palette.primary.main, 0.2),
                     transform: "translate3d(0, -4px, 0)",
                     boxShadow: (theme) =>
                       theme.palette.mode === "light"
@@ -221,37 +222,21 @@ function Home() {
               sx={{
                 width: { xs: "100%", md: "50%" },
                 order: { xs: 1, md: 2 },
-                padding: { xs: 2, sm: 3, md: 4 },
-                paddingLeft: { xs: 2, sm: 3, md: 12 },
-                "& p": {
-                  fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                  fontWeight: 400,
-                  color: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.9)"
-                      : theme.palette.text.primary,
-                  lineHeight: 1.8,
-                  textAlign: "left",
-                  maxWidth: "900px",
-                  marginBottom: { xs: "1rem", sm: "1.5rem" },
-                  marginTop: 0,
-                  "&:last-child": {
-                    marginBottom: 0,
-                  },
-                },
+                padding: { xs: 2, sm: 3, md: 3 },
               }}
             >
               {/* Title */}
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "center",
+                  flexDirection: { xs: "column", sm: "row" },
+                  alignItems: { xs: "flex-start", sm: "center" },
                   gap: 2,
                   flexWrap: "wrap",
                   backgroundColor: (theme) =>
                     theme.palette.mode === "light"
                       ? "rgba(0, 0, 0, 0.15)"
-                      : "rgba(0, 0, 0, 0.3)",
+                      : "rgba(31, 31, 31, 0.91)",
                   border: (theme) =>
                     theme.palette.mode === "dark"
                       ? "1px solid rgba(255, 255, 255, 0.1)"
@@ -262,18 +247,17 @@ function Home() {
                     theme.palette.mode === "light"
                       ? "0 2px 8px rgba(0, 0, 0, 0.05)"
                       : "none",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
                 }}
               >
                 <Typography
                   variant="h1"
                   component="h1"
                   sx={{
+                    minWidth: 0,
                     fontSize: {
                       xs: "2rem",
-                      sm: "2.5rem",
-                      md: "3.5rem",
+                      sm: "2rem",
+                      md: "3rem",
                       lg: "4rem",
                     },
                     fontWeight: 700,
@@ -283,9 +267,8 @@ function Home() {
                         : theme.palette.text.primary,
                     marginBottom: 0,
                     lineHeight: 1.2,
-                    textAlign: "left",
+                    textAlign: { xs: "center", sm: "left" },
                     flex: 1,
-                    minWidth: { xs: "100%", sm: "auto" },
                   }}
                 >
                   Empowering Growth with{" "}
@@ -303,6 +286,7 @@ function Home() {
                 <IconButton
                   onClick={handleOpenModal}
                   sx={{
+                    alignSelf: { xs: "flex-end", sm: "auto" },
                     color: (theme) => theme.palette.primary.main,
                     backgroundColor: (theme) =>
                       theme.palette.mode === "dark"
@@ -339,12 +323,7 @@ function Home() {
         PaperProps={{
           sx: {
             borderRadius: { xs: 3, sm: 4 },
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? "rgba(0, 0, 0, 0.03)"
-                : "transparent",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
+            backgroundColor: (theme) => theme.palette.background.overlay,
             border: (theme) =>
               theme.palette.mode === "dark"
                 ? "1px solid rgba(255, 255, 255, 0.1)"
@@ -383,7 +362,9 @@ function Home() {
               fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
               fontWeight: 700,
               color: (theme) =>
-                theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.text.primary,
               flex: 1,
             }}
           >
@@ -392,7 +373,9 @@ function Home() {
               component="span"
               sx={{
                 color: (theme) =>
-                  theme.palette.mode === "light" ? "#000000" : theme.palette.primary.main,
+                  theme.palette.mode === "light"
+                    ? "#000000"
+                    : theme.palette.primary.main,
               }}
             >
               Innovative Software Platforms
@@ -402,7 +385,9 @@ function Home() {
             onClick={handleCloseModal}
             sx={{
               color: (theme) =>
-                theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.text.secondary,
               "&:hover": {
                 backgroundColor: (theme) =>
                   theme.palette.mode === "dark"
@@ -422,7 +407,9 @@ function Home() {
               fontSize: { xs: "1rem", sm: "1.125rem" },
               fontWeight: 400,
               color: (theme) =>
-                theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.text.primary,
               lineHeight: 1.8,
               marginBottom: "1.5rem",
               "&:last-child": {
