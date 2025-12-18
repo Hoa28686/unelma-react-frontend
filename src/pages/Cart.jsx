@@ -158,7 +158,7 @@ function Cart() {
                 sx={{
                   backgroundColor: (theme) => theme.palette.primary.main,
                   color: "#FFFFFF",
-                  fontWeight: 100,
+                  fontWeight: 400,
                   borderRadius: 2,
                   boxShadow: "none",
                   textTransform: "none",
@@ -471,7 +471,7 @@ function Cart() {
                     sx={{
                       backgroundColor: (theme) => theme.palette.primary.main,
                       color: "#FFFFFF",
-                      fontWeight: 100,
+                      fontWeight: 400,
                       borderRadius: 2,
                       boxShadow: "none",
                       textTransform: "none",

@@ -46,9 +46,9 @@ export const buttonHoverStyles = {
 
 // Card background color - use theme instead
 // Deprecated: Use theme.palette.background.paper or theme.palette.background.default
-export const cardBackgroundLight = (theme) => 
-  theme.palette.mode === "light" 
-    ? theme.palette.background.paper 
+export const cardBackgroundLight = (theme) =>
+  theme.palette.mode === "light"
+    ? theme.palette.background.paper
     : theme.palette.background.default;
 
 // Primary accent color - use theme instead
@@ -59,7 +59,7 @@ export const getPrimaryColor = (theme) => theme.palette.primary.main;
 export const getCommonButtonStyles = (theme) => ({
   backgroundColor: theme.palette.primary.main,
   color: "#FFFFFF",
-  fontWeight: 100,
+  fontWeight: 400,
   borderRadius: 2,
   boxShadow: "none",
   textTransform: "none",
@@ -70,10 +70,9 @@ export const getCommonButtonStyles = (theme) => ({
 export const commonButtonStyles = {
   backgroundColor: (theme) => theme.palette.primary.main,
   color: "#FFFFFF",
-  fontWeight: 100,
+  fontWeight: 400,
   borderRadius: 2,
   boxShadow: "none",
   textTransform: "none",
   ...buttonHoverStyles,
 };
-

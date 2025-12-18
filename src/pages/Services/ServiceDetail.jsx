@@ -536,7 +536,7 @@ function ServiceDetail() {
                               backgroundColor: (theme) =>
                                 theme.palette.primary.main,
                               color: "#FFFFFF",
-                              fontWeight: 100,
+                              fontWeight: 400,
                               borderRadius: 2,
                               boxShadow: "none",
                               textTransform: "none",
@@ -703,7 +703,10 @@ function ServiceDetail() {
       </Box>
 
       {/* Suggested Services */}
-      <SuggestedServices currentService={selectedService} allServices={services} />
+      <SuggestedServices
+        currentService={selectedService}
+        allServices={services}
+      />
 
       {/* Payment Error Alert */}
       {paymentError && (
@@ -760,7 +763,7 @@ function ServiceDetail() {
             sx={{
               backgroundColor: (theme) => theme.palette.primary.main,
               color: "#FFFFFF",
-              fontWeight: 100,
+              fontWeight: 400,
               borderRadius: 2,
               textTransform: "none",
               "&:focus": {

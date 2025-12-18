@@ -343,7 +343,7 @@ const Footer = () => {
                 sx={{
                   py: 1,
                   px: 3,
-                  fontWeight: 100,
+                  fontWeight: 500,
                   borderRadius: 2,
                   boxShadow: "none",
                   textTransform: "none",
