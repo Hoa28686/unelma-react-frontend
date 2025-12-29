@@ -250,6 +250,7 @@ function ServiceDetail() {
         >
           <Box
             component="img"
+            loading="lazy"
             src={getImageUrl(
               service.image_local_url || service.image_url || service.image
             )}

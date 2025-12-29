@@ -213,6 +213,7 @@ function ProductDetail() {
         >
           <Box
             component="img"
+            loading="lazy"
             src={getImageUrl(
               product?.image_local_url || product?.image_url || product?.image
             )}

@@ -64,7 +64,10 @@ const JobApply = ({ career_id, jobName }) => {
         CV: null,
       });
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to submit application. Please try again.");
+      setError(
+        err.response?.data?.message ||
+          "Failed to submit application. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -214,8 +217,8 @@ const JobApply = ({ career_id, jobName }) => {
                   personalDetails.cover_letter
                     ? theme.palette.success.main
                     : theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.2)"
-                    : "rgba(0, 0, 0, 0.23)",
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "rgba(0, 0, 0, 0.23)",
                 backgroundColor: (theme) =>
                   personalDetails.cover_letter
                     ? theme.palette.mode === "dark"
@@ -283,8 +286,8 @@ const JobApply = ({ career_id, jobName }) => {
                   personalDetails.CV
                     ? theme.palette.success.main
                     : theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.2)"
-                    : "rgba(0, 0, 0, 0.23)",
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "rgba(0, 0, 0, 0.23)",
                 backgroundColor: (theme) =>
                   personalDetails.CV
                     ? theme.palette.mode === "dark"

@@ -103,6 +103,7 @@ function SuggestedProducts({ currentProduct, allProducts }) {
           >
             <CardMedia
               component="img"
+              loading="lazy"
               onClick={() => handleProductClick(product)}
               src={getImageUrl(
                 product.image_local_url || product.image_url || product.image

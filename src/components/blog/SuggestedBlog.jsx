@@ -98,6 +98,7 @@ function SuggestedBlog({ currentBlog, allBlogs }) {
           >
             <CardMedia
               component="img"
+              loading="lazy"
               onClick={() => handleBlogClick(blog)}
               src={
                 blog.image_url ||

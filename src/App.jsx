@@ -8,6 +8,7 @@ import BlogByTag from "./pages/Blog/BlogByTag.jsx";
 import ProductRedirect from "./pages/Products/ProductRedirect.jsx";
 import ServiceRedirect from "./pages/Services/ServiceRedirect.jsx";
 import BlogRedirect from "./pages/Blog/BlogRedirect.jsx";
+import ProtectedRoute from "./pages/Auth/ProtectedRoute.jsx";
 
 // Lazy load all pages for code splitting - only load what's needed
 const Home = lazy(() => import("./pages/Home.jsx"));
@@ -76,7 +77,14 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/user" element={<User />} />
+                <Route
+                  path="/user"
+                  element={
+                    <ProtectedRoute>
+                      <User />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment/success" element={<PaymentSuccess />} />
                 <Route path="/payment/cancel" element={<PaymentCancel />} />

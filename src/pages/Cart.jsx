@@ -207,6 +207,7 @@ function Cart() {
                         {/* Product Image */}
                         <CardMedia
                           component="img"
+                          loading="lazy"
                           src={getImageUrl(
                             item.image_local_url || item.image_url || item.image
                           )}

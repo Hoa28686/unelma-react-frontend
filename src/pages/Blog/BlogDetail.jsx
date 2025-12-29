@@ -214,6 +214,7 @@ function BlogDetail() {
         >
           <Box
             component="img"
+            loading="lazy"
             src={getImageUrl(
               selectedBlog?.featured_image_local_url ||
                 selectedBlog?.featured_image_url ||
