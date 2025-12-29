@@ -24,7 +24,7 @@ const Services = lazy(() => import("./pages/Services/Services.jsx"));
 const ServiceDetail = lazy(() => import("./pages/Services/ServiceDetail.jsx"));
 const Login = lazy(() => import("./pages/Auth/Login.jsx"));
 const Register = lazy(() => import("./pages/Auth/Register.jsx"));
-const User = lazy(() => import("./pages/User.jsx"));
+const User = lazy(() => import("./pages/Auth/User.jsx"));
 const PaymentSuccess = lazy(() => import("./pages/Payment/PaymentSuccess.jsx"));
 const PaymentCancel = lazy(() => import("./pages/Payment/PaymentCancel.jsx"));
 const Favorites = lazy(() => import("./pages/Favorites.jsx"));

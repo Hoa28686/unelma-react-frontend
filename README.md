@@ -6,8 +6,8 @@ A full-stack web application for blogs, products, and services with authenticati
 
 ## Demo
 
-- Image:
-- Video:
+- Image: ![seo](./src/assets/demo/SEO.png)
+- Video: ![demo-video](./src/assets/demo/video.gif)
 
 ## Team Members
 

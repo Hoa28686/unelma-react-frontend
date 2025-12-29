@@ -42,11 +42,11 @@ import {
   Settings,
   Delete,
 } from "@mui/icons-material";
-import { useContactForm } from "../hooks/useContactForm";
-import { useAuth } from "../context/AuthContext";
-import { getImageUrl, placeholderLogo } from "../helpers/helpers";
-import { API } from "../api";
-import { fetchProducts } from "../store/slices/products/productsSlice";
+import { useContactForm } from "../../hooks/useContactForm";
+import { useAuth } from "../../context/AuthContext";
+import { getImageUrl, placeholderLogo } from "../../helpers/helpers";
+import { API } from "../../api";
+import { fetchProducts } from "../../store/slices/products/productsSlice";
 
 function User() {
   const theme = useTheme();
