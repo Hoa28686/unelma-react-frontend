@@ -74,21 +74,36 @@ function SuggestedServices({ currentService, allServices }) {
               height: "37rem",
               p: 0,
               flexShrink: 0,
-              backgroundColor: (theme) => theme.palette.background.paper,
-              border: (theme) => `1px solid ${theme.palette.text.secondary}20`,
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? "rgba(0, 0, 0, 0.03)"
+                  : "transparent",
+              border: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "1px solid rgba(255, 255, 255, 0.1)"
+                  : "1px solid rgba(0, 0, 0, 0.1)",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               transition: "all 0.3s ease",
               cursor: "pointer",
+              boxShadow: (theme) =>
+                theme.palette.mode === "light"
+                  ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                  : "none",
               "&:hover": {
                 borderColor: (theme) => theme.palette.primary.main,
                 transform: "translateY(-4px)",
+                boxShadow: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                    : "0 8px 32px rgba(0, 0, 0, 0.3)",
               },
             }}
           >
             <CardMedia
               component="img"
+              loading="lazy"
               src={getImageUrl(
                 service.image_local_url || service.image_url || service.image
               )}
@@ -105,10 +120,26 @@ function SuggestedServices({ currentService, allServices }) {
                 backgroundColor: (theme) => theme.palette.background.paper,
               }}
             />
-            <Box sx={{ p: 2, width: "100%", flex: 1, display: "flex", flexDirection: "column" }}>
+            <Box
+              sx={{
+                p: 2,
+                width: "100%",
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               <CardHeader
                 title={
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", mb: 0.5 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      flexWrap: "wrap",
+                      mb: 0.5,
+                    }}
+                  >
                     <Typography
                       variant="h6"
                       component="h2"
@@ -129,7 +160,7 @@ function SuggestedServices({ currentService, allServices }) {
                           height: 20,
                           fontSize: "0.7rem",
                           backgroundColor: "#E57A44",
-                          color: "#FFFFFF"
+                          color: "#FFFFFF",
                         }}
                       />
                     )}
@@ -168,6 +199,3 @@ function SuggestedServices({ currentService, allServices }) {
 }
 
 export default SuggestedServices;
-
-
-

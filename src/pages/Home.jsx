@@ -10,6 +10,7 @@ import {
   DialogContent,
   IconButton,
 } from "@mui/material";
+import { darken } from "@mui/material/styles";
 import { useNavigate } from "react-router";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CloseIcon from "@mui/icons-material/Close";
@@ -24,6 +25,9 @@ import StorageIcon from "@mui/icons-material/Storage";
 import ScienceIcon from "@mui/icons-material/Science";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import Portfolio from "../components/home/Portfolio";
+import Testimonials from "../components/home/Testimonials";
+import Stats from "../components/home/Stats";
 
 // Hardcoded services for Home page
 const hardcodedServices = [
@@ -109,6 +113,10 @@ function Home() {
         sx={{
           position: "relative",
           width: "100%",
+          backgroundImage: "url(/unelma_hero_small.webp)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         {" "}
@@ -151,7 +159,7 @@ function Home() {
               }}
             >
               <Button
-                variant="contained"
+                variant="text"
                 color="primary"
                 size="large"
                 onClick={handleRequestQuote}
@@ -161,15 +169,28 @@ function Home() {
                   fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   fontWeight: 400,
                   borderRadius: 2,
-                  boxShadow: "none",
                   textTransform: "none",
                   whiteSpace: "nowrap",
                   width: { xs: "auto", md: "fit-content" },
-                  border: "1px solid transparent",
+                  border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: "#FFFFFF",
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                      : "0 4px 12px rgba(0, 0, 0, 0.3)",
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    borderColor: (theme) => theme.palette.primary.main,
-                    transform: "translateY(-4px)",
+                    backgroundColor: (theme) =>
+                      darken(theme.palette.primary.main, 0.2),
+                    color: "#FFFFFF",
+                    borderColor: (theme) =>
+                      darken(theme.palette.primary.main, 0.2),
+                    transform: "translate3d(0, -4px, 0)",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                        : "0 8px 32px rgba(0, 0, 0, 0.3)",
                   },
                   "&:focus": {
                     outline: (theme) =>
@@ -201,42 +222,41 @@ function Home() {
               sx={{
                 width: { xs: "100%", md: "50%" },
                 order: { xs: 1, md: 2 },
-                "& p": {
-                  fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                  fontWeight: 400,
-                  color: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.9)"
-                      : theme.palette.text.primary,
-                  lineHeight: 1.8,
-                  textAlign: "left",
-                  maxWidth: "900px",
-                  marginBottom: { xs: "1rem", sm: "1.5rem" },
-                  marginTop: 0,
-                  "&:last-child": {
-                    marginBottom: 0,
-                  },
-                },
               }}
             >
               {/* Title */}
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "center",
+                  flexDirection: { xs: "column", sm: "row" },
+                  alignItems: { xs: "flex-start", sm: "center" },
                   gap: 2,
                   flexWrap: "wrap",
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "rgba(0, 0, 0, 0.15)"
+                      : "rgba(31, 31, 31, 0.91)",
+                  border: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "1px solid rgba(255, 255, 255, 0.1)"
+                      : "1px solid rgba(0, 0, 0, 0.1)",
+                  borderRadius: 2,
+                  padding: { xs: 2, sm: 2.5, md: 3.5 },
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                      : "none",
                 }}
               >
                 <Typography
                   variant="h1"
                   component="h1"
                   sx={{
+                    minWidth: 0,
                     fontSize: {
-                      xs: "2rem",
-                      sm: "2.5rem",
-                      md: "3.5rem",
-                      lg: "4rem",
+                      sm: "1.75rem",
+                      md: "2.25rem",
+                      lg: "3.25rem",
                     },
                     fontWeight: 700,
                     color: (theme) =>
@@ -245,18 +265,26 @@ function Home() {
                         : theme.palette.text.primary,
                     marginBottom: 0,
                     lineHeight: 1.2,
-                    textAlign: "left",
+                    textAlign: { xs: "center", sm: "left" },
                     flex: 1,
-                    minWidth: { xs: "100%", sm: "auto" },
                   }}
                 >
-                  We are Software Platform Development Company
+                  Empowering Growth with{" "}
+                  <Box
+                    component="span"
+                    sx={{
+                      color: (theme) => theme.palette.primary.main,
+                    }}
+                  >
+                    Innovative Software Platforms
+                  </Box>
                 </Typography>
 
                 {/* Arrow Icon Button */}
                 <IconButton
                   onClick={handleOpenModal}
                   sx={{
+                    alignSelf: { xs: "flex-end", sm: "auto" },
                     color: (theme) => theme.palette.primary.main,
                     backgroundColor: (theme) =>
                       theme.palette.mode === "dark"
@@ -292,8 +320,22 @@ function Home() {
         fullWidth
         PaperProps={{
           sx: {
-            borderRadius: 2,
-            backgroundColor: (theme) => theme.palette.background.paper,
+            borderRadius: { xs: 3, sm: 4 },
+            backgroundColor: (theme) => theme.palette.background.overlay,
+            border: (theme) =>
+              theme.palette.mode === "dark"
+                ? "1px solid rgba(255, 255, 255, 0.1)"
+                : "1px solid rgba(0, 0, 0, 0.1)",
+            boxShadow: (theme) =>
+              theme.palette.mode === "light"
+                ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                : "none",
+            overflow: "hidden",
+            willChange: "transform, opacity",
+            transform: "translateZ(0)",
+            contain: "layout style paint",
+            // Prevent layout thrashing
+            position: "relative",
           },
         }}
       >
@@ -317,21 +359,38 @@ function Home() {
             sx={{
               fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
               fontWeight: 700,
-              color: (theme) => theme.palette.text.primary,
+              color: (theme) =>
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.text.primary,
               flex: 1,
             }}
           >
-            We are Software Platform Development Company
+            Empowering Growth with{" "}
+            <Box
+              component="span"
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "#000000"
+                    : theme.palette.primary.main,
+              }}
+            >
+              Innovative Software Platforms
+            </Box>
           </Typography>
           <IconButton
             onClick={handleCloseModal}
             sx={{
-              color: (theme) => theme.palette.text.secondary,
+              color: (theme) =>
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.text.secondary,
               "&:hover": {
                 backgroundColor: (theme) =>
                   theme.palette.mode === "dark"
                     ? "rgba(255, 255, 255, 0.1)"
-                    : "rgba(0, 0, 0, 0.05)",
+                    : "rgba(255, 255, 255, 0.1)",
               },
             }}
             aria-label="close"
@@ -341,11 +400,15 @@ function Home() {
         </DialogTitle>
         <DialogContent
           sx={{
+            overflow: "hidden",
             padding: { xs: "1.5rem", sm: "2rem" },
             "& p": {
               fontSize: { xs: "1rem", sm: "1.125rem" },
               fontWeight: 400,
-              color: (theme) => theme.palette.text.primary,
+              color: (theme) =>
+                theme.palette.mode === "light"
+                  ? "#FFFFFF"
+                  : theme.palette.text.primary,
               lineHeight: 1.8,
               marginBottom: "1.5rem",
               "&:last-child": {
@@ -404,7 +467,7 @@ function Home() {
               display: "flex",
               flexWrap: "wrap",
               gap: { xs: 2, sm: 3, md: 3 },
-              justifyContent: { xs: "center", sm: "flex-start" },
+              justifyContent: "center",
             }}
           >
             {hardcodedServices.map((service) => {
@@ -412,7 +475,7 @@ function Home() {
               return (
                 <Card
                   key={service.id}
-                  onClick={() => navigate(`/services/${service.serviceId}`)}
+                  onClick={() => navigate(`/services/${service.id}`)}
                   sx={{
                     flex: {
                       xs: "1 1 100%",
@@ -422,7 +485,10 @@ function Home() {
                     },
                     minWidth: { xs: "100%", sm: "280px", md: "300px" },
                     maxWidth: { xs: "100%", sm: "none", md: "400px" },
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) =>
                       theme.palette.mode === "dark"
                         ? "1px solid rgba(255, 255, 255, 0.1)"
@@ -433,13 +499,17 @@ function Home() {
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                     "&:hover": {
                       borderColor: (theme) => theme.palette.primary.main,
                       transform: "translateY(-4px)",
                       boxShadow: (theme) =>
-                        theme.palette.mode === "dark"
-                          ? "0 8px 16px rgba(0, 0, 0, 0.3)"
-                          : "0 8px 16px rgba(0, 0, 0, 0.1)",
+                        theme.palette.mode === "light"
+                          ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                          : "0 8px 32px rgba(0, 0, 0, 0.3)",
                     },
                   }}
                 >
@@ -711,6 +781,15 @@ function Home() {
           </Box>
         </Box>
       </Box>
+
+      {/* Portfolio Section */}
+      <Portfolio />
+
+      {/* Stats Section */}
+      <Stats />
+
+      {/* Testimonials Section */}
+      <Testimonials />
     </Box>
   );
 }

@@ -215,7 +215,10 @@ function ServicesSection() {
                 minWidth: { xs: 0, sm: "280px", md: "300px" },
                 maxWidth: { xs: "100%", sm: "none", md: "400px" },
                 width: { xs: "100%", sm: "auto" },
-                backgroundColor: (theme) => theme.palette.background.paper,
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "rgba(0, 0, 0, 0.03)"
+                    : "transparent",
                 border: (theme) =>
                   theme.palette.mode === "dark"
                     ? "1px solid rgba(255, 255, 255, 0.1)"
@@ -226,13 +229,17 @@ function ServicesSection() {
                 overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
+                boxShadow: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                    : "none",
                 "&:hover": {
                   borderColor: (theme) => theme.palette.primary.main,
                   transform: "translateY(-4px)",
                   boxShadow: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "0 8px 16px rgba(0, 0, 0, 0.3)"
-                      : "0 8px 16px rgba(0, 0, 0, 0.1)",
+                    theme.palette.mode === "light"
+                      ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                      : "0 8px 32px rgba(0, 0, 0, 0.3)",
                 },
               }}
             >

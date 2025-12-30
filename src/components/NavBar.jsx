@@ -35,7 +35,7 @@ import { getImageUrl, placeholderLogo } from "../helpers/helpers";
 function NavBar() {
   const { user, logout } = useAuth();
 
-  const mobileMenuWidth = 320;
+  const mobileMenuWidth = 240;
   const location = useLocation();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
@@ -557,11 +557,11 @@ function NavBar() {
           onClose={handleNavToggle}
           ModalProps={{
             keepMounted: true,
-            sx: {
-              zIndex: 1400, // Higher than navbar (1301) to appear on top
-            },
+
+            //important: don't put zIndex here
           }}
           sx={{
+            zIndex: 1400,
             display: { md: "block", lg: "none" },
             "& .MuiBackdrop-root": {
               backgroundColor: (theme) =>
@@ -578,10 +578,10 @@ function NavBar() {
               width: mobileMenuWidth,
               backgroundColor: (theme) =>
                 theme.palette.mode === "dark"
-                  ? "rgba(21, 27, 46, 0.95)"
-                  : "rgba(255, 255, 255, 0.95)",
+                  ? "rgba(21, 27, 46, 0.7)"
+                  : "rgba(255, 255, 255, 0.85)",
               backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(8px)",
               border: (theme) =>
                 theme.palette.mode === "dark"
                   ? "1px solid rgba(255, 255, 255, 0.1)"
@@ -593,7 +593,6 @@ function NavBar() {
               color: (theme) => theme.palette.text.primary,
               willChange: "transform, opacity",
               transform: "translateZ(0)",
-              contain: "layout style paint",
             },
           }}
         >

@@ -30,44 +30,45 @@ function Login() {
     }
   }, [user, navigate]);
 
+  //this is not neccessary
   // Fix aria-hidden accessibility issue
-  useEffect(() => {
-    const rootElement = document.getElementById("root");
-    if (rootElement && rootElement.getAttribute("aria-hidden") === "true") {
-      // Remove aria-hidden from root if it's incorrectly set
-      rootElement.removeAttribute("aria-hidden");
-    }
+  // useEffect(() => {
+  //   const rootElement = document.getElementById("root");
+  //   if (rootElement && rootElement.getAttribute("aria-hidden") === "true") {
+  //     // Remove aria-hidden from root if it's incorrectly set
+  //     rootElement.removeAttribute("aria-hidden");
+  //   }
 
-    // Monitor for aria-hidden changes and fix them
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.type === "attributes" &&
-          mutation.attributeName === "aria-hidden" &&
-          rootElement &&
-          rootElement.getAttribute("aria-hidden") === "true"
-        ) {
-          // Check if there's a focused element inside
-          const focusedElement = document.activeElement;
-          if (focusedElement && rootElement.contains(focusedElement)) {
-            // Remove aria-hidden if a focused element is inside
-            rootElement.removeAttribute("aria-hidden");
-          }
-        }
-      });
-    });
+  //   // Monitor for aria-hidden changes and fix them
+  //   const observer = new MutationObserver((mutations) => {
+  //     mutations.forEach((mutation) => {
+  //       if (
+  //         mutation.type === "attributes" &&
+  //         mutation.attributeName === "aria-hidden" &&
+  //         rootElement &&
+  //         rootElement.getAttribute("aria-hidden") === "true"
+  //       ) {
+  //         // Check if there's a focused element inside
+  //         const focusedElement = document.activeElement;
+  //         if (focusedElement && rootElement.contains(focusedElement)) {
+  //           // Remove aria-hidden if a focused element is inside
+  //           rootElement.removeAttribute("aria-hidden");
+  //         }
+  //       }
+  //     });
+  //   });
 
-    if (rootElement) {
-      observer.observe(rootElement, {
-        attributes: true,
-        attributeFilter: ["aria-hidden"],
-      });
-    }
+  //   if (rootElement) {
+  //     observer.observe(rootElement, {
+  //       attributes: true,
+  //       attributeFilter: ["aria-hidden"],
+  //     });
+  //   }
 
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     observer.disconnect();
+  //   };
+  // }, []);
 
   const providers = [{ id: "credentials", name: "Email & Password" }];
 

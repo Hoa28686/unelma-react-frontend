@@ -223,6 +223,8 @@ function SearchBar({ open, onClose }) {
         right: 0,
         bottom: 0,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
         zIndex: 1300,
         display: "flex",
         justifyContent: "center",
@@ -240,14 +242,22 @@ function SearchBar({ open, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <Paper
-          elevation={8}
+          elevation={0}
           sx={{
             borderRadius: 2,
             overflow: "hidden",
             backgroundColor: (theme) =>
               theme.palette.mode === "light"
-                ? theme.palette.background.paper
-                : theme.palette.background.default,
+                ? "rgba(0, 0, 0, 0.03)"
+                : "transparent",
+            border: (theme) =>
+              theme.palette.mode === "dark"
+                ? "1px solid rgba(255, 255, 255, 0.1)"
+                : "1px solid rgba(0, 0, 0, 0.1)",
+            boxShadow: (theme) =>
+              theme.palette.mode === "light"
+                ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                : "none",
           }}
         >
           {/* Search Input */}
@@ -266,7 +276,8 @@ function SearchBar({ open, onClose }) {
                   <InputAdornment position="start">
                     <SearchOutlinedIcon
                       sx={{
-                        color: (theme) => theme.palette.text.secondary,
+                        color: (theme) =>
+                          theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
                       }}
                     />
                   </InputAdornment>
@@ -277,7 +288,8 @@ function SearchBar({ open, onClose }) {
                       size="small"
                       onClick={handleClear}
                       sx={{
-                        color: (theme) => theme.palette.text.secondary,
+                        color: (theme) =>
+                          theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
                       }}
                     >
                       <ClearOutlinedIcon fontSize="small" />
@@ -285,15 +297,38 @@ function SearchBar({ open, onClose }) {
                   </InputAdornment>
                 ),
                 sx: {
-                  backgroundColor: (theme) =>
-                    theme.palette.mode === "light"
-                      ? "#FFFFFF"
-                      : theme.palette.background.paper,
+                  backgroundColor: "transparent",
+                  color: (theme) =>
+                    theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
+                  "& input": {
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
+                  },
+                  "& input::placeholder": {
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "rgba(255, 255, 255, 0.7)" : undefined,
+                    opacity: 1,
+                  },
+                  "& input:-webkit-autofill": {
+                    WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                    WebkitTextFillColor: (theme) =>
+                      theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
+                  },
+                  "& input:-webkit-autofill:hover": {
+                    WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                    WebkitTextFillColor: (theme) =>
+                      theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
+                  },
+                  "& input:-webkit-autofill:focus": {
+                    WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                    WebkitTextFillColor: (theme) =>
+                      theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.primary,
+                  },
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: (theme) =>
                       theme.palette.mode === "dark"
                         ? "rgba(255, 255, 255, 0.2)"
-                        : "rgba(0, 0, 0, 0.23)",
+                        : "rgba(255, 255, 255, 0.3)",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
                     borderColor: (theme) => theme.palette.primary.main,
@@ -317,7 +352,7 @@ function SearchBar({ open, onClose }) {
                   `1px solid ${
                     theme.palette.mode === "dark"
                       ? "rgba(255, 255, 255, 0.1)"
-                      : "rgba(0, 0, 0, 0.1)"
+                      : "rgba(255, 255, 255, 0.2)"
                   }`,
               }}
               ref={resultsRef}
@@ -326,8 +361,11 @@ function SearchBar({ open, onClose }) {
                 <Box sx={{ p: 3, textAlign: "center" }}>
                   <Typography
                     variant="body2"
-                    color="text.secondary"
-                    sx={{ fontStyle: "italic" }}
+                    sx={{
+                      fontStyle: "italic",
+                      color: (theme) =>
+                        theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
+                    }}
                   >
                     No results found for "{searchQuery}"
                   </Typography>
@@ -341,7 +379,8 @@ function SearchBar({ open, onClose }) {
                       variant="caption"
                       sx={{
                         fontWeight: 600,
-                        color: (theme) => theme.palette.text.secondary,
+                        color: (theme) =>
+                          theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
                         textTransform: "uppercase",
                         letterSpacing: 1,
                       }}
@@ -382,13 +421,23 @@ function SearchBar({ open, onClose }) {
                                 variant="caption"
                                 sx={{
                                   color: (theme) =>
-                                    theme.palette.text.secondary,
+                                    theme.palette.mode === "light"
+                                      ? "rgba(255, 255, 255, 0.7)"
+                                      : theme.palette.text.secondary,
                                   fontSize: "0.75rem",
                                 }}
                               >
                                 {product.category}
                               </Typography>
                             }
+                            sx={{
+                              "& .MuiListItemText-primary": {
+                                color: (theme) =>
+                                  theme.palette.mode === "light"
+                                    ? "#FFFFFF"
+                                    : theme.palette.text.primary,
+                              },
+                            }}
                           />
                         </ListItemButton>
                       </ListItem>
@@ -399,7 +448,14 @@ function SearchBar({ open, onClose }) {
 
               {results.products.length > 0 &&
                 (results.blogs.length > 0 || results.services.length > 0) && (
-                  <Divider />
+                  <Divider
+                    sx={{
+                      borderColor: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "rgba(255, 255, 255, 0.1)"
+                          : "rgba(255, 255, 255, 0.2)",
+                    }}
+                  />
                 )}
 
               {results.blogs.length > 0 && (
@@ -409,7 +465,8 @@ function SearchBar({ open, onClose }) {
                       variant="caption"
                       sx={{
                         fontWeight: 600,
-                        color: (theme) => theme.palette.text.secondary,
+                        color: (theme) =>
+                          theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
                         textTransform: "uppercase",
                         letterSpacing: 1,
                       }}
@@ -452,7 +509,9 @@ function SearchBar({ open, onClose }) {
                                   variant="caption"
                                   sx={{
                                     color: (theme) =>
-                                      theme.palette.text.secondary,
+                                      theme.palette.mode === "light"
+                                        ? "rgba(255, 255, 255, 0.7)"
+                                        : theme.palette.text.secondary,
                                     fontSize: "0.75rem",
                                     display: "-webkit-box",
                                     WebkitLineClamp: 1,
@@ -463,6 +522,14 @@ function SearchBar({ open, onClose }) {
                                   {blog.content?.substring(0, 60)}...
                                 </Typography>
                               }
+                              sx={{
+                                "& .MuiListItemText-primary": {
+                                  color: (theme) =>
+                                    theme.palette.mode === "light"
+                                      ? "#FFFFFF"
+                                      : theme.palette.text.primary,
+                                },
+                              }}
                             />
                           </ListItemButton>
                         </ListItem>
@@ -482,7 +549,8 @@ function SearchBar({ open, onClose }) {
                       variant="caption"
                       sx={{
                         fontWeight: 600,
-                        color: (theme) => theme.palette.text.secondary,
+                        color: (theme) =>
+                          theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
                         textTransform: "uppercase",
                         letterSpacing: 1,
                       }}
@@ -526,7 +594,9 @@ function SearchBar({ open, onClose }) {
                                   variant="caption"
                                   sx={{
                                     color: (theme) =>
-                                      theme.palette.text.secondary,
+                                      theme.palette.mode === "light"
+                                        ? "rgba(255, 255, 255, 0.7)"
+                                        : theme.palette.text.secondary,
                                     fontSize: "0.75rem",
                                     display: "-webkit-box",
                                     WebkitLineClamp: 1,
@@ -537,6 +607,14 @@ function SearchBar({ open, onClose }) {
                                   {service.description?.substring(0, 60)}...
                                 </Typography>
                               }
+                              sx={{
+                                "& .MuiListItemText-primary": {
+                                  color: (theme) =>
+                                    theme.palette.mode === "light"
+                                      ? "#FFFFFF"
+                                      : theme.palette.text.primary,
+                                },
+                              }}
                             />
                           </ListItemButton>
                         </ListItem>
@@ -563,7 +641,8 @@ function SearchBar({ open, onClose }) {
                   <Typography
                     variant="caption"
                     sx={{
-                      color: (theme) => theme.palette.text.secondary,
+                      color: (theme) =>
+                        theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.text.secondary,
                       fontSize: "0.7rem",
                     }}
                   >

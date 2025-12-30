@@ -6,16 +6,35 @@ A full-stack web application for blogs, products, and services with authenticati
 
 ## Demo
 
-- Image:
-- Video:
+Image gallery:
+
+| Product                                   | Service                                   | Blog                                | Contact                                   |
+| ----------------------------------------- | ----------------------------------------- | ----------------------------------- | ----------------------------------------- |
+| ![Product](./src/assets/demo/product.png) | ![Service](./src/assets/demo/service.png) | ![Blog](./src/assets/demo/blog.png) | ![Contact](./src/assets/demo/contact.png) |
+
+| Protected                                     | Favorites                                    | Newsletter                                      | Career                                  |
+| --------------------------------------------- | -------------------------------------------- | ----------------------------------------------- | --------------------------------------- |
+| ![Protected](./src/assets/demo/protected.png) | ![Favorites](./src/assets/demo/favorite.png) | ![Newsletter](./src/assets/demo/newsletter.png) | ![Career](./src/assets/demo/career.png) |
+
+| Dark Mode                           | Light Mode                            | Mobile                                  | Lighthouse Analysis               |
+| ----------------------------------- | ------------------------------------- | --------------------------------------- | --------------------------------- |
+| ![Dark](./src/assets/demo/dark.png) | ![Light](./src/assets/demo/light.png) | ![Mobile](./src/assets/demo/mobile.png) | ![SEO](./src/assets/demo/SEO.png) |
+
+Video:
+
+<p align="center">
+<a href="https://unelmacloud.com/drive/s/9nSJJg82hNEJGctEOpiVqsg9nCHfOH" >
+<img src="./src/assets/demo/thumbnail.png" alt="Demo Video" width="600" />
+</a>
+</p>
 
 ## Team Members
 
 - Binyam Angamo: UI Lead; contributed to frontend and backend
-- Hoa Lu: Frontend Lead; contributed to UI and backend
+- Hoa Lu: Frontend Lead; contributed to UI, mobile responsiveness, and backend
 - Elias Tekle: Backend Co-Lead; contributed to payment system on frontend
 - Basudev Pokharel: Backend Co-Lead; contributed to ThemeContext, service payment, and Career page on frontend
-- Mahfuz Shihab: Managed team email and contributed to footer content
+- Mahfuz Shihab: created team email and footer content
 
 ## Website Navigation
 

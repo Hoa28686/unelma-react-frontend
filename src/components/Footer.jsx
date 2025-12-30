@@ -173,6 +173,7 @@ const Footer = () => {
                   >
                     <Box
                       component="img"
+                      loading="lazy"
                       src={logo.src}
                       alt={logo.alt}
                       sx={{

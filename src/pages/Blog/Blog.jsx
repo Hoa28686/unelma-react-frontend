@@ -351,10 +351,16 @@ function Blog() {
                   </InputAdornment>
                 ),
                 sx: {
-                  backgroundColor: (theme) =>
-                    theme.palette.mode === "light"
-                      ? "#FFFFFF"
-                      : theme.palette.background.paper,
+                  backgroundColor: "transparent",
+                  "& input:-webkit-autofill": {
+                    WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                  },
+                  "& input:-webkit-autofill:hover": {
+                    WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                  },
+                  "& input:-webkit-autofill:focus": {
+                    WebkitBoxShadow: "0 0 0 1000px transparent inset",
+                  },
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: (theme) =>
                       theme.palette.mode === "dark"
@@ -390,7 +396,7 @@ function Blog() {
           <Stack
             spacing={2}
             direction={{ xs: "column", sm: "row" }}
-            sx={{ mb: 5 }}
+            sx={{ mb: 5, width: "100%", justifyContent: "center", alignItems: "center" }}
           >
             {/* Category Filter */}
             <Select

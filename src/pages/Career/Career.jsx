@@ -181,9 +181,9 @@ function Careers() {
                         flexDirection: "column",
                         height: "100%",
                         backgroundColor: (theme) =>
-                          theme.palette.mode === "dark"
-                            ? "transparent"
-                            : theme.palette.background.paper,
+                          theme.palette.mode === "light"
+                            ? "rgba(0, 0, 0, 0.03)"
+                            : "transparent",
                         border: (theme) =>
                           theme.palette.mode === "dark"
                             ? "1px solid rgba(255, 255, 255, 0.1)"
@@ -191,13 +191,17 @@ function Careers() {
                         borderRadius: 3,
                         transition: "all 0.3s ease",
                         cursor: "pointer",
+                        boxShadow: (theme) =>
+                          theme.palette.mode === "light"
+                            ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                            : "none",
                         "&:hover": {
                           transform: "translateY(-4px)",
                           borderColor: (theme) => theme.palette.primary.main,
                           boxShadow: (theme) =>
-                            theme.palette.mode === "dark"
-                              ? "0 8px 32px rgba(0, 0, 0, 0.3)"
-                              : "0 8px 32px rgba(0, 0, 0, 0.1)",
+                            theme.palette.mode === "light"
+                              ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+                              : "0 8px 32px rgba(0, 0, 0, 0.3)",
                         },
                       }}
                       onClick={() => handleCareerClick(job)}

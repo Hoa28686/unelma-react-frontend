@@ -214,6 +214,7 @@ function BlogDetail() {
         >
           <Box
             component="img"
+            loading="lazy"
             src={getImageUrl(
               selectedBlog?.featured_image_local_url ||
                 selectedBlog?.featured_image_url ||
@@ -266,31 +267,37 @@ function BlogDetail() {
             <HandleBackButton content="Blog List" link="/blogs" />
           </Box>
 
+          {selectedBlog.category && (
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: (theme) => theme.palette.text.secondary,
+                textTransform: "uppercase",
+                cursor: "pointer",
+                mb: 2,
+                textAlign: { xs: "center", lg: "left" },
+                mx: "auto",
+              }}
+              onClick={() =>
+                handleCategoryClick(selectedBlog.category, navigate)
+              }
+            >
+              {selectedBlog.category}
+            </Typography>
+          )}
           {/* Blog Header */}
           <Box
             sx={{
               display: "flex",
+              flexDirection: { xs: "column", lg: "row" },
+              justifyContent: { xs: "flex-start", lg: "space-between" },
               alignItems: "center",
+              textAlign: "center",
               gap: 2,
-              marginBottom: { xs: "2rem", sm: "3rem" },
+              marginBottom: { xs: "1rem", lg: "3rem" },
               flexWrap: "wrap",
             }}
           >
-            {selectedBlog.category && (
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  color: (theme) => theme.palette.text.secondary,
-                  textTransform: "uppercase",
-                  cursor: "pointer",
-                }}
-                onClick={() =>
-                  handleCategoryClick(selectedBlog.category, navigate)
-                }
-              >
-                {selectedBlog.category}
-              </Typography>
-            )}
             <Typography
               variant="h2"
               component="h1"
@@ -298,7 +305,6 @@ function BlogDetail() {
                 fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
                 fontWeight: 700,
                 color: (theme) => theme.palette.text.primary,
-                flex: 1,
               }}
             >
               {selectedBlog.title}
@@ -307,9 +313,13 @@ function BlogDetail() {
           </Box>
 
           {/* Main Content and Sidebar Layout */}
-          <Grid container spacing={4} sx={{ alignItems: "flex-start", mb: 4 }}>
+          <Grid
+            container
+            spacing={4}
+            sx={{ alignItems: "flex-start", mb: 4, width: "100%" }}
+          >
             {/* Left Side - Main Content */}
-            <Grid size={{ xs: 12, md: 8 }}>
+            <Grid size={{ lg: 8 }}>
               {/* Author and Date */}
               <Typography
                 variant="subtitle1"
@@ -317,6 +327,8 @@ function BlogDetail() {
                   color: (theme) => theme.palette.text.secondary,
                   fontSize: { xs: "0.875rem", sm: "1rem" },
                   mb: 2,
+                  textAlign: { xs: "center", lg: "left" },
+                  mx: "auto",
                 }}
               >
                 {selectedBlog.author_name} •{" "}
@@ -555,7 +567,7 @@ function BlogDetail() {
             </Grid>
 
             {/* Right Side - Contact Form Sidebar */}
-            <Grid size={{ xs: 12, md: 4 }}>
+            <Grid size={{ xs: 10, lg: 4 }} sx={{ mx: { xs: "auto" } }}>
               <Box
                 sx={{
                   position: { md: "sticky" },
@@ -564,13 +576,20 @@ function BlogDetail() {
               >
                 <Card
                   sx={{
-                    backgroundColor: (theme) => theme.palette.background.paper,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.03)"
+                        : "transparent",
                     border: (theme) =>
                       theme.palette.mode === "dark"
                         ? "1px solid rgba(255, 255, 255, 0.1)"
                         : "1px solid rgba(0, 0, 0, 0.1)",
                     borderRadius: 2,
                     padding: { xs: "2rem", sm: "2.5rem" },
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? "0 2px 8px rgba(0, 0, 0, 0.05)"
+                        : "none",
                   }}
                 >
                   <Typography

@@ -26,6 +26,7 @@ function Logo() {
       >
         <img
           src="/unelma_logo.webp"
+          loading="lazy"
           alt="unelma-logo"
           style={{
             height: "auto",
