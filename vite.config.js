@@ -7,7 +7,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-<<<<<<< HEAD
           if (id.includes("node_modules")) {
             if (id.includes("react") || id.includes("react-dom"))
               return "react-vendor";
@@ -16,20 +15,6 @@ export default defineConfig({
               id.includes("@mui/icons-material")
             )
               return "mui-vendor";
-=======
-          // Only separate big libraries that benefit most from caching
-          if (id.includes("node_modules")) {
-            if (id.includes("react") || id.includes("react-dom")) {
-              return "react-vendor";
-            }
-            if (
-              id.includes("@mui/material") ||
-              id.includes("@mui/icons-material")
-            ) {
-              return "mui-vendor";
-            }
-            // Let Redux and others stay in main bundle to avoid runtime import issues
->>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
           }
         },
       },
@@ -54,7 +39,6 @@ export default defineConfig({
     ),
   },
   server: {
-<<<<<<< HEAD
     hmr: { protocol: "ws" },
   },
   // ✅ Add this section for dev server caching (optional)
@@ -62,10 +46,6 @@ export default defineConfig({
     headers: {
       // Cache hashed assets for 1 year
       "Cache-Control": "public, max-age=31536000, immutable",
-=======
-    hmr: {
-      protocol: "ws",
->>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
     },
   },
 });

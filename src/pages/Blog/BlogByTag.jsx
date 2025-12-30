@@ -91,6 +91,7 @@ function BlogByTag() {
         px: { xs: 2, md: 10, lg: 15 },
         minHeight: "100vh",
         backgroundColor: (theme) => theme.palette.background.default,
+        color: (theme) => theme.palette.text.primary,
         mt: 8,
         display: "flex",
         flexDirection: "column",

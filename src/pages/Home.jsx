@@ -113,11 +113,7 @@ function Home() {
         sx={{
           position: "relative",
           width: "100%",
-<<<<<<< HEAD
           backgroundImage: "url(/unelma_hero_small.webp)",
-=======
-          backgroundImage: "url(/unelma_hero.webp)",
->>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -404,10 +400,7 @@ function Home() {
         </DialogTitle>
         <DialogContent
           sx={{
-<<<<<<< HEAD
             overflow: "hidden",
-=======
->>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
             padding: { xs: "1.5rem", sm: "2rem" },
             "& p": {
               fontSize: { xs: "1rem", sm: "1.125rem" },
@@ -474,11 +467,7 @@ function Home() {
               display: "flex",
               flexWrap: "wrap",
               gap: { xs: 2, sm: 3, md: 3 },
-<<<<<<< HEAD
               justifyContent: "center",
-=======
-              justifyContent: { xs: "center", sm: "flex-start" },
->>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
             }}
           >
             {hardcodedServices.map((service) => {
