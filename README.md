@@ -23,7 +23,9 @@ Image gallery:
 Video:
 
 <p align="center">
-  <img src="./src/assets/demo/video.gif" alt="Demo Video" width="400" />
+<a href="https://unelmacloud.com/drive/s/9nSJJg82hNEJGctEOpiVqsg9nCHfOH" >
+<img src="./src/assets/demo/thumbnail.png" alt="Demo Video" width="600" />
+</a>
 </p>
 
 ## Team Members
