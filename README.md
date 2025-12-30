@@ -23,7 +23,7 @@ A full-stack web application for blogs, products, and services with authenticati
   <img src="./src/assets/demo/SEO.png" alt="lighthouse" style="width: 440px; height: auto;" />
 </div>
 
-- Video: [Demo Video](./src/assets/demo/video.mov)
+- Video: [Demo Video](./src/assets/demo/video.mp4)
 
 ## Team Members
 
