@@ -6,31 +6,27 @@ A full-stack web application for blogs, products, and services with authenticati
 
 ## Demo
 
-- Image:
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content:center">
-  <img src="./src/assets/demo/product.png" alt="Product page" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/service.png" alt="Service page" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/blog.png" alt="Blog page" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/contact.png" alt="Contact page" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/protected.png" alt="Protected route" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/favorite.png" alt="Favorites page" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/newsletter.png" alt="Newsletter subscription" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/career.png" alt="Career page" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/dark.png" alt="dark mode" style="width: 200px; height: 150px; object-fit: cover;" />
-  <img src="./src/assets/demo/light.png" alt="light mode" style="width: 200px; height: 150px; object-fit: cover;" />
-</div>
+Image gallery:
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content:center; margin-block:10px 20px">
-  <img src="./src/assets/demo/mobile.png" alt="mobile" style="width: 200px; height: auto;" />
-  <img src="./src/assets/demo/SEO.png" alt="lighthouse" style="width: 440px; height: auto;" />
-</div>
+| Product                                   | Service                                   | Blog                                | Contact                                   |
+| ----------------------------------------- | ----------------------------------------- | ----------------------------------- | ----------------------------------------- |
+| ![Product](./src/assets/demo/product.png) | ![Service](./src/assets/demo/service.png) | ![Blog](./src/assets/demo/blog.png) | ![Contact](./src/assets/demo/contact.png) |
 
-- Video:
-<div style="display: flex; justify-content:center;">
-  <video width="500" height="400" controls>
-    <source src="./src/assets/demo/video.mp4" type="video/mp4" />
-  </video>
-</div>
+| Protected                                     | Favorites                                    | Newsletter                                      | Career                                  |
+| --------------------------------------------- | -------------------------------------------- | ----------------------------------------------- | --------------------------------------- |
+| ![Protected](./src/assets/demo/protected.png) | ![Favorites](./src/assets/demo/favorite.png) | ![Newsletter](./src/assets/demo/newsletter.png) | ![Career](./src/assets/demo/career.png) |
+
+| Dark Mode                           | Light Mode                            | Mobile                                  | Lighthouse Analysis               |
+| ----------------------------------- | ------------------------------------- | --------------------------------------- | --------------------------------- |
+| ![Dark](./src/assets/demo/dark.png) | ![Light](./src/assets/demo/light.png) | ![Mobile](./src/assets/demo/mobile.png) | ![SEO](./src/assets/demo/SEO.png) |
+
+Video:
+
+<p align="center">
+<a href="https://unelmacloud.com/drive/s/9nSJJg82hNEJGctEOpiVqsg9nCHfOH" >
+<img src="./src/assets/demo/thumbnail.png" alt="Demo Video" width="400" height='auto' />
+</a>
+</p>
 
 ## Team Members
 
