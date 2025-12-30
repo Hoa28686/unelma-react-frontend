@@ -23,7 +23,7 @@ Image gallery:
 Video:
 
 <p align="center">
-<a href="https://unelmacloud.com/drive/s/9nSJJg82hNEJGctEOpiVqsg9nCHfOH" >
+<a href="https://unelmacloud.com/drive/s/9nSJJg82hNEJGctEOpiVqsg9nCHfOH" target='_blank'>
 <img src="./src/assets/demo/thumbnail.png" alt="Demo Video" width="400" height='auto' />
 </a>
 </p>
