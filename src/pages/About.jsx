@@ -322,7 +322,10 @@ function About() {
           >
             <Box
               component="img"
+<<<<<<< HEAD
               loading="lazy"
+=======
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
               src={globalMapImage}
               alt="Global office presence map"
               sx={{
@@ -623,8 +626,12 @@ function About() {
                     "Backend Contributions",
                   ],
                   icon: DesignServicesIcon,
+<<<<<<< HEAD
                   profilePicture:
                     "https://media.licdn.com/dms/image/v2/D4E03AQFR4iujRlrg6Q/profile-displayphoto-scale_400_400/B4EZjGpPj2GwAg-/0/1755679358044?e=1767830400&v=beta&t=FgrcNB6DNfwamUDwSdFvts_ChIN5jMLj67C7oQPQ4uQ", // Set to profile picture URL when available
+=======
+                  profilePicture: null, // Set to profile picture URL when available
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
                   linkedinUrl:
                     "https://www.linkedin.com/in/binyam-angamo-0611172b9",
                 },
@@ -637,9 +644,14 @@ function About() {
                     "Backend Contributions",
                   ],
                   icon: CodeIcon,
+<<<<<<< HEAD
                   profilePicture:
                     "https://media.licdn.com/dms/image/v2/C4E03AQFdBEcB7t9L3g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1653299102686?e=1767830400&v=beta&t=rh1pMmTY71xhaJSdtIAgeXoXYGJTiLqC7xWKjZMdTOQ",
                   linkedinUrl: "https://www.linkedin.com/in/hoalu28/", // Add LinkedIn URL when available
+=======
+                  profilePicture: null,
+                  linkedinUrl: null, // Add LinkedIn URL when available
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
                 },
                 {
                   name: "Elias Bekele",
@@ -650,26 +662,41 @@ function About() {
                     "API Integration",
                   ],
                   icon: VpnKeyIcon,
+<<<<<<< HEAD
                   profilePicture:
                     "https://media.licdn.com/dms/image/v2/D4D03AQFAtbGxPVvm0Q/profile-displayphoto-scale_400_400/B4DZiNa07ZGsAg-/0/1754719282182?e=1767830400&v=beta&t=rQBNZcgPbpPAXEf1CFN14Qwgu59VTfHB1J5y5XoVem0",
                   linkedinUrl:
                     "https://www.linkedin.com/in/elias-tekle-810045287/",
+=======
+                  profilePicture: null,
+                  linkedinUrl: null, // Add LinkedIn URL when available
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
                 },
                 {
                   name: "Basudev Pokharel",
                   roles: ["Backend Lead", "DB Integration"],
                   icon: StorageIcon,
+<<<<<<< HEAD
                   profilePicture:
                     "https://media.licdn.com/dms/image/v2/D4D03AQFE2ryHkyQNng/profile-displayphoto-scale_400_400/B4DZk9L0c6JgAg-/0/1757668133966?e=1767830400&v=beta&t=prtLvafH5L63pkx1gXXak4zU5xDAqCJRPJJf1dOnjQA",
                   linkedinUrl: "https://www.linkedin.com/in/basudev-pokharel/", // Add LinkedIn URL when available
+=======
+                  profilePicture: null,
+                  linkedinUrl: null, // Add LinkedIn URL when available
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
                 },
                 {
                   name: "Shihab Mahfuz",
                   roles: ["Common Email", "Footer Content"],
                   icon: EmailIcon,
+<<<<<<< HEAD
                   profilePicture:
                     "https://media.licdn.com/dms/image/v2/D5603AQHQvRAxONGeYQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1710601893783?e=1767830400&v=beta&t=0VtP2J8-IHAF9bc_M3VP1xgGNqyb6IxGinNYIe4OYtw",
                   linkedinUrl: "https://www.linkedin.com/in/mahfuz-shihab/", // Add LinkedIn URL when available
+=======
+                  profilePicture: null,
+                  linkedinUrl: null, // Add LinkedIn URL when available
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
                 },
               ].map((member, index) => {
                 const IconComponent = member.icon;

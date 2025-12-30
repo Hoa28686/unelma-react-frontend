@@ -103,7 +103,10 @@ function SuggestedServices({ currentService, allServices }) {
           >
             <CardMedia
               component="img"
+<<<<<<< HEAD
               loading="lazy"
+=======
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
               src={getImageUrl(
                 service.image_local_url || service.image_url || service.image
               )}
@@ -120,6 +123,7 @@ function SuggestedServices({ currentService, allServices }) {
                 backgroundColor: (theme) => theme.palette.background.paper,
               }}
             />
+<<<<<<< HEAD
             <Box
               sx={{
                 p: 2,
@@ -140,6 +144,12 @@ function SuggestedServices({ currentService, allServices }) {
                       mb: 0.5,
                     }}
                   >
+=======
+            <Box sx={{ p: 2, width: "100%", flex: 1, display: "flex", flexDirection: "column" }}>
+              <CardHeader
+                title={
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", mb: 0.5 }}>
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
                     <Typography
                       variant="h6"
                       component="h2"
@@ -160,7 +170,11 @@ function SuggestedServices({ currentService, allServices }) {
                           height: 20,
                           fontSize: "0.7rem",
                           backgroundColor: "#E57A44",
+<<<<<<< HEAD
                           color: "#FFFFFF",
+=======
+                          color: "#FFFFFF"
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
                         }}
                       />
                     )}
@@ -199,3 +213,9 @@ function SuggestedServices({ currentService, allServices }) {
 }
 
 export default SuggestedServices;
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059

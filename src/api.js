@@ -4,7 +4,10 @@ const baseUrl =
 export const API = {
   login: `${baseUrl}/login`,
   register: `${baseUrl}/register`,
+<<<<<<< HEAD
   changePassword: `${baseUrl}/profile/change-password`,
+=======
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
   logout: `${baseUrl}/logout`,
   products: `${baseUrl}/products`,
   blogs: `${baseUrl}/blogs`,

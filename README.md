@@ -7,6 +7,7 @@ A full-stack web application for blogs, products, and services with authenticati
 ## Demo
 
 - Image:
+<<<<<<< HEAD
 <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content:center">
   <img src="./src/assets/demo/product.png" alt="Product page"  style="width: 200px; height: auto;"/>
   <img src="./src/assets/demo/service.png" alt="Service page"  style="width: 200px; height: auto;" />
@@ -24,6 +25,9 @@ A full-stack web application for blogs, products, and services with authenticati
 </div>
 
 - Video: [Demo Video](./src/assets/demo/video.mp4)
+=======
+- Video:
+>>>>>>> dc647b6b814b39e803ef200ea9fc537750285059
 
 ## Team Members
 
