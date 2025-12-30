@@ -6,8 +6,24 @@ A full-stack web application for blogs, products, and services with authenticati
 
 ## Demo
 
-- Image: ![seo](./src/assets/demo/SEO.png)
-- Video: ![demo-video](./src/assets/demo/video.gif)
+- Image:
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content:center">
+  <img src="./src/assets/demo/product.png" alt="Product page"  style="width: 200px; height: auto;"/>
+  <img src="./src/assets/demo/service.png" alt="Service page"  style="width: 200px; height: auto;" />
+  <img src="./src/assets/demo/blog.png" alt="Blog page"  style="width: 200px; height: auto;" />
+  <img src="./src/assets/demo/contact.png" alt="Contact page"  style="width: 200px; height: auto;" />
+  <img src="./src/assets/demo/protected.png" alt="Protected route"  style="width: 200px; height: auto;" />
+  <img src="./src/assets/demo/favorite.png" alt="Favorites page"  style="width: 200px; height: auto;" />
+  <img src="./src/assets/demo/newsletter.png" alt="Newsletter subscription"  style="width: 200px; height: auto;" />
+  <img src="./src/assets/demo/career.png" alt="Career page"  style="width: 200px; height: auto;" />
+  <img src="./src/assets/demo/darkmode.png" alt="dark mode" style="width: 200px; height: auto;" />
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content:center; margin-block:10px 20px">
+ <img src="./src/assets/demo/mobile.png" alt="mobile" style="width: 200px; height: auto;" />
+  <img src="./src/assets/demo/SEO.png" alt="lighthouse" style="width: 440px; height: auto;" />
+</div>
+
+- Video: [Demo Video](./src/assets/demo/video.mov)
 
 ## Team Members
 
