@@ -631,7 +631,7 @@ function About() {
                 {
                   name: "Lu Hoa",
                   roles: [
-                    "Frontend Lead",
+                    "Frontend",
                     "UI",
                     "Mobile Responsiveness",
                     "Backend Contributions",
@@ -644,7 +644,7 @@ function About() {
                 {
                   name: "Elias Bekele",
                   roles: [
-                    "Backend Lead",
+                    "Backend",
                     "Authentication",
                     "Payment System",
                     "API Integration",
@@ -657,7 +657,7 @@ function About() {
                 },
                 {
                   name: "Basudev Pokharel",
-                  roles: ["Backend Lead", "DB Integration"],
+                  roles: ["Backend", "DB Integration"],
                   icon: StorageIcon,
                   profilePicture:
                     "https://media.licdn.com/dms/image/v2/D4D03AQFE2ryHkyQNng/profile-displayphoto-scale_400_400/B4DZk9L0c6JgAg-/0/1757668133966?e=1767830400&v=beta&t=prtLvafH5L63pkx1gXXak4zU5xDAqCJRPJJf1dOnjQA",
