@@ -30,11 +30,11 @@ Video:
 
 ## Team Members
 
-- **Binyam Angamo**: UI Lead; contributed to frontend and backend
-- **Hoa Lu**: Frontend Lead; contributed to UI, mobile responsiveness, and backend
-- **Elias Tekle**: Backend Co-Lead; contributed to payment system on frontend
-- **Basudev Pokharel**: Backend Co-Lead; contributed to ThemeContext, service payment, and Career page on frontend
-- **Mahfuz Shihab**: created team email and footer content
+- **Binyam Angamo**: Focused on UI; contributed to frontend and backend
+- **Hoa Lu**: Focused on frontend; contributed to UI, mobile responsiveness, and backend
+- **Elias Tekle**: Focused on backend; contributed to payment system on frontend
+- **Basudev Pokharel**: Focused on backend; contributed to ThemeContext, service payment, and Career page on frontend
+- **Mahfuz Shihab**: Created team email and footer content
 
 ## Website Navigation
 
