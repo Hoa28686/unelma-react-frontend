@@ -4,6 +4,10 @@ A full-stack web application for blogs, products, and services with authenticati
 
 > **School Project** - This project was developed as part of a school course to practice full‑stack web development using React and Laravel, from 26.10.2025-19.12.2025
 
+## Links
+- Frontend: https://github.com/Hoa28686/unelma-react-frontend
+- Backend: https://github.com/Basudev-Pokharel/unelma-laravel-backend
+
 ## Demo
 
 Image gallery:
